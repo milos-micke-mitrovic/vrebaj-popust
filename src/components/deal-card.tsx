@@ -14,6 +14,7 @@ interface DealCardProps {
 const STORE_INFO: Record<Store, { name: string; logo: string; fallbackColor: string }> = {
   djaksport: { name: "Djak Sport", logo: "/logos/djaksport.png", fallbackColor: "bg-red-600" },
   planeta: { name: "Planeta Sport", logo: "/logos/planeta.png", fallbackColor: "bg-blue-600" },
+  sportvision: { name: "Sport Vision", logo: "/logos/sportvision.png", fallbackColor: "bg-orange-600" },
   fashionandfriends: { name: "F&F", logo: "/logos/ff.png", fallbackColor: "bg-black" },
 };
 

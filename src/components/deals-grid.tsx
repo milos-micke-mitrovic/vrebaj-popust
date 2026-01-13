@@ -22,6 +22,7 @@ const ITEMS_PER_PAGE = 24;
 const STORE_NAMES: Record<Store, string> = {
   djaksport: "Djak Sport",
   planeta: "Planeta Sport",
+  sportvision: "Sport Vision",
   fashionandfriends: "Fashion & Friends",
 };
 

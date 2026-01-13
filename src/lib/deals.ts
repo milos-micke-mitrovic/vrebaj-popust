@@ -67,6 +67,7 @@ function extractCategory(name: string): Category {
 const STORE_FILES: Record<Store, string> = {
   djaksport: "djaksport-deals.json",
   planeta: "planeta-deals.json",
+  sportvision: "sportvision-deals.json",
   fashionandfriends: "fashionandfriends-deals.json",
 };
 
@@ -83,6 +84,11 @@ export const STORE_INFO: Record<
     name: "Planeta Sport",
     logo: "/logos/planeta.png",
     url: "https://www.planetasport.rs",
+  },
+  sportvision: {
+    name: "Sport Vision",
+    logo: "/logos/sportvision.png",
+    url: "https://www.sportvision.rs",
   },
   fashionandfriends: {
     name: "Fashion & Friends",
