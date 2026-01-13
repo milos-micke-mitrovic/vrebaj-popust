@@ -1,65 +1,193 @@
-import Image from "next/image";
+import { Metadata } from "next";
+import {
+  getAllDeals,
+  getUniqueBrands,
+  getUniqueStores,
+  getUniqueCategories,
+  getPriceRange,
+} from "@/lib/deals";
+import { DealsGrid } from "@/components/deals-grid";
+
+export const metadata: Metadata = {
+  title: "VrebajPopust | Najbolji popusti preko 50% u Srbiji",
+  description:
+    "Pronađi najbolje popuste preko 50% na DjakSport, Planeta Sport, Fashion and Friends i drugim prodavnicama u Srbiji. Ažurirano svakodnevno.",
+  keywords: [
+    "popusti",
+    "akcije",
+    "sniženja",
+    "srbija",
+    "djak sport",
+    "planeta sport",
+    "fashion and friends",
+    "online kupovina",
+    "jeftino",
+  ],
+  openGraph: {
+    title: "VrebajPopust | Najbolji popusti preko 50% u Srbiji",
+    description:
+      "Pronađi najbolje popuste preko 50% na DjakSport, Planeta Sport i drugim prodavnicama.",
+    type: "website",
+    locale: "sr_RS",
+  },
+};
 
 export default function Home() {
+  const deals = getAllDeals();
+  const brands = getUniqueBrands();
+  const stores = getUniqueStores();
+  const categories = getUniqueCategories();
+  const priceRange = getPriceRange();
+
+  // WebSite structured data with search
+  const websiteSchema = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "VrebajPopust",
+    description: "Najbolji popusti preko 50% u Srbiji",
+    url: "https://vrebajpopust.rs",
+    potentialAction: {
+      "@type": "SearchAction",
+      target: {
+        "@type": "EntryPoint",
+        urlTemplate: "https://vrebajpopust.rs/?q={search_term_string}",
+      },
+      "query-input": "required name=search_term_string",
+    },
+  };
+
+  // ItemList for product listings (top 10 for SEO)
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Najbolji popusti",
+    description: "Proizvodi sa najvećim popustima preko 50%",
+    numberOfItems: deals.length,
+    itemListElement: deals.slice(0, 10).map((deal, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "Product",
+        name: deal.name,
+        url: `https://vrebajpopust.rs/deal/${deal.id}`,
+        image: deal.imageUrl?.startsWith("/")
+          ? `https://vrebajpopust.rs${deal.imageUrl}`
+          : deal.imageUrl,
+        brand: deal.brand ? { "@type": "Brand", name: deal.brand } : undefined,
+        offers: {
+          "@type": "Offer",
+          price: deal.salePrice,
+          priceCurrency: "RSD",
+          availability: "https://schema.org/InStock",
+          priceValidUntil: new Date(
+            Date.now() + 7 * 24 * 60 * 60 * 1000
+          ).toISOString().split("T")[0],
+        },
+      },
+    })),
+  };
+
+  // CollectionPage schema
+  const collectionPageSchema = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "VrebajPopust - Svi popusti",
+    description: `${deals.length} proizvoda sa popustima preko 50%`,
+    url: "https://vrebajpopust.rs",
+    mainEntity: {
+      "@type": "ItemList",
+      numberOfItems: deals.length,
+    },
+  };
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageSchema) }}
+      />
+
+      <div className="min-h-screen bg-gray-50">
+        {/* Header */}
+        <header className="sticky top-0 z-10 border-b bg-white shadow-sm">
+          <div className="mx-auto max-w-7xl px-4 py-3">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <img
+                  src="/logos/logo.png"
+                  alt="VrebajPopust"
+                  className="h-10 w-10"
+                />
+                <div>
+                  <h1 className="text-xl font-bold text-gray-900">
+                    Vrebaj<span className="text-red-500">Popust</span>
+                  </h1>
+                  <p className="hidden text-xs text-gray-500 sm:block">
+                    Popusti preko 50% u Srbiji
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Main content */}
+        <main className="mx-auto max-w-7xl px-4 py-6">
+          <DealsGrid
+            deals={deals}
+            brands={brands}
+            stores={stores}
+            categories={categories}
+            priceRange={priceRange}
+          />
+        </main>
+
+        {/* Footer */}
+        <footer className="border-t bg-white py-6">
+          <div className="mx-auto max-w-7xl px-4">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="flex items-center gap-3">
+                <img
+                  src="/logos/logo.png"
+                  alt="VrebajPopust"
+                  className="h-8 w-8"
+                />
+                <div>
+                  <span className="text-lg font-semibold text-gray-900">
+                    Vrebaj<span className="text-red-500">Popust</span>
+                  </span>
+                  <p className="text-xs text-gray-500">
+                    Agregator popusta preko 50%
+                  </p>
+                </div>
+              </div>
+              <div className="flex items-center gap-4">
+                <img
+                  src="/logos/djaksport.png"
+                  alt="Djak Sport"
+                  className="h-5 opacity-70"
+                />
+                <img
+                  src="/logos/planeta.png"
+                  alt="Planeta Sport"
+                  className="h-5 opacity-70"
+                />
+              </div>
+            </div>
+            <p className="mt-4 text-xs text-gray-400">
+              Cene se ažuriraju automatski. VrebajPopust nije odgovoran za tačnost cena.
+            </p>
+          </div>
+        </footer>
+      </div>
+    </>
   );
 }
