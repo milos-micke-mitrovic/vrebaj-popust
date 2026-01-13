@@ -40,5 +40,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# scraped data
-/data/*.json
+# debug data (keep deals JSON)
+/data/*.html
+/data/*.png
