@@ -18,7 +18,7 @@ interface DealsGridProps {
 
 type SortOption = "discount" | "price-low" | "price-high" | "name";
 
-const ITEMS_PER_PAGE = 30;
+const ITEMS_PER_PAGE = 32;
 
 const STORE_NAMES: Record<Store, string> = {
   djaksport: "Djak Sport",
@@ -636,9 +636,11 @@ export function DealsGrid({
               Nema proizvoda koji odgovaraju filterima
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
+            <div className="flex flex-wrap gap-3">
               {paginatedDeals.map((deal) => (
-                <DealCard key={deal.id} deal={deal} />
+                <div key={deal.id} className="w-[calc(50%-6px)] sm:w-[calc(25%-9px)]">
+                  <DealCard deal={deal} />
+                </div>
               ))}
             </div>
           )}

@@ -71,7 +71,7 @@ export function DealCard({ deal }: DealCardProps) {
             </p>
           )}
           <h3 className="mt-1 line-clamp-2 text-sm font-medium">{deal.name}</h3>
-          <div className="mt-2 flex items-baseline gap-2">
+          <div className="mt-2 flex flex-wrap items-baseline gap-x-2">
             <span className="text-lg font-bold text-red-600">
               {formatPrice(deal.salePrice)}
             </span>

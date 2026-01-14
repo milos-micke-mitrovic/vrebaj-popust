@@ -11,8 +11,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: baseUrl,
       lastModified: now,
-      changeFrequency: "hourly",
+      changeFrequency: "weekly",
       priority: 1.0,
+    },
+    {
+      url: `${baseUrl}/ponude`,
+      lastModified: now,
+      changeFrequency: "hourly",
+      priority: 0.95,
     },
   ];
 

@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { StoreLogo } from "@/components/store-logo";
 import { BackButton } from "@/components/back-button";
+import { Header } from "@/components/header";
 
 // Calculate price valid date at build time (7 days from build)
 const priceValidUntilDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
@@ -167,14 +168,14 @@ export default async function DealPage({ params }: Props) {
       {
         "@type": "ListItem",
         position: 1,
-        name: "Početna",
-        item: "https://vrebajpopust.rs",
+        name: "Ponude",
+        item: "https://vrebajpopust.rs/ponude",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: categoryText,
-        item: `https://vrebajpopust.rs/?category=${deal.category}`,
+        item: `https://vrebajpopust.rs/ponude?category=${deal.category}`,
       },
       {
         "@type": "ListItem",
@@ -197,26 +198,7 @@ export default async function DealPage({ params }: Props) {
       />
 
       <div className="min-h-screen bg-gray-50">
-        {/* Header */}
-        <header className="sticky top-0 z-10 border-b bg-white shadow-sm">
-          <div className="mx-auto max-w-7xl px-4 py-3">
-            <Link href="/" className="flex items-center gap-3">
-              <img
-                src="/logos/logo.png"
-                alt="VrebajPopust"
-                className="h-10 w-10"
-              />
-              <div>
-                <span className="text-xl font-bold text-gray-900">
-                  Vrebaj<span className="text-red-500">Popust</span>
-                </span>
-                <p className="hidden text-xs text-gray-500 sm:block">
-                  Popusti preko 50% u Srbiji
-                </p>
-              </div>
-            </Link>
-          </div>
-        </header>
+        <Header />
 
         {/* Breadcrumb with Back Button */}
         <nav
@@ -225,13 +207,13 @@ export default async function DealPage({ params }: Props) {
         >
           <ol className="flex items-center text-sm text-gray-500">
             <li>
-              <Link href="/" className="hover:text-red-500">
-                Početna
+              <Link href="/ponude" className="hover:text-red-500">
+                Ponude
               </Link>
             </li>
             <li className="mx-2">/</li>
             <li>
-              <Link href={`/?categories=${deal.category}`} className="hover:text-red-500">
+              <Link href={`/ponude?categories=${deal.category}`} className="hover:text-red-500">
                 {categoryText}
               </Link>
             </li>
@@ -385,7 +367,7 @@ export default async function DealPage({ params }: Props) {
                 </div>
               </div>
               <Link
-                href="/"
+                href="/ponude"
                 className="text-sm text-red-500 hover:underline"
               >
                 ← Nazad na sve ponude
