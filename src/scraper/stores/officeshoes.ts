@@ -10,7 +10,11 @@ puppeteer.use(StealthPlugin());
 
 const STORE = "officeshoes" as const;
 const BASE_URL = "https://www.officeshoes.rs";
-const SALE_URL = `${BASE_URL}/sale/0/48/discount_desc/`;
+const SALE_PAGES = [
+  { url: `${BASE_URL}/obuca-discount-popust-50-muske/10392237/48/discount_desc/`, gender: "men" },
+  { url: `${BASE_URL}/obuca-discount-popust-50-zenske/10406903/48/discount_desc/`, gender: "women" },
+  { url: `${BASE_URL}/obuca-discount-popust-50-decije/11121149/48/discount_desc/`, gender: "kids" },
+];
 const MIN_DISCOUNT = 50;
 const IMAGE_DIR = path.join(process.cwd(), "public", "images", "officeshoes");
 
@@ -222,10 +226,9 @@ async function scrapeOfficeShoes(): Promise<ScrapeResult> {
   const allDeals: RawDeal[] = [];
   const seenUrls = new Set<string>();
   let totalScraped = 0;
-  let foundBelowMinDiscount = false;
 
   console.log("Starting Office Shoes scraper with stealth mode...");
-  console.log(`Target: ${SALE_URL}`);
+  console.log(`Scraping ${SALE_PAGES.length} gender sections`);
   console.log(`Min discount: ${MIN_DISCOUNT}%`);
   console.log("Products are sorted by discount (highest first)");
 
@@ -235,172 +238,180 @@ async function scrapeOfficeShoes(): Promise<ScrapeResult> {
     const page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
 
-    console.log("\nNavigating to sale page...");
-    await page.goto(SALE_URL, {
-      waitUntil: "networkidle2",
-      timeout: 60000,
-    });
+    for (const salePage of SALE_PAGES) {
+      console.log(`\n=== Scraping: ${salePage.url} (${salePage.gender}) ===`);
+      let foundBelowMinDiscount = false;
 
-    // Wait for products to load
-    try {
-      await page.waitForSelector('.product-article_wrapper, article[data-product_id]', { timeout: 15000 });
-      console.log("Product grid loaded");
-    } catch {
-      console.log("Waiting for product grid timed out, continuing...");
-    }
+      await page.goto(salePage.url, {
+        waitUntil: "networkidle2",
+        timeout: 60000,
+      });
 
-    await sleep(2000);
-
-    // Save debug screenshot
-    await page.screenshot({
-      path: path.join(process.cwd(), "data", "officeshoes-page-1.png"),
-    });
-    const html = await page.content();
-    fs.writeFileSync(
-      path.join(process.cwd(), "data", "officeshoes-page-1.html"),
-      html
-    );
-    console.log("Saved debug screenshot and HTML");
-
-    // Click "Load more" button until all products are loaded or we hit products < 50%
-    let loadMoreClicks = 0;
-    const maxClicks = 50; // Safety limit
-
-    while (loadMoreClicks < maxClicks && !foundBelowMinDiscount) {
-      // Check if load more button exists and is visible
-      const loadMoreBtn = await page.$('#loadMoreButton');
-
-      if (!loadMoreBtn) {
-        console.log("No more 'Load more' button found");
-        break;
-      }
-
-      const isVisible = await page.evaluate((btn) => {
-        const style = window.getComputedStyle(btn as Element);
-        return style.display !== 'none' && style.visibility !== 'hidden';
-      }, loadMoreBtn);
-
-      if (!isVisible) {
-        console.log("'Load more' button is hidden, all products loaded");
-        break;
-      }
-
-      // Get current product count
-      const productCountBefore = await page.evaluate(() =>
-        document.querySelectorAll('.product-article_wrapper, article[data-product_id]').length
-      );
-
-      // Click the load more button
+      // Wait for products to load
       try {
-        await loadMoreBtn.click();
-        loadMoreClicks++;
-        console.log(`Clicked 'Load more' (${loadMoreClicks}), waiting for products...`);
+        await page.waitForSelector('.product-article_wrapper, article[data-product_id]', { timeout: 15000 });
+        console.log("Product grid loaded");
+      } catch {
+        console.log("Waiting for product grid timed out, continuing...");
+      }
 
-        // Wait for new products to load
-        await sleep(2000 + Math.random() * 1000);
+      await sleep(2000);
 
-        // Check if new products were loaded
-        const productCountAfter = await page.evaluate(() =>
-          document.querySelectorAll('.product-article_wrapper, article[data-product_id]').length
+      // Save debug screenshot for first section only
+      if (salePage === SALE_PAGES[0]) {
+        await page.screenshot({
+          path: path.join(process.cwd(), "data", "officeshoes-page-1.png"),
+        });
+        const html = await page.content();
+        fs.writeFileSync(
+          path.join(process.cwd(), "data", "officeshoes-page-1.html"),
+          html
         );
+        console.log("Saved debug screenshot and HTML");
+      }
 
-        if (productCountAfter === productCountBefore) {
-          console.log("No new products loaded, stopping");
+      // Click "Load more" button until all products are loaded or we hit products < 50%
+      let loadMoreClicks = 0;
+      const maxClicks = 50; // Safety limit
+
+      while (loadMoreClicks < maxClicks && !foundBelowMinDiscount) {
+        const loadMoreBtn = await page.$('#loadMoreButton');
+
+        if (!loadMoreBtn) {
+          console.log("No more 'Load more' button found");
           break;
         }
 
-        console.log(`Products: ${productCountBefore} -> ${productCountAfter}`);
+        const isVisible = await page.evaluate((btn) => {
+          const style = window.getComputedStyle(btn as Element);
+          return style.display !== 'none' && style.visibility !== 'hidden';
+        }, loadMoreBtn);
 
-        // Check if latest products are below min discount (products are sorted by discount desc)
-        const latestProducts = await page.evaluate(`
-          (function() {
-            var items = document.querySelectorAll('.product-article_wrapper, article[data-product_id]');
-            var lastItems = Array.from(items).slice(-10);
-            var discounts = [];
-            lastItems.forEach(function(el) {
-              var discountImg = el.querySelector('img[src*="ssrs"]');
-              if (discountImg) {
-                var match = discountImg.src.match(/ssrs(\\d+)/);
-                if (match) discounts.push(parseInt(match[1], 10));
-              }
-            });
-            return discounts;
-          })()
-        `) as number[];
-
-        if (latestProducts.length > 0) {
-          const minInBatch = Math.min(...latestProducts);
-          console.log(`Latest batch discounts: ${latestProducts.join(', ')}% (min: ${minInBatch}%)`);
-          if (minInBatch < MIN_DISCOUNT) {
-            console.log(`Found products below ${MIN_DISCOUNT}%, stopping load more`);
-            foundBelowMinDiscount = true;
-          }
+        if (!isVisible) {
+          console.log("'Load more' button is hidden, all products loaded");
+          break;
         }
 
-      } catch (err) {
-        const message = err instanceof Error ? err.message : String(err);
-        console.log(`Error clicking load more: ${message}`);
-        break;
-      }
-    }
-
-    // Now extract all products
-    const products = await extractProducts(page);
-    console.log(`\nFound ${products.length} total product elements`);
-
-    if (products.length > 0) {
-      console.log("Sample product:", JSON.stringify(products[0], null, 2));
-    }
-
-    for (const product of products) {
-      // Skip duplicates
-      if (seenUrls.has(product.url)) continue;
-      seenUrls.add(product.url);
-
-      totalScraped++;
-
-      const originalPrice = parsePrice(product.originalPrice);
-      const salePrice = parsePrice(product.salePrice);
-
-      if (originalPrice <= 0 || salePrice <= 0) continue;
-      if (salePrice >= originalPrice) continue;
-
-      const discountPercent =
-        product.discountPercent || calcDiscount(originalPrice, salePrice);
-
-      // Since sorted by discount desc, stop when we hit < MIN_DISCOUNT
-      if (discountPercent < MIN_DISCOUNT) {
-        console.log(`Reached product with ${discountPercent}% discount, stopping (sorted by discount desc)`);
-        break;
-      }
-
-      let localImageUrl: string | null = null;
-      if (product.imageUrl) {
-        const imgFilename =
-          product.imageUrl.split("/").pop()?.split("?")[0] || `${idCounter}.jpg`;
-        localImageUrl = await downloadImage(
-          product.imageUrl,
-          imgFilename,
-          page
+        const productCountBefore = await page.evaluate(() =>
+          document.querySelectorAll('.product-article_wrapper, article[data-product_id]').length
         );
+
+        try {
+          await loadMoreBtn.click();
+          loadMoreClicks++;
+          console.log(`Clicked 'Load more' (${loadMoreClicks}), waiting for products...`);
+          await sleep(2000 + Math.random() * 1000);
+
+          const productCountAfter = await page.evaluate(() =>
+            document.querySelectorAll('.product-article_wrapper, article[data-product_id]').length
+          );
+
+          if (productCountAfter === productCountBefore) {
+            console.log("No new products loaded, stopping");
+            break;
+          }
+
+          console.log(`Products: ${productCountBefore} -> ${productCountAfter}`);
+
+          // Check if latest products are below min discount
+          const latestProducts = await page.evaluate(`
+            (function() {
+              var items = document.querySelectorAll('.product-article_wrapper, article[data-product_id]');
+              var lastItems = Array.from(items).slice(-10);
+              var discounts = [];
+              lastItems.forEach(function(el) {
+                var discountImg = el.querySelector('img[src*="ssrs"]');
+                if (discountImg) {
+                  var match = discountImg.src.match(/ssrs(\\d+)/);
+                  if (match) discounts.push(parseInt(match[1], 10));
+                }
+              });
+              return discounts;
+            })()
+          `) as number[];
+
+          if (latestProducts.length > 0) {
+            const minInBatch = Math.min(...latestProducts);
+            console.log(`Latest batch discounts: ${latestProducts.join(', ')}% (min: ${minInBatch}%)`);
+            if (minInBatch < MIN_DISCOUNT) {
+              console.log(`Found products below ${MIN_DISCOUNT}%, stopping load more`);
+              foundBelowMinDiscount = true;
+            }
+          }
+
+        } catch (err) {
+          const message = err instanceof Error ? err.message : String(err);
+          console.log(`Error clicking load more: ${message}`);
+          break;
+        }
       }
 
-      allDeals.push({
-        id: generateId(product.url),
-        store: STORE,
-        name: product.name,
-        brand: product.brand,
-        originalPrice,
-        salePrice,
-        discountPercent,
-        url: product.url,
-        imageUrl: localImageUrl || product.imageUrl,
-        category: null,
-        scrapedAt: new Date(),
-      });
-    }
+      // Now extract all products from this gender section
+      const products = await extractProducts(page);
+      console.log(`Found ${products.length} total product elements`);
 
-    console.log(`\nDeals with ${MIN_DISCOUNT}%+ discount: ${allDeals.length} (total scraped: ${totalScraped})`);
+      if (products.length > 0 && salePage === SALE_PAGES[0]) {
+        console.log("Sample product:", JSON.stringify(products[0], null, 2));
+      }
+
+      // Gender marker for extractGender() to detect
+      const genderMarker = salePage.gender === "men" ? " men"
+        : salePage.gender === "women" ? " women"
+        : " kids";
+
+      for (const product of products) {
+        // Skip duplicates
+        if (seenUrls.has(product.url)) continue;
+        seenUrls.add(product.url);
+
+        totalScraped++;
+
+        const originalPrice = parsePrice(product.originalPrice);
+        const salePrice = parsePrice(product.salePrice);
+
+        if (originalPrice <= 0 || salePrice <= 0) continue;
+        if (salePrice >= originalPrice) continue;
+
+        const discountPercent =
+          product.discountPercent || calcDiscount(originalPrice, salePrice);
+
+        // Since sorted by discount desc, stop when we hit < MIN_DISCOUNT
+        if (discountPercent < MIN_DISCOUNT) {
+          console.log(`Reached product with ${discountPercent}% discount, stopping`);
+          break;
+        }
+
+        let localImageUrl: string | null = null;
+        if (product.imageUrl) {
+          const imgFilename =
+            product.imageUrl.split("/").pop()?.split("?")[0] || `${idCounter}.jpg`;
+          localImageUrl = await downloadImage(
+            product.imageUrl,
+            imgFilename,
+            page
+          );
+        }
+
+        // Append gender marker to name for extractGender() to detect
+        const nameWithGender = product.name + genderMarker;
+
+        allDeals.push({
+          id: generateId(product.url),
+          store: STORE,
+          name: nameWithGender,
+          brand: product.brand,
+          originalPrice,
+          salePrice,
+          discountPercent,
+          url: product.url,
+          imageUrl: localImageUrl || product.imageUrl,
+          category: null,
+          scrapedAt: new Date(),
+        });
+      }
+
+      console.log(`Deals with ${MIN_DISCOUNT}%+ discount: ${allDeals.length} (total scraped: ${totalScraped})`);
+    }
 
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
