@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import { Deal, RawDeal, ScrapeResult, Store, Gender, Category } from "@/types/deal";
+import { Deal, ScrapeResult, Store, Gender, Category } from "@/types/deal";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 

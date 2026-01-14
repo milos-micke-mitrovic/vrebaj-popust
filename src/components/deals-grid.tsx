@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect, useCallback, useRef } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { Deal, Store, Gender, Category } from "@/types/deal";
 import { DealCard } from "./deal-card";
@@ -95,6 +95,7 @@ export function DealsGrid({
   const urlUpdateTimeout = useRef<NodeJS.Timeout | null>(null);
 
   // Sync state from URL params when URL changes externally (e.g., clicking logo to go home)
+  // This is intentional - we need to sync external URL changes to local state
   useEffect(() => {
     // Build current state as URL params to compare
     const currentParams = new URLSearchParams();
@@ -111,6 +112,7 @@ export function DealsGrid({
     // Only sync if URL differs from current state (external navigation)
     if (currentParams.toString() !== searchParams.toString()) {
       isUpdatingFromUrl.current = true;
+      /* eslint-disable react-hooks/set-state-in-effect */
       setSearch(searchParams.get("q") || "");
       setSelectedStores((searchParams.get("stores")?.split(",").filter(Boolean) as Store[]) || []);
       setSelectedBrands(searchParams.get("brands")?.split(",").filter(Boolean) || []);
@@ -120,6 +122,7 @@ export function DealsGrid({
       setMaxPrice(searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : null);
       setSortBy((searchParams.get("sort") as SortOption) || "discount");
       setCurrentPage(Number(searchParams.get("page")) || 1);
+      /* eslint-enable react-hooks/set-state-in-effect */
       // Reset flag after a short delay
       setTimeout(() => { isUpdatingFromUrl.current = false; }, 50);
     }
@@ -557,7 +560,7 @@ export function DealsGrid({
                     setCurrentPage(1);
                   }}
                 >
-                  Pretraga: "{search}" ✕
+                  Pretraga: &quot;{search}&quot; ✕
                 </Badge>
               )}
               {selectedStores.map((store) => (

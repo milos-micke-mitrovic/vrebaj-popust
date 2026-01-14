@@ -1,0 +1,61 @@
+name: Nightly Scrape
+
+on:
+  schedule:
+    # Run at midnight Serbian time (23:00 UTC, since Serbia is UTC+1)
+    - cron: '0 23 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Puppeteer browser dependencies
+        run: npx puppeteer browsers install chrome
+
+      - name: Run DjakSport scraper
+        run: npx tsx src/scraper/stores/djaksport.ts
+        continue-on-error: true
+
+      - name: Run Planeta Sport scraper
+        run: npx tsx src/scraper/stores/planeta.ts
+        continue-on-error: true
+
+      - name: Run N-Sport scraper
+        run: npx tsx src/scraper/stores/nsport.ts
+        continue-on-error: true
+
+      - name: Run SportVision scraper
+        run: npx tsx src/scraper/stores/sportvision.ts
+        continue-on-error: true
+
+      - name: Run Buzz scraper
+        run: npx tsx src/scraper/stores/buzz.ts
+        continue-on-error: true
+
+      - name: Run Office Shoes scraper
+        run: npx tsx src/scraper/stores/officeshoes.ts
+        continue-on-error: true
+
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add data/*.json public/images/
+          git diff --staged --quiet || git commit -m "chore: Update deals data [$(date +'%Y-%m-%d')]"
+          git push

@@ -34,6 +34,11 @@ export const metadata: Metadata = {
   },
 };
 
+// Calculate price valid date at build time (7 days from build)
+const priceValidUntilDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+  .toISOString()
+  .split("T")[0];
+
 export default function Home() {
   const deals = getAllDeals();
   const brands = getUniqueBrands();
@@ -81,9 +86,7 @@ export default function Home() {
           price: deal.salePrice,
           priceCurrency: "RSD",
           availability: "https://schema.org/InStock",
-          priceValidUntil: new Date(
-            Date.now() + 7 * 24 * 60 * 60 * 1000
-          ).toISOString().split("T")[0],
+          priceValidUntil: priceValidUntilDate,
         },
       },
     })),

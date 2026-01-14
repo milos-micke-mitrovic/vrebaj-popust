@@ -8,6 +8,11 @@ import { Button } from "@/components/ui/button";
 import { StoreLogo } from "@/components/store-logo";
 import { BackButton } from "@/components/back-button";
 
+// Calculate price valid date at build time (7 days from build)
+const priceValidUntilDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+  .toISOString()
+  .split("T")[0];
+
 interface Props {
   params: Promise<{ id: string }>;
 }
@@ -145,9 +150,7 @@ export default async function DealPage({ params }: Props) {
       price: deal.salePrice,
       priceCurrency: "RSD",
       availability: "https://schema.org/InStock",
-      priceValidUntil: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
-        .toISOString()
-        .split("T")[0],
+      priceValidUntil: priceValidUntilDate,
       seller: {
         "@type": "Organization",
         name: storeInfo.name,

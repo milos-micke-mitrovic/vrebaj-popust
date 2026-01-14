@@ -189,45 +189,6 @@ async function extractProducts(page: Page): Promise<RawProduct[]> {
   `) as Promise<RawProduct[]>;
 }
 
-async function autoScroll(page: Page): Promise<void> {
-  await page.evaluate(`
-    (function() {
-      return new Promise(function(resolve) {
-        var totalHeight = 0;
-        var distance = 500;
-        var maxScrolls = 50;
-        var scrollCount = 0;
-
-        var timer = setInterval(function() {
-          var scrollHeight = document.body.scrollHeight;
-          window.scrollBy(0, distance);
-          totalHeight += distance;
-          scrollCount++;
-
-          if (totalHeight >= scrollHeight || scrollCount >= maxScrolls) {
-            clearInterval(timer);
-            resolve();
-          }
-        }, 200);
-      });
-    })()
-  `);
-}
-
-async function clickShowMore(page: Page): Promise<boolean> {
-  try {
-    const showMoreButton = await page.$('button:has-text("Prikaži više"), .show-more, [class*="load-more"]');
-    if (showMoreButton) {
-      await showMoreButton.click();
-      await sleep(2000);
-      return true;
-    }
-  } catch {
-    // No more button or error
-  }
-  return false;
-}
-
 async function scrapeSportVision(): Promise<ScrapeResult> {
   const errors: string[] = [];
   const allDeals: RawDeal[] = [];
