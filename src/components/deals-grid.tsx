@@ -427,43 +427,26 @@ export function DealsGrid({
 
   return (
     <div>
-      {/* Mobile/Tablet Filter Bar - visible on smaller screens */}
-      <div className="mb-4 flex flex-wrap items-center gap-2 lg:hidden">
-        <Button
-          onClick={() => setShowMobileFilters(true)}
-          variant="outline"
-          className="flex items-center gap-2"
-        >
-          <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-            />
-          </svg>
-          Filteri
-          {activeFilterCount > 0 && (
-            <Badge variant="secondary" className="ml-1">
-              {activeFilterCount}
-            </Badge>
-          )}
-        </Button>
-
-        {/* Quick gender filters */}
-        <div className="flex gap-1 overflow-x-auto">
-          {(["men", "women", "kids"] as Gender[]).map((gender) => (
-            <Badge
-              key={gender}
-              variant={selectedGenders.includes(gender) ? "default" : "outline"}
-              className="cursor-pointer whitespace-nowrap"
-              onClick={() => toggleGender(gender)}
-            >
-              {GENDER_NAMES[gender]}
-            </Badge>
-          ))}
-        </div>
-      </div>
+      {/* Fixed Filter Tab Button - Left Side Top (mobile/tablet only) */}
+      <button
+        onClick={() => setShowMobileFilters(true)}
+        className="fixed left-0 top-20 z-40 flex items-center gap-1 rounded-r-lg bg-red-500 px-2 py-3 text-white shadow-lg transition-all hover:bg-red-600 hover:pl-3 lg:hidden"
+        aria-label="Otvori filtere"
+      >
+        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
+          />
+        </svg>
+        {activeFilterCount > 0 && (
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-xs font-bold text-red-500">
+            {activeFilterCount}
+          </span>
+        )}
+      </button>
 
       {/* Mobile Filter Drawer - Left Side */}
       {showMobileFilters && (
@@ -475,13 +458,14 @@ export function DealsGrid({
           <div className="absolute top-0 left-0 bottom-0 w-72 max-w-[80vw] overflow-y-auto bg-white shadow-xl rounded-r-2xl animate-[slideInLeft_0.25s_ease-out]">
             <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white p-4">
               <h2 className="text-lg font-semibold">Filteri</h2>
-              <Button
-                variant="ghost"
-                size="sm"
+              <button
                 onClick={() => setShowMobileFilters(false)}
+                className="rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
               >
-                ✕
-              </Button>
+                <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
             </div>
             <div className="p-4 pb-8">
               {filterContentJSX}
@@ -505,9 +489,9 @@ export function DealsGrid({
         {/* Main Content */}
         <div className="flex-1 min-w-0">
           {/* Top Bar */}
-          <div className="mb-4 flex items-center justify-between gap-4">
+          <div className="mb-4 flex items-center justify-end gap-4">
             <p className="text-sm text-gray-600">
-              {filteredDeals.length} proizvoda
+              {filteredDeals.length} {filteredDeals.length === 1 ? "proizvod" : "proizvoda"}
             </p>
             <select
               value={sortBy}

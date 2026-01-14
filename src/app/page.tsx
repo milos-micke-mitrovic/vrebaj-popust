@@ -116,7 +116,7 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageSchema) }}
       />
 
-      <div className="min-h-screen bg-gray-50">
+      <div className="flex min-h-screen flex-col bg-gray-50">
         {/* Header */}
         <header className="sticky top-0 z-10 border-b bg-white shadow-sm">
           <div className="mx-auto max-w-7xl px-4 py-3">
@@ -141,7 +141,7 @@ export default function Home() {
         </header>
 
         {/* Main content */}
-        <main className="mx-auto max-w-7xl px-4 py-6">
+        <main className="mx-auto max-w-7xl flex-1 px-4 py-6">
           <Suspense fallback={<div className="py-12 text-center text-gray-500">Učitavanje...</div>}>
             <DealsGrid
               deals={deals}
