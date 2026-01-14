@@ -55,10 +55,14 @@ jobs:
         run: npx tsx src/scraper/stores/officeshoes.ts
         continue-on-error: true
 
+      - name: Cleanup orphaned images
+        run: npx tsx src/scraper/cleanup-images.ts
+
       - name: Commit and push changes
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add data/*.json public/images/
+          git add data/*.json
+          git add -A public/images/
           git diff --staged --quiet || git commit -m "chore: Update deals data [$(date +'%Y-%m-%d')]"
           git push
