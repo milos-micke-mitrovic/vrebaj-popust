@@ -70,6 +70,7 @@ const STORE_FILES: Record<Store, string> = {
   sportvision: "sportvision-deals.json",
   nsport: "nsport-deals.json",
   buzz: "buzz-deals.json",
+  officeshoes: "officeshoes-deals.json",
 };
 
 export const STORE_INFO: Record<
@@ -100,6 +101,11 @@ export const STORE_INFO: Record<
     name: "Buzz Sneakers",
     logo: "/logos/buzz.png",
     url: "https://www.buzzsneakers.rs",
+  },
+  officeshoes: {
+    name: "Office Shoes",
+    logo: "/logos/officeshoes.png",
+    url: "https://www.officeshoes.rs",
   },
 };
 

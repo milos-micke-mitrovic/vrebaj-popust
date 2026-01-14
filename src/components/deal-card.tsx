@@ -17,6 +17,7 @@ const STORE_INFO: Record<Store, { name: string; logo: string; fallbackColor: str
   sportvision: { name: "Sport Vision", logo: "/logos/sportvision.png", fallbackColor: "bg-orange-600" },
   nsport: { name: "N Sport", logo: "/logos/nsport.jpg", fallbackColor: "bg-green-600" },
   buzz: { name: "Buzz", logo: "/logos/buzz.png", fallbackColor: "bg-yellow-500" },
+  officeshoes: { name: "Office Shoes", logo: "/logos/officeshoes.png", fallbackColor: "bg-purple-600" },
 };
 
 export function DealCard({ deal }: DealCardProps) {

@@ -199,6 +199,11 @@ export default function Home() {
                   alt="Buzz Sneakers"
                   className="h-5 opacity-70 hover:opacity-100 transition-opacity"
                 />
+                <img
+                  src="/logos/officeshoes.png"
+                  alt="Office Shoes"
+                  className="h-5 opacity-70 hover:opacity-100 transition-opacity"
+                />
               </div>
             </div>
             <p className="mt-4 text-xs text-gray-400">
