@@ -281,6 +281,7 @@ export function DealsGrid({
   };
 
   const hasActiveFilters =
+    search.length > 0 ||
     selectedStores.length > 0 ||
     selectedGenders.length > 0 ||
     selectedCategories.length > 0 ||
@@ -289,6 +290,7 @@ export function DealsGrid({
     maxPrice !== null;
 
   const activeFilterCount =
+    (search.length > 0 ? 1 : 0) +
     selectedStores.length +
     selectedGenders.length +
     selectedCategories.length +
@@ -545,6 +547,18 @@ export function DealsGrid({
           {/* Active Filters */}
           {hasActiveFilters && (
             <div className="mb-4 flex flex-wrap gap-2">
+              {search && (
+                <Badge
+                  variant="secondary"
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setSearch("");
+                    setCurrentPage(1);
+                  }}
+                >
+                  Pretraga: "{search}" ✕
+                </Badge>
+              )}
               {selectedStores.map((store) => (
                 <Badge
                   key={store}
