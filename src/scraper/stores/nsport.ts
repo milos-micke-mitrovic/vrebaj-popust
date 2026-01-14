@@ -10,16 +10,23 @@ puppeteer.use(StealthPlugin());
 
 const STORE = "nsport" as const;
 const BASE_URL = "https://www.n-sport.net";
+
+// Gender-specific promo pages (40-70% discount promo filtered by gender)
 const SALE_PAGES = [
   {
-    url: `${BASE_URL}/promos/popusti-od-40-do-70-sport.html`,
-    paginationBase: `${BASE_URL}/index.php?mod=catalog&op=browse&view=promo&sef_name=popusti-od-40-do-70-sport&filters%5Bpromo%5D%5B0%5D=Popusti+od+40%25+do+70%25+Sport`,
+    url: `${BASE_URL}/index.php?mod=catalog&op=browse&view=promo&filters%5Bpromo%5D%5B%5D=Popusti+od+40%25+do+70%25+Sport&filters%5BPol%5D%5B%5D=Mu%C5%A1karci`,
+    gender: "men",
   },
   {
-    url: `${BASE_URL}/promos/popusti-do--60.html`,
-    paginationBase: `${BASE_URL}/index.php?mod=catalog&op=browse&view=promo&sef_name=popusti-do--60&filters%5Bpromo%5D%5B0%5D=Popusti+do+-60%25`,
+    url: `${BASE_URL}/index.php?mod=catalog&op=browse&view=promo&filters%5Bpromo%5D%5B%5D=Popusti+od+40%25+do+70%25+Sport&filters%5BPol%5D%5B%5D=%C5%BDene`,
+    gender: "women",
+  },
+  {
+    url: `${BASE_URL}/index.php?mod=catalog&op=browse&view=promo&filters%5Bpromo%5D%5B%5D=Popusti+od+40%25+do+70%25+Sport&filters%5BPol%5D%5B%5D=Deca`,
+    gender: "kids",
   },
 ];
+
 const MIN_DISCOUNT = 50;
 const IMAGE_DIR = path.join(process.cwd(), "public", "images", "nsport");
 
@@ -252,7 +259,7 @@ async function scrapeNSport(): Promise<ScrapeResult> {
   let totalScraped = 0;
 
   console.log("Starting N-Sport scraper with stealth mode...");
-  console.log(`Scraping ${SALE_PAGES.length} promo sections`);
+  console.log(`Scraping ${SALE_PAGES.length} gender sections`);
   console.log(`Min discount: ${MIN_DISCOUNT}%`);
 
   const browser = await launchBrowser();
@@ -261,136 +268,144 @@ async function scrapeNSport(): Promise<ScrapeResult> {
     const page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
 
-    for (const promoSection of SALE_PAGES) {
-      console.log(`\n=== Scraping: ${promoSection.url} ===`);
+    for (const salePage of SALE_PAGES) {
+      console.log(`\n=== Scraping: ${salePage.gender} ===`);
 
       let currentPage = 1;
       const maxPages = 10;
 
       while (currentPage <= maxPages) {
         const pageUrl = currentPage === 1
-          ? promoSection.url
-          : `${promoSection.paginationBase}&pg=${currentPage}`;
+          ? salePage.url
+          : `${salePage.url}&pg=${currentPage}`;
         console.log(`\nScraping page ${currentPage}: ${pageUrl}`);
 
-      try {
-        await page.goto(pageUrl, {
-          waitUntil: "networkidle2",
-          timeout: 60000,
-        });
-
-        // Wait for products to load
         try {
-          await page.waitForSelector('.product, .product-item', { timeout: 15000 });
-          console.log("Product grid loaded");
-        } catch {
-          console.log("Waiting for product grid timed out, continuing...");
-        }
-
-        await sleep(2000 + Math.random() * 2000);
-        await autoScroll(page);
-        await sleep(2000);
-
-        // Save debug screenshot for first page of first section only
-        if (currentPage === 1 && promoSection === SALE_PAGES[0]) {
-          await page.screenshot({
-            path: path.join(process.cwd(), "data", "nsport-page-1.png"),
+          await page.goto(pageUrl, {
+            waitUntil: "networkidle2",
+            timeout: 60000,
           });
-          const html = await page.content();
-          fs.writeFileSync(
-            path.join(process.cwd(), "data", "nsport-page-1.html"),
-            html
-          );
-          console.log("Saved debug screenshot and HTML");
-        }
 
-        const products = await extractProducts(page);
-        console.log(`Found ${products.length} product elements`);
-
-        if (products.length === 0) {
-          console.log("No products found, ending pagination");
-          break;
-        }
-
-        if (products.length > 0 && currentPage === 1 && promoSection === SALE_PAGES[0]) {
-          console.log("Sample product:", JSON.stringify(products[0], null, 2));
-        }
-
-        for (const product of products) {
-          // Skip duplicates
-          if (seenUrls.has(product.url)) continue;
-          seenUrls.add(product.url);
-
-          const originalPrice = parsePrice(product.originalPrice);
-          const salePrice = parsePrice(product.salePrice);
-
-          if (originalPrice <= 0 || salePrice <= 0) continue;
-          if (salePrice >= originalPrice) continue;
-
-          const discountPercent =
-            product.discountFromSite || calcDiscount(originalPrice, salePrice);
-
-          if (discountPercent >= MIN_DISCOUNT) {
-            let localImageUrl: string | null = null;
-            if (product.imageUrl) {
-              const imgFilename =
-                product.imageUrl.split("/").pop()?.split("?")[0] || `${idCounter}.jpg`;
-              localImageUrl = await downloadImage(
-                product.imageUrl,
-                imgFilename,
-                page
-              );
-            }
-
-            allDeals.push({
-              id: generateId(product.url),
-              store: STORE,
-              name: product.name,
-              brand: product.brand,
-              originalPrice,
-              salePrice,
-              discountPercent,
-              url: product.url,
-              imageUrl: localImageUrl || product.imageUrl,
-              category: null,
-              scrapedAt: new Date(),
-            });
+          // Wait for products to load
+          try {
+            await page.waitForSelector('.product, .product-item', { timeout: 15000 });
+            console.log("Product grid loaded");
+          } catch {
+            console.log("Waiting for product grid timed out, continuing...");
           }
-        }
 
-        totalScraped += products.length;
-        console.log(
-          `Deals with ${MIN_DISCOUNT}%+ discount: ${allDeals.length} (total scraped: ${totalScraped})`
-        );
+          await sleep(2000 + Math.random() * 2000);
+          await autoScroll(page);
+          await sleep(2000);
 
-        // Check if there's a next page - N-Sport uses .paginationTG with >> for next
-        const hasNextPage = await page.evaluate(`
-          (function() {
-            var paginationLinks = document.querySelectorAll('.paginationTG a');
-            for (var i = 0; i < paginationLinks.length; i++) {
-              if (paginationLinks[i].textContent.trim() === '>>' ||
-                  paginationLinks[i].textContent.trim() === '»') {
-                return true;
+          // Save debug screenshot for first page of first section only
+          if (currentPage === 1 && salePage === SALE_PAGES[0]) {
+            await page.screenshot({
+              path: path.join(process.cwd(), "data", "nsport-page-1.png"),
+            });
+            const html = await page.content();
+            fs.writeFileSync(
+              path.join(process.cwd(), "data", "nsport-page-1.html"),
+              html
+            );
+            console.log("Saved debug screenshot and HTML");
+          }
+
+          const products = await extractProducts(page);
+          console.log(`Found ${products.length} product elements`);
+
+          if (products.length === 0) {
+            console.log("No products found, ending pagination");
+            break;
+          }
+
+          if (products.length > 0 && currentPage === 1 && salePage === SALE_PAGES[0]) {
+            console.log("Sample product:", JSON.stringify(products[0], null, 2));
+          }
+
+          // Gender marker for extractGender() to detect
+          const genderMarker = salePage.gender === "men" ? " men"
+            : salePage.gender === "women" ? " women"
+            : " kids";
+
+          for (const product of products) {
+            // Skip duplicates
+            if (seenUrls.has(product.url)) continue;
+            seenUrls.add(product.url);
+
+            const originalPrice = parsePrice(product.originalPrice);
+            const salePrice = parsePrice(product.salePrice);
+
+            if (originalPrice <= 0 || salePrice <= 0) continue;
+            if (salePrice >= originalPrice) continue;
+
+            const discountPercent =
+              product.discountFromSite || calcDiscount(originalPrice, salePrice);
+
+            if (discountPercent >= MIN_DISCOUNT) {
+              let localImageUrl: string | null = null;
+              if (product.imageUrl) {
+                const imgFilename =
+                  product.imageUrl.split("/").pop()?.split("?")[0] || `${idCounter}.jpg`;
+                localImageUrl = await downloadImage(
+                  product.imageUrl,
+                  imgFilename,
+                  page
+                );
               }
-            }
-            return false;
-          })()
-        `) as boolean;
 
-        if (!hasNextPage) {
-          console.log("No more pages");
+              // Append gender marker to name for extractGender() to detect
+              const nameWithGender = product.name + genderMarker;
+
+              allDeals.push({
+                id: generateId(product.url),
+                store: STORE,
+                name: nameWithGender,
+                brand: product.brand,
+                originalPrice,
+                salePrice,
+                discountPercent,
+                url: product.url,
+                imageUrl: localImageUrl || product.imageUrl,
+                category: null,
+                scrapedAt: new Date(),
+              });
+            }
+          }
+
+          totalScraped += products.length;
+          console.log(
+            `Deals with ${MIN_DISCOUNT}%+ discount: ${allDeals.length} (total scraped: ${totalScraped})`
+          );
+
+          // Check if there's a next page - N-Sport uses .paginationTG with >> for next
+          const hasNextPage = await page.evaluate(`
+            (function() {
+              var paginationLinks = document.querySelectorAll('.paginationTG a');
+              for (var i = 0; i < paginationLinks.length; i++) {
+                if (paginationLinks[i].textContent.trim() === '>>' ||
+                    paginationLinks[i].textContent.trim() === '»') {
+                  return true;
+                }
+              }
+              return false;
+            })()
+          `) as boolean;
+
+          if (!hasNextPage) {
+            console.log("No more pages");
+            break;
+          }
+
+          currentPage++;
+          await sleep(3000 + Math.random() * 2000);
+
+        } catch (err) {
+          const message = err instanceof Error ? err.message : String(err);
+          errors.push(`${salePage.gender} page ${currentPage}: ${message}`);
+          console.error(`Error on page ${currentPage}:`, message);
           break;
         }
-
-        currentPage++;
-        await sleep(3000 + Math.random() * 2000);
-
-      } catch (err) {
-        const message = err instanceof Error ? err.message : String(err);
-        errors.push(`Page ${currentPage}: ${message}`);
-        console.error(`Error on page ${currentPage}:`, message);
-        break;
-      }
       }
     }
   } finally {

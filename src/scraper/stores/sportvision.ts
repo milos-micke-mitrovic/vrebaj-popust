@@ -10,7 +10,11 @@ puppeteer.use(StealthPlugin());
 
 const STORE = "sportvision" as const;
 const BASE_URL = "https://www.sportvision.rs";
-const OUTLET_URL = `${BASE_URL}/proizvodi/outlet-ponuda`;
+const SALE_PAGES = [
+  { url: `${BASE_URL}/proizvodi/samo-online-muskarci`, gender: "men" },
+  { url: `${BASE_URL}/proizvodi/samo-online-zene`, gender: "women" },
+  { url: `${BASE_URL}/proizvodi/samo-online-deca`, gender: "kids" },
+];
 const MIN_DISCOUNT = 50;
 const IMAGE_DIR = path.join(process.cwd(), "public", "images", "sportvision");
 
@@ -231,7 +235,7 @@ async function scrapeSportVision(): Promise<ScrapeResult> {
   let totalScraped = 0;
 
   console.log("Starting SportVision scraper with stealth mode...");
-  console.log(`Target: ${OUTLET_URL}`);
+  console.log(`Scraping ${SALE_PAGES.length} gender sections`);
   console.log(`Min discount: ${MIN_DISCOUNT}%`);
 
   const browser = await launchBrowser();
@@ -240,17 +244,11 @@ async function scrapeSportVision(): Promise<ScrapeResult> {
     const page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
 
-    // Start with page showing 48 items
-    const startUrl = `${OUTLET_URL}?limit=48`;
-    let currentPage = 1;
-    const maxPages = 20;
-
-    while (currentPage <= maxPages) {
-      const pageUrl = currentPage === 1 ? startUrl : `${startUrl}&p=${currentPage}`;
-      console.log(`\nScraping page ${currentPage}: ${pageUrl}`);
+    for (const salePage of SALE_PAGES) {
+      console.log(`\n=== Scraping: ${salePage.url} (${salePage.gender}) ===`);
 
       try {
-        await page.goto(pageUrl, {
+        await page.goto(salePage.url, {
           waitUntil: "networkidle2",
           timeout: 60000,
         });
@@ -264,11 +262,9 @@ async function scrapeSportVision(): Promise<ScrapeResult> {
         }
 
         await sleep(2000 + Math.random() * 2000);
-        await autoScroll(page);
-        await sleep(2000);
 
-        // Save debug screenshot for first page
-        if (currentPage === 1) {
+        // Save debug screenshot for first section only
+        if (salePage === SALE_PAGES[0]) {
           await page.screenshot({
             path: path.join(process.cwd(), "data", "sportvision-page-1.png"),
           });
@@ -280,22 +276,76 @@ async function scrapeSportVision(): Promise<ScrapeResult> {
           console.log("Saved debug screenshot and HTML");
         }
 
-        const products = await extractProducts(page);
-        console.log(`Found ${products.length} product elements`);
+        // Click "Load more" button until all products are loaded
+        let loadMoreClicks = 0;
+        const maxClicks = 50; // Safety limit
 
-        if (products.length === 0) {
-          console.log("No products found, ending pagination");
-          break;
+        while (loadMoreClicks < maxClicks) {
+          // Look for load more button - SportVision uses .next-load-btn
+          const loadMoreBtn = await page.$('.next-load-btn, a.next-load-btn');
+
+          if (!loadMoreBtn) {
+            console.log("No 'Load more' button found");
+            break;
+          }
+
+          const isVisible = await page.evaluate((btn) => {
+            const style = window.getComputedStyle(btn as Element);
+            const rect = (btn as Element).getBoundingClientRect();
+            return style.display !== 'none' && style.visibility !== 'hidden' && rect.height > 0;
+          }, loadMoreBtn);
+
+          if (!isVisible) {
+            console.log("'Load more' button is hidden, all products loaded");
+            break;
+          }
+
+          const productCountBefore = await page.evaluate(() =>
+            document.querySelectorAll('.product-item[data-productid]').length
+          );
+
+          try {
+            await loadMoreBtn.click();
+            loadMoreClicks++;
+            console.log(`Clicked 'Load more' (${loadMoreClicks}), waiting for products...`);
+            await sleep(2000 + Math.random() * 1000);
+
+            const productCountAfter = await page.evaluate(() =>
+              document.querySelectorAll('.product-item[data-productid]').length
+            );
+
+            if (productCountAfter === productCountBefore) {
+              console.log("No new products loaded, stopping");
+              break;
+            }
+
+            console.log(`Products: ${productCountBefore} -> ${productCountAfter}`);
+          } catch (err) {
+            const message = err instanceof Error ? err.message : String(err);
+            console.log(`Error clicking load more: ${message}`);
+            break;
+          }
         }
 
-        if (products.length > 0 && currentPage === 1) {
+        // Now extract all products
+        const products = await extractProducts(page);
+        console.log(`Found ${products.length} total product elements`);
+
+        if (products.length > 0 && salePage === SALE_PAGES[0]) {
           console.log("Sample product:", JSON.stringify(products[0], null, 2));
         }
+
+        // Gender marker for extractGender() to detect
+        const genderMarker = salePage.gender === "men" ? " men"
+          : salePage.gender === "women" ? " women"
+          : " kids";
 
         for (const product of products) {
           // Skip duplicates
           if (seenUrls.has(product.url)) continue;
           seenUrls.add(product.url);
+
+          totalScraped++;
 
           const originalPrice = parsePrice(product.originalPrice);
           const salePrice = parsePrice(product.salePrice);
@@ -318,10 +368,13 @@ async function scrapeSportVision(): Promise<ScrapeResult> {
               );
             }
 
+            // Append gender marker to name for extractGender() to detect
+            const nameWithGender = product.name + genderMarker;
+
             allDeals.push({
               id: generateId(product.url),
               store: STORE,
-              name: product.name,
+              name: nameWithGender,
               brand: product.brand,
               originalPrice,
               salePrice,
@@ -334,33 +387,17 @@ async function scrapeSportVision(): Promise<ScrapeResult> {
           }
         }
 
-        totalScraped += products.length;
         console.log(
           `Deals with ${MIN_DISCOUNT}%+ discount: ${allDeals.length} (total scraped: ${totalScraped})`
         );
 
-        // Check if there's a next page
-        const hasNextPage = await page.evaluate(`
-          (function() {
-            var nextBtn = document.querySelector('.pages-item-next a, a.next, [class*="next-page"]');
-            return !!nextBtn;
-          })()
-        `) as boolean;
-
-        if (!hasNextPage && products.length < 48) {
-          console.log("No more pages");
-          break;
-        }
-
-        currentPage++;
-        await sleep(3000 + Math.random() * 2000);
-
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err);
-        errors.push(`Page ${currentPage}: ${message}`);
-        console.error(`Error on page ${currentPage}:`, message);
-        break;
+        errors.push(`${salePage.gender}: ${message}`);
+        console.error(`Error scraping ${salePage.gender}:`, message);
       }
+
+      await sleep(3000 + Math.random() * 2000);
     }
   } finally {
     await browser.close();

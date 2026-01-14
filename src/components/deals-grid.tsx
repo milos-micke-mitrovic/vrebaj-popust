@@ -365,7 +365,8 @@ export function DealsGrid({
       </div>
 
       <div>
-        <h3 className="mb-2 text-sm font-semibold text-gray-700">Kategorija</h3>
+        <h3 className="mb-1 text-sm font-semibold text-gray-700">Kategorija</h3>
+        <p className="mb-2 text-xs text-gray-400">* Filteri nisu precizni</p>
         <div className="space-y-1.5 max-h-44 overflow-y-auto pr-2">
           {categories.map((category) => (
             <label
