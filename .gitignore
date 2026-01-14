@@ -43,3 +43,9 @@ next-env.d.ts
 # debug data (keep deals JSON)
 /data/*.html
 /data/*.png
+
+# PWA generated files
+/public/sw.js
+/public/sw.js.map
+/public/workbox-*.js
+/public/workbox-*.js.map

@@ -130,8 +130,7 @@ export default function RootLayout({
     <html lang="sr" dir="ltr" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/icon.png" type="image/png" />
-        <link rel="apple-touch-icon" href="/apple-icon.png" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
         <meta name="geo.region" content="RS" />
         <meta name="geo.placename" content="Serbia" />
