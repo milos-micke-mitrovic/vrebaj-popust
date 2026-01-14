@@ -8,6 +8,7 @@ import { ScrollFade } from "./scroll-fade";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { SearchX } from "lucide-react";
 
 interface DealsGridProps {
   deals: Deal[];
@@ -591,7 +592,7 @@ export function DealsGrid({
       {/* Fixed Filter Tab Button - Left Side Top (mobile/tablet only) */}
       <button
         onClick={() => setShowMobileFilters(true)}
-        className="fixed left-0 top-20 z-40 flex items-center gap-1 rounded-r-lg bg-red-500 px-2 py-3 text-white shadow-lg transition-all hover:bg-red-600 hover:pl-3 lg:hidden"
+        className="cursor-pointer fixed left-0 top-20 z-40 flex items-center gap-1 rounded-r-lg bg-red-500 px-2 py-3 text-white shadow-lg transition-all hover:bg-red-600 hover:pl-3 lg:hidden"
         aria-label="Otvori filtere"
       >
         <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -621,7 +622,7 @@ export function DealsGrid({
               <h2 className="text-lg font-semibold">Filteri</h2>
               <button
                 onClick={() => setShowMobileFilters(false)}
-                className="rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                className="cursor-pointer rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -650,121 +651,238 @@ export function DealsGrid({
 
         {/* Main Content */}
         <div className="min-w-0">
-          {/* Top Bar */}
-          <div className="mb-4 flex items-center justify-end gap-4">
-            <p className="text-sm text-gray-600">
-              {filteredDeals.length} {filteredDeals.length === 1 ? "proizvod" : "proizvoda"}
-            </p>
-            <select
-              value={sortBy}
-              onChange={(e) => setSortBy(e.target.value as SortOption)}
-              className="rounded border border-gray-200 bg-white px-3 py-1.5 text-sm"
-            >
-              <option value="discount">Sortiraj: Popust ↓</option>
-              <option value="price-low">Sortiraj: Cena ↑</option>
-              <option value="price-high">Sortiraj: Cena ↓</option>
-              <option value="name">Sortiraj: Naziv</option>
-            </select>
-          </div>
+          {/* Top Bar - Sort and Active Filters */}
+          <div className="mb-4">
+            {/* Desktop/Tablet: Single row */}
+            <div className="sm:flex sm:items-center sm:gap-4">
+              {/* Active Filters - left side on sm+, with padding for toggle button on tablet */}
+              {hasActiveFilters && (
+                <div className="hidden sm:flex sm:flex-1 flex-wrap gap-2 pl-10 lg:pl-0">
+                  {search && (
+                    <Badge
+                      variant="secondary"
+                      className="cursor-pointer px-3 py-1.5 text-sm"
+                      onClick={() => {
+                        setSearch("");
+                        setCurrentPage(1);
+                      }}
+                    >
+                      Pretraga: &quot;{search}&quot; ✕
+                    </Badge>
+                  )}
+                  {selectedStores.map((store) => (
+                    <Badge
+                      key={store}
+                      variant="secondary"
+                      className="cursor-pointer px-3 py-1.5 text-sm"
+                      onClick={() => toggleStore(store)}
+                    >
+                      {STORE_NAMES[store]} ✕
+                    </Badge>
+                  ))}
+                  {selectedGenders.map((gender) => (
+                    <Badge
+                      key={gender}
+                      variant="secondary"
+                      className="cursor-pointer px-3 py-1.5 text-sm"
+                      onClick={() => toggleGender(gender)}
+                    >
+                      {GENDER_NAMES[gender]} ✕
+                    </Badge>
+                  ))}
+                  {selectedCategories.map((category) => (
+                    <Badge
+                      key={category}
+                      variant="secondary"
+                      className="cursor-pointer px-3 py-1.5 text-sm"
+                      onClick={() => toggleCategory(category)}
+                    >
+                      {CATEGORY_NAMES[category]} ✕
+                    </Badge>
+                  ))}
+                  {selectedBrands.map((brand) => (
+                    <Badge
+                      key={brand}
+                      variant="secondary"
+                      className="cursor-pointer px-3 py-1.5 text-sm"
+                      onClick={() => toggleBrand(brand)}
+                    >
+                      {brand} ✕
+                    </Badge>
+                  ))}
+                  {minDiscount > 50 && (
+                    <Badge
+                      variant="secondary"
+                      className="cursor-pointer px-3 py-1.5 text-sm"
+                      onClick={() => {
+                        setMinDiscount(50);
+                        setCurrentPage(1);
+                      }}
+                    >
+                      Min {minDiscount}% ✕
+                    </Badge>
+                  )}
+                  {minPrice !== null && (
+                    <Badge
+                      variant="secondary"
+                      className="cursor-pointer px-3 py-1.5 text-sm"
+                      onClick={() => {
+                        setMinPrice(null);
+                        setCurrentPage(1);
+                      }}
+                    >
+                      Od {minPrice.toLocaleString()} RSD ✕
+                    </Badge>
+                  )}
+                  {maxPrice !== null && (
+                    <Badge
+                      variant="secondary"
+                      className="cursor-pointer px-3 py-1.5 text-sm"
+                      onClick={() => {
+                        setMaxPrice(null);
+                        setCurrentPage(1);
+                      }}
+                    >
+                      Do {maxPrice.toLocaleString()} RSD ✕
+                    </Badge>
+                  )}
+                </div>
+              )}
 
-          {/* Active Filters */}
-          {hasActiveFilters && (
-            <div className="mb-4 flex flex-wrap gap-2">
-              {search && (
-                <Badge
-                  variant="secondary"
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setSearch("");
-                    setCurrentPage(1);
-                  }}
+              {/* Sort and count - right side */}
+              <div className="flex items-center justify-end gap-4 sm:flex-shrink-0">
+                <p className="text-sm text-gray-600">
+                  {filteredDeals.length} {filteredDeals.length === 1 ? "proizvod" : "proizvoda"}
+                </p>
+                <select
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value as SortOption)}
+                  className="rounded border border-gray-200 bg-white px-3 py-1.5 text-sm"
                 >
-                  Pretraga: &quot;{search}&quot; ✕
-                </Badge>
-              )}
-              {selectedStores.map((store) => (
-                <Badge
-                  key={store}
-                  variant="secondary"
-                  className="cursor-pointer"
-                  onClick={() => toggleStore(store)}
-                >
-                  {STORE_NAMES[store]} ✕
-                </Badge>
-              ))}
-              {selectedGenders.map((gender) => (
-                <Badge
-                  key={gender}
-                  variant="secondary"
-                  className="cursor-pointer"
-                  onClick={() => toggleGender(gender)}
-                >
-                  {GENDER_NAMES[gender]} ✕
-                </Badge>
-              ))}
-              {selectedCategories.map((category) => (
-                <Badge
-                  key={category}
-                  variant="secondary"
-                  className="cursor-pointer"
-                  onClick={() => toggleCategory(category)}
-                >
-                  {CATEGORY_NAMES[category]} ✕
-                </Badge>
-              ))}
-              {selectedBrands.map((brand) => (
-                <Badge
-                  key={brand}
-                  variant="secondary"
-                  className="cursor-pointer"
-                  onClick={() => toggleBrand(brand)}
-                >
-                  {brand} ✕
-                </Badge>
-              ))}
-              {minDiscount > 50 && (
-                <Badge
-                  variant="secondary"
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setMinDiscount(50);
-                    setCurrentPage(1);
-                  }}
-                >
-                  Min {minDiscount}% ✕
-                </Badge>
-              )}
-              {minPrice !== null && (
-                <Badge
-                  variant="secondary"
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setMinPrice(null);
-                    setCurrentPage(1);
-                  }}
-                >
-                  Od {minPrice.toLocaleString()} RSD ✕
-                </Badge>
-              )}
-              {maxPrice !== null && (
-                <Badge
-                  variant="secondary"
-                  className="cursor-pointer"
-                  onClick={() => {
-                    setMaxPrice(null);
-                    setCurrentPage(1);
-                  }}
-                >
-                  Do {maxPrice.toLocaleString()} RSD ✕
-                </Badge>
-              )}
+                  <option value="discount">Sortiraj: Popust ↓</option>
+                  <option value="price-low">Sortiraj: Cena ↑</option>
+                  <option value="price-high">Sortiraj: Cena ↓</option>
+                  <option value="name">Sortiraj: Naziv</option>
+                </select>
+              </div>
             </div>
-          )}
+
+            {/* Mobile: Active filters below sort */}
+            {hasActiveFilters && (
+              <div className="mt-3 flex sm:hidden flex-wrap gap-2">
+                {search && (
+                  <Badge
+                    variant="secondary"
+                    className="cursor-pointer px-3 py-1.5 text-sm"
+                    onClick={() => {
+                      setSearch("");
+                      setCurrentPage(1);
+                    }}
+                  >
+                    Pretraga: &quot;{search}&quot; ✕
+                  </Badge>
+                )}
+                {selectedStores.map((store) => (
+                  <Badge
+                    key={store}
+                    variant="secondary"
+                    className="cursor-pointer px-3 py-1.5 text-sm"
+                    onClick={() => toggleStore(store)}
+                  >
+                    {STORE_NAMES[store]} ✕
+                  </Badge>
+                ))}
+                {selectedGenders.map((gender) => (
+                  <Badge
+                    key={gender}
+                    variant="secondary"
+                    className="cursor-pointer px-3 py-1.5 text-sm"
+                    onClick={() => toggleGender(gender)}
+                  >
+                    {GENDER_NAMES[gender]} ✕
+                  </Badge>
+                ))}
+                {selectedCategories.map((category) => (
+                  <Badge
+                    key={category}
+                    variant="secondary"
+                    className="cursor-pointer px-3 py-1.5 text-sm"
+                    onClick={() => toggleCategory(category)}
+                  >
+                    {CATEGORY_NAMES[category]} ✕
+                  </Badge>
+                ))}
+                {selectedBrands.map((brand) => (
+                  <Badge
+                    key={brand}
+                    variant="secondary"
+                    className="cursor-pointer px-3 py-1.5 text-sm"
+                    onClick={() => toggleBrand(brand)}
+                  >
+                    {brand} ✕
+                  </Badge>
+                ))}
+                {minDiscount > 50 && (
+                  <Badge
+                    variant="secondary"
+                    className="cursor-pointer px-3 py-1.5 text-sm"
+                    onClick={() => {
+                      setMinDiscount(50);
+                      setCurrentPage(1);
+                    }}
+                  >
+                    Min {minDiscount}% ✕
+                  </Badge>
+                )}
+                {minPrice !== null && (
+                  <Badge
+                    variant="secondary"
+                    className="cursor-pointer px-3 py-1.5 text-sm"
+                    onClick={() => {
+                      setMinPrice(null);
+                      setCurrentPage(1);
+                    }}
+                  >
+                    Od {minPrice.toLocaleString()} RSD ✕
+                  </Badge>
+                )}
+                {maxPrice !== null && (
+                  <Badge
+                    variant="secondary"
+                    className="cursor-pointer px-3 py-1.5 text-sm"
+                    onClick={() => {
+                      setMaxPrice(null);
+                      setCurrentPage(1);
+                    }}
+                  >
+                    Do {maxPrice.toLocaleString()} RSD ✕
+                  </Badge>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* Deals Grid */}
           {paginatedDeals.length === 0 ? (
-            <div className="min-h-[400px] flex items-center justify-center text-gray-500">
-              Nema proizvoda koji odgovaraju filterima
+            <div className="min-h-[400px] flex flex-col items-center justify-center text-center px-4">
+              <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+                <SearchX className="w-10 h-10 text-gray-400" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                Nema rezultata
+              </h3>
+              <p className="text-gray-500 mb-6 max-w-sm">
+                Nismo pronašli proizvode koji odgovaraju tvojim filterima. Probaj da prilagodiš pretragu.
+              </p>
+              {hasActiveFilters && (
+                <Button
+                  variant="outline"
+                  onClick={resetFilters}
+                  className="border-red-200 text-red-600 hover:bg-red-50"
+                >
+                  Resetuj filtere
+                </Button>
+              )}
             </div>
           ) : (
             <div className="flex flex-wrap gap-3">

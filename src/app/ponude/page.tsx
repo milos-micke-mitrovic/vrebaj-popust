@@ -60,7 +60,7 @@ export default function PonudePage() {
       item: {
         "@type": "Product",
         name: deal.name,
-        url: `https://vrebajpopust.rs/deal/${deal.id}`,
+        url: `https://vrebajpopust.rs/ponuda/${deal.id}`,
         image: deal.imageUrl?.startsWith("/")
           ? `https://vrebajpopust.rs${deal.imageUrl}`
           : deal.imageUrl,

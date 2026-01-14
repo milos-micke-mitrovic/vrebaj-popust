@@ -3,7 +3,6 @@ import Link from "next/link";
 import { getDealById, getAllDealIds, getRelatedDeals, getTopDeals, STORE_INFO } from "@/lib/deals";
 import { formatPrice } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { StoreLogo } from "@/components/store-logo";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -93,7 +92,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${deal.name} - ${deal.discountPercent}% POPUST | VrebajPopust`,
       description,
-      url: `https://vrebajpopust.rs/deal/${id}`,
+      url: `https://vrebajpopust.rs/ponuda/${id}`,
       siteName: "VrebajPopust",
       images: imageUrl
         ? [
@@ -115,7 +114,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: imageUrl ? [imageUrl] : [],
     },
     alternates: {
-      canonical: `https://vrebajpopust.rs/deal/${id}`,
+      canonical: `https://vrebajpopust.rs/ponuda/${id}`,
     },
     robots: {
       index: true,
@@ -195,6 +194,15 @@ export default async function DealPage({ params }: Props) {
   const genderText = GENDER_NAMES[deal.gender] || "";
   const relatedDeals = getRelatedDeals(deal, 8);
 
+  // Add UTM tracking to external URLs
+  const addUtmParams = (url: string) => {
+    const separator = url.includes("?") ? "&" : "?";
+    return `${url}${separator}utm_source=vrebajpopust&utm_medium=referral`;
+  };
+
+  const productUrl = addUtmParams(deal.url);
+  const storeUrl = addUtmParams(storeInfo.url);
+
   const imageUrl = deal.imageUrl?.startsWith("/")
     ? `https://vrebajpopust.rs${deal.imageUrl}`
     : deal.imageUrl;
@@ -217,7 +225,7 @@ export default async function DealPage({ params }: Props) {
     itemCondition: "https://schema.org/NewCondition",
     offers: {
       "@type": "Offer",
-      url: `https://vrebajpopust.rs/deal/${deal.id}`,
+      url: `https://vrebajpopust.rs/ponuda/${deal.id}`,
       price: deal.salePrice,
       priceCurrency: "RSD",
       availability: "https://schema.org/InStock",
@@ -272,7 +280,7 @@ export default async function DealPage({ params }: Props) {
         "@type": "ListItem",
         position: 3,
         name: deal.name,
-        item: `https://vrebajpopust.rs/deal/${deal.id}`,
+        item: `https://vrebajpopust.rs/ponuda/${deal.id}`,
       },
     ],
   };
@@ -313,8 +321,8 @@ export default async function DealPage({ params }: Props) {
               </Link>
             </li>
             <li className="mx-2">/</li>
-            <li>
-              <span className="text-gray-900 font-medium truncate max-w-[200px] inline-block">
+            <li className="flex items-center">
+              <span className="text-gray-900 font-medium truncate max-w-[200px]">
                 {deal.name}
               </span>
             </li>
@@ -352,6 +360,7 @@ export default async function DealPage({ params }: Props) {
                     store={deal.store}
                     logoUrl={storeInfo.logo}
                     storeName={storeInfo.name}
+                    storeUrl={storeUrl}
                   />
                 </div>
 
@@ -374,9 +383,20 @@ export default async function DealPage({ params }: Props) {
                 </h1>
 
                 {/* Category & Gender tags */}
-                <div className="mt-3 flex gap-2">
-                  <Badge variant="outline">{categoryText}</Badge>
-                  {genderText && <Badge variant="outline">{genderText}</Badge>}
+                <div className="mt-3 flex flex-wrap gap-2">
+                  <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
+                    {categoryText}
+                  </span>
+                  {genderText && (
+                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
+                      {genderText}
+                    </span>
+                  )}
+                  {deal.brand && (
+                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-blue-50 text-blue-700">
+                      {deal.brand}
+                    </span>
+                  )}
                 </div>
 
                 {/* Prices */}
@@ -407,30 +427,28 @@ export default async function DealPage({ params }: Props) {
 
                 {/* CTA Button */}
                 <div className="mt-6">
-                  <Button asChild size="lg" className="w-full text-lg">
-                    <a
-                      href={deal.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="flex items-center justify-center gap-2"
+                  <a
+                    href={productUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-red-500 px-6 py-4 text-lg font-semibold text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
+                  >
+                    Kupi na {storeInfo.name}
+                    <svg
+                      className="h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      aria-hidden="true"
                     >
-                      Kupi na {storeInfo.name}
-                      <svg
-                        className="h-5 w-5"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                        aria-hidden="true"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        />
-                      </svg>
-                    </a>
-                  </Button>
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                      />
+                    </svg>
+                  </a>
                 </div>
 
                 <p className="mt-4 text-center text-sm text-gray-500">

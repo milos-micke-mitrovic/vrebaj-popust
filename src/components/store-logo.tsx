@@ -16,34 +16,53 @@ interface StoreLogoProps {
   store: Store;
   logoUrl: string;
   storeName: string;
+  storeUrl?: string;
 }
 
-export function StoreLogo({ store, logoUrl, storeName }: StoreLogoProps) {
+export function StoreLogo({ store, logoUrl, storeName, storeUrl }: StoreLogoProps) {
   const [imgError, setImgError] = useState(false);
   const storeStyle = STORE_STYLES[store];
 
-  if (imgError) {
-    return (
-      <div className="flex items-center gap-2">
-        <div
-          className={`${storeStyle.color} rounded px-2 py-1 text-xs font-bold text-white`}
-        >
-          {storeStyle.name}
-        </div>
-        <span className="text-sm text-gray-500">{storeName}</span>
+  const content = imgError ? (
+    <>
+      <div
+        className={`${storeStyle.color} rounded px-2 py-1 text-xs font-bold text-white`}
+      >
+        {storeStyle.name}
       </div>
-    );
-  }
-
-  return (
-    <div className="flex items-center gap-2">
+      <span className="text-sm text-gray-600">{storeName}</span>
+    </>
+  ) : (
+    <>
       <img
         src={logoUrl}
         alt={storeName}
         className="h-8 w-auto"
         onError={() => setImgError(true)}
       />
-      <span className="text-sm text-gray-500">{storeName}</span>
+      <span className="text-sm text-gray-600">{storeName}</span>
+    </>
+  );
+
+  if (storeUrl) {
+    return (
+      <a
+        href={storeUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity cursor-pointer"
+      >
+        {content}
+        <svg className="w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+        </svg>
+      </a>
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      {content}
     </div>
   );
 }

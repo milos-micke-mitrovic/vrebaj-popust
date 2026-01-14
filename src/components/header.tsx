@@ -31,7 +31,8 @@ export function Header() {
           {/* Desktop nav */}
           <nav className="hidden sm:flex items-center gap-1">
             {navLinks.map((link) => {
-              const isActive = pathname === link.href;
+              const isActive = pathname === link.href ||
+                (link.href === "/ponude" && pathname.startsWith("/ponuda/"));
               return (
                 <Link
                   key={link.href}
@@ -66,12 +67,22 @@ export function Header() {
           </button>
         </div>
 
-        {/* Mobile menu dropdown */}
-        {mobileMenuOpen && (
-          <nav className="sm:hidden mt-3 pt-3 border-t border-gray-100">
-            <div className="flex flex-col gap-1">
+      </div>
+
+      {/* Mobile menu overlay */}
+      {mobileMenuOpen && (
+        <div className="sm:hidden fixed inset-0 top-[57px] z-40">
+          {/* Backdrop */}
+          <div
+            className="absolute inset-0 bg-black/30 animate-[fadeIn_0.15s_ease-out]"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+          {/* Menu */}
+          <nav className="absolute top-0 left-0 right-0 bg-white border-b shadow-lg animate-[slideDown_0.2s_ease-out]">
+            <div className="flex flex-col p-2">
               {navLinks.map((link) => {
-                const isActive = pathname === link.href;
+                const isActive = pathname === link.href ||
+                  (link.href === "/ponude" && pathname.startsWith("/ponuda/"));
                 return (
                   <Link
                     key={link.href}
@@ -89,8 +100,8 @@ export function Header() {
               })}
             </div>
           </nav>
-        )}
-      </div>
+        </div>
+      )}
     </header>
   );
 }

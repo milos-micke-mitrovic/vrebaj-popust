@@ -26,7 +26,7 @@ export function DealCard({ deal }: DealCardProps) {
   const storeInfo = STORE_INFO[deal.store];
 
   return (
-    <Link href={`/deal/${deal.id}`}>
+    <Link href={`/ponuda/${deal.id}`}>
       <Card className="group h-full overflow-hidden transition-shadow hover:shadow-lg">
         <div className="relative aspect-square overflow-hidden bg-gray-100">
           {deal.imageUrl && !imgError ? (

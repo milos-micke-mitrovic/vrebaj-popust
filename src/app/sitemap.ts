@@ -52,7 +52,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     const priority = Math.max(basePriority - priorityDecrease, 0.5);
 
     return {
-      url: `${baseUrl}/deal/${deal.id}`,
+      url: `${baseUrl}/ponuda/${deal.id}`,
       lastModified: new Date(deal.scrapedAt),
       changeFrequency: "daily" as const,
       priority: Number(priority.toFixed(2)),
