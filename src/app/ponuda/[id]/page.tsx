@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { getDealById, getAllDealIds, getRelatedDeals, getTopDeals, STORE_INFO } from "@/lib/deals";
 import { formatPrice } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -10,6 +9,7 @@ import { Footer } from "@/components/footer";
 import { DealCard } from "@/components/deal-card";
 import { ShareButton } from "@/components/share-button";
 import { ProductWishlistButton } from "@/components/product-wishlist-button";
+import { ProductImage } from "@/components/product-image";
 
 // Calculate price valid date at build time (7 days from build)
 const priceValidUntilDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
@@ -347,13 +347,9 @@ export default async function DealPage({ params }: Props) {
               {/* Image */}
               <div className="relative aspect-square overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow">
                 {deal.imageUrl ? (
-                  <Image
+                  <ProductImage
                     src={deal.imageUrl}
                     alt={`${deal.name} - ${deal.brand || ""} ${categoryText}`}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-contain p-4"
-                    unoptimized
                   />
                 ) : (
                   <div className="flex h-full items-center justify-center text-gray-400 dark:text-gray-500">

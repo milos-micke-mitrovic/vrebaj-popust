@@ -8,6 +8,21 @@ import { useWishlistContext } from "@/context/wishlist-context";
 import { formatPrice } from "@/lib/utils";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 
+function WishlistImage({ src, alt }: { src: string; alt: string }) {
+  const [loaded, setLoaded] = useState(false);
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      fill
+      sizes="80px"
+      className={`object-cover transition-opacity duration-300 ${loaded ? "opacity-100" : "opacity-0"}`}
+      onLoad={() => setLoaded(true)}
+      unoptimized
+    />
+  );
+}
+
 interface WishlistDrawerProps {
   availableDealIds: Set<string>;
 }
@@ -80,14 +95,7 @@ export function WishlistDrawer({ availableDealIds }: WishlistDrawerProps) {
                     {/* Image */}
                     <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
                       {deal.imageUrl ? (
-                        <Image
-                          src={deal.imageUrl}
-                          alt={deal.name}
-                          fill
-                          sizes="80px"
-                          className="object-cover"
-                          unoptimized
-                        />
+                        <WishlistImage src={deal.imageUrl} alt={deal.name} />
                       ) : (
                         <div className="flex h-full items-center justify-center text-xs text-gray-400">
                           Nema slike

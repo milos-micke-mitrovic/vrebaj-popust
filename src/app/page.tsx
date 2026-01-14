@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { HeroBanner } from "@/components/hero-banner";
 import { getAllDeals, getUniqueStores, STORE_INFO } from "@/lib/deals";
 
 export const metadata: Metadata = {
@@ -66,34 +67,27 @@ export default function Home() {
         <Header />
 
         {/* Hero Section */}
-        <section className="relative overflow-hidden">
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: "url('/images/hero.jpg')" }}
-          />
-          <div className="absolute inset-0 bg-black/60" />
-          <div className="relative mx-auto max-w-7xl px-4 py-16 sm:py-24">
-            <div className="text-center text-white">
-              <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
-                Sportski popusti
-                <br />
-                <span className="text-red-400">preko 50%</span>
-              </h1>
-              <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-300 sm:text-xl">
-                Svakodnevno pretražujemo najveće sportske prodavnice u Srbiji i
-                pronalazimo najbolje popuste za tebe. Uštedi vreme i novac.
-              </p>
-              <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-                <Link
-                  href="/ponude"
-                  className="rounded-lg bg-red-500 px-8 py-4 text-lg font-semibold text-white shadow-lg hover:bg-red-600 transition-colors"
-                >
-                  Pregledaj {totalDeals} ponuda
-                </Link>
-              </div>
+        <HeroBanner>
+          <div className="text-center text-white">
+            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+              Sportski popusti
+              <br />
+              <span className="text-red-400">preko 50%</span>
+            </h1>
+            <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-300 sm:text-xl">
+              Svakodnevno pretražujemo najveće sportske prodavnice u Srbiji i
+              pronalazimo najbolje popuste za tebe. Uštedi vreme i novac.
+            </p>
+            <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
+              <Link
+                href="/ponude"
+                className="rounded-lg bg-red-500 px-8 py-4 text-lg font-semibold text-white shadow-lg hover:bg-red-600 transition-colors"
+              >
+                Pregledaj {totalDeals} ponuda
+              </Link>
             </div>
           </div>
-        </section>
+        </HeroBanner>
 
         {/* Stats Section */}
         <section className="border-b bg-white dark:bg-gray-900 dark:border-gray-800 py-12">
