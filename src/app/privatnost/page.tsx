@@ -16,21 +16,21 @@ export const metadata: Metadata = {
 
 export default function PrivacyPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50">
+    <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-950">
       <Header />
 
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-        <article className="rounded-xl bg-white p-8 shadow-sm border border-gray-100">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">
+        <article className="rounded-xl bg-white dark:bg-gray-900 p-8 shadow-sm border border-gray-100 dark:border-gray-800">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
             Politika privatnosti
           </h1>
 
-          <div className="prose prose-gray max-w-none text-gray-600">
+          <div className="prose prose-gray max-w-none text-gray-600 dark:text-gray-300">
             <p className="mb-4">
               Poslednje ažuriranje: {new Date().toLocaleDateString("sr-RS")}
             </p>
 
-            <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
               Uvod
             </h2>
             <p className="mb-4">
@@ -39,7 +39,7 @@ export default function PrivacyPage() {
               posetite naš sajt.
             </p>
 
-            <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
               Podaci koje prikupljamo
             </h2>
             <p className="mb-4">
@@ -54,7 +54,7 @@ export default function PrivacyPage() {
               <li>Vreme i datum posete</li>
             </ul>
 
-            <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
               Google Analytics
             </h2>
             <p className="mb-4">
@@ -77,7 +77,7 @@ export default function PrivacyPage() {
               .
             </p>
 
-            <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
               Kolačići
             </h2>
             <p className="mb-4">
@@ -86,7 +86,7 @@ export default function PrivacyPage() {
               blokirati putem podešavanja pretraživača.
             </p>
 
-            <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
               Linkovi ka drugim sajtovima
             </h2>
             <p className="mb-4">
@@ -97,7 +97,7 @@ export default function PrivacyPage() {
               sajtova.
             </p>
 
-            <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
               Vaša prava
             </h2>
             <p className="mb-4">Imate pravo da:</p>
@@ -107,20 +107,14 @@ export default function PrivacyPage() {
               <li>Onemogućite kolačiće putem podešavanja pretraživača</li>
             </ul>
 
-            <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
               Kontakt
             </h2>
             <p className="mb-4">
-              Za sva pitanja vezana za privatnost, kontaktirajte nas na{" "}
-              <a
-                href="mailto:info@vrebajpopust.rs"
-                className="text-red-500 hover:text-red-600"
-              >
-                info@vrebajpopust.rs
-              </a>
+              Kontakt email za pitanja o privatnosti je trenutno u pripremi.
             </p>
 
-            <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
               Izmene politike
             </h2>
             <p>

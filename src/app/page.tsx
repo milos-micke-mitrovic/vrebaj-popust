@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { getAllDeals, getUniqueStores, STORE_INFO } from "@/lib/deals";
@@ -61,7 +62,7 @@ export default function Home() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
       />
 
-      <div className="flex min-h-screen flex-col bg-gray-50">
+      <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-950">
         <Header />
 
         {/* Hero Section */}
@@ -95,32 +96,32 @@ export default function Home() {
         </section>
 
         {/* Stats Section */}
-        <section className="border-b bg-white py-12">
+        <section className="border-b bg-white dark:bg-gray-900 dark:border-gray-800 py-12">
           <div className="mx-auto max-w-7xl px-4">
             <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
               <div className="text-center">
                 <div className="text-3xl font-bold text-red-500 sm:text-4xl">
                   {totalDeals}+
                 </div>
-                <div className="mt-2 text-sm text-gray-600">Aktivnih ponuda</div>
+                <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">Aktivnih ponuda</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-red-500 sm:text-4xl">
                   {stores.length}
                 </div>
-                <div className="mt-2 text-sm text-gray-600">Prodavnica</div>
+                <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">Prodavnica</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-red-500 sm:text-4xl">
                   {avgDiscount}%
                 </div>
-                <div className="mt-2 text-sm text-gray-600">Prosečan popust</div>
+                <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">Prosečan popust</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-bold text-red-500 sm:text-4xl">
                   24h
                 </div>
-                <div className="mt-2 text-sm text-gray-600">Ažuriranje</div>
+                <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">Ažuriranje</div>
               </div>
             </div>
           </div>
@@ -129,42 +130,42 @@ export default function Home() {
         {/* How it works */}
         <section className="py-16">
           <div className="mx-auto max-w-7xl px-4">
-            <h2 className="text-center text-2xl font-bold text-gray-900 sm:text-3xl">
+            <h2 className="text-center text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
               Kako funkcioniše?
             </h2>
             <div className="mt-12 grid gap-8 md:grid-cols-3">
               <div className="text-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-2xl">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 text-2xl dark:text-red-400">
                   1
                 </div>
-                <h3 className="mt-4 text-lg font-semibold text-gray-900">
+                <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
                   Pretražujemo prodavnice
                 </h3>
-                <p className="mt-2 text-gray-600">
+                <p className="mt-2 text-gray-600 dark:text-gray-400">
                   Automatski skeniramo najveće sportske prodavnice u Srbiji svaki
                   dan.
                 </p>
               </div>
               <div className="text-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-2xl">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 text-2xl dark:text-red-400">
                   2
                 </div>
-                <h3 className="mt-4 text-lg font-semibold text-gray-900">
+                <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
                   Filtriramo popuste
                 </h3>
-                <p className="mt-2 text-gray-600">
+                <p className="mt-2 text-gray-600 dark:text-gray-400">
                   Prikazujemo samo proizvode sa popustom preko 50% - prave
                   uštede.
                 </p>
               </div>
               <div className="text-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 text-2xl">
+                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 text-2xl dark:text-red-400">
                   3
                 </div>
-                <h3 className="mt-4 text-lg font-semibold text-gray-900">
+                <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
                   Ti uštediš
                 </h3>
-                <p className="mt-2 text-gray-600">
+                <p className="mt-2 text-gray-600 dark:text-gray-400">
                   Pronađi savršenu ponudu i kupi direktno u prodavnici po
                   sniženoj ceni.
                 </p>
@@ -174,9 +175,9 @@ export default function Home() {
         </section>
 
         {/* Stores we track */}
-        <section className="border-t bg-white py-16">
+        <section className="border-t bg-white dark:bg-gray-900 dark:border-gray-800 py-16">
           <div className="mx-auto max-w-7xl px-4">
-            <h2 className="text-center text-2xl font-bold text-gray-900 sm:text-3xl">
+            <h2 className="text-center text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
               Prodavnice koje pratimo
             </h2>
             <div className="mt-12 grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-6">
@@ -187,12 +188,15 @@ export default function Home() {
                     key={store}
                     className="flex flex-col items-center gap-2"
                   >
-                    <img
+                    <Image
                       src={info.logo}
                       alt={info.name}
-                      className="h-12 w-auto object-contain grayscale hover:grayscale-0 transition-all"
+                      width={96}
+                      height={48}
+                      style={{ height: '48px', width: 'auto' }}
+                      className="object-contain grayscale hover:grayscale-0 transition-all dark:brightness-90 dark:hover:brightness-100"
                     />
-                    <span className="text-sm text-gray-600">{info.name}</span>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">{info.name}</span>
                   </div>
                 );
               })}
@@ -201,7 +205,7 @@ export default function Home() {
         </section>
 
         {/* CTA */}
-        <section className="bg-gray-900 py-16">
+        <section className="bg-gray-900 dark:bg-gray-800 py-16">
           <div className="mx-auto max-w-7xl px-4 text-center">
             <h2 className="text-2xl font-bold text-white sm:text-3xl">
               Spreman da uštediš?

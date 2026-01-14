@@ -41,7 +41,7 @@ export function ScrollFade({ children, maxHeight, className = "" }: ScrollFadePr
     <div className="relative overflow-hidden">
       {/* Top fade */}
       <div
-        className={`pointer-events-none absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-white via-white/80 to-transparent z-10 transition-opacity duration-200 ${
+        className={`pointer-events-none absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-white via-white/80 to-transparent dark:from-gray-900 dark:via-gray-900/80 z-10 transition-opacity duration-200 ${
           showTopFade ? "opacity-100" : "opacity-0"
         }`}
       />
@@ -57,7 +57,7 @@ export function ScrollFade({ children, maxHeight, className = "" }: ScrollFadePr
 
       {/* Bottom fade */}
       <div
-        className={`pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white via-white/80 to-transparent z-10 transition-opacity duration-200 ${
+        className={`pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-gray-900 dark:via-gray-900/80 z-10 transition-opacity duration-200 ${
           showBottomFade ? "opacity-100" : "opacity-0"
         }`}
       />

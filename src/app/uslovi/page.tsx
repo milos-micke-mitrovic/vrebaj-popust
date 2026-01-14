@@ -16,21 +16,21 @@ export const metadata: Metadata = {
 
 export default function TermsPage() {
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50">
+    <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-950">
       <Header />
 
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
-        <article className="rounded-xl bg-white p-8 shadow-sm border border-gray-100">
-          <h1 className="text-3xl font-bold text-gray-900 mb-6">
+        <article className="rounded-xl bg-white dark:bg-gray-900 p-8 shadow-sm border border-gray-100 dark:border-gray-800">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
             Uslovi korišćenja
           </h1>
 
-          <div className="prose prose-gray max-w-none text-gray-600">
+          <div className="prose prose-gray max-w-none text-gray-600 dark:text-gray-300">
             <p className="mb-4">
               Poslednje ažuriranje: {new Date().toLocaleDateString("sr-RS")}
             </p>
 
-            <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
               Prihvatanje uslova
             </h2>
             <p className="mb-4">
@@ -38,7 +38,7 @@ export default function TermsPage() {
               se ne slažete sa ovim uslovima, molimo vas da ne koristite naš sajt.
             </p>
 
-            <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
               Opis servisa
             </h2>
             <p className="mb-4">
@@ -48,7 +48,7 @@ export default function TermsPage() {
               drugim prodavnicama.
             </p>
 
-            <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
               Ograničenje odgovornosti
             </h2>
             <p className="mb-4">VrebajPopust:</p>
@@ -70,7 +70,7 @@ export default function TermsPage() {
               </li>
             </ul>
 
-            <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
               Cene i dostupnost
             </h2>
             <p className="mb-4">
@@ -81,7 +81,7 @@ export default function TermsPage() {
               prodavnica i mogu sadržati greške.
             </p>
 
-            <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
               Intelektualna svojina
             </h2>
             <p className="mb-4">
@@ -90,7 +90,7 @@ export default function TermsPage() {
               Logo i dizajn sajta VrebajPopust su naša intelektualna svojina.
             </p>
 
-            <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
               Linkovi ka trećim stranama
             </h2>
             <p className="mb-4">
@@ -99,7 +99,7 @@ export default function TermsPage() {
               ili prakse tih sajtova.
             </p>
 
-            <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
               Zabranjeno korišćenje
             </h2>
             <p className="mb-4">Zabranjeno je:</p>
@@ -116,7 +116,7 @@ export default function TermsPage() {
               </li>
             </ul>
 
-            <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
               Izmene uslova
             </h2>
             <p className="mb-4">
@@ -125,17 +125,11 @@ export default function TermsPage() {
               uslova.
             </p>
 
-            <h2 className="text-xl font-semibold text-gray-900 mt-8 mb-4">
+            <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
               Kontakt
             </h2>
             <p>
-              Za sva pitanja vezana za uslove korišćenja, kontaktirajte nas na{" "}
-              <a
-                href="mailto:info@vrebajpopust.rs"
-                className="text-red-500 hover:text-red-600"
-              >
-                info@vrebajpopust.rs
-              </a>
+              Kontakt email za pitanja o uslovima korišćenja je trenutno u pripremi.
             </p>
           </div>
         </article>

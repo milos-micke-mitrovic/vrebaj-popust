@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import Image from "next/image";
 import { getDealById, getAllDealIds, getRelatedDeals, getTopDeals, STORE_INFO } from "@/lib/deals";
 import { formatPrice } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +8,8 @@ import { StoreLogo } from "@/components/store-logo";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { DealCard } from "@/components/deal-card";
+import { ShareButton } from "@/components/share-button";
+import { ProductWishlistButton } from "@/components/product-wishlist-button";
 
 // Calculate price valid date at build time (7 days from build)
 const priceValidUntilDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
@@ -31,7 +34,14 @@ const CATEGORY_NAMES: Record<string, string> = {
   ostalo: "Ostalo",
 };
 
-const GENDER_NAMES: Record<string, string> = {
+const GENDER_TAGS: Record<string, string> = {
+  men: "Muškarci",
+  women: "Žene",
+  kids: "Deca",
+  unisex: "",
+};
+
+const GENDER_TEXT: Record<string, string> = {
   men: "za muškarce",
   women: "za žene",
   kids: "za decu",
@@ -61,7 +71,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
 
   const storeInfo = STORE_INFO[deal.store];
-  const genderText = GENDER_NAMES[deal.gender] || "";
+  const genderText = GENDER_TEXT[deal.gender] || "";
   const categoryText = CATEGORY_NAMES[deal.category] || "";
 
   const savings = deal.originalPrice - deal.salePrice;
@@ -132,21 +142,21 @@ export default async function DealPage({ params }: Props) {
     const topDeals = getTopDeals(8);
 
     return (
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
         <Header />
 
         <main className="mx-auto max-w-7xl px-4 py-12">
           {/* Unavailable Message */}
           <div className="mx-auto max-w-2xl text-center mb-12">
-            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100">
-              <svg className="h-10 w-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
+              <svg className="h-10 w-10 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
-            <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
               Ova ponuda više nije dostupna
             </h1>
-            <p className="mt-4 text-gray-600">
+            <p className="mt-4 text-gray-600 dark:text-gray-400">
               Proizvod je možda rasprodat ili je popust istekao.
               Pogledajte druge aktuelne ponude sa popustima preko 50%.
             </p>
@@ -159,7 +169,7 @@ export default async function DealPage({ params }: Props) {
               </Link>
               <Link
                 href="/"
-                className="rounded-lg border border-gray-300 px-6 py-3 font-medium text-gray-700 hover:bg-gray-100 transition-colors"
+                className="rounded-lg border border-gray-300 dark:border-gray-700 px-6 py-3 font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
               >
                 Početna stranica
               </Link>
@@ -169,7 +179,7 @@ export default async function DealPage({ params }: Props) {
           {/* Top Deals Section */}
           {topDeals.length > 0 && (
             <section>
-              <h2 className="text-xl font-bold text-gray-900 mb-6">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
                 Najpopularnije ponude
               </h2>
               <div className="flex flex-wrap gap-3">
@@ -191,7 +201,8 @@ export default async function DealPage({ params }: Props) {
   const storeInfo = STORE_INFO[deal.store];
   const savings = deal.originalPrice - deal.salePrice;
   const categoryText = CATEGORY_NAMES[deal.category] || "Proizvod";
-  const genderText = GENDER_NAMES[deal.gender] || "";
+  const genderText = GENDER_TEXT[deal.gender] || "";
+  const genderTag = GENDER_TAGS[deal.gender] || "";
   const relatedDeals = getRelatedDeals(deal, 8);
 
   // Add UTM tracking to external URLs
@@ -300,7 +311,7 @@ export default async function DealPage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
-      <div className="min-h-screen bg-gray-50">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
         <Header />
 
         {/* Breadcrumb */}
@@ -308,7 +319,7 @@ export default async function DealPage({ params }: Props) {
           className="mx-auto max-w-7xl px-4 py-4"
           aria-label="Breadcrumb"
         >
-          <ol className="flex items-center text-sm text-gray-500">
+          <ol className="flex items-center text-sm text-gray-500 dark:text-gray-400">
             <li>
               <Link href="/ponude" className="hover:text-red-500">
                 Ponude
@@ -322,7 +333,7 @@ export default async function DealPage({ params }: Props) {
             </li>
             <li className="mx-2">/</li>
             <li className="flex items-center">
-              <span className="text-gray-900 font-medium truncate max-w-[200px]">
+              <span className="text-gray-900 dark:text-white font-medium truncate max-w-[200px]">
                 {deal.name}
               </span>
             </li>
@@ -334,16 +345,18 @@ export default async function DealPage({ params }: Props) {
           <article itemScope itemType="https://schema.org/Product">
             <div className="grid gap-8 md:grid-cols-2">
               {/* Image */}
-              <div className="relative aspect-square overflow-hidden rounded-lg bg-white shadow">
+              <div className="relative aspect-square overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow">
                 {deal.imageUrl ? (
-                  <img
+                  <Image
                     src={deal.imageUrl}
                     alt={`${deal.name} - ${deal.brand || ""} ${categoryText}`}
-                    className="h-full w-full object-contain p-4"
-                    itemProp="image"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 50vw"
+                    className="object-contain p-4"
+                    unoptimized
                   />
                 ) : (
-                  <div className="flex h-full items-center justify-center text-gray-400">
+                  <div className="flex h-full items-center justify-center text-gray-400 dark:text-gray-500">
                     Nema slike
                   </div>
                 )}
@@ -367,7 +380,7 @@ export default async function DealPage({ params }: Props) {
                 {/* Brand */}
                 {deal.brand && (
                   <p
-                    className="text-sm font-medium uppercase text-gray-500"
+                    className="text-sm font-medium uppercase text-gray-500 dark:text-gray-400"
                     itemProp="brand"
                   >
                     {deal.brand}
@@ -376,7 +389,7 @@ export default async function DealPage({ params }: Props) {
 
                 {/* Title */}
                 <h1
-                  className="mt-2 text-2xl font-bold text-gray-900 md:text-3xl"
+                  className="mt-2 text-2xl font-bold text-gray-900 dark:text-white md:text-3xl"
                   itemProp="name"
                 >
                   {deal.name}
@@ -384,16 +397,16 @@ export default async function DealPage({ params }: Props) {
 
                 {/* Category & Gender tags */}
                 <div className="mt-3 flex flex-wrap gap-2">
-                  <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
+                  <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">
                     {categoryText}
                   </span>
-                  {genderText && (
-                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700">
-                      {genderText}
+                  {genderTag && (
+                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                      {genderTag}
                     </span>
                   )}
                   {deal.brand && (
-                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-blue-50 text-blue-700">
+                    <span className="inline-flex items-center px-3 py-1.5 rounded-full text-sm font-medium bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400">
                       {deal.brand}
                     </span>
                   )}
@@ -401,7 +414,7 @@ export default async function DealPage({ params }: Props) {
 
                 {/* Prices */}
                 <div
-                  className="mt-6 rounded-lg bg-white p-6 shadow"
+                  className="mt-6 rounded-lg bg-white dark:bg-gray-800 p-6 shadow"
                   itemProp="offers"
                   itemScope
                   itemType="https://schema.org/Offer"
@@ -410,17 +423,17 @@ export default async function DealPage({ params }: Props) {
                   <meta itemProp="availability" content="https://schema.org/InStock" />
                   <div className="flex items-baseline gap-4">
                     <span
-                      className="text-3xl font-bold text-red-600"
+                      className="text-3xl font-bold text-red-600 dark:text-red-500"
                       itemProp="price"
                       content={String(deal.salePrice)}
                     >
                       {formatPrice(deal.salePrice)}
                     </span>
-                    <span className="text-xl text-gray-400 line-through">
+                    <span className="text-xl text-gray-400 dark:text-gray-500 line-through">
                       {formatPrice(deal.originalPrice)}
                     </span>
                   </div>
-                  <p className="mt-2 text-green-600 font-medium">
+                  <p className="mt-2 text-green-600 dark:text-green-500 font-medium">
                     Ušteda: {formatPrice(savings)} ({deal.discountPercent}%)
                   </p>
                 </div>
@@ -431,7 +444,7 @@ export default async function DealPage({ params }: Props) {
                     href={productUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-red-500 px-6 py-4 text-lg font-semibold text-red-500 hover:bg-red-50 transition-colors cursor-pointer"
+                    className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-red-500 px-6 py-4 text-lg font-semibold text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors cursor-pointer"
                   >
                     Kupi na {storeInfo.name}
                     <svg
@@ -451,41 +464,50 @@ export default async function DealPage({ params }: Props) {
                   </a>
                 </div>
 
-                <p className="mt-4 text-center text-sm text-gray-500">
+                <p className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
                   Bićete preusmereni na sajt prodavca
                 </p>
+
+                {/* Share and wishlist buttons */}
+                <div className="mt-4 flex justify-center gap-2">
+                  <ProductWishlistButton deal={deal} />
+                  <ShareButton
+                    title={`${deal.name} - ${deal.discountPercent}% popust`}
+                    url={`https://vrebajpopust.rs/ponuda/${deal.id}`}
+                  />
+                </div>
               </div>
             </div>
 
             {/* SEO Content Section */}
-            <div className="mt-12 rounded-lg bg-white p-6 shadow">
-              <h2 className="text-lg font-semibold text-gray-900 mb-3">
+            <div className="mt-12 rounded-lg bg-white dark:bg-gray-800 p-6 shadow">
+              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
                 O proizvodu
               </h2>
-              <p className="text-gray-600 leading-relaxed" itemProp="description">
+              <p className="text-gray-600 dark:text-gray-300 leading-relaxed" itemProp="description">
                 {deal.brand && <strong>{deal.brand}</strong>} {deal.name} {genderText} je trenutno na akciji u prodavnici {storeInfo.name} sa popustom od <strong>{deal.discountPercent}%</strong>.
                 Originalna cena ovog proizvoda je {formatPrice(deal.originalPrice)}, a akcijska cena je samo <strong>{formatPrice(deal.salePrice)}</strong>.
                 Kupovinom ovog proizvoda uštedećete {formatPrice(savings)}.
               </p>
-              <p className="text-gray-600 mt-3 leading-relaxed">
+              <p className="text-gray-600 dark:text-gray-300 mt-3 leading-relaxed">
                 VrebajPopust svakodnevno pretražuje najveće sportske prodavnice u Srbiji kako bi pronašao najbolje popuste preko 50%.
                 Svi prikazani proizvodi su dostupni za kupovinu online.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
-                <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                <span className="text-xs bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">
                   {categoryText}
                 </span>
-                {genderText && (
-                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
-                    {genderText}
+                {genderTag && (
+                  <span className="text-xs bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">
+                    {genderTag}
                   </span>
                 )}
                 {deal.brand && (
-                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                  <span className="text-xs bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">
                     {deal.brand}
                   </span>
                 )}
-                <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded">
+                <span className="text-xs bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 px-2 py-1 rounded">
                   {deal.discountPercent}% popust
                 </span>
               </div>
@@ -497,7 +519,7 @@ export default async function DealPage({ params }: Props) {
         {relatedDeals.length > 0 && (
           <section className="mx-auto max-w-7xl px-4 py-12">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-xl font-bold text-gray-900">
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">
                 Slične ponude
               </h2>
               <Link

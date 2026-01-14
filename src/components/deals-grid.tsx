@@ -367,7 +367,7 @@ export function DealsGrid({
             setSearch(e.target.value);
             setCurrentPage(1);
           }}
-          className="bg-gray-50 border-gray-200 focus:bg-white"
+          className="bg-gray-50 border-gray-200 focus:bg-white dark:bg-gray-800 dark:border-gray-700 dark:focus:bg-gray-700 dark:text-white dark:placeholder-gray-400"
         />
       </div>
 
@@ -376,7 +376,7 @@ export function DealsGrid({
           variant="outline"
           size="sm"
           onClick={resetFilters}
-          className="w-full border-red-200 text-red-600 hover:bg-red-50"
+          className="w-full border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/30"
         >
           Resetuj filtere ✕
         </Button>
@@ -384,7 +384,7 @@ export function DealsGrid({
 
       {/* Discount Level */}
       <div>
-        <h3 className="mb-3 text-sm font-semibold text-gray-900">Popust</h3>
+        <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Popust</h3>
         <div className="flex flex-wrap gap-2">
           {discountLevels.map((level) => (
             <button
@@ -396,7 +396,7 @@ export function DealsGrid({
               className={`cursor-pointer px-3 py-1.5 text-sm rounded-full transition-colors ${
                 minDiscount === level.value
                   ? "bg-red-500 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
               }`}
             >
               {level.label}
@@ -407,10 +407,10 @@ export function DealsGrid({
 
       {/* Price Range */}
       <div>
-        <h3 className="mb-3 text-sm font-semibold text-gray-900">Cena (RSD)</h3>
+        <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Cena (RSD)</h3>
         <div className="space-y-2">
           <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-500 w-6">Od</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400 w-6">Od</span>
             <div className="flex flex-wrap gap-1.5">
               {priceFromOptions.map((option) => (
                 <button
@@ -422,7 +422,7 @@ export function DealsGrid({
                   className={`cursor-pointer px-2.5 py-1 text-xs rounded-full transition-colors ${
                     minPrice === option.value
                       ? "bg-red-500 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
                   }`}
                 >
                   {option.label}
@@ -431,7 +431,7 @@ export function DealsGrid({
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-500 w-6">Do</span>
+            <span className="text-xs text-gray-500 dark:text-gray-400 w-6">Do</span>
             <div className="flex flex-wrap gap-1.5">
               {priceToOptions.map((option) => (
                 <button
@@ -443,7 +443,7 @@ export function DealsGrid({
                   className={`cursor-pointer px-2.5 py-1 text-xs rounded-full transition-colors ${
                     maxPrice === option.value
                       ? "bg-red-500 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
                   }`}
                 >
                   {option.label}
@@ -456,7 +456,7 @@ export function DealsGrid({
 
       {/* Gender */}
       <div>
-        <h3 className="mb-3 text-sm font-semibold text-gray-900">Pol</h3>
+        <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Pol</h3>
         <div className="flex flex-wrap gap-2">
           {(["men", "women", "kids", "unisex"] as Gender[]).map((gender) => (
             <button
@@ -465,7 +465,7 @@ export function DealsGrid({
               className={`cursor-pointer px-3 py-1.5 text-sm rounded-full transition-colors ${
                 selectedGenders.includes(gender)
                   ? "bg-red-500 text-white"
-                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
               }`}
             >
               {GENDER_NAMES[gender]}
@@ -476,15 +476,15 @@ export function DealsGrid({
 
       {/* Store */}
       <div>
-        <h3 className="mb-3 text-sm font-semibold text-gray-900">Prodavnica</h3>
+        <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Prodavnica</h3>
         <div className="space-y-2">
           {stores.map((store) => (
             <label
               key={store}
               className={`flex cursor-pointer items-center gap-3 p-2 rounded-lg transition-colors ${
                 selectedStores.includes(store)
-                  ? "bg-red-50 border border-red-200"
-                  : "hover:bg-gray-50"
+                  ? "bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800"
+                  : "hover:bg-gray-50 dark:hover:bg-gray-800"
               }`}
             >
               <input
@@ -496,7 +496,7 @@ export function DealsGrid({
               <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
                 selectedStores.includes(store)
                   ? "bg-red-500 border-red-500"
-                  : "border-gray-300"
+                  : "border-gray-300 dark:border-gray-600"
               }`}>
                 {selectedStores.includes(store) && (
                   <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -504,7 +504,7 @@ export function DealsGrid({
                   </svg>
                 )}
               </div>
-              <span className="text-sm text-gray-700">{STORE_NAMES[store]}</span>
+              <span className="text-sm text-gray-700 dark:text-gray-300">{STORE_NAMES[store]}</span>
             </label>
           ))}
         </div>
@@ -512,8 +512,8 @@ export function DealsGrid({
 
       {/* Category */}
       <div>
-        <h3 className="mb-1 text-sm font-semibold text-gray-900">Kategorija</h3>
-        <p className="mb-3 text-xs text-gray-400">* Filteri nisu precizni</p>
+        <h3 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">Kategorija</h3>
+        <p className="mb-3 text-xs text-gray-400 dark:text-gray-500">* Filteri nisu precizni</p>
         <ScrollFade maxHeight="200px">
           <div className="space-y-1 pr-1">
             {categories.map((category) => (
@@ -521,8 +521,8 @@ export function DealsGrid({
                 key={category}
                 className={`flex cursor-pointer items-center gap-3 p-2 rounded-lg transition-colors ${
                   selectedCategories.includes(category)
-                    ? "bg-red-50 border border-red-200"
-                    : "hover:bg-gray-50"
+                    ? "bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800"
+                    : "hover:bg-gray-50 dark:hover:bg-gray-800"
                 }`}
               >
                 <input
@@ -534,7 +534,7 @@ export function DealsGrid({
                 <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
                   selectedCategories.includes(category)
                     ? "bg-red-500 border-red-500"
-                    : "border-gray-300"
+                    : "border-gray-300 dark:border-gray-600"
                 }`}>
                   {selectedCategories.includes(category) && (
                     <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -542,7 +542,7 @@ export function DealsGrid({
                     </svg>
                   )}
                 </div>
-                <span className="text-sm text-gray-700">{CATEGORY_NAMES[category]}</span>
+                <span className="text-sm text-gray-700 dark:text-gray-300">{CATEGORY_NAMES[category]}</span>
               </label>
             ))}
           </div>
@@ -551,13 +551,13 @@ export function DealsGrid({
 
       {/* Brand */}
       <div>
-        <h3 className="mb-3 text-sm font-semibold text-gray-900">Brend</h3>
+        <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Brend</h3>
         <Input
           type="search"
           placeholder="Pretraži brendove..."
           value={brandSearch}
           onChange={(e) => setBrandSearch(e.target.value)}
-          className="mb-3 h-9 text-sm bg-gray-50 border-gray-200 focus:bg-white"
+          className="mb-3 h-9 text-sm bg-gray-50 border-gray-200 focus:bg-white dark:bg-gray-800 dark:border-gray-700 dark:focus:bg-gray-700 dark:text-white dark:placeholder-gray-400"
         />
         <ScrollFade maxHeight="200px">
           <div className="space-y-1 pr-1">
@@ -566,8 +566,8 @@ export function DealsGrid({
                 key={brand}
                 className={`flex cursor-pointer items-center gap-3 p-2 rounded-lg transition-colors ${
                   selectedBrands.includes(brand)
-                    ? "bg-red-50 border border-red-200"
-                    : "hover:bg-gray-50"
+                    ? "bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800"
+                    : "hover:bg-gray-50 dark:hover:bg-gray-800"
                 }`}
               >
                 <input
@@ -579,7 +579,7 @@ export function DealsGrid({
                 <div className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 ${
                   selectedBrands.includes(brand)
                     ? "bg-red-500 border-red-500"
-                    : "border-gray-300"
+                    : "border-gray-300 dark:border-gray-600"
                 }`}>
                   {selectedBrands.includes(brand) && (
                     <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -587,11 +587,11 @@ export function DealsGrid({
                     </svg>
                   )}
                 </div>
-                <span className="text-sm text-gray-700 truncate">{brand}</span>
+                <span className="text-sm text-gray-700 dark:text-gray-300 truncate">{brand}</span>
               </label>
             ))}
             {filteredBrands.length === 0 && (
-              <p className="text-sm text-gray-400 p-2">Nema rezultata</p>
+              <p className="text-sm text-gray-400 dark:text-gray-500 p-2">Nema rezultata</p>
             )}
           </div>
         </ScrollFade>
@@ -629,12 +629,12 @@ export function DealsGrid({
             className="absolute inset-0 bg-black/50 animate-[fadeIn_0.2s_ease-out]"
             onClick={() => setShowMobileFilters(false)}
           />
-          <div className="absolute top-0 left-0 bottom-0 w-72 max-w-[80vw] bg-white shadow-xl rounded-r-2xl animate-[slideInLeft_0.25s_ease-out] flex flex-col overflow-hidden">
-            <div className="flex items-center justify-between border-b bg-white p-4 flex-shrink-0">
-              <h2 className="text-lg font-semibold">Filteri</h2>
+          <div className="absolute top-0 left-0 bottom-0 w-72 max-w-[80vw] bg-white dark:bg-gray-900 shadow-xl rounded-r-2xl animate-[slideInLeft_0.25s_ease-out] flex flex-col overflow-hidden">
+            <div className="flex items-center justify-between border-b dark:border-gray-800 bg-white dark:bg-gray-900 p-4 flex-shrink-0">
+              <h2 className="text-lg font-semibold dark:text-white">Filteri</h2>
               <button
                 onClick={() => setShowMobileFilters(false)}
-                className="cursor-pointer rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                className="cursor-pointer rounded p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-gray-800 dark:hover:text-gray-300"
               >
                 <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
@@ -652,7 +652,7 @@ export function DealsGrid({
       <div className="lg:grid lg:grid-cols-[260px_1fr] lg:gap-6">
         {/* Desktop Sidebar - hidden on mobile/tablet */}
         <aside className="hidden lg:block">
-          <div className="sticky top-20 rounded-xl bg-white shadow-sm border border-gray-100 overflow-hidden">
+          <div className="sticky top-20 rounded-xl bg-white dark:bg-gray-900 shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
             <ScrollFade maxHeight="calc(100vh - 6rem)" className="p-5">
               {filterContentJSX}
             </ScrollFade>
@@ -759,15 +759,15 @@ export function DealsGrid({
                 </div>
               )}
 
-              {/* Sort and count - right side */}
-              <div className="flex items-center justify-end gap-4 sm:flex-shrink-0">
-                <p className="text-sm text-gray-600">
+              {/* Sort and count - right side, full width when no filters */}
+              <div className={`flex items-center justify-end gap-4 ${hasActiveFilters ? "sm:flex-shrink-0" : "w-full"}`}>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   {filteredDeals.length} {filteredDeals.length === 1 ? "proizvod" : "proizvoda"}
                 </p>
                 <select
                   value={sortBy}
                   onChange={(e) => setSortBy(e.target.value as SortOption)}
-                  className="rounded border border-gray-200 bg-white px-3 py-1.5 text-sm"
+                  className="rounded border border-gray-200 bg-white px-3 py-1.5 text-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
                 >
                   <option value="discount">Sortiraj: Popust ↓</option>
                   <option value="price-low">Sortiraj: Cena ↑</option>
@@ -875,20 +875,20 @@ export function DealsGrid({
           {/* Deals Grid */}
           {paginatedDeals.length === 0 ? (
             <div className="min-h-[400px] flex flex-col items-center justify-center text-center px-4">
-              <div className="w-20 h-20 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-                <SearchX className="w-10 h-10 text-gray-400" />
+              <div className="w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
+                <SearchX className="w-10 h-10 text-gray-400 dark:text-gray-500" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                 Nema rezultata
               </h3>
-              <p className="text-gray-500 mb-6 max-w-sm">
+              <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-sm">
                 Nismo pronašli proizvode koji odgovaraju tvojim filterima. Probaj da prilagodiš pretragu.
               </p>
               {hasActiveFilters && (
                 <Button
                   variant="outline"
                   onClick={resetFilters}
-                  className="border-red-200 text-red-600 hover:bg-red-50"
+                  className="border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/30"
                 >
                   Resetuj filtere
                 </Button>
@@ -970,7 +970,7 @@ export function DealsGrid({
                   »»
                 </Button>
               </div>
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
                 Stranica {currentPage} od {totalPages} ({filteredDeals.length} proizvoda)
               </p>
             </div>

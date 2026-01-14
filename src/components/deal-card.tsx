@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Deal, Store } from "@/types/deal";
 import { formatPrice } from "@/lib/utils";
+import { WishlistButton } from "@/components/wishlist-button";
 
 interface DealCardProps {
   deal: Deal;
@@ -27,18 +29,20 @@ export function DealCard({ deal }: DealCardProps) {
 
   return (
     <Link href={`/ponuda/${deal.id}`}>
-      <Card className="group h-full overflow-hidden transition-shadow hover:shadow-lg">
-        <div className="relative aspect-square overflow-hidden bg-gray-100">
+      <Card className="group h-full overflow-hidden transition-shadow hover:shadow-lg dark:bg-gray-800 dark:border-gray-700">
+        <div className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-700">
           {deal.imageUrl && !imgError ? (
-            <img
+            <Image
               src={deal.imageUrl}
               alt={deal.name}
-              className="absolute inset-0 h-full w-full object-cover transition-transform group-hover:scale-105"
-              loading="lazy"
+              fill
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              className="object-cover transition-transform group-hover:scale-105"
               onError={() => setImgError(true)}
+              unoptimized
             />
           ) : (
-            <div className="flex h-full items-center justify-center text-gray-400 text-xs text-center p-2">
+            <div className="flex h-full items-center justify-center text-gray-400 dark:text-gray-500 text-xs text-center p-2">
               {deal.brand || "Nema slike"}
             </div>
           )}
@@ -49,9 +53,11 @@ export function DealCard({ deal }: DealCardProps) {
           {/* Store logo */}
           <div className="absolute right-2 top-2">
             {!logoError ? (
-              <img
+              <Image
                 src={storeInfo.logo}
                 alt={storeInfo.name}
+                width={60}
+                height={20}
                 className="h-5 w-auto rounded bg-white/90 p-0.5"
                 onError={() => setLogoError(true)}
               />
@@ -63,23 +69,27 @@ export function DealCard({ deal }: DealCardProps) {
               </div>
             )}
           </div>
+          {/* Wishlist button */}
+          <div className="absolute right-2 bottom-2">
+            <WishlistButton deal={deal} size="sm" />
+          </div>
         </div>
         <CardContent className="p-3">
           {deal.brand && (
-            <p className="text-xs font-medium text-gray-500 uppercase">
+            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
               {deal.brand}
             </p>
           )}
-          <h3 className="mt-1 line-clamp-2 text-sm font-medium">{deal.name}</h3>
+          <h3 className="mt-1 line-clamp-2 text-sm font-medium dark:text-white">{deal.name}</h3>
           <div className="mt-2 flex flex-wrap items-baseline gap-x-2">
-            <span className="text-lg font-bold text-red-600">
+            <span className="text-lg font-bold text-red-600 dark:text-red-500">
               {formatPrice(deal.salePrice)}
             </span>
-            <span className="text-sm text-gray-400 line-through">
+            <span className="text-sm text-gray-400 dark:text-gray-500 line-through">
               {formatPrice(deal.originalPrice)}
             </span>
           </div>
-          <p className="mt-1 text-xs text-gray-500">
+          <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">
             Ušteda: {formatPrice(deal.originalPrice - deal.salePrice)}
           </p>
         </CardContent>

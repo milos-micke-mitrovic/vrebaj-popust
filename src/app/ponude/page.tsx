@@ -100,14 +100,14 @@ export default function PonudePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageSchema) }}
       />
 
-      <div className="flex min-h-screen flex-col bg-gray-50">
+      <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-950">
         <Header />
 
         {/* Main content */}
         <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6">
           <Suspense
             fallback={
-              <div className="py-12 text-center text-gray-500">Učitavanje...</div>
+              <div className="py-12 text-center text-gray-500 dark:text-gray-400">Učitavanje...</div>
             }
           >
             <DealsGrid

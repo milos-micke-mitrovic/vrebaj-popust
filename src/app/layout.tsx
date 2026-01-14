@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { Outfit } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { getAllDealIds } from "@/lib/deals";
+import { AppProviders } from "@/components/app-providers";
 import "./globals.css";
 
 // Replace with your GA4 Measurement ID
@@ -122,6 +124,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const availableDealIds = getAllDealIds();
+
   return (
     <html lang="sr" dir="ltr" suppressHydrationWarning>
       <head>
@@ -143,7 +147,9 @@ export default function RootLayout({
       <body
         className={`${outfit.variable} font-sans antialiased`}
       >
-        {children}
+        <AppProviders availableDealIds={availableDealIds}>
+          {children}
+        </AppProviders>
         {GA_MEASUREMENT_ID && <GoogleAnalytics gaId={GA_MEASUREMENT_ID} />}
       </body>
     </html>

@@ -208,10 +208,14 @@ export function getRelatedDeals(deal: Deal, limit: number = 8): Deal[] {
   const related: Deal[] = [];
   const seen = new Set<string>([deal.id]);
 
-  // Priority 1: Same brand and category
+  // Helper: check if genders are compatible (same gender or unisex)
+  const genderMatch = (d: Deal) =>
+    d.gender === deal.gender || d.gender === "unisex" || deal.gender === "unisex";
+
+  // Priority 1: Same brand, category, and gender
   for (const d of allDeals) {
     if (seen.has(d.id)) continue;
-    if (d.brand && d.brand === deal.brand && d.category === deal.category) {
+    if (d.brand && d.brand === deal.brand && d.category === deal.category && genderMatch(d)) {
       related.push(d);
       seen.add(d.id);
       if (related.length >= limit) return related;
@@ -221,37 +225,37 @@ export function getRelatedDeals(deal: Deal, limit: number = 8): Deal[] {
   // Priority 2: Same category and gender
   for (const d of allDeals) {
     if (seen.has(d.id)) continue;
-    if (d.category === deal.category && d.gender === deal.gender) {
+    if (d.category === deal.category && genderMatch(d)) {
       related.push(d);
       seen.add(d.id);
       if (related.length >= limit) return related;
     }
   }
 
-  // Priority 3: Same category
+  // Priority 3: Same brand and gender
   for (const d of allDeals) {
     if (seen.has(d.id)) continue;
-    if (d.category === deal.category) {
+    if (d.brand && d.brand === deal.brand && genderMatch(d)) {
       related.push(d);
       seen.add(d.id);
       if (related.length >= limit) return related;
     }
   }
 
-  // Priority 4: Same brand
+  // Priority 4: Same gender and store
   for (const d of allDeals) {
     if (seen.has(d.id)) continue;
-    if (d.brand && d.brand === deal.brand) {
+    if (d.store === deal.store && genderMatch(d)) {
       related.push(d);
       seen.add(d.id);
       if (related.length >= limit) return related;
     }
   }
 
-  // Priority 5: Same store
+  // Priority 5: Same gender only (fallback)
   for (const d of allDeals) {
     if (seen.has(d.id)) continue;
-    if (d.store === deal.store) {
+    if (genderMatch(d)) {
       related.push(d);
       seen.add(d.id);
       if (related.length >= limit) return related;
