@@ -69,6 +69,7 @@ const STORE_FILES: Record<Store, string> = {
   planeta: "planeta-deals.json",
   sportvision: "sportvision-deals.json",
   nsport: "nsport-deals.json",
+  buzz: "buzz-deals.json",
 };
 
 export const STORE_INFO: Record<
@@ -94,6 +95,11 @@ export const STORE_INFO: Record<
     name: "N Sport",
     logo: "/logos/nsport.jpg",
     url: "https://www.n-sport.net",
+  },
+  buzz: {
+    name: "Buzz Sneakers",
+    logo: "/logos/buzz.png",
+    url: "https://www.buzzsneakers.rs",
   },
 };
 

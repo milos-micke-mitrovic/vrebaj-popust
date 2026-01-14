@@ -34,7 +34,7 @@ export interface Deal extends Omit<RawDeal, "category"> {
   gender: Gender;
 }
 
-export type Store = "djaksport" | "planeta" | "sportvision" | "nsport";
+export type Store = "djaksport" | "planeta" | "sportvision" | "nsport" | "buzz";
 
 export interface ScrapeResult {
   store: Store;
