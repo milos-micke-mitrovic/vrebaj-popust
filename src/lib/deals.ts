@@ -191,3 +191,61 @@ export function getPriceRange(): { min: number; max: number } {
     max: Math.max(...prices),
   };
 }
+
+export function getRelatedDeals(deal: Deal, limit: number = 8): Deal[] {
+  const allDeals = getAllDeals();
+  const related: Deal[] = [];
+  const seen = new Set<string>([deal.id]);
+
+  // Priority 1: Same brand and category
+  for (const d of allDeals) {
+    if (seen.has(d.id)) continue;
+    if (d.brand && d.brand === deal.brand && d.category === deal.category) {
+      related.push(d);
+      seen.add(d.id);
+      if (related.length >= limit) return related;
+    }
+  }
+
+  // Priority 2: Same category and gender
+  for (const d of allDeals) {
+    if (seen.has(d.id)) continue;
+    if (d.category === deal.category && d.gender === deal.gender) {
+      related.push(d);
+      seen.add(d.id);
+      if (related.length >= limit) return related;
+    }
+  }
+
+  // Priority 3: Same category
+  for (const d of allDeals) {
+    if (seen.has(d.id)) continue;
+    if (d.category === deal.category) {
+      related.push(d);
+      seen.add(d.id);
+      if (related.length >= limit) return related;
+    }
+  }
+
+  // Priority 4: Same brand
+  for (const d of allDeals) {
+    if (seen.has(d.id)) continue;
+    if (d.brand && d.brand === deal.brand) {
+      related.push(d);
+      seen.add(d.id);
+      if (related.length >= limit) return related;
+    }
+  }
+
+  // Priority 5: Same store
+  for (const d of allDeals) {
+    if (seen.has(d.id)) continue;
+    if (d.store === deal.store) {
+      related.push(d);
+      seen.add(d.id);
+      if (related.length >= limit) return related;
+    }
+  }
+
+  return related;
+}

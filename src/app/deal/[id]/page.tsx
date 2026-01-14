@@ -1,13 +1,13 @@
 import { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getDealById, getAllDealIds, STORE_INFO } from "@/lib/deals";
+import { getDealById, getAllDealIds, getRelatedDeals, STORE_INFO } from "@/lib/deals";
 import { formatPrice } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { StoreLogo } from "@/components/store-logo";
-import { BackButton } from "@/components/back-button";
 import { Header } from "@/components/header";
+import { DealCard } from "@/components/deal-card";
 
 // Calculate price valid date at build time (7 days from build)
 const priceValidUntilDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
@@ -125,6 +125,7 @@ export default async function DealPage({ params }: Props) {
   const savings = deal.originalPrice - deal.salePrice;
   const categoryText = CATEGORY_NAMES[deal.category] || "Proizvod";
   const genderText = GENDER_NAMES[deal.gender] || "";
+  const relatedDeals = getRelatedDeals(deal, 8);
 
   const imageUrl = deal.imageUrl?.startsWith("/")
     ? `https://vrebajpopust.rs${deal.imageUrl}`
@@ -200,9 +201,9 @@ export default async function DealPage({ params }: Props) {
       <div className="min-h-screen bg-gray-50">
         <Header />
 
-        {/* Breadcrumb with Back Button */}
+        {/* Breadcrumb */}
         <nav
-          className="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between"
+          className="mx-auto max-w-7xl px-4 py-4"
           aria-label="Breadcrumb"
         >
           <ol className="flex items-center text-sm text-gray-500">
@@ -224,7 +225,6 @@ export default async function DealPage({ params }: Props) {
               </span>
             </li>
           </ol>
-          <BackButton />
         </nav>
 
         {/* Product Details */}
@@ -347,10 +347,34 @@ export default async function DealPage({ params }: Props) {
           </article>
         </main>
 
+        {/* Related Deals */}
+        {relatedDeals.length > 0 && (
+          <section className="mx-auto max-w-7xl px-4 py-12">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-bold text-gray-900">
+                Slične ponude
+              </h2>
+              <Link
+                href={`/ponude?categories=${deal.category}`}
+                className="text-sm text-red-500 hover:underline"
+              >
+                Prikaži sve →
+              </Link>
+            </div>
+            <div className="flex flex-wrap gap-3">
+              {relatedDeals.map((relatedDeal) => (
+                <div key={relatedDeal.id} className="w-[calc(50%-6px)] sm:w-[calc(25%-9px)]">
+                  <DealCard deal={relatedDeal} />
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
         {/* Footer */}
-        <footer className="border-t bg-white py-6">
+        <footer className="border-t bg-white py-8">
           <div className="mx-auto max-w-7xl px-4">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
               <div className="flex items-center gap-3">
                 <img
                   src="/logos/logo.png"
@@ -366,13 +390,23 @@ export default async function DealPage({ params }: Props) {
                   </p>
                 </div>
               </div>
-              <Link
-                href="/ponude"
-                className="text-sm text-red-500 hover:underline"
-              >
-                ← Nazad na sve ponude
-              </Link>
+              <div className="flex flex-wrap gap-6 text-sm">
+                <Link href="/ponude" className="text-gray-600 hover:text-red-500">
+                  Sve ponude
+                </Link>
+                <Link href={`/ponude?stores=${deal.store}`} className="text-gray-600 hover:text-red-500">
+                  {storeInfo.name} ponude
+                </Link>
+                {deal.brand && (
+                  <Link href={`/ponude?brands=${deal.brand}`} className="text-gray-600 hover:text-red-500">
+                    {deal.brand} ponude
+                  </Link>
+                )}
+              </div>
             </div>
+            <p className="mt-6 text-xs text-gray-400">
+              Cene se ažuriraju automatski. VrebajPopust nije odgovoran za tačnost cena.
+            </p>
           </div>
         </footer>
       </div>
