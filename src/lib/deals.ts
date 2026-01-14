@@ -68,6 +68,7 @@ const STORE_FILES: Record<Store, string> = {
   djaksport: "djaksport-deals.json",
   planeta: "planeta-deals.json",
   sportvision: "sportvision-deals.json",
+  nsport: "nsport-deals.json",
 };
 
 export const STORE_INFO: Record<
@@ -88,6 +89,11 @@ export const STORE_INFO: Record<
     name: "Sport Vision",
     logo: "/logos/sportvision.png",
     url: "https://www.sportvision.rs",
+  },
+  nsport: {
+    name: "N Sport",
+    logo: "/logos/nsport.jpg",
+    url: "https://www.n-sport.net",
   },
 };
 

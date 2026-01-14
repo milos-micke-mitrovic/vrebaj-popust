@@ -1,0 +1,100 @@
+{
+  "store": "nsport",
+  "deals": [
+    {
+      "id": "nsport-www-n-sport-net-lifestyle-patike-decije-patike-puma-carina-lift-ps-3-html-1",
+      "store": "nsport",
+      "name": "Dečije patike Puma Carina Lift Ps",
+      "brand": "Puma",
+      "originalPrice": 7199,
+      "salePrice": 3499,
+      "discountPercent": 51,
+      "url": "https://www.n-sport.net/lifestyle-patike/decije-patike-puma-carina-lift-ps-3.html",
+      "imageUrl": "/images/nsport/decije-patike-puma-carina-lift-ps-374226-08.jpg",
+      "category": null,
+      "scrapedAt": "2026-01-14T09:04:56.884Z"
+    },
+    {
+      "id": "nsport-www-n-sport-net-fitnes-majica-zenski-top-puma-mid-impact-4keeps-bra-2-html-2",
+      "store": "nsport",
+      "name": "Ženski top Puma Mid Impact 4Keeps Bra",
+      "brand": "Puma",
+      "originalPrice": 3599,
+      "salePrice": 1799,
+      "discountPercent": 50,
+      "url": "https://www.n-sport.net/fitnes-majica/zenski-top-puma-mid-impact-4keeps-bra-2.html",
+      "imageUrl": "/images/nsport/zenski-top-puma-mid-impact-4keeps-bra-520304-19.jpg",
+      "category": null,
+      "scrapedAt": "2026-01-14T09:05:09.223Z"
+    },
+    {
+      "id": "nsport-www-n-sport-net-kacket-unisex-kacket-puma-ess-cap-no-2-2-html-3",
+      "store": "nsport",
+      "name": "Unisex kačket Puma Ess Cap No. 2",
+      "brand": "Puma",
+      "originalPrice": 1799,
+      "salePrice": 699,
+      "discountPercent": 61,
+      "url": "https://www.n-sport.net/kacket/unisex-kacket-puma-ess-cap-no-2-2.html",
+      "imageUrl": "/images/nsport/unisex-kacket-puma-ess-cap-no-2-022885-05.jpg",
+      "category": null,
+      "scrapedAt": "2026-01-14T09:05:09.228Z"
+    },
+    {
+      "id": "nsport-www-n-sport-net-majica-polo-muska-majica-puma-ess-pique-polo-7-html-4",
+      "store": "nsport",
+      "name": "Muška majica Puma Ess Pique Polo",
+      "brand": "Puma",
+      "originalPrice": 3999,
+      "salePrice": 1999,
+      "discountPercent": 50,
+      "url": "https://www.n-sport.net/majica-polo/muska-majica-puma-ess-pique-polo-7.html",
+      "imageUrl": "/images/nsport/muska-majica-puma-ess-pique-polo-586674-02.jpg",
+      "category": null,
+      "scrapedAt": "2026-01-14T09:05:30.945Z"
+    },
+    {
+      "id": "nsport-www-n-sport-net-majica-polo-muska-majica-puma-ess-pique-polo-6-html-5",
+      "store": "nsport",
+      "name": "Muška majica Puma Ess Pique Polo",
+      "brand": "Puma",
+      "originalPrice": 3999,
+      "salePrice": 1999,
+      "discountPercent": 50,
+      "url": "https://www.n-sport.net/majica-polo/muska-majica-puma-ess-pique-polo-6.html",
+      "imageUrl": "/images/nsport/muska-majica-puma-ess-pique-polo-586674-06.jpg",
+      "category": null,
+      "scrapedAt": "2026-01-14T09:05:30.948Z"
+    },
+    {
+      "id": "nsport-www-n-sport-net-sorc-zenski-sorc-russell-athletic-bloom-shorts-1-html-6",
+      "store": "nsport",
+      "name": "Ženski šorc Russell Athletic Bloom-Shorts",
+      "brand": "Russell Athletic",
+      "originalPrice": 1790,
+      "salePrice": 799,
+      "discountPercent": 55,
+      "url": "https://www.n-sport.net/sorc/zenski-sorc-russell-athletic-bloom-shorts-1.html",
+      "imageUrl": "/images/nsport/zenski-sorc-russell-athletic-bloom-shorts-a2-122-1-564.jpg",
+      "category": null,
+      "scrapedAt": "2026-01-14T09:05:30.951Z"
+    },
+    {
+      "id": "nsport-www-n-sport-net-sorc-za-kupanje-deciji-sorc-za-kupanje-speedo-essential-13-html-7",
+      "store": "nsport",
+      "name": "Dečiji šorc za kupanje Speedo Essential 13",
+      "brand": "Speedo",
+      "originalPrice": 2699,
+      "salePrice": 1350,
+      "discountPercent": 50,
+      "url": "https://www.n-sport.net/sorc-za-kupanje/deciji-sorc-za-kupanje-speedo-essential-13.html",
+      "imageUrl": "/images/nsport/deciji-sorc-za-kupanje-speedo-essential-13-812412a369.jpg",
+      "category": null,
+      "scrapedAt": "2026-01-14T09:05:44.118Z"
+    }
+  ],
+  "totalScraped": 163,
+  "filteredCount": 7,
+  "scrapedAt": "2026-01-14T09:05:44.249Z",
+  "errors": []
+}

@@ -189,6 +189,11 @@ export default function Home() {
                   alt="Sport Vision"
                   className="h-5 opacity-70 hover:opacity-100 transition-opacity"
                 />
+                <img
+                  src="/logos/nsport.jpg"
+                  alt="N Sport"
+                  className="h-5 opacity-70 hover:opacity-100 transition-opacity"
+                />
               </div>
             </div>
             <p className="mt-4 text-xs text-gray-400">

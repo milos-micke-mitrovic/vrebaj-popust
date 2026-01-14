@@ -15,6 +15,7 @@ const STORE_INFO: Record<Store, { name: string; logo: string; fallbackColor: str
   djaksport: { name: "Djak Sport", logo: "/logos/djaksport.png", fallbackColor: "bg-red-600" },
   planeta: { name: "Planeta Sport", logo: "/logos/planeta.png", fallbackColor: "bg-blue-600" },
   sportvision: { name: "Sport Vision", logo: "/logos/sportvision.png", fallbackColor: "bg-orange-600" },
+  nsport: { name: "N Sport", logo: "/logos/nsport.jpg", fallbackColor: "bg-green-600" },
 };
 
 export function DealCard({ deal }: DealCardProps) {
