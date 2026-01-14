@@ -2,7 +2,46 @@
   "store": "sportvision",
   "deals": [
     {
-      "id": "sportvision-www-sportvision-rs-donji-deo-trenerke-70015613-nike-psg-1",
+      "id": "sportvision-www-sportvision-rs-dukserica-69939217-ellesse-crewneck-1",
+      "store": "sportvision",
+      "name": "Ellesse CREWNECK women",
+      "brand": "Ellesse",
+      "originalPrice": 6499,
+      "salePrice": 2499,
+      "discountPercent": 61,
+      "url": "https://www.sportvision.rs/dukserica/69939217-ellesse-crewneck",
+      "imageUrl": "/images/sportvision/ela231f608-01_350_350px.jpg.jpg",
+      "category": null,
+      "scrapedAt": "2026-01-14T12:38:38.190Z"
+    },
+    {
+      "id": "sportvision-www-sportvision-rs-patike-69858482-ellesse-lolita-2",
+      "store": "sportvision",
+      "name": "Ellesse LOLITA women",
+      "brand": "Ellesse",
+      "originalPrice": 8999,
+      "salePrice": 3999,
+      "discountPercent": 55,
+      "url": "https://www.sportvision.rs/patike/69858482-ellesse-lolita",
+      "imageUrl": "/images/sportvision/elf213f115-08_350_350px.jpg.jpg",
+      "category": null,
+      "scrapedAt": "2026-01-14T12:38:38.190Z"
+    },
+    {
+      "id": "sportvision-www-sportvision-rs-dukserica-70004439-lussari-soft-3",
+      "store": "sportvision",
+      "name": "Lussari Soft women",
+      "brand": "Lussari",
+      "originalPrice": 7999,
+      "salePrice": 3999,
+      "discountPercent": 50,
+      "url": "https://www.sportvision.rs/dukserica/70004439-lussari-soft",
+      "imageUrl": "/images/sportvision/ssa243f620-52_350_350px.jpg.jpg",
+      "category": null,
+      "scrapedAt": "2026-01-14T12:38:38.190Z"
+    },
+    {
+      "id": "sportvision-www-sportvision-rs-donji-deo-trenerke-70015613-nike-psg-4",
       "store": "sportvision",
       "name": "Nike PSG kids",
       "brand": "Nike",
@@ -12,10 +51,10 @@
       "url": "https://www.sportvision.rs/donji-deo-trenerke/70015613-nike-psg",
       "imageUrl": "/images/sportvision/95d288-g0t_350_350px.jpg.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:13:34.483Z"
+      "scrapedAt": "2026-01-14T12:38:58.140Z"
     },
     {
-      "id": "sportvision-www-sportvision-rs-patike-69974534-champion-cross-2",
+      "id": "sportvision-www-sportvision-rs-patike-69974534-champion-cross-5",
       "store": "sportvision",
       "name": "Champion CROSS kids",
       "brand": "Champion",
@@ -25,10 +64,10 @@
       "url": "https://www.sportvision.rs/patike/69974534-champion-cross",
       "imageUrl": "/images/sportvision/chf223b111-02_350_350px.jpg.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:13:34.483Z"
+      "scrapedAt": "2026-01-14T12:38:58.140Z"
     },
     {
-      "id": "sportvision-www-sportvision-rs-patike-69994339-adidas-x-crazifast-club-messi-3",
+      "id": "sportvision-www-sportvision-rs-patike-69994339-adidas-x-crazifast-club-messi-6",
       "store": "sportvision",
       "name": "adidas X Crazifast Club Messi kids",
       "brand": "adidas",
@@ -38,12 +77,12 @@
       "url": "https://www.sportvision.rs/patike/69994339-adidas-x-crazifast-club-messi",
       "imageUrl": "/images/sportvision/id0722_350_350px.jpg.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:13:34.486Z"
+      "scrapedAt": "2026-01-14T12:38:58.140Z"
     }
   ],
-  "totalScraped": 54,
-  "filteredCount": 3,
-  "scrapedAt": "2026-01-14T12:13:39.414Z",
+  "totalScraped": 96,
+  "filteredCount": 6,
+  "scrapedAt": "2026-01-14T12:39:02.143Z",
   "errors": [
     "men: Navigation timeout of 60000 ms exceeded"
   ]
