@@ -11,9 +11,9 @@ puppeteer.use(StealthPlugin());
 const STORE = "buzz" as const;
 const BASE_URL = "https://www.buzzsneakers.rs";
 const SALE_PAGES = [
-  `${BASE_URL}/proizvodi/buzz-sale-men`,
-  `${BASE_URL}/proizvodi/buzz-sale-women`,
-  `${BASE_URL}/proizvodi/buzz-sale-kids`,
+  { url: `${BASE_URL}/proizvodi/buzz-sale-men`, gender: "men" },
+  { url: `${BASE_URL}/proizvodi/buzz-sale-women`, gender: "women" },
+  { url: `${BASE_URL}/proizvodi/buzz-sale-kids`, gender: "kids" },
 ];
 const MIN_DISCOUNT = 50;
 const IMAGE_DIR = path.join(process.cwd(), "public", "images", "buzz");
@@ -244,16 +244,16 @@ async function scrapeBuzz(): Promise<ScrapeResult> {
     const page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
 
-    for (const salePageUrl of SALE_PAGES) {
-      console.log(`\n=== Scraping: ${salePageUrl} ===`);
+    for (const salePage of SALE_PAGES) {
+      console.log(`\n=== Scraping: ${salePage.url} (${salePage.gender}) ===`);
 
       let currentPage = 1;
       const maxPages = 20;
 
       while (currentPage <= maxPages) {
         const pageUrl = currentPage === 1
-          ? salePageUrl
-          : `${salePageUrl}/page-${currentPage}`;
+          ? salePage.url
+          : `${salePage.url}/page-${currentPage}`;
         console.log(`\nScraping page ${currentPage}: ${pageUrl}`);
 
         try {
@@ -275,7 +275,7 @@ async function scrapeBuzz(): Promise<ScrapeResult> {
           await sleep(2000);
 
           // Save debug screenshot for first page of first section only
-          if (currentPage === 1 && salePageUrl === SALE_PAGES[0]) {
+          if (currentPage === 1 && salePage === SALE_PAGES[0]) {
             await page.screenshot({
               path: path.join(process.cwd(), "data", "buzz-page-1.png"),
             });
@@ -295,9 +295,14 @@ async function scrapeBuzz(): Promise<ScrapeResult> {
             break;
           }
 
-          if (products.length > 0 && currentPage === 1 && salePageUrl === SALE_PAGES[0]) {
+          if (products.length > 0 && currentPage === 1 && salePage === SALE_PAGES[0]) {
             console.log("Sample product:", JSON.stringify(products[0], null, 2));
           }
+
+          // Gender marker for extractGender() to detect
+          const genderMarker = salePage.gender === "men" ? " men"
+            : salePage.gender === "women" ? " women"
+            : " kids";
 
           for (const product of products) {
             // Skip duplicates
@@ -325,10 +330,13 @@ async function scrapeBuzz(): Promise<ScrapeResult> {
                 );
               }
 
+              // Append gender marker to name for extractGender() to detect
+              const nameWithGender = product.name + genderMarker;
+
               allDeals.push({
                 id: generateId(product.url),
                 store: STORE,
-                name: product.name,
+                name: nameWithGender,
                 brand: product.brand,
                 originalPrice,
                 salePrice,

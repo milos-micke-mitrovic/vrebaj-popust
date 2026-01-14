@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import { Suspense } from "react";
+import Link from "next/link";
 import {
   getAllDeals,
   getUniqueBrands,
@@ -121,7 +122,7 @@ export default function Home() {
         <header className="sticky top-0 z-10 border-b bg-white shadow-sm">
           <div className="mx-auto max-w-7xl px-4 py-3">
             <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
+              <Link href="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
                 <img
                   src="/logos/logo.png"
                   alt="VrebajPopust"
@@ -135,13 +136,13 @@ export default function Home() {
                     Popusti preko 50% u Srbiji
                   </p>
                 </div>
-              </div>
+              </Link>
             </div>
           </div>
         </header>
 
         {/* Main content */}
-        <main className="mx-auto max-w-7xl flex-1 px-4 py-6">
+        <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6">
           <Suspense fallback={<div className="py-12 text-center text-gray-500">Učitavanje...</div>}>
             <DealsGrid
               deals={deals}

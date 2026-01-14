@@ -90,11 +90,46 @@ export function DealsGrid({
   );
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-  // Debounced URL update to prevent re-renders while typing/dragging
+  // Track if we're updating from URL to prevent sync loops
+  const isUpdatingFromUrl = useRef(false);
   const urlUpdateTimeout = useRef<NodeJS.Timeout | null>(null);
 
+  // Sync state from URL params when URL changes externally (e.g., clicking logo to go home)
   useEffect(() => {
-    // Debounce URL updates by 300ms
+    // Build current state as URL params to compare
+    const currentParams = new URLSearchParams();
+    if (search) currentParams.set("q", search);
+    if (selectedStores.length) currentParams.set("stores", selectedStores.join(","));
+    if (selectedBrands.length) currentParams.set("brands", selectedBrands.join(","));
+    if (selectedGenders.length) currentParams.set("genders", selectedGenders.join(","));
+    if (selectedCategories.length) currentParams.set("categories", selectedCategories.join(","));
+    if (minDiscount > 50) currentParams.set("minDiscount", String(minDiscount));
+    if (maxPrice !== null) currentParams.set("maxPrice", String(maxPrice));
+    if (sortBy !== "discount") currentParams.set("sort", sortBy);
+    if (currentPage > 1) currentParams.set("page", String(currentPage));
+
+    // Only sync if URL differs from current state (external navigation)
+    if (currentParams.toString() !== searchParams.toString()) {
+      isUpdatingFromUrl.current = true;
+      setSearch(searchParams.get("q") || "");
+      setSelectedStores((searchParams.get("stores")?.split(",").filter(Boolean) as Store[]) || []);
+      setSelectedBrands(searchParams.get("brands")?.split(",").filter(Boolean) || []);
+      setSelectedGenders((searchParams.get("genders")?.split(",").filter(Boolean) as Gender[]) || []);
+      setSelectedCategories((searchParams.get("categories")?.split(",").filter(Boolean) as Category[]) || []);
+      setMinDiscount(Number(searchParams.get("minDiscount")) || 50);
+      setMaxPrice(searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : null);
+      setSortBy((searchParams.get("sort") as SortOption) || "discount");
+      setCurrentPage(Number(searchParams.get("page")) || 1);
+      // Reset flag after a short delay
+      setTimeout(() => { isUpdatingFromUrl.current = false; }, 50);
+    }
+  }, [searchParams]);
+
+  // Debounced URL update to prevent re-renders while typing/dragging
+  useEffect(() => {
+    // Skip if we're syncing from URL
+    if (isUpdatingFromUrl.current) return;
+
     if (urlUpdateTimeout.current) {
       clearTimeout(urlUpdateTimeout.current);
     }
@@ -276,6 +311,17 @@ export function DealsGrid({
         />
       </div>
 
+      {hasActiveFilters && (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={resetFilters}
+          className="w-full"
+        >
+          Resetuj filtere
+        </Button>
+      )}
+
       <div>
         <h3 className="mb-2 text-sm font-semibold text-gray-700">Pol</h3>
         <div className="space-y-1.5">
@@ -413,17 +459,6 @@ export function DealsGrid({
           )}
         </div>
       </div>
-
-      {hasActiveFilters && (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={resetFilters}
-          className="w-full"
-        >
-          Resetuj filtere
-        </Button>
-      )}
     </div>
   );
 
@@ -477,9 +512,9 @@ export function DealsGrid({
       )}
 
       {/* Desktop Layout */}
-      <div className="flex gap-6">
+      <div className="lg:grid lg:grid-cols-[240px_1fr] lg:gap-6">
         {/* Desktop Sidebar - hidden on mobile/tablet */}
-        <aside className="hidden w-60 shrink-0 lg:block">
+        <aside className="hidden lg:block">
           <div
             className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-lg bg-white p-4 shadow-sm"
             onWheel={(e) => e.stopPropagation()}
@@ -489,7 +524,7 @@ export function DealsGrid({
         </aside>
 
         {/* Main Content */}
-        <div className="flex-1 min-w-0">
+        <div className="min-w-0">
           {/* Top Bar */}
           <div className="mb-4 flex items-center justify-end gap-4">
             <p className="text-sm text-gray-600">
@@ -579,7 +614,7 @@ export function DealsGrid({
 
           {/* Deals Grid */}
           {paginatedDeals.length === 0 ? (
-            <div className="py-12 text-center text-gray-500">
+            <div className="min-h-[400px] flex items-center justify-center text-gray-500">
               Nema proizvoda koji odgovaraju filterima
             </div>
           ) : (
