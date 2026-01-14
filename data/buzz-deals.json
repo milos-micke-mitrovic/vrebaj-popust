@@ -2,436 +2,7 @@
   "store": "buzz",
   "deals": [
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-303046-nike-patike-air-foamposite-one-1",
-      "store": "buzz",
-      "name": "NIKE Patike Air Foamposite One men",
-      "brand": "NIKE",
-      "originalPrice": 28999,
-      "salePrice": 14499,
-      "discountPercent": 50,
-      "url": "https://www.buzzsneakers.rs/patike/303046-nike-patike-air-foamposite-one",
-      "imageUrl": "/images/buzz/fq8181-511_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:05:57.233Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-305506-nike-patike-air-force-1-retro-ll-qs-2",
-      "store": "buzz",
-      "name": "NIKE Patike AIR FORCE 1 RETRO LL QS men",
-      "brand": "NIKE",
-      "originalPrice": 19999,
-      "salePrice": 9999,
-      "discountPercent": 50,
-      "url": "https://www.buzzsneakers.rs/patike/305506-nike-patike-air-force-1-retro-ll-qs",
-      "imageUrl": "/images/buzz/hv2021-200_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:05:57.234Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-280286-nike-patike-air-jordan-1-mid-se-3",
-      "store": "buzz",
-      "name": "NIKE Patike Air Jordan 1 Mid SE men",
-      "brand": "NIKE",
-      "originalPrice": 19699,
-      "salePrice": 9799,
-      "discountPercent": 50,
-      "url": "https://www.buzzsneakers.rs/patike/280286-nike-patike-air-jordan-1-mid-se",
-      "imageUrl": "/images/buzz/fj3458-160_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:15.526Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-279503-new-balance-patike-650-r-4",
-      "store": "buzz",
-      "name": "NEW BALANCE Patike 650 R men",
-      "brand": "NEW BALANCE",
-      "originalPrice": 19499,
-      "salePrice": 6999,
-      "discountPercent": 64,
-      "url": "https://www.buzzsneakers.rs/patike/279503-new-balance-patike-650-r",
-      "imageUrl": "/images/buzz/bb650rbr_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:15.526Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-274603-new-balance-patike-650-r-5",
-      "store": "buzz",
-      "name": "NEW BALANCE Patike 650 R men",
-      "brand": "NEW BALANCE",
-      "originalPrice": 19999,
-      "salePrice": 6999,
-      "discountPercent": 65,
-      "url": "https://www.buzzsneakers.rs/patike/274603-new-balance-patike-650-r",
-      "imageUrl": "/images/buzz/bb650rpc_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:15.526Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-274593-new-balance-patike-650-r-6",
-      "store": "buzz",
-      "name": "NEW BALANCE Patike 650 R men",
-      "brand": "NEW BALANCE",
-      "originalPrice": 19499,
-      "salePrice": 6999,
-      "discountPercent": 64,
-      "url": "https://www.buzzsneakers.rs/patike/274593-new-balance-patike-650-r",
-      "imageUrl": "/images/buzz/bb650rcl_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:15.526Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-274588-new-balance-patike-650-r-7",
-      "store": "buzz",
-      "name": "NEW BALANCE Patike 650 R men",
-      "brand": "NEW BALANCE",
-      "originalPrice": 19499,
-      "salePrice": 6999,
-      "discountPercent": 64,
-      "url": "https://www.buzzsneakers.rs/patike/274588-new-balance-patike-650-r",
-      "imageUrl": "/images/buzz/bb650rcg_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:15.526Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-274583-new-balance-patike-650-r-8",
-      "store": "buzz",
-      "name": "NEW BALANCE Patike 650 R men",
-      "brand": "NEW BALANCE",
-      "originalPrice": 19499,
-      "salePrice": 6999,
-      "discountPercent": 64,
-      "url": "https://www.buzzsneakers.rs/patike/274583-new-balance-patike-650-r",
-      "imageUrl": "/images/buzz/bb650rce_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:15.526Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-286573-vans-patike-lowland-9",
-      "store": "buzz",
-      "name": "VANS Patike Lowland men",
-      "brand": "VANS",
-      "originalPrice": 11999,
-      "salePrice": 4999,
-      "discountPercent": 58,
-      "url": "https://www.buzzsneakers.rs/patike/286573-vans-patike-lowland",
-      "imageUrl": "/images/buzz/vn0007p2cd3_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:33.957Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-283815-vans-patike-lowland-10",
-      "store": "buzz",
-      "name": "VANS Patike Lowland men",
-      "brand": "VANS",
-      "originalPrice": 11999,
-      "salePrice": 4999,
-      "discountPercent": 58,
-      "url": "https://www.buzzsneakers.rs/patike/283815-vans-patike-lowland",
-      "imageUrl": "/images/buzz/vn0007p2y9h_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:33.957Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-283810-vans-patike-lowland-11",
-      "store": "buzz",
-      "name": "VANS Patike Lowland men",
-      "brand": "VANS",
-      "originalPrice": 11999,
-      "salePrice": 4999,
-      "discountPercent": 58,
-      "url": "https://www.buzzsneakers.rs/patike/283810-vans-patike-lowland",
-      "imageUrl": "/images/buzz/vn0007p2twb_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:33.957Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-281833-nike-patike-attack-12",
-      "store": "buzz",
-      "name": "NIKE Patike Attack men",
-      "brand": "NIKE",
-      "originalPrice": 18399,
-      "salePrice": 8499,
-      "discountPercent": 53,
-      "url": "https://www.buzzsneakers.rs/patike/281833-nike-patike-attack",
-      "imageUrl": "/images/buzz/fb8938-101_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:33.957Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-286878-nike-patike-dunk-hi-retro-bttys-13",
-      "store": "buzz",
-      "name": "NIKE Patike Dunk Hi Retro BTTYS men",
-      "brand": "NIKE",
-      "originalPrice": 16799,
-      "salePrice": 8299,
-      "discountPercent": 50,
-      "url": "https://www.buzzsneakers.rs/patike/286878-nike-patike-dunk-hi-retro-bttys",
-      "imageUrl": "/images/buzz/dv0829-101_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:33.958Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-303436-nike-patike-nike-dunk-low-qs-14",
-      "store": "buzz",
-      "name": "NIKE Patike NIKE DUNK LOW QS men",
-      "brand": "NIKE",
-      "originalPrice": 17199,
-      "salePrice": 8499,
-      "discountPercent": 50,
-      "url": "https://www.buzzsneakers.rs/patike/303436-nike-patike-nike-dunk-low-qs",
-      "imageUrl": "/images/buzz/hf0391-001_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:33.958Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-282051-nike-patike-terminator-15",
-      "store": "buzz",
-      "name": "NIKE Patike Terminator men",
-      "brand": "NIKE",
-      "originalPrice": 18999,
-      "salePrice": 7999,
-      "discountPercent": 57,
-      "url": "https://www.buzzsneakers.rs/patike/282051-nike-patike-terminator",
-      "imageUrl": "/images/buzz/fd0650-100_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:33.958Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-292546-nike-patike-nike-terminator-high-nbhd-16",
-      "store": "buzz",
-      "name": "NIKE Patike NIKE TERMINATOR HIGH NBHD men",
-      "brand": "NIKE",
-      "originalPrice": 18099,
-      "salePrice": 7999,
-      "discountPercent": 55,
-      "url": "https://www.buzzsneakers.rs/patike/292546-nike-patike-nike-terminator-high-nbhd",
-      "imageUrl": "/images/buzz/fn6836-100_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:33.959Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-281823-nike-patike-terminator-17",
-      "store": "buzz",
-      "name": "NIKE Patike Terminator men",
-      "brand": "NIKE",
-      "originalPrice": 19199,
-      "salePrice": 8999,
-      "discountPercent": 53,
-      "url": "https://www.buzzsneakers.rs/patike/281823-nike-patike-terminator",
-      "imageUrl": "/images/buzz/fb1832-001_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:33.959Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-281838-nike-patike-terminator-18",
-      "store": "buzz",
-      "name": "NIKE Patike Terminator men",
-      "brand": "NIKE",
-      "originalPrice": 18999,
-      "salePrice": 8999,
-      "discountPercent": 52,
-      "url": "https://www.buzzsneakers.rs/patike/281838-nike-patike-terminator",
-      "imageUrl": "/images/buzz/fd0394-030_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:33.959Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-272118-puma-patike-slipstream-bball-19",
-      "store": "buzz",
-      "name": "PUMA Patike Slipstream Bball men",
-      "brand": "PUMA",
-      "originalPrice": 13999,
-      "salePrice": 5999,
-      "discountPercent": 57,
-      "url": "https://www.buzzsneakers.rs/patike/272118-puma-patike-slipstream-bball",
-      "imageUrl": "/images/buzz/393266-01_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:52.489Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-273936-puma-patike-slipstream-20",
-      "store": "buzz",
-      "name": "PUMA Patike Slipstream men",
-      "brand": "PUMA",
-      "originalPrice": 13999,
-      "salePrice": 5999,
-      "discountPercent": 57,
-      "url": "https://www.buzzsneakers.rs/patike/273936-puma-patike-slipstream",
-      "imageUrl": "/images/buzz/393787-01_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:52.489Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-269709-puma-patike-slipstream-21",
-      "store": "buzz",
-      "name": "PUMA Patike Slipstream men",
-      "brand": "PUMA",
-      "originalPrice": 12999,
-      "salePrice": 5199,
-      "discountPercent": 60,
-      "url": "https://www.buzzsneakers.rs/patike/269709-puma-patike-slipstream",
-      "imageUrl": "/images/buzz/384692-05_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:52.489Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-303781-adidas-patike-stan-smith-decon-22",
-      "store": "buzz",
-      "name": "adidas Patike Stan Smith Decon men",
-      "brand": "adidas",
-      "originalPrice": 16799,
-      "salePrice": 7999,
-      "discountPercent": 52,
-      "url": "https://www.buzzsneakers.rs/patike/303781-adidas-patike-stan-smith-decon",
-      "imageUrl": "/images/buzz/ie9118_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:52.489Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-283088-converse-patike-star-player-76-23",
-      "store": "buzz",
-      "name": "CONVERSE Patike Star Player 76 men",
-      "brand": "CONVERSE",
-      "originalPrice": 9499,
-      "salePrice": 3999,
-      "discountPercent": 57,
-      "url": "https://www.buzzsneakers.rs/patike/283088-converse-patike-star-player-76",
-      "imageUrl": "/images/buzz/a01607c_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:52.489Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-293701-puma-patike-velophasis-born-in-the-2000s-24",
-      "store": "buzz",
-      "name": "PUMA Patike Velophasis Born in the 2000s men",
-      "brand": "PUMA",
-      "originalPrice": 14399,
-      "salePrice": 6999,
-      "discountPercent": 51,
-      "url": "https://www.buzzsneakers.rs/patike/293701-puma-patike-velophasis-born-in-the-2000s",
-      "imageUrl": "/images/buzz/398219-03_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:06:52.489Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-donji-deo-trenerke-295673-nike-donji-deo-trenerke-m-acg-smit-25",
-      "store": "buzz",
-      "name": "NIKE Donji deo trenerke M ACG SMITH SUMMIT CRG AOP CAP men",
-      "brand": "NIKE",
-      "originalPrice": 44499,
-      "salePrice": 21999,
-      "discountPercent": 50,
-      "url": "https://www.buzzsneakers.rs/donji-deo-trenerke/295673-nike-donji-deo-trenerke-m-acg-smith-summit-crg-aop-cap",
-      "imageUrl": "/images/buzz/fb8199-386_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:07:11.418Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-pantalone-274121-nike-pantalone-tech-lined-26",
-      "store": "buzz",
-      "name": "NIKE Pantalone Tech Lined men",
-      "brand": "NIKE",
-      "originalPrice": 14199,
-      "salePrice": 6999,
-      "discountPercent": 50,
-      "url": "https://www.buzzsneakers.rs/pantalone/274121-nike-pantalone-tech-lined",
-      "imageUrl": "/images/buzz/fb7911-247_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:07:11.418Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-jakna-274111-nike-jakna-tech-woven-n24-27",
-      "store": "buzz",
-      "name": "NIKE Jakna Tech Woven N24 men",
-      "brand": "NIKE",
-      "originalPrice": 16799,
-      "salePrice": 7999,
-      "discountPercent": 52,
-      "url": "https://www.buzzsneakers.rs/jakna/274111-nike-jakna-tech-woven-n24",
-      "imageUrl": "/images/buzz/fb7903-247_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:07:11.418Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-jakna-274106-nike-jakna-tech-woven-n24-28",
-      "store": "buzz",
-      "name": "NIKE Jakna Tech Woven N24 men",
-      "brand": "NIKE",
-      "originalPrice": 16799,
-      "salePrice": 7999,
-      "discountPercent": 52,
-      "url": "https://www.buzzsneakers.rs/jakna/274106-nike-jakna-tech-woven-n24",
-      "imageUrl": "/images/buzz/fb7903-010_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:07:11.418Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-jakna-286063-nike-jakna-life-29",
-      "store": "buzz",
-      "name": "NIKE Jakna Life men",
-      "brand": "NIKE",
-      "originalPrice": 15799,
-      "salePrice": 6999,
-      "discountPercent": 55,
-      "url": "https://www.buzzsneakers.rs/jakna/286063-nike-jakna-life",
-      "imageUrl": "/images/buzz/dq5184-010_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:07:29.335Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-jakna-275236-mont-jakna-lightweight-30",
-      "store": "buzz",
-      "name": "MONT Jakna LIGHTWEIGHT men",
-      "brand": "MONT",
-      "originalPrice": 16999,
-      "salePrice": 7999,
-      "discountPercent": 52,
-      "url": "https://www.buzzsneakers.rs/jakna/275236-mont-jakna-lightweight",
-      "imageUrl": "/images/buzz/mna233m504-62_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:07:29.335Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-majica-319141-adidas-majica-neu-c-tee-31",
-      "store": "buzz",
-      "name": "adidas Majica NEU C TEE men",
-      "brand": "adidas",
-      "originalPrice": 4199,
-      "salePrice": 1999,
-      "discountPercent": 52,
-      "url": "https://www.buzzsneakers.rs/majica/319141-adidas-majica-neu-c-tee",
-      "imageUrl": "/images/buzz/hz3700_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:07:29.335Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-majica-272556-nike-majica-sportswear-32",
-      "store": "buzz",
-      "name": "NIKE Majica Sportswear men",
-      "brand": "NIKE",
-      "originalPrice": 6599,
-      "salePrice": 3199,
-      "discountPercent": 51,
-      "url": "https://www.buzzsneakers.rs/majica/272556-nike-majica-sportswear",
-      "imageUrl": "/images/buzz/fd1309-838_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:07:47.011Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-polo-majica-304376-adidas-polo-majica-wb-ss-polo-33",
-      "store": "buzz",
-      "name": "adidas Polo Majica WB S/S POLO men",
-      "brand": "adidas",
-      "originalPrice": 17999,
-      "salePrice": 7999,
-      "discountPercent": 55,
-      "url": "https://www.buzzsneakers.rs/polo-majica/304376-adidas-polo-majica-wb-ss-polo",
-      "imageUrl": "/images/buzz/jj2943_350_350px.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T11:08:07.820Z"
-    },
-    {
-      "id": "buzz-www-buzzsneakers-rs-patike-304406-adidas-patike-taekwondo-34",
+      "id": "buzz-www-buzzsneakers-rs-patike-304406-adidas-patike-taekwondo-1",
       "store": "buzz",
       "name": "adidas Patike Taekwondo women",
       "brand": "adidas",
@@ -441,10 +12,10 @@
       "url": "https://www.buzzsneakers.rs/patike/304406-adidas-patike-taekwondo",
       "imageUrl": "/images/buzz/jq4775_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:08:56.054Z"
+      "scrapedAt": "2026-01-14T12:15:22.086Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-304401-adidas-patike-taekwondo-35",
+      "id": "buzz-www-buzzsneakers-rs-patike-304401-adidas-patike-taekwondo-2",
       "store": "buzz",
       "name": "adidas Patike Taekwondo women",
       "brand": "adidas",
@@ -454,10 +25,10 @@
       "url": "https://www.buzzsneakers.rs/patike/304401-adidas-patike-taekwondo",
       "imageUrl": "/images/buzz/jq4774_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:08:56.054Z"
+      "scrapedAt": "2026-01-14T12:15:22.086Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-283293-puma-patike-cali-dream-36",
+      "id": "buzz-www-buzzsneakers-rs-patike-283293-puma-patike-cali-dream-3",
       "store": "buzz",
       "name": "PUMA Patike Cali Dream women",
       "brand": "PUMA",
@@ -467,10 +38,10 @@
       "url": "https://www.buzzsneakers.rs/patike/283293-puma-patike-cali-dream",
       "imageUrl": "/images/buzz/392730-19_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:08:56.054Z"
+      "scrapedAt": "2026-01-14T12:15:22.086Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-299393-converse-patike-chuck-taylor-all-star-37",
+      "id": "buzz-www-buzzsneakers-rs-patike-299393-converse-patike-chuck-taylor-all-star-4",
       "store": "buzz",
       "name": "CONVERSE Patike Chuck Taylor All Star women",
       "brand": "CONVERSE",
@@ -480,10 +51,10 @@
       "url": "https://www.buzzsneakers.rs/patike/299393-converse-patike-chuck-taylor-all-star",
       "imageUrl": "/images/buzz/a11163c_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:08:56.054Z"
+      "scrapedAt": "2026-01-14T12:15:22.086Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-281378-converse-patike-chuck-taylor-all-star-modern-l-38",
+      "id": "buzz-www-buzzsneakers-rs-patike-281378-converse-patike-chuck-taylor-all-star-modern-l-5",
       "store": "buzz",
       "name": "CONVERSE Patike Chuck Taylor All Star Modern Lift women",
       "brand": "CONVERSE",
@@ -493,10 +64,10 @@
       "url": "https://www.buzzsneakers.rs/patike/281378-converse-patike-chuck-taylor-all-star-modern-lift",
       "imageUrl": "/images/buzz/a08102c_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:08:56.054Z"
+      "scrapedAt": "2026-01-14T12:15:22.086Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-281396-converse-patike-chuck-taylor-all-star-move-39",
+      "id": "buzz-www-buzzsneakers-rs-patike-281396-converse-patike-chuck-taylor-all-star-move-6",
       "store": "buzz",
       "name": "CONVERSE Patike Chuck Taylor All Star Move women",
       "brand": "CONVERSE",
@@ -506,10 +77,10 @@
       "url": "https://www.buzzsneakers.rs/patike/281396-converse-patike-chuck-taylor-all-star-move",
       "imageUrl": "/images/buzz/a09073c_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:08:56.054Z"
+      "scrapedAt": "2026-01-14T12:15:22.086Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-287284-vans-patike-lowland-40",
+      "id": "buzz-www-buzzsneakers-rs-patike-287284-vans-patike-lowland-7",
       "store": "buzz",
       "name": "VANS Patike Lowland women",
       "brand": "VANS",
@@ -519,10 +90,10 @@
       "url": "https://www.buzzsneakers.rs/patike/287284-vans-patike-lowland",
       "imageUrl": "/images/buzz/vn000bwbsyc_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:08:56.054Z"
+      "scrapedAt": "2026-01-14T12:15:22.086Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-268778-puma-patike-mayze-thrifted-41",
+      "id": "buzz-www-buzzsneakers-rs-patike-268778-puma-patike-mayze-thrifted-8",
       "store": "buzz",
       "name": "PUMA Patike Mayze Thrifted women",
       "brand": "PUMA",
@@ -532,10 +103,10 @@
       "url": "https://www.buzzsneakers.rs/patike/268778-puma-patike-mayze-thrifted",
       "imageUrl": "/images/buzz/389861-01_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:09:13.940Z"
+      "scrapedAt": "2026-01-14T12:15:42.359Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-272078-puma-patike-slipstream-42",
+      "id": "buzz-www-buzzsneakers-rs-patike-272078-puma-patike-slipstream-9",
       "store": "buzz",
       "name": "PUMA Patike Slipstream women",
       "brand": "PUMA",
@@ -545,10 +116,10 @@
       "url": "https://www.buzzsneakers.rs/patike/272078-puma-patike-slipstream",
       "imageUrl": "/images/buzz/386270-03_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:09:13.940Z"
+      "scrapedAt": "2026-01-14T12:15:42.359Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-293758-converse-patike-run-star-hike-43",
+      "id": "buzz-www-buzzsneakers-rs-patike-293758-converse-patike-run-star-hike-10",
       "store": "buzz",
       "name": "CONVERSE Patike Run Star Hike women",
       "brand": "CONVERSE",
@@ -558,10 +129,10 @@
       "url": "https://www.buzzsneakers.rs/patike/293758-converse-patike-run-star-hike",
       "imageUrl": "/images/buzz/a04292c_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:09:13.940Z"
+      "scrapedAt": "2026-01-14T12:15:42.359Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-294440-vans-patike-upland-44",
+      "id": "buzz-www-buzzsneakers-rs-patike-294440-vans-patike-upland-11",
       "store": "buzz",
       "name": "VANS Patike Upland women",
       "brand": "VANS",
@@ -571,10 +142,10 @@
       "url": "https://www.buzzsneakers.rs/patike/294440-vans-patike-upland",
       "imageUrl": "/images/buzz/vn000d1hyb2_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:09:13.940Z"
+      "scrapedAt": "2026-01-14T12:15:42.359Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-274668-nike-patike-air-force-1-sculpt-45",
+      "id": "buzz-www-buzzsneakers-rs-patike-274668-nike-patike-air-force-1-sculpt-12",
       "store": "buzz",
       "name": "NIKE Patike Air Force 1 Sculpt women",
       "brand": "NIKE",
@@ -584,10 +155,10 @@
       "url": "https://www.buzzsneakers.rs/patike/274668-nike-patike-air-force-1-sculpt",
       "imageUrl": "/images/buzz/dv7454-100_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:09:13.940Z"
+      "scrapedAt": "2026-01-14T12:15:42.359Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-273156-nike-patike-air-force-1-sculpt-46",
+      "id": "buzz-www-buzzsneakers-rs-patike-273156-nike-patike-air-force-1-sculpt-13",
       "store": "buzz",
       "name": "NIKE Patike Air Force 1 Sculpt women",
       "brand": "NIKE",
@@ -597,10 +168,10 @@
       "url": "https://www.buzzsneakers.rs/patike/273156-nike-patike-air-force-1-sculpt",
       "imageUrl": "/images/buzz/dz2782-100_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:09:13.940Z"
+      "scrapedAt": "2026-01-14T12:15:42.359Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-228064-nike-patike-air-force-1-sculpt-47",
+      "id": "buzz-www-buzzsneakers-rs-patike-228064-nike-patike-air-force-1-sculpt-14",
       "store": "buzz",
       "name": "NIKE Patike Air Force 1 Sculpt women",
       "brand": "NIKE",
@@ -610,10 +181,10 @@
       "url": "https://www.buzzsneakers.rs/patike/228064-nike-patike-air-force-1-sculpt",
       "imageUrl": "/images/buzz/dc3590-101_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:09:13.940Z"
+      "scrapedAt": "2026-01-14T12:15:42.359Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-302751-nike-patike-air-jordan-1-retro-high-og-48",
+      "id": "buzz-www-buzzsneakers-rs-patike-302751-nike-patike-air-jordan-1-retro-high-og-15",
       "store": "buzz",
       "name": "NIKE Patike Air Jordan 1 Retro High OG women",
       "brand": "NIKE",
@@ -623,10 +194,10 @@
       "url": "https://www.buzzsneakers.rs/patike/302751-nike-patike-air-jordan-1-retro-high-og",
       "imageUrl": "/images/buzz/fd2596-107_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:09:35.613Z"
+      "scrapedAt": "2026-01-14T12:16:08.046Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-295443-nike-patike-w-air-jordan-1-retro-high-og-t-49",
+      "id": "buzz-www-buzzsneakers-rs-patike-295443-nike-patike-w-air-jordan-1-retro-high-og-t-16",
       "store": "buzz",
       "name": "NIKE Patike W AIR JORDAN 1 RETRO HIGH OG T women",
       "brand": "NIKE",
@@ -636,10 +207,10 @@
       "url": "https://www.buzzsneakers.rs/patike/295443-nike-patike-w-air-jordan-1-retro-high-og-t",
       "imageUrl": "/images/buzz/fd4810-061_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:09:35.615Z"
+      "scrapedAt": "2026-01-14T12:16:08.046Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-296181-nike-patike-air-jordan-1-zoom-air-50",
+      "id": "buzz-www-buzzsneakers-rs-patike-296181-nike-patike-air-jordan-1-zoom-air-17",
       "store": "buzz",
       "name": "NIKE Patike Air Jordan 1 Zoom Air women",
       "brand": "NIKE",
@@ -649,10 +220,10 @@
       "url": "https://www.buzzsneakers.rs/patike/296181-nike-patike-air-jordan-1-zoom-air",
       "imageUrl": "/images/buzz/dv1305-600_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:09:35.615Z"
+      "scrapedAt": "2026-01-14T12:16:08.046Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-283413-nike-patike-air-jordan-1-51",
+      "id": "buzz-www-buzzsneakers-rs-patike-283413-nike-patike-air-jordan-1-18",
       "store": "buzz",
       "name": "NIKE Patike Air Jordan 1 women",
       "brand": "NIKE",
@@ -662,10 +233,10 @@
       "url": "https://www.buzzsneakers.rs/patike/283413-nike-patike-air-jordan-1",
       "imageUrl": "/images/buzz/fj5743-700_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:09:35.615Z"
+      "scrapedAt": "2026-01-14T12:16:08.046Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-279781-nike-patike-dunk-high-52",
+      "id": "buzz-www-buzzsneakers-rs-patike-279781-nike-patike-dunk-high-19",
       "store": "buzz",
       "name": "NIKE Patike Dunk High women",
       "brand": "NIKE",
@@ -675,10 +246,10 @@
       "url": "https://www.buzzsneakers.rs/patike/279781-nike-patike-dunk-high",
       "imageUrl": "/images/buzz/fn4216-001_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:09:35.615Z"
+      "scrapedAt": "2026-01-14T12:16:08.046Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-281211-nike-patike-air-force-1-07-mid-53",
+      "id": "buzz-www-buzzsneakers-rs-patike-281211-nike-patike-air-force-1-07-mid-20",
       "store": "buzz",
       "name": "NIKE Patike Air Force 1 '07 Mid women",
       "brand": "NIKE",
@@ -688,10 +259,10 @@
       "url": "https://www.buzzsneakers.rs/patike/281211-nike-patike-air-force-1-07-mid",
       "imageUrl": "/images/buzz/dd9625-400_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:09:54.382Z"
+      "scrapedAt": "2026-01-14T12:16:29.309Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-305043-nike-patike-wmns-air-force-1-07-se-54",
+      "id": "buzz-www-buzzsneakers-rs-patike-305043-nike-patike-wmns-air-force-1-07-se-21",
       "store": "buzz",
       "name": "NIKE Patike WMNS AIR FORCE 1 '07 SE women",
       "brand": "NIKE",
@@ -701,10 +272,10 @@
       "url": "https://www.buzzsneakers.rs/patike/305043-nike-patike-wmns-air-force-1-07-se",
       "imageUrl": "/images/buzz/hf2016-600_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:09:54.382Z"
+      "scrapedAt": "2026-01-14T12:16:29.309Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-305923-nike-patike-wmns-air-jordan-1-mm-low-v2-55",
+      "id": "buzz-www-buzzsneakers-rs-patike-305923-nike-patike-wmns-air-jordan-1-mm-low-v2-22",
       "store": "buzz",
       "name": "NIKE Patike WMNS AIR JORDAN 1 MM LOW V2 women",
       "brand": "NIKE",
@@ -714,10 +285,10 @@
       "url": "https://www.buzzsneakers.rs/patike/305923-nike-patike-wmns-air-jordan-1-mm-low-v2",
       "imageUrl": "/images/buzz/hf3969-200_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:09:54.382Z"
+      "scrapedAt": "2026-01-14T12:16:29.309Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-282018-nike-patike-air-jordan-1-low-og-56",
+      "id": "buzz-www-buzzsneakers-rs-patike-282018-nike-patike-air-jordan-1-low-og-23",
       "store": "buzz",
       "name": "NIKE Patike Air Jordan 1 Low OG women",
       "brand": "NIKE",
@@ -727,10 +298,10 @@
       "url": "https://www.buzzsneakers.rs/patike/282018-nike-patike-air-jordan-1-low-og",
       "imageUrl": "/images/buzz/cz0775-046_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:09:54.382Z"
+      "scrapedAt": "2026-01-14T12:16:29.309Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-297406-nike-patike-air-jordan-2-retro-57",
+      "id": "buzz-www-buzzsneakers-rs-patike-297406-nike-patike-air-jordan-2-retro-24",
       "store": "buzz",
       "name": "NIKE Patike Air Jordan 2 Retro women",
       "brand": "NIKE",
@@ -740,10 +311,10 @@
       "url": "https://www.buzzsneakers.rs/patike/297406-nike-patike-air-jordan-2-retro",
       "imageUrl": "/images/buzz/dx4401-001_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:09:54.382Z"
+      "scrapedAt": "2026-01-14T12:16:29.309Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-jakna-265328-nike-jakna-jordan-flight-58",
+      "id": "buzz-www-buzzsneakers-rs-jakna-265328-nike-jakna-jordan-flight-25",
       "store": "buzz",
       "name": "NIKE Jakna Jordan Flight women",
       "brand": "NIKE",
@@ -753,10 +324,10 @@
       "url": "https://www.buzzsneakers.rs/jakna/265328-nike-jakna-jordan-flight",
       "imageUrl": "/images/buzz/dz1377-254_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:10:34.591Z"
+      "scrapedAt": "2026-01-14T12:17:13.101Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-majica-296963-juicy-couture-majica-cait-59",
+      "id": "buzz-www-buzzsneakers-rs-majica-296963-juicy-couture-majica-cait-26",
       "store": "buzz",
       "name": "JUICY COUTURE Majica Cait women",
       "brand": "JUICY COUTURE",
@@ -766,10 +337,10 @@
       "url": "https://www.buzzsneakers.rs/majica/296963-juicy-couture-majica-cait",
       "imageUrl": "/images/buzz/jcmcs224252-101_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:10:52.318Z"
+      "scrapedAt": "2026-01-14T12:17:34.695Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-majica-286588-vans-majica-go-anyplace-60",
+      "id": "buzz-www-buzzsneakers-rs-majica-286588-vans-majica-go-anyplace-27",
       "store": "buzz",
       "name": "VANS Majica Go Anyplace women",
       "brand": "VANS",
@@ -779,10 +350,10 @@
       "url": "https://www.buzzsneakers.rs/majica/286588-vans-majica-go-anyplace",
       "imageUrl": "/images/buzz/vn000gj1wht_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:10:52.318Z"
+      "scrapedAt": "2026-01-14T12:17:34.695Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-majica-286583-vans-majica-go-anywhere-61",
+      "id": "buzz-www-buzzsneakers-rs-majica-286583-vans-majica-go-anywhere-28",
       "store": "buzz",
       "name": "VANS Majica Go Anywhere women",
       "brand": "VANS",
@@ -792,10 +363,10 @@
       "url": "https://www.buzzsneakers.rs/majica/286583-vans-majica-go-anywhere",
       "imageUrl": "/images/buzz/vn000gj1blk_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:10:52.318Z"
+      "scrapedAt": "2026-01-14T12:17:34.695Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-majica-286593-vans-majica-dazed-mini-62",
+      "id": "buzz-www-buzzsneakers-rs-majica-286593-vans-majica-dazed-mini-29",
       "store": "buzz",
       "name": "VANS Majica Dazed Mini women",
       "brand": "VANS",
@@ -805,10 +376,10 @@
       "url": "https://www.buzzsneakers.rs/majica/286593-vans-majica-dazed-mini",
       "imageUrl": "/images/buzz/vn000h0jfs8_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:10:52.318Z"
+      "scrapedAt": "2026-01-14T12:17:34.695Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-majica-258408-nike-majica-paris-saint-germain-63",
+      "id": "buzz-www-buzzsneakers-rs-majica-258408-nike-majica-paris-saint-germain-30",
       "store": "buzz",
       "name": "NIKE Majica Paris Saint - Germain women",
       "brand": "NIKE",
@@ -818,10 +389,10 @@
       "url": "https://www.buzzsneakers.rs/majica/258408-nike-majica-paris-saint-germain",
       "imageUrl": "/images/buzz/dn3467-291_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:10:52.318Z"
+      "scrapedAt": "2026-01-14T12:17:34.695Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-kapa-259986-juicy-couture-kapa-ingrid-flat-64",
+      "id": "buzz-www-buzzsneakers-rs-kapa-259986-juicy-couture-kapa-ingrid-flat-31",
       "store": "buzz",
       "name": "JUICY COUTURE Kapa INGRID FLAT women",
       "brand": "JUICY COUTURE",
@@ -831,10 +402,10 @@
       "url": "https://www.buzzsneakers.rs/kapa/259986-juicy-couture-kapa-ingrid-flat",
       "imageUrl": "/images/buzz/jcawh222045-134_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:10:52.318Z"
+      "scrapedAt": "2026-01-14T12:17:34.695Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-kapa-259981-juicy-couture-kapa-ingrid-flat-65",
+      "id": "buzz-www-buzzsneakers-rs-kapa-259981-juicy-couture-kapa-ingrid-flat-32",
       "store": "buzz",
       "name": "JUICY COUTURE Kapa INGRID FLAT women",
       "brand": "JUICY COUTURE",
@@ -844,10 +415,10 @@
       "url": "https://www.buzzsneakers.rs/kapa/259981-juicy-couture-kapa-ingrid-flat",
       "imageUrl": "/images/buzz/jcawh222045-126_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:10:52.318Z"
+      "scrapedAt": "2026-01-14T12:17:34.695Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-278423-nike-patike-dunk-low-66",
+      "id": "buzz-www-buzzsneakers-rs-patike-278423-nike-patike-dunk-low-33",
       "store": "buzz",
       "name": "NIKE Patike Dunk Low kids",
       "brand": "NIKE",
@@ -857,10 +428,10 @@
       "url": "https://www.buzzsneakers.rs/patike/278423-nike-patike-dunk-low",
       "imageUrl": "/images/buzz/fv0373-001_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:12:06.562Z"
+      "scrapedAt": "2026-01-14T12:18:59.731Z"
     },
     {
-      "id": "buzz-www-buzzsneakers-rs-patike-269668-nike-patike-air-max-67",
+      "id": "buzz-www-buzzsneakers-rs-patike-269668-nike-patike-air-max-34",
       "store": "buzz",
       "name": "NIKE Patike AIR MAX kids",
       "brand": "NIKE",
@@ -870,11 +441,13 @@
       "url": "https://www.buzzsneakers.rs/patike/269668-nike-patike-air-max",
       "imageUrl": "/images/buzz/fj4606-100_350_350px.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T11:12:06.562Z"
+      "scrapedAt": "2026-01-14T12:18:59.731Z"
     }
   ],
-  "totalScraped": 1487,
-  "filteredCount": 67,
-  "scrapedAt": "2026-01-14T11:12:06.707Z",
-  "errors": []
+  "totalScraped": 834,
+  "filteredCount": 34,
+  "scrapedAt": "2026-01-14T12:18:59.852Z",
+  "errors": [
+    "Page 1: Navigation timeout of 60000 ms exceeded"
+  ]
 }
