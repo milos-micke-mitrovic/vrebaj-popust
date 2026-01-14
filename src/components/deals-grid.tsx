@@ -95,6 +95,18 @@ export function DealsGrid({
   );
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
+  // Lock body scroll when mobile filters are open
+  useEffect(() => {
+    if (showMobileFilters) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [showMobileFilters]);
+
   // Track if we're updating from URL to prevent sync loops
   const isUpdatingFromUrl = useRef(false);
   const urlUpdateTimeout = useRef<NodeJS.Timeout | null>(null);
@@ -629,10 +641,8 @@ export function DealsGrid({
                 </svg>
               </button>
             </div>
-            <div className="flex-1 overflow-hidden">
-              <ScrollFade maxHeight="100%" className="p-4 pb-8 h-full">
-                {filterContentJSX}
-              </ScrollFade>
+            <div className="flex-1 overflow-y-auto overscroll-contain p-4 pb-8">
+              {filterContentJSX}
             </div>
           </div>
         </div>
