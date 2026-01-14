@@ -192,6 +192,17 @@ export function getPriceRange(): { min: number; max: number } {
   };
 }
 
+export function getTopDeals(limit: number = 8): Deal[] {
+  const allDeals = getAllDeals();
+  // Already sorted by discount (highest first)
+  return allDeals.slice(0, limit);
+}
+
+export function getDealsByCategory(category: Category, limit: number = 8): Deal[] {
+  const allDeals = getAllDeals();
+  return allDeals.filter((d) => d.category === category).slice(0, limit);
+}
+
 export function getRelatedDeals(deal: Deal, limit: number = 8): Deal[] {
   const allDeals = getAllDeals();
   const related: Deal[] = [];

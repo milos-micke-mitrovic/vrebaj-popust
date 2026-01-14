@@ -1,7 +1,6 @@
 import { Metadata } from "next";
-import { notFound } from "next/navigation";
 import Link from "next/link";
-import { getDealById, getAllDealIds, getRelatedDeals, STORE_INFO } from "@/lib/deals";
+import { getDealById, getAllDealIds, getRelatedDeals, getTopDeals, STORE_INFO } from "@/lib/deals";
 import { formatPrice } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -51,15 +50,23 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const deal = getDealById(id);
 
   if (!deal) {
-    return { title: "Proizvod nije pronađen" };
+    return {
+      title: "Ponuda više nije dostupna | VrebajPopust",
+      description: "Ova ponuda više nije dostupna. Pogledajte druge aktuelne popuste preko 50% na sportsku opremu u Srbiji.",
+      robots: {
+        index: false,
+        follow: true,
+      },
+    };
   }
 
   const storeInfo = STORE_INFO[deal.store];
   const genderText = GENDER_NAMES[deal.gender] || "";
   const categoryText = CATEGORY_NAMES[deal.category] || "";
 
-  const title = `${deal.name} - ${deal.discountPercent}% popust`;
-  const description = `${deal.brand || ""} ${categoryText} ${genderText} na akciji u ${storeInfo.name}. Stara cena: ${formatPrice(deal.originalPrice)}, nova cena: ${formatPrice(deal.salePrice)}. Uštedi ${formatPrice(deal.originalPrice - deal.salePrice)}!`.trim();
+  const savings = deal.originalPrice - deal.salePrice;
+  const title = `${deal.name} - ${deal.discountPercent}% popust | VrebajPopust`;
+  const description = `${deal.brand || ""} ${categoryText} ${genderText} na akciji u ${storeInfo.name}. Stara cena: ${formatPrice(deal.originalPrice)}, nova cena: ${formatPrice(deal.salePrice)}. Uštedi ${formatPrice(savings)}! Pronađi najbolje sportske popuste u Srbiji.`.trim();
 
   const imageUrl = deal.imageUrl?.startsWith("/")
     ? `https://vrebajpopust.rs${deal.imageUrl}`
@@ -77,10 +84,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "akcija",
       "sniženje",
       "srbija",
+      "online kupovina",
       `${deal.discountPercent}% popust`,
+      `${deal.brand} popust`,
+      `${categoryText.toLowerCase()} na akciji`,
     ].filter(Boolean) as string[],
     openGraph: {
-      title: `${deal.name} - ${deal.discountPercent}% POPUST`,
+      title: `${deal.name} - ${deal.discountPercent}% POPUST | VrebajPopust`,
       description,
       url: `https://vrebajpopust.rs/deal/${id}`,
       siteName: "VrebajPopust",
@@ -90,11 +100,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
               url: imageUrl,
               width: 800,
               height: 800,
-              alt: deal.name,
+              alt: `${deal.name} - ${deal.brand || ""} ${categoryText} sa ${deal.discountPercent}% popusta`,
             },
           ]
         : [],
-      type: "website",
+      type: "article",
       locale: "sr_RS",
     },
     twitter: {
@@ -117,8 +127,80 @@ export default async function DealPage({ params }: Props) {
   const { id } = await params;
   const deal = getDealById(id);
 
+  // Product not available - show friendly page with alternatives
   if (!deal) {
-    notFound();
+    const topDeals = getTopDeals(8);
+
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+
+        <main className="mx-auto max-w-7xl px-4 py-12">
+          {/* Unavailable Message */}
+          <div className="mx-auto max-w-2xl text-center mb-12">
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100">
+              <svg className="h-10 w-10 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 sm:text-3xl">
+              Ova ponuda više nije dostupna
+            </h1>
+            <p className="mt-4 text-gray-600">
+              Proizvod je možda rasprodat ili je popust istekao.
+              Pogledajte druge aktuelne ponude sa popustima preko 50%.
+            </p>
+            <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link
+                href="/ponude"
+                className="rounded-lg bg-red-500 px-6 py-3 font-medium text-white hover:bg-red-600 transition-colors"
+              >
+                Pregledaj sve ponude
+              </Link>
+              <Link
+                href="/"
+                className="rounded-lg border border-gray-300 px-6 py-3 font-medium text-gray-700 hover:bg-gray-100 transition-colors"
+              >
+                Početna stranica
+              </Link>
+            </div>
+          </div>
+
+          {/* Top Deals Section */}
+          {topDeals.length > 0 && (
+            <section>
+              <h2 className="text-xl font-bold text-gray-900 mb-6">
+                Najpopularnije ponude
+              </h2>
+              <div className="flex flex-wrap gap-3">
+                {topDeals.map((topDeal) => (
+                  <div key={topDeal.id} className="w-[calc(50%-6px)] sm:w-[calc(25%-9px)]">
+                    <DealCard deal={topDeal} />
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+        </main>
+
+        {/* Footer */}
+        <footer className="border-t bg-white py-8 mt-12">
+          <div className="mx-auto max-w-7xl px-4">
+            <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
+              <div className="flex items-center gap-3">
+                <img src="/logos/logo.png" alt="VrebajPopust" className="h-8 w-8" />
+                <span className="text-lg font-semibold text-gray-900">
+                  Vrebaj<span className="text-red-500">Popust</span>
+                </span>
+              </div>
+              <p className="text-sm text-gray-500">
+                Agregator popusta preko 50% u Srbiji
+              </p>
+            </div>
+          </div>
+        </footer>
+      </div>
+    );
   }
 
   const storeInfo = STORE_INFO[deal.store];
@@ -131,13 +213,13 @@ export default async function DealPage({ params }: Props) {
     ? `https://vrebajpopust.rs${deal.imageUrl}`
     : deal.imageUrl;
 
-  // Product structured data
+  // Product structured data - enhanced for better SEO
   const productSchema = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: deal.name,
     image: imageUrl,
-    description: `${deal.name} ${genderText} na akciji sa ${deal.discountPercent}% popusta u ${storeInfo.name}`,
+    description: `${deal.brand || ""} ${categoryText} ${genderText} sa ${deal.discountPercent}% popusta. Originalna cena ${formatPrice(deal.originalPrice)}, sada samo ${formatPrice(deal.salePrice)}. Dostupno u ${storeInfo.name}.`.trim(),
     sku: deal.id,
     brand: deal.brand
       ? {
@@ -146,6 +228,7 @@ export default async function DealPage({ params }: Props) {
         }
       : undefined,
     category: categoryText,
+    itemCondition: "https://schema.org/NewCondition",
     offers: {
       "@type": "Offer",
       url: `https://vrebajpopust.rs/deal/${deal.id}`,
@@ -153,11 +236,32 @@ export default async function DealPage({ params }: Props) {
       priceCurrency: "RSD",
       availability: "https://schema.org/InStock",
       priceValidUntil: priceValidUntilDate,
+      itemCondition: "https://schema.org/NewCondition",
       seller: {
         "@type": "Organization",
         name: storeInfo.name,
         url: storeInfo.url,
       },
+      priceSpecification: {
+        "@type": "PriceSpecification",
+        price: deal.salePrice,
+        priceCurrency: "RSD",
+        valueAddedTaxIncluded: true,
+      },
+    },
+  };
+
+  // Aggregate offer to show price drop
+  const aggregateOfferSchema = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: deal.name,
+    offers: {
+      "@type": "AggregateOffer",
+      lowPrice: deal.salePrice,
+      highPrice: deal.originalPrice,
+      priceCurrency: "RSD",
+      offerCount: 1,
     },
   };
 
@@ -192,6 +296,10 @@ export default async function DealPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aggregateOfferSchema) }}
       />
       <script
         type="application/ld+json"
@@ -342,6 +450,40 @@ export default async function DealPage({ params }: Props) {
                 <p className="mt-4 text-center text-sm text-gray-500">
                   Bićete preusmereni na sajt prodavca
                 </p>
+              </div>
+            </div>
+
+            {/* SEO Content Section */}
+            <div className="mt-12 rounded-lg bg-white p-6 shadow">
+              <h2 className="text-lg font-semibold text-gray-900 mb-3">
+                O proizvodu
+              </h2>
+              <p className="text-gray-600 leading-relaxed" itemProp="description">
+                {deal.brand && <strong>{deal.brand}</strong>} {deal.name} {genderText} je trenutno na akciji u prodavnici {storeInfo.name} sa popustom od <strong>{deal.discountPercent}%</strong>.
+                Originalna cena ovog proizvoda je {formatPrice(deal.originalPrice)}, a akcijska cena je samo <strong>{formatPrice(deal.salePrice)}</strong>.
+                Kupovinom ovog proizvoda uštedećete {formatPrice(savings)}.
+              </p>
+              <p className="text-gray-600 mt-3 leading-relaxed">
+                VrebajPopust svakodnevno pretražuje najveće sportske prodavnice u Srbiji kako bi pronašao najbolje popuste preko 50%.
+                Svi prikazani proizvodi su dostupni za kupovinu online.
+              </p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                  {categoryText}
+                </span>
+                {genderText && (
+                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                    {genderText}
+                  </span>
+                )}
+                {deal.brand && (
+                  <span className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded">
+                    {deal.brand}
+                  </span>
+                )}
+                <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded">
+                  {deal.discountPercent}% popust
+                </span>
               </div>
             </div>
           </article>
