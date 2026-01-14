@@ -2,20 +2,7 @@
   "store": "planeta",
   "deals": [
     {
-      "id": "planeta-planetasport-rs-wintro-cipele-dorel-w-wif243f304-76-html-1",
-      "store": "planeta",
-      "name": "WINTRO Cipele dorel W",
-      "brand": "WINTRO",
-      "originalPrice": 10000,
-      "salePrice": 4250,
-      "discountPercent": 50,
-      "url": "https://planetasport.rs/wintro-cipele-dorel-w-wif243f304-76.html",
-      "imageUrl": "/images/planeta/wif243f304-76.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T12:34:23.122Z"
-    },
-    {
-      "id": "planeta-planetasport-rs-wintro-cipele-armon-m-wif243m302-90-html-2",
+      "id": "planeta-planetasport-rs-wintro-cipele-armon-m-wif243m302-90-html-1",
       "store": "planeta",
       "name": "WINTRO Cipele armon M",
       "brand": "WINTRO",
@@ -25,10 +12,10 @@
       "url": "https://planetasport.rs/wintro-cipele-armon-m-wif243m302-90.html",
       "imageUrl": "/images/planeta/wif243m302-90.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:23.122Z"
+      "scrapedAt": "2026-01-14T23:18:34.960Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-cizme-perilla-w-br42202-1-html-3",
+      "id": "planeta-planetasport-rs-wink-cizme-perilla-w-br42202-1-html-2",
       "store": "planeta",
       "name": "WINK Čizme perilla W",
       "brand": "WINK",
@@ -38,10 +25,10 @@
       "url": "https://planetasport.rs/wink-cizme-perilla-w-br42202-1.html",
       "imageUrl": "/images/planeta/br42202-1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:23.123Z"
+      "scrapedAt": "2026-01-14T23:18:34.960Z"
     },
     {
-      "id": "planeta-planetasport-rs-slazenger-patike-noah-mid-m-slf253m103-10-html-4",
+      "id": "planeta-planetasport-rs-slazenger-patike-noah-mid-m-slf253m103-10-html-3",
       "store": "planeta",
       "name": "SLAZENGER Patike noah mid M",
       "brand": "SLAZENGER",
@@ -51,10 +38,10 @@
       "url": "https://planetasport.rs/slazenger-patike-noah-mid-m-slf253m103-10.html",
       "imageUrl": "/images/planeta/slf253m103-10.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:23.123Z"
+      "scrapedAt": "2026-01-14T23:18:34.960Z"
     },
     {
-      "id": "planeta-planetasport-rs-patike-stelt-w-stw328720-02-html-5",
+      "id": "planeta-planetasport-rs-patike-stelt-w-stw328720-02-html-4",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike stelt W",
       "brand": "SERGIO TACCHINI",
@@ -64,10 +51,10 @@
       "url": "https://planetasport.rs/patike-stelt-w-stw328720-02.html",
       "imageUrl": "/images/planeta/stw328720-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:23.123Z"
+      "scrapedAt": "2026-01-14T23:18:34.960Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-valzer-w-stw524717-03-html-6",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-valzer-w-stw524717-03-html-5",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike valzer W",
       "brand": "SERGIO TACCHINI",
@@ -77,10 +64,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-valzer-w-stw524717-03.html",
       "imageUrl": "/images/planeta/stw524717-03.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:23.123Z"
+      "scrapedAt": "2026-01-14T23:18:34.960Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cipele-fergus-m-wif243m306-62-html-7",
+      "id": "planeta-planetasport-rs-wintro-cipele-fergus-m-wif243m306-62-html-6",
       "store": "planeta",
       "name": "WINTRO Cipele fergus M",
       "brand": "WINTRO",
@@ -90,10 +77,10 @@
       "url": "https://planetasport.rs/wintro-cipele-fergus-m-wif243m306-62.html",
       "imageUrl": "/images/planeta/wif243m306-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:23.123Z"
+      "scrapedAt": "2026-01-14T23:18:34.960Z"
     },
     {
-      "id": "planeta-planetasport-rs-cizme-sound-w-sound-81-html-8",
+      "id": "planeta-planetasport-rs-cizme-sound-w-sound-81-html-7",
       "store": "planeta",
       "name": "OLANG Čizme sound W",
       "brand": "OLANG",
@@ -103,10 +90,10 @@
       "url": "https://planetasport.rs/cizme-sound-w-sound-81.html",
       "imageUrl": "/images/planeta/sound-81.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:23.123Z"
+      "scrapedAt": "2026-01-14T23:18:34.960Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-laggio-m-st253m032-20-html-9",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-laggio-m-st253m032-20-html-8",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike laggio M",
       "brand": "SERGIO TACCHINI",
@@ -116,10 +103,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-laggio-m-st253m032-20.html",
       "imageUrl": "/images/planeta/st253m032-20.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:23.123Z"
+      "scrapedAt": "2026-01-14T23:18:34.960Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-wintro-cipele-fidias-m-wif243m305-62-html-10",
+      "id": "planeta-planetasport-rs-wintro-wintro-cipele-fidias-m-wif243m305-62-html-9",
       "store": "planeta",
       "name": "WINTRO Cipele fidias M",
       "brand": "WINTRO",
@@ -129,10 +116,10 @@
       "url": "https://planetasport.rs/wintro-wintro-cipele-fidias-m-wif243m305-62.html",
       "imageUrl": "/images/planeta/wif243m305-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:23.123Z"
+      "scrapedAt": "2026-01-14T23:18:34.960Z"
     },
     {
-      "id": "planeta-planetasport-rs-rang-cipele-advik-m-xmf25300-02-html-11",
+      "id": "planeta-planetasport-rs-rang-cipele-advik-m-xmf25300-02-html-10",
       "store": "planeta",
       "name": "RANG Cipele advik  M",
       "brand": "RANG",
@@ -142,10 +129,10 @@
       "url": "https://planetasport.rs/rang-cipele-advik-m-xmf25300-02.html",
       "imageUrl": "/images/planeta/xmf25300-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:23.123Z"
+      "scrapedAt": "2026-01-14T23:18:34.961Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-cipele-navius-m-lx42189-1-html-12",
+      "id": "planeta-planetasport-rs-wink-cipele-navius-m-lx42189-1-html-11",
       "store": "planeta",
       "name": "WINK Cipele navius M",
       "brand": "WINK",
@@ -155,10 +142,10 @@
       "url": "https://planetasport.rs/wink-cipele-navius-m-lx42189-1.html",
       "imageUrl": "/images/planeta/lx42189-1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:23.123Z"
+      "scrapedAt": "2026-01-14T23:18:34.961Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cizme-milani-w-wif253f305-62-html-13",
+      "id": "planeta-planetasport-rs-wintro-cizme-milani-w-wif253f305-62-html-12",
       "store": "planeta",
       "name": "WINTRO Čizme milani W",
       "brand": "WINTRO",
@@ -168,10 +155,10 @@
       "url": "https://planetasport.rs/wintro-cizme-milani-w-wif253f305-62.html",
       "imageUrl": "/images/planeta/wif253f305-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:23.123Z"
+      "scrapedAt": "2026-01-14T23:18:34.961Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-ace-style-2-m-st253m890-01-html-14",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-ace-style-2-m-st253m890-01-html-13",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike ace style 2 M",
       "brand": "SERGIO TACCHINI",
@@ -181,10 +168,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-ace-style-2-m-st253m890-01.html",
       "imageUrl": "/images/planeta/st253m890-01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:23.123Z"
+      "scrapedAt": "2026-01-14T23:18:34.961Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cizme-riella-w-wif233f204-01-html-15",
+      "id": "planeta-planetasport-rs-wintro-cizme-riella-w-wif233f204-01-html-14",
       "store": "planeta",
       "name": "WINTRO Čizme riella W",
       "brand": "WINTRO",
@@ -194,10 +181,10 @@
       "url": "https://planetasport.rs/wintro-cizme-riella-w-wif233f204-01.html",
       "imageUrl": "/images/planeta/wif233f204-01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:23.123Z"
+      "scrapedAt": "2026-01-14T23:18:34.961Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-patike-abilogym-m-jf42145-3-html-16",
+      "id": "planeta-planetasport-rs-wink-patike-abilogym-m-jf42145-3-html-15",
       "store": "planeta",
       "name": "WINK Patike abilogym M",
       "brand": "WINK",
@@ -207,23 +194,10 @@
       "url": "https://planetasport.rs/wink-patike-abilogym-m-jf42145-3.html",
       "imageUrl": "/images/planeta/jf42145-3.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:23.123Z"
+      "scrapedAt": "2026-01-14T23:18:34.961Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cipele-dorel-w-wif243f304-76-html-17",
-      "store": "planeta",
-      "name": "WINTRO Cipele dorel W",
-      "brand": "WINTRO",
-      "originalPrice": 10000,
-      "salePrice": 4250,
-      "discountPercent": 50,
-      "url": "https://planetasport.rs/wintro-cipele-dorel-w-wif243f304-76.html",
-      "imageUrl": "/images/planeta/wif243f304-76.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T12:34:40.883Z"
-    },
-    {
-      "id": "planeta-planetasport-rs-wintro-cipele-armon-m-wif243m302-90-html-18",
+      "id": "planeta-planetasport-rs-wintro-cipele-armon-m-wif243m302-90-html-16",
       "store": "planeta",
       "name": "WINTRO Cipele armon M",
       "brand": "WINTRO",
@@ -233,10 +207,10 @@
       "url": "https://planetasport.rs/wintro-cipele-armon-m-wif243m302-90.html",
       "imageUrl": "/images/planeta/wif243m302-90.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:40.883Z"
+      "scrapedAt": "2026-01-14T23:18:57.767Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-cizme-perilla-w-br42202-1-html-19",
+      "id": "planeta-planetasport-rs-wink-cizme-perilla-w-br42202-1-html-17",
       "store": "planeta",
       "name": "WINK Čizme perilla W",
       "brand": "WINK",
@@ -246,10 +220,10 @@
       "url": "https://planetasport.rs/wink-cizme-perilla-w-br42202-1.html",
       "imageUrl": "/images/planeta/br42202-1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:40.884Z"
+      "scrapedAt": "2026-01-14T23:18:57.767Z"
     },
     {
-      "id": "planeta-planetasport-rs-slazenger-patike-noah-mid-m-slf253m103-10-html-20",
+      "id": "planeta-planetasport-rs-slazenger-patike-noah-mid-m-slf253m103-10-html-18",
       "store": "planeta",
       "name": "SLAZENGER Patike noah mid M",
       "brand": "SLAZENGER",
@@ -259,10 +233,10 @@
       "url": "https://planetasport.rs/slazenger-patike-noah-mid-m-slf253m103-10.html",
       "imageUrl": "/images/planeta/slf253m103-10.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:40.884Z"
+      "scrapedAt": "2026-01-14T23:18:57.767Z"
     },
     {
-      "id": "planeta-planetasport-rs-patike-stelt-w-stw328720-02-html-21",
+      "id": "planeta-planetasport-rs-patike-stelt-w-stw328720-02-html-19",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike stelt W",
       "brand": "SERGIO TACCHINI",
@@ -272,10 +246,10 @@
       "url": "https://planetasport.rs/patike-stelt-w-stw328720-02.html",
       "imageUrl": "/images/planeta/stw328720-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:40.884Z"
+      "scrapedAt": "2026-01-14T23:18:57.767Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-valzer-w-stw524717-03-html-22",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-valzer-w-stw524717-03-html-20",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike valzer W",
       "brand": "SERGIO TACCHINI",
@@ -285,10 +259,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-valzer-w-stw524717-03.html",
       "imageUrl": "/images/planeta/stw524717-03.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:40.884Z"
+      "scrapedAt": "2026-01-14T23:18:57.767Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cipele-fergus-m-wif243m306-62-html-23",
+      "id": "planeta-planetasport-rs-wintro-cipele-fergus-m-wif243m306-62-html-21",
       "store": "planeta",
       "name": "WINTRO Cipele fergus M",
       "brand": "WINTRO",
@@ -298,10 +272,10 @@
       "url": "https://planetasport.rs/wintro-cipele-fergus-m-wif243m306-62.html",
       "imageUrl": "/images/planeta/wif243m306-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:40.884Z"
+      "scrapedAt": "2026-01-14T23:18:57.767Z"
     },
     {
-      "id": "planeta-planetasport-rs-cizme-sound-w-sound-81-html-24",
+      "id": "planeta-planetasport-rs-cizme-sound-w-sound-81-html-22",
       "store": "planeta",
       "name": "OLANG Čizme sound W",
       "brand": "OLANG",
@@ -311,10 +285,10 @@
       "url": "https://planetasport.rs/cizme-sound-w-sound-81.html",
       "imageUrl": "/images/planeta/sound-81.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:40.884Z"
+      "scrapedAt": "2026-01-14T23:18:57.767Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-laggio-m-st253m032-20-html-25",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-laggio-m-st253m032-20-html-23",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike laggio M",
       "brand": "SERGIO TACCHINI",
@@ -324,10 +298,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-laggio-m-st253m032-20.html",
       "imageUrl": "/images/planeta/st253m032-20.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:40.884Z"
+      "scrapedAt": "2026-01-14T23:18:57.767Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-wintro-cipele-fidias-m-wif243m305-62-html-26",
+      "id": "planeta-planetasport-rs-wintro-wintro-cipele-fidias-m-wif243m305-62-html-24",
       "store": "planeta",
       "name": "WINTRO Cipele fidias M",
       "brand": "WINTRO",
@@ -337,10 +311,10 @@
       "url": "https://planetasport.rs/wintro-wintro-cipele-fidias-m-wif243m305-62.html",
       "imageUrl": "/images/planeta/wif243m305-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:40.884Z"
+      "scrapedAt": "2026-01-14T23:18:57.767Z"
     },
     {
-      "id": "planeta-planetasport-rs-rang-cipele-advik-m-xmf25300-02-html-27",
+      "id": "planeta-planetasport-rs-rang-cipele-advik-m-xmf25300-02-html-25",
       "store": "planeta",
       "name": "RANG Cipele advik  M",
       "brand": "RANG",
@@ -350,10 +324,10 @@
       "url": "https://planetasport.rs/rang-cipele-advik-m-xmf25300-02.html",
       "imageUrl": "/images/planeta/xmf25300-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:40.884Z"
+      "scrapedAt": "2026-01-14T23:18:57.767Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-cipele-navius-m-lx42189-1-html-28",
+      "id": "planeta-planetasport-rs-wink-cipele-navius-m-lx42189-1-html-26",
       "store": "planeta",
       "name": "WINK Cipele navius M",
       "brand": "WINK",
@@ -363,10 +337,10 @@
       "url": "https://planetasport.rs/wink-cipele-navius-m-lx42189-1.html",
       "imageUrl": "/images/planeta/lx42189-1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:40.884Z"
+      "scrapedAt": "2026-01-14T23:18:57.767Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cizme-milani-w-wif253f305-62-html-29",
+      "id": "planeta-planetasport-rs-wintro-cizme-milani-w-wif253f305-62-html-27",
       "store": "planeta",
       "name": "WINTRO Čizme milani W",
       "brand": "WINTRO",
@@ -376,10 +350,10 @@
       "url": "https://planetasport.rs/wintro-cizme-milani-w-wif253f305-62.html",
       "imageUrl": "/images/planeta/wif253f305-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:40.884Z"
+      "scrapedAt": "2026-01-14T23:18:57.767Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-ace-style-2-m-st253m890-01-html-30",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-ace-style-2-m-st253m890-01-html-28",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike ace style 2 M",
       "brand": "SERGIO TACCHINI",
@@ -389,10 +363,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-ace-style-2-m-st253m890-01.html",
       "imageUrl": "/images/planeta/st253m890-01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:40.884Z"
+      "scrapedAt": "2026-01-14T23:18:57.767Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cizme-riella-w-wif233f204-01-html-31",
+      "id": "planeta-planetasport-rs-wintro-cizme-riella-w-wif233f204-01-html-29",
       "store": "planeta",
       "name": "WINTRO Čizme riella W",
       "brand": "WINTRO",
@@ -402,10 +376,10 @@
       "url": "https://planetasport.rs/wintro-cizme-riella-w-wif233f204-01.html",
       "imageUrl": "/images/planeta/wif233f204-01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:40.884Z"
+      "scrapedAt": "2026-01-14T23:18:57.767Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-patike-abilogym-m-jf42145-3-html-32",
+      "id": "planeta-planetasport-rs-wink-patike-abilogym-m-jf42145-3-html-30",
       "store": "planeta",
       "name": "WINK Patike abilogym M",
       "brand": "WINK",
@@ -415,23 +389,10 @@
       "url": "https://planetasport.rs/wink-patike-abilogym-m-jf42145-3.html",
       "imageUrl": "/images/planeta/jf42145-3.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:34:40.884Z"
+      "scrapedAt": "2026-01-14T23:18:57.767Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cipele-dorel-w-wif243f304-76-html-33",
-      "store": "planeta",
-      "name": "WINTRO Cipele dorel W",
-      "brand": "WINTRO",
-      "originalPrice": 10000,
-      "salePrice": 4250,
-      "discountPercent": 50,
-      "url": "https://planetasport.rs/wintro-cipele-dorel-w-wif243f304-76.html",
-      "imageUrl": "/images/planeta/wif243f304-76.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T12:35:00.105Z"
-    },
-    {
-      "id": "planeta-planetasport-rs-wintro-cipele-armon-m-wif243m302-90-html-34",
+      "id": "planeta-planetasport-rs-wintro-cipele-armon-m-wif243m302-90-html-31",
       "store": "planeta",
       "name": "WINTRO Cipele armon M",
       "brand": "WINTRO",
@@ -441,10 +402,10 @@
       "url": "https://planetasport.rs/wintro-cipele-armon-m-wif243m302-90.html",
       "imageUrl": "/images/planeta/wif243m302-90.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:00.105Z"
+      "scrapedAt": "2026-01-14T23:19:15.816Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-cizme-perilla-w-br42202-1-html-35",
+      "id": "planeta-planetasport-rs-wink-cizme-perilla-w-br42202-1-html-32",
       "store": "planeta",
       "name": "WINK Čizme perilla W",
       "brand": "WINK",
@@ -454,10 +415,10 @@
       "url": "https://planetasport.rs/wink-cizme-perilla-w-br42202-1.html",
       "imageUrl": "/images/planeta/br42202-1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:00.105Z"
+      "scrapedAt": "2026-01-14T23:19:15.816Z"
     },
     {
-      "id": "planeta-planetasport-rs-slazenger-patike-noah-mid-m-slf253m103-10-html-36",
+      "id": "planeta-planetasport-rs-slazenger-patike-noah-mid-m-slf253m103-10-html-33",
       "store": "planeta",
       "name": "SLAZENGER Patike noah mid M",
       "brand": "SLAZENGER",
@@ -467,10 +428,10 @@
       "url": "https://planetasport.rs/slazenger-patike-noah-mid-m-slf253m103-10.html",
       "imageUrl": "/images/planeta/slf253m103-10.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:00.105Z"
+      "scrapedAt": "2026-01-14T23:19:15.816Z"
     },
     {
-      "id": "planeta-planetasport-rs-patike-stelt-w-stw328720-02-html-37",
+      "id": "planeta-planetasport-rs-patike-stelt-w-stw328720-02-html-34",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike stelt W",
       "brand": "SERGIO TACCHINI",
@@ -480,10 +441,10 @@
       "url": "https://planetasport.rs/patike-stelt-w-stw328720-02.html",
       "imageUrl": "/images/planeta/stw328720-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:00.105Z"
+      "scrapedAt": "2026-01-14T23:19:15.816Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-valzer-w-stw524717-03-html-38",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-valzer-w-stw524717-03-html-35",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike valzer W",
       "brand": "SERGIO TACCHINI",
@@ -493,10 +454,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-valzer-w-stw524717-03.html",
       "imageUrl": "/images/planeta/stw524717-03.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:00.105Z"
+      "scrapedAt": "2026-01-14T23:19:15.816Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cipele-fergus-m-wif243m306-62-html-39",
+      "id": "planeta-planetasport-rs-wintro-cipele-fergus-m-wif243m306-62-html-36",
       "store": "planeta",
       "name": "WINTRO Cipele fergus M",
       "brand": "WINTRO",
@@ -506,10 +467,10 @@
       "url": "https://planetasport.rs/wintro-cipele-fergus-m-wif243m306-62.html",
       "imageUrl": "/images/planeta/wif243m306-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:00.105Z"
+      "scrapedAt": "2026-01-14T23:19:15.816Z"
     },
     {
-      "id": "planeta-planetasport-rs-cizme-sound-w-sound-81-html-40",
+      "id": "planeta-planetasport-rs-cizme-sound-w-sound-81-html-37",
       "store": "planeta",
       "name": "OLANG Čizme sound W",
       "brand": "OLANG",
@@ -519,10 +480,10 @@
       "url": "https://planetasport.rs/cizme-sound-w-sound-81.html",
       "imageUrl": "/images/planeta/sound-81.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:00.105Z"
+      "scrapedAt": "2026-01-14T23:19:15.817Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-laggio-m-st253m032-20-html-41",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-laggio-m-st253m032-20-html-38",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike laggio M",
       "brand": "SERGIO TACCHINI",
@@ -532,10 +493,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-laggio-m-st253m032-20.html",
       "imageUrl": "/images/planeta/st253m032-20.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:00.105Z"
+      "scrapedAt": "2026-01-14T23:19:15.817Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-wintro-cipele-fidias-m-wif243m305-62-html-42",
+      "id": "planeta-planetasport-rs-wintro-wintro-cipele-fidias-m-wif243m305-62-html-39",
       "store": "planeta",
       "name": "WINTRO Cipele fidias M",
       "brand": "WINTRO",
@@ -545,10 +506,10 @@
       "url": "https://planetasport.rs/wintro-wintro-cipele-fidias-m-wif243m305-62.html",
       "imageUrl": "/images/planeta/wif243m305-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:00.105Z"
+      "scrapedAt": "2026-01-14T23:19:15.817Z"
     },
     {
-      "id": "planeta-planetasport-rs-rang-cipele-advik-m-xmf25300-02-html-43",
+      "id": "planeta-planetasport-rs-rang-cipele-advik-m-xmf25300-02-html-40",
       "store": "planeta",
       "name": "RANG Cipele advik  M",
       "brand": "RANG",
@@ -558,10 +519,10 @@
       "url": "https://planetasport.rs/rang-cipele-advik-m-xmf25300-02.html",
       "imageUrl": "/images/planeta/xmf25300-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:00.105Z"
+      "scrapedAt": "2026-01-14T23:19:15.817Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-cipele-navius-m-lx42189-1-html-44",
+      "id": "planeta-planetasport-rs-wink-cipele-navius-m-lx42189-1-html-41",
       "store": "planeta",
       "name": "WINK Cipele navius M",
       "brand": "WINK",
@@ -571,10 +532,10 @@
       "url": "https://planetasport.rs/wink-cipele-navius-m-lx42189-1.html",
       "imageUrl": "/images/planeta/lx42189-1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:00.105Z"
+      "scrapedAt": "2026-01-14T23:19:15.817Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cizme-milani-w-wif253f305-62-html-45",
+      "id": "planeta-planetasport-rs-wintro-cizme-milani-w-wif253f305-62-html-42",
       "store": "planeta",
       "name": "WINTRO Čizme milani W",
       "brand": "WINTRO",
@@ -584,10 +545,10 @@
       "url": "https://planetasport.rs/wintro-cizme-milani-w-wif253f305-62.html",
       "imageUrl": "/images/planeta/wif253f305-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:00.105Z"
+      "scrapedAt": "2026-01-14T23:19:15.817Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-ace-style-2-m-st253m890-01-html-46",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-ace-style-2-m-st253m890-01-html-43",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike ace style 2 M",
       "brand": "SERGIO TACCHINI",
@@ -597,10 +558,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-ace-style-2-m-st253m890-01.html",
       "imageUrl": "/images/planeta/st253m890-01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:00.105Z"
+      "scrapedAt": "2026-01-14T23:19:15.817Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cizme-riella-w-wif233f204-01-html-47",
+      "id": "planeta-planetasport-rs-wintro-cizme-riella-w-wif233f204-01-html-44",
       "store": "planeta",
       "name": "WINTRO Čizme riella W",
       "brand": "WINTRO",
@@ -610,10 +571,10 @@
       "url": "https://planetasport.rs/wintro-cizme-riella-w-wif233f204-01.html",
       "imageUrl": "/images/planeta/wif233f204-01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:00.105Z"
+      "scrapedAt": "2026-01-14T23:19:15.817Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-patike-abilogym-m-jf42145-3-html-48",
+      "id": "planeta-planetasport-rs-wink-patike-abilogym-m-jf42145-3-html-45",
       "store": "planeta",
       "name": "WINK Patike abilogym M",
       "brand": "WINK",
@@ -623,23 +584,10 @@
       "url": "https://planetasport.rs/wink-patike-abilogym-m-jf42145-3.html",
       "imageUrl": "/images/planeta/jf42145-3.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:00.105Z"
+      "scrapedAt": "2026-01-14T23:19:15.817Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cipele-dorel-w-wif243f304-76-html-49",
-      "store": "planeta",
-      "name": "WINTRO Cipele dorel W",
-      "brand": "WINTRO",
-      "originalPrice": 10000,
-      "salePrice": 4250,
-      "discountPercent": 50,
-      "url": "https://planetasport.rs/wintro-cipele-dorel-w-wif243f304-76.html",
-      "imageUrl": "/images/planeta/wif243f304-76.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T12:35:15.690Z"
-    },
-    {
-      "id": "planeta-planetasport-rs-wintro-cipele-armon-m-wif243m302-90-html-50",
+      "id": "planeta-planetasport-rs-wintro-cipele-armon-m-wif243m302-90-html-46",
       "store": "planeta",
       "name": "WINTRO Cipele armon M",
       "brand": "WINTRO",
@@ -649,10 +597,10 @@
       "url": "https://planetasport.rs/wintro-cipele-armon-m-wif243m302-90.html",
       "imageUrl": "/images/planeta/wif243m302-90.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:15.690Z"
+      "scrapedAt": "2026-01-14T23:19:33.412Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-cizme-perilla-w-br42202-1-html-51",
+      "id": "planeta-planetasport-rs-wink-cizme-perilla-w-br42202-1-html-47",
       "store": "planeta",
       "name": "WINK Čizme perilla W",
       "brand": "WINK",
@@ -662,10 +610,10 @@
       "url": "https://planetasport.rs/wink-cizme-perilla-w-br42202-1.html",
       "imageUrl": "/images/planeta/br42202-1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:15.690Z"
+      "scrapedAt": "2026-01-14T23:19:33.412Z"
     },
     {
-      "id": "planeta-planetasport-rs-slazenger-patike-noah-mid-m-slf253m103-10-html-52",
+      "id": "planeta-planetasport-rs-slazenger-patike-noah-mid-m-slf253m103-10-html-48",
       "store": "planeta",
       "name": "SLAZENGER Patike noah mid M",
       "brand": "SLAZENGER",
@@ -675,10 +623,10 @@
       "url": "https://planetasport.rs/slazenger-patike-noah-mid-m-slf253m103-10.html",
       "imageUrl": "/images/planeta/slf253m103-10.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:15.690Z"
+      "scrapedAt": "2026-01-14T23:19:33.412Z"
     },
     {
-      "id": "planeta-planetasport-rs-patike-stelt-w-stw328720-02-html-53",
+      "id": "planeta-planetasport-rs-patike-stelt-w-stw328720-02-html-49",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike stelt W",
       "brand": "SERGIO TACCHINI",
@@ -688,10 +636,10 @@
       "url": "https://planetasport.rs/patike-stelt-w-stw328720-02.html",
       "imageUrl": "/images/planeta/stw328720-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:15.690Z"
+      "scrapedAt": "2026-01-14T23:19:33.412Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-valzer-w-stw524717-03-html-54",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-valzer-w-stw524717-03-html-50",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike valzer W",
       "brand": "SERGIO TACCHINI",
@@ -701,10 +649,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-valzer-w-stw524717-03.html",
       "imageUrl": "/images/planeta/stw524717-03.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:15.690Z"
+      "scrapedAt": "2026-01-14T23:19:33.412Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cipele-fergus-m-wif243m306-62-html-55",
+      "id": "planeta-planetasport-rs-wintro-cipele-fergus-m-wif243m306-62-html-51",
       "store": "planeta",
       "name": "WINTRO Cipele fergus M",
       "brand": "WINTRO",
@@ -714,10 +662,10 @@
       "url": "https://planetasport.rs/wintro-cipele-fergus-m-wif243m306-62.html",
       "imageUrl": "/images/planeta/wif243m306-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:15.691Z"
+      "scrapedAt": "2026-01-14T23:19:33.412Z"
     },
     {
-      "id": "planeta-planetasport-rs-cizme-sound-w-sound-81-html-56",
+      "id": "planeta-planetasport-rs-cizme-sound-w-sound-81-html-52",
       "store": "planeta",
       "name": "OLANG Čizme sound W",
       "brand": "OLANG",
@@ -727,10 +675,10 @@
       "url": "https://planetasport.rs/cizme-sound-w-sound-81.html",
       "imageUrl": "/images/planeta/sound-81.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:15.691Z"
+      "scrapedAt": "2026-01-14T23:19:33.412Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-laggio-m-st253m032-20-html-57",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-laggio-m-st253m032-20-html-53",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike laggio M",
       "brand": "SERGIO TACCHINI",
@@ -740,10 +688,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-laggio-m-st253m032-20.html",
       "imageUrl": "/images/planeta/st253m032-20.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:15.691Z"
+      "scrapedAt": "2026-01-14T23:19:33.412Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-wintro-cipele-fidias-m-wif243m305-62-html-58",
+      "id": "planeta-planetasport-rs-wintro-wintro-cipele-fidias-m-wif243m305-62-html-54",
       "store": "planeta",
       "name": "WINTRO Cipele fidias M",
       "brand": "WINTRO",
@@ -753,10 +701,10 @@
       "url": "https://planetasport.rs/wintro-wintro-cipele-fidias-m-wif243m305-62.html",
       "imageUrl": "/images/planeta/wif243m305-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:15.691Z"
+      "scrapedAt": "2026-01-14T23:19:33.412Z"
     },
     {
-      "id": "planeta-planetasport-rs-rang-cipele-advik-m-xmf25300-02-html-59",
+      "id": "planeta-planetasport-rs-rang-cipele-advik-m-xmf25300-02-html-55",
       "store": "planeta",
       "name": "RANG Cipele advik  M",
       "brand": "RANG",
@@ -766,10 +714,10 @@
       "url": "https://planetasport.rs/rang-cipele-advik-m-xmf25300-02.html",
       "imageUrl": "/images/planeta/xmf25300-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:15.691Z"
+      "scrapedAt": "2026-01-14T23:19:33.412Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-cipele-navius-m-lx42189-1-html-60",
+      "id": "planeta-planetasport-rs-wink-cipele-navius-m-lx42189-1-html-56",
       "store": "planeta",
       "name": "WINK Cipele navius M",
       "brand": "WINK",
@@ -779,10 +727,10 @@
       "url": "https://planetasport.rs/wink-cipele-navius-m-lx42189-1.html",
       "imageUrl": "/images/planeta/lx42189-1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:15.691Z"
+      "scrapedAt": "2026-01-14T23:19:33.412Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cizme-milani-w-wif253f305-62-html-61",
+      "id": "planeta-planetasport-rs-wintro-cizme-milani-w-wif253f305-62-html-57",
       "store": "planeta",
       "name": "WINTRO Čizme milani W",
       "brand": "WINTRO",
@@ -792,10 +740,10 @@
       "url": "https://planetasport.rs/wintro-cizme-milani-w-wif253f305-62.html",
       "imageUrl": "/images/planeta/wif253f305-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:15.691Z"
+      "scrapedAt": "2026-01-14T23:19:33.412Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-ace-style-2-m-st253m890-01-html-62",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-ace-style-2-m-st253m890-01-html-58",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike ace style 2 M",
       "brand": "SERGIO TACCHINI",
@@ -805,10 +753,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-ace-style-2-m-st253m890-01.html",
       "imageUrl": "/images/planeta/st253m890-01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:15.691Z"
+      "scrapedAt": "2026-01-14T23:19:33.412Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cizme-riella-w-wif233f204-01-html-63",
+      "id": "planeta-planetasport-rs-wintro-cizme-riella-w-wif233f204-01-html-59",
       "store": "planeta",
       "name": "WINTRO Čizme riella W",
       "brand": "WINTRO",
@@ -818,10 +766,10 @@
       "url": "https://planetasport.rs/wintro-cizme-riella-w-wif233f204-01.html",
       "imageUrl": "/images/planeta/wif233f204-01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:15.691Z"
+      "scrapedAt": "2026-01-14T23:19:33.412Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-patike-abilogym-m-jf42145-3-html-64",
+      "id": "planeta-planetasport-rs-wink-patike-abilogym-m-jf42145-3-html-60",
       "store": "planeta",
       "name": "WINK Patike abilogym M",
       "brand": "WINK",
@@ -831,23 +779,10 @@
       "url": "https://planetasport.rs/wink-patike-abilogym-m-jf42145-3.html",
       "imageUrl": "/images/planeta/jf42145-3.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:15.691Z"
+      "scrapedAt": "2026-01-14T23:19:33.412Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cipele-dorel-w-wif243f304-76-html-65",
-      "store": "planeta",
-      "name": "WINTRO Cipele dorel W",
-      "brand": "WINTRO",
-      "originalPrice": 10000,
-      "salePrice": 4250,
-      "discountPercent": 50,
-      "url": "https://planetasport.rs/wintro-cipele-dorel-w-wif243f304-76.html",
-      "imageUrl": "/images/planeta/wif243f304-76.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T12:35:31.158Z"
-    },
-    {
-      "id": "planeta-planetasport-rs-wintro-cipele-armon-m-wif243m302-90-html-66",
+      "id": "planeta-planetasport-rs-wintro-cipele-armon-m-wif243m302-90-html-61",
       "store": "planeta",
       "name": "WINTRO Cipele armon M",
       "brand": "WINTRO",
@@ -857,10 +792,10 @@
       "url": "https://planetasport.rs/wintro-cipele-armon-m-wif243m302-90.html",
       "imageUrl": "/images/planeta/wif243m302-90.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:31.158Z"
+      "scrapedAt": "2026-01-14T23:19:53.276Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-cizme-perilla-w-br42202-1-html-67",
+      "id": "planeta-planetasport-rs-wink-cizme-perilla-w-br42202-1-html-62",
       "store": "planeta",
       "name": "WINK Čizme perilla W",
       "brand": "WINK",
@@ -870,10 +805,10 @@
       "url": "https://planetasport.rs/wink-cizme-perilla-w-br42202-1.html",
       "imageUrl": "/images/planeta/br42202-1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:31.158Z"
+      "scrapedAt": "2026-01-14T23:19:53.276Z"
     },
     {
-      "id": "planeta-planetasport-rs-slazenger-patike-noah-mid-m-slf253m103-10-html-68",
+      "id": "planeta-planetasport-rs-slazenger-patike-noah-mid-m-slf253m103-10-html-63",
       "store": "planeta",
       "name": "SLAZENGER Patike noah mid M",
       "brand": "SLAZENGER",
@@ -883,10 +818,10 @@
       "url": "https://planetasport.rs/slazenger-patike-noah-mid-m-slf253m103-10.html",
       "imageUrl": "/images/planeta/slf253m103-10.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:31.158Z"
+      "scrapedAt": "2026-01-14T23:19:53.276Z"
     },
     {
-      "id": "planeta-planetasport-rs-patike-stelt-w-stw328720-02-html-69",
+      "id": "planeta-planetasport-rs-patike-stelt-w-stw328720-02-html-64",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike stelt W",
       "brand": "SERGIO TACCHINI",
@@ -896,10 +831,10 @@
       "url": "https://planetasport.rs/patike-stelt-w-stw328720-02.html",
       "imageUrl": "/images/planeta/stw328720-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:31.158Z"
+      "scrapedAt": "2026-01-14T23:19:53.276Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-valzer-w-stw524717-03-html-70",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-valzer-w-stw524717-03-html-65",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike valzer W",
       "brand": "SERGIO TACCHINI",
@@ -909,10 +844,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-valzer-w-stw524717-03.html",
       "imageUrl": "/images/planeta/stw524717-03.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:31.158Z"
+      "scrapedAt": "2026-01-14T23:19:53.276Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cipele-fergus-m-wif243m306-62-html-71",
+      "id": "planeta-planetasport-rs-wintro-cipele-fergus-m-wif243m306-62-html-66",
       "store": "planeta",
       "name": "WINTRO Cipele fergus M",
       "brand": "WINTRO",
@@ -922,10 +857,10 @@
       "url": "https://planetasport.rs/wintro-cipele-fergus-m-wif243m306-62.html",
       "imageUrl": "/images/planeta/wif243m306-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:31.158Z"
+      "scrapedAt": "2026-01-14T23:19:53.276Z"
     },
     {
-      "id": "planeta-planetasport-rs-cizme-sound-w-sound-81-html-72",
+      "id": "planeta-planetasport-rs-cizme-sound-w-sound-81-html-67",
       "store": "planeta",
       "name": "OLANG Čizme sound W",
       "brand": "OLANG",
@@ -935,10 +870,10 @@
       "url": "https://planetasport.rs/cizme-sound-w-sound-81.html",
       "imageUrl": "/images/planeta/sound-81.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:31.158Z"
+      "scrapedAt": "2026-01-14T23:19:53.276Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-laggio-m-st253m032-20-html-73",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-laggio-m-st253m032-20-html-68",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike laggio M",
       "brand": "SERGIO TACCHINI",
@@ -948,10 +883,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-laggio-m-st253m032-20.html",
       "imageUrl": "/images/planeta/st253m032-20.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:31.158Z"
+      "scrapedAt": "2026-01-14T23:19:53.276Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-wintro-cipele-fidias-m-wif243m305-62-html-74",
+      "id": "planeta-planetasport-rs-wintro-wintro-cipele-fidias-m-wif243m305-62-html-69",
       "store": "planeta",
       "name": "WINTRO Cipele fidias M",
       "brand": "WINTRO",
@@ -961,10 +896,10 @@
       "url": "https://planetasport.rs/wintro-wintro-cipele-fidias-m-wif243m305-62.html",
       "imageUrl": "/images/planeta/wif243m305-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:31.158Z"
+      "scrapedAt": "2026-01-14T23:19:53.276Z"
     },
     {
-      "id": "planeta-planetasport-rs-rang-cipele-advik-m-xmf25300-02-html-75",
+      "id": "planeta-planetasport-rs-rang-cipele-advik-m-xmf25300-02-html-70",
       "store": "planeta",
       "name": "RANG Cipele advik  M",
       "brand": "RANG",
@@ -974,10 +909,10 @@
       "url": "https://planetasport.rs/rang-cipele-advik-m-xmf25300-02.html",
       "imageUrl": "/images/planeta/xmf25300-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:31.158Z"
+      "scrapedAt": "2026-01-14T23:19:53.276Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-cipele-navius-m-lx42189-1-html-76",
+      "id": "planeta-planetasport-rs-wink-cipele-navius-m-lx42189-1-html-71",
       "store": "planeta",
       "name": "WINK Cipele navius M",
       "brand": "WINK",
@@ -987,10 +922,10 @@
       "url": "https://planetasport.rs/wink-cipele-navius-m-lx42189-1.html",
       "imageUrl": "/images/planeta/lx42189-1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:31.158Z"
+      "scrapedAt": "2026-01-14T23:19:53.276Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cizme-milani-w-wif253f305-62-html-77",
+      "id": "planeta-planetasport-rs-wintro-cizme-milani-w-wif253f305-62-html-72",
       "store": "planeta",
       "name": "WINTRO Čizme milani W",
       "brand": "WINTRO",
@@ -1000,10 +935,10 @@
       "url": "https://planetasport.rs/wintro-cizme-milani-w-wif253f305-62.html",
       "imageUrl": "/images/planeta/wif253f305-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:31.158Z"
+      "scrapedAt": "2026-01-14T23:19:53.276Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-ace-style-2-m-st253m890-01-html-78",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-ace-style-2-m-st253m890-01-html-73",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike ace style 2 M",
       "brand": "SERGIO TACCHINI",
@@ -1013,10 +948,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-ace-style-2-m-st253m890-01.html",
       "imageUrl": "/images/planeta/st253m890-01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:31.158Z"
+      "scrapedAt": "2026-01-14T23:19:53.276Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cizme-riella-w-wif233f204-01-html-79",
+      "id": "planeta-planetasport-rs-wintro-cizme-riella-w-wif233f204-01-html-74",
       "store": "planeta",
       "name": "WINTRO Čizme riella W",
       "brand": "WINTRO",
@@ -1026,10 +961,10 @@
       "url": "https://planetasport.rs/wintro-cizme-riella-w-wif233f204-01.html",
       "imageUrl": "/images/planeta/wif233f204-01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:31.158Z"
+      "scrapedAt": "2026-01-14T23:19:53.276Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-patike-abilogym-m-jf42145-3-html-80",
+      "id": "planeta-planetasport-rs-wink-patike-abilogym-m-jf42145-3-html-75",
       "store": "planeta",
       "name": "WINK Patike abilogym M",
       "brand": "WINK",
@@ -1039,23 +974,10 @@
       "url": "https://planetasport.rs/wink-patike-abilogym-m-jf42145-3.html",
       "imageUrl": "/images/planeta/jf42145-3.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:31.158Z"
+      "scrapedAt": "2026-01-14T23:19:53.276Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cipele-dorel-w-wif243f304-76-html-81",
-      "store": "planeta",
-      "name": "WINTRO Cipele dorel W",
-      "brand": "WINTRO",
-      "originalPrice": 10000,
-      "salePrice": 4250,
-      "discountPercent": 50,
-      "url": "https://planetasport.rs/wintro-cipele-dorel-w-wif243f304-76.html",
-      "imageUrl": "/images/planeta/wif243f304-76.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T12:35:50.321Z"
-    },
-    {
-      "id": "planeta-planetasport-rs-wintro-cipele-armon-m-wif243m302-90-html-82",
+      "id": "planeta-planetasport-rs-wintro-cipele-armon-m-wif243m302-90-html-76",
       "store": "planeta",
       "name": "WINTRO Cipele armon M",
       "brand": "WINTRO",
@@ -1065,10 +987,10 @@
       "url": "https://planetasport.rs/wintro-cipele-armon-m-wif243m302-90.html",
       "imageUrl": "/images/planeta/wif243m302-90.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:50.321Z"
+      "scrapedAt": "2026-01-14T23:20:10.548Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-cizme-perilla-w-br42202-1-html-83",
+      "id": "planeta-planetasport-rs-wink-cizme-perilla-w-br42202-1-html-77",
       "store": "planeta",
       "name": "WINK Čizme perilla W",
       "brand": "WINK",
@@ -1078,10 +1000,10 @@
       "url": "https://planetasport.rs/wink-cizme-perilla-w-br42202-1.html",
       "imageUrl": "/images/planeta/br42202-1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:50.321Z"
+      "scrapedAt": "2026-01-14T23:20:10.548Z"
     },
     {
-      "id": "planeta-planetasport-rs-slazenger-patike-noah-mid-m-slf253m103-10-html-84",
+      "id": "planeta-planetasport-rs-slazenger-patike-noah-mid-m-slf253m103-10-html-78",
       "store": "planeta",
       "name": "SLAZENGER Patike noah mid M",
       "brand": "SLAZENGER",
@@ -1091,10 +1013,10 @@
       "url": "https://planetasport.rs/slazenger-patike-noah-mid-m-slf253m103-10.html",
       "imageUrl": "/images/planeta/slf253m103-10.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:50.321Z"
+      "scrapedAt": "2026-01-14T23:20:10.548Z"
     },
     {
-      "id": "planeta-planetasport-rs-patike-stelt-w-stw328720-02-html-85",
+      "id": "planeta-planetasport-rs-patike-stelt-w-stw328720-02-html-79",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike stelt W",
       "brand": "SERGIO TACCHINI",
@@ -1104,10 +1026,10 @@
       "url": "https://planetasport.rs/patike-stelt-w-stw328720-02.html",
       "imageUrl": "/images/planeta/stw328720-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:50.321Z"
+      "scrapedAt": "2026-01-14T23:20:10.548Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-valzer-w-stw524717-03-html-86",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-valzer-w-stw524717-03-html-80",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike valzer W",
       "brand": "SERGIO TACCHINI",
@@ -1117,10 +1039,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-valzer-w-stw524717-03.html",
       "imageUrl": "/images/planeta/stw524717-03.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:50.321Z"
+      "scrapedAt": "2026-01-14T23:20:10.548Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cipele-fergus-m-wif243m306-62-html-87",
+      "id": "planeta-planetasport-rs-wintro-cipele-fergus-m-wif243m306-62-html-81",
       "store": "planeta",
       "name": "WINTRO Cipele fergus M",
       "brand": "WINTRO",
@@ -1130,10 +1052,10 @@
       "url": "https://planetasport.rs/wintro-cipele-fergus-m-wif243m306-62.html",
       "imageUrl": "/images/planeta/wif243m306-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:50.322Z"
+      "scrapedAt": "2026-01-14T23:20:10.548Z"
     },
     {
-      "id": "planeta-planetasport-rs-cizme-sound-w-sound-81-html-88",
+      "id": "planeta-planetasport-rs-cizme-sound-w-sound-81-html-82",
       "store": "planeta",
       "name": "OLANG Čizme sound W",
       "brand": "OLANG",
@@ -1143,10 +1065,10 @@
       "url": "https://planetasport.rs/cizme-sound-w-sound-81.html",
       "imageUrl": "/images/planeta/sound-81.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:50.322Z"
+      "scrapedAt": "2026-01-14T23:20:10.548Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-laggio-m-st253m032-20-html-89",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-laggio-m-st253m032-20-html-83",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike laggio M",
       "brand": "SERGIO TACCHINI",
@@ -1156,10 +1078,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-laggio-m-st253m032-20.html",
       "imageUrl": "/images/planeta/st253m032-20.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:50.322Z"
+      "scrapedAt": "2026-01-14T23:20:10.549Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-wintro-cipele-fidias-m-wif243m305-62-html-90",
+      "id": "planeta-planetasport-rs-wintro-wintro-cipele-fidias-m-wif243m305-62-html-84",
       "store": "planeta",
       "name": "WINTRO Cipele fidias M",
       "brand": "WINTRO",
@@ -1169,10 +1091,10 @@
       "url": "https://planetasport.rs/wintro-wintro-cipele-fidias-m-wif243m305-62.html",
       "imageUrl": "/images/planeta/wif243m305-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:50.322Z"
+      "scrapedAt": "2026-01-14T23:20:10.549Z"
     },
     {
-      "id": "planeta-planetasport-rs-rang-cipele-advik-m-xmf25300-02-html-91",
+      "id": "planeta-planetasport-rs-rang-cipele-advik-m-xmf25300-02-html-85",
       "store": "planeta",
       "name": "RANG Cipele advik  M",
       "brand": "RANG",
@@ -1182,10 +1104,10 @@
       "url": "https://planetasport.rs/rang-cipele-advik-m-xmf25300-02.html",
       "imageUrl": "/images/planeta/xmf25300-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:50.322Z"
+      "scrapedAt": "2026-01-14T23:20:10.549Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-cipele-navius-m-lx42189-1-html-92",
+      "id": "planeta-planetasport-rs-wink-cipele-navius-m-lx42189-1-html-86",
       "store": "planeta",
       "name": "WINK Cipele navius M",
       "brand": "WINK",
@@ -1195,10 +1117,10 @@
       "url": "https://planetasport.rs/wink-cipele-navius-m-lx42189-1.html",
       "imageUrl": "/images/planeta/lx42189-1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:50.322Z"
+      "scrapedAt": "2026-01-14T23:20:10.549Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cizme-milani-w-wif253f305-62-html-93",
+      "id": "planeta-planetasport-rs-wintro-cizme-milani-w-wif253f305-62-html-87",
       "store": "planeta",
       "name": "WINTRO Čizme milani W",
       "brand": "WINTRO",
@@ -1208,10 +1130,10 @@
       "url": "https://planetasport.rs/wintro-cizme-milani-w-wif253f305-62.html",
       "imageUrl": "/images/planeta/wif253f305-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:50.322Z"
+      "scrapedAt": "2026-01-14T23:20:10.549Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-ace-style-2-m-st253m890-01-html-94",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-ace-style-2-m-st253m890-01-html-88",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike ace style 2 M",
       "brand": "SERGIO TACCHINI",
@@ -1221,10 +1143,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-ace-style-2-m-st253m890-01.html",
       "imageUrl": "/images/planeta/st253m890-01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:50.322Z"
+      "scrapedAt": "2026-01-14T23:20:10.549Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cizme-riella-w-wif233f204-01-html-95",
+      "id": "planeta-planetasport-rs-wintro-cizme-riella-w-wif233f204-01-html-89",
       "store": "planeta",
       "name": "WINTRO Čizme riella W",
       "brand": "WINTRO",
@@ -1234,10 +1156,10 @@
       "url": "https://planetasport.rs/wintro-cizme-riella-w-wif233f204-01.html",
       "imageUrl": "/images/planeta/wif233f204-01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:50.322Z"
+      "scrapedAt": "2026-01-14T23:20:10.549Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-patike-abilogym-m-jf42145-3-html-96",
+      "id": "planeta-planetasport-rs-wink-patike-abilogym-m-jf42145-3-html-90",
       "store": "planeta",
       "name": "WINK Patike abilogym M",
       "brand": "WINK",
@@ -1247,23 +1169,10 @@
       "url": "https://planetasport.rs/wink-patike-abilogym-m-jf42145-3.html",
       "imageUrl": "/images/planeta/jf42145-3.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:35:50.322Z"
+      "scrapedAt": "2026-01-14T23:20:10.549Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cipele-dorel-w-wif243f304-76-html-97",
-      "store": "planeta",
-      "name": "WINTRO Cipele dorel W",
-      "brand": "WINTRO",
-      "originalPrice": 10000,
-      "salePrice": 4250,
-      "discountPercent": 50,
-      "url": "https://planetasport.rs/wintro-cipele-dorel-w-wif243f304-76.html",
-      "imageUrl": "/images/planeta/wif243f304-76.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T12:36:05.830Z"
-    },
-    {
-      "id": "planeta-planetasport-rs-wintro-cipele-armon-m-wif243m302-90-html-98",
+      "id": "planeta-planetasport-rs-wintro-cipele-armon-m-wif243m302-90-html-91",
       "store": "planeta",
       "name": "WINTRO Cipele armon M",
       "brand": "WINTRO",
@@ -1273,10 +1182,10 @@
       "url": "https://planetasport.rs/wintro-cipele-armon-m-wif243m302-90.html",
       "imageUrl": "/images/planeta/wif243m302-90.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:05.830Z"
+      "scrapedAt": "2026-01-14T23:20:28.586Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-cizme-perilla-w-br42202-1-html-99",
+      "id": "planeta-planetasport-rs-wink-cizme-perilla-w-br42202-1-html-92",
       "store": "planeta",
       "name": "WINK Čizme perilla W",
       "brand": "WINK",
@@ -1286,10 +1195,10 @@
       "url": "https://planetasport.rs/wink-cizme-perilla-w-br42202-1.html",
       "imageUrl": "/images/planeta/br42202-1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:05.830Z"
+      "scrapedAt": "2026-01-14T23:20:28.586Z"
     },
     {
-      "id": "planeta-planetasport-rs-slazenger-patike-noah-mid-m-slf253m103-10-html-100",
+      "id": "planeta-planetasport-rs-slazenger-patike-noah-mid-m-slf253m103-10-html-93",
       "store": "planeta",
       "name": "SLAZENGER Patike noah mid M",
       "brand": "SLAZENGER",
@@ -1299,10 +1208,10 @@
       "url": "https://planetasport.rs/slazenger-patike-noah-mid-m-slf253m103-10.html",
       "imageUrl": "/images/planeta/slf253m103-10.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:05.830Z"
+      "scrapedAt": "2026-01-14T23:20:28.586Z"
     },
     {
-      "id": "planeta-planetasport-rs-patike-stelt-w-stw328720-02-html-101",
+      "id": "planeta-planetasport-rs-patike-stelt-w-stw328720-02-html-94",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike stelt W",
       "brand": "SERGIO TACCHINI",
@@ -1312,10 +1221,10 @@
       "url": "https://planetasport.rs/patike-stelt-w-stw328720-02.html",
       "imageUrl": "/images/planeta/stw328720-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:05.830Z"
+      "scrapedAt": "2026-01-14T23:20:28.586Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-valzer-w-stw524717-03-html-102",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-valzer-w-stw524717-03-html-95",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike valzer W",
       "brand": "SERGIO TACCHINI",
@@ -1325,10 +1234,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-valzer-w-stw524717-03.html",
       "imageUrl": "/images/planeta/stw524717-03.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:05.830Z"
+      "scrapedAt": "2026-01-14T23:20:28.587Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cipele-fergus-m-wif243m306-62-html-103",
+      "id": "planeta-planetasport-rs-wintro-cipele-fergus-m-wif243m306-62-html-96",
       "store": "planeta",
       "name": "WINTRO Cipele fergus M",
       "brand": "WINTRO",
@@ -1338,10 +1247,10 @@
       "url": "https://planetasport.rs/wintro-cipele-fergus-m-wif243m306-62.html",
       "imageUrl": "/images/planeta/wif243m306-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:05.830Z"
+      "scrapedAt": "2026-01-14T23:20:28.587Z"
     },
     {
-      "id": "planeta-planetasport-rs-cizme-sound-w-sound-81-html-104",
+      "id": "planeta-planetasport-rs-cizme-sound-w-sound-81-html-97",
       "store": "planeta",
       "name": "OLANG Čizme sound W",
       "brand": "OLANG",
@@ -1351,10 +1260,10 @@
       "url": "https://planetasport.rs/cizme-sound-w-sound-81.html",
       "imageUrl": "/images/planeta/sound-81.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:05.830Z"
+      "scrapedAt": "2026-01-14T23:20:28.587Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-laggio-m-st253m032-20-html-105",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-laggio-m-st253m032-20-html-98",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike laggio M",
       "brand": "SERGIO TACCHINI",
@@ -1364,10 +1273,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-laggio-m-st253m032-20.html",
       "imageUrl": "/images/planeta/st253m032-20.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:05.830Z"
+      "scrapedAt": "2026-01-14T23:20:28.587Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-wintro-cipele-fidias-m-wif243m305-62-html-106",
+      "id": "planeta-planetasport-rs-wintro-wintro-cipele-fidias-m-wif243m305-62-html-99",
       "store": "planeta",
       "name": "WINTRO Cipele fidias M",
       "brand": "WINTRO",
@@ -1377,10 +1286,10 @@
       "url": "https://planetasport.rs/wintro-wintro-cipele-fidias-m-wif243m305-62.html",
       "imageUrl": "/images/planeta/wif243m305-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:05.830Z"
+      "scrapedAt": "2026-01-14T23:20:28.587Z"
     },
     {
-      "id": "planeta-planetasport-rs-rang-cipele-advik-m-xmf25300-02-html-107",
+      "id": "planeta-planetasport-rs-rang-cipele-advik-m-xmf25300-02-html-100",
       "store": "planeta",
       "name": "RANG Cipele advik  M",
       "brand": "RANG",
@@ -1390,10 +1299,10 @@
       "url": "https://planetasport.rs/rang-cipele-advik-m-xmf25300-02.html",
       "imageUrl": "/images/planeta/xmf25300-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:05.830Z"
+      "scrapedAt": "2026-01-14T23:20:28.587Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-cipele-navius-m-lx42189-1-html-108",
+      "id": "planeta-planetasport-rs-wink-cipele-navius-m-lx42189-1-html-101",
       "store": "planeta",
       "name": "WINK Cipele navius M",
       "brand": "WINK",
@@ -1403,10 +1312,10 @@
       "url": "https://planetasport.rs/wink-cipele-navius-m-lx42189-1.html",
       "imageUrl": "/images/planeta/lx42189-1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:05.830Z"
+      "scrapedAt": "2026-01-14T23:20:28.587Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cizme-milani-w-wif253f305-62-html-109",
+      "id": "planeta-planetasport-rs-wintro-cizme-milani-w-wif253f305-62-html-102",
       "store": "planeta",
       "name": "WINTRO Čizme milani W",
       "brand": "WINTRO",
@@ -1416,10 +1325,10 @@
       "url": "https://planetasport.rs/wintro-cizme-milani-w-wif253f305-62.html",
       "imageUrl": "/images/planeta/wif253f305-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:05.830Z"
+      "scrapedAt": "2026-01-14T23:20:28.587Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-ace-style-2-m-st253m890-01-html-110",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-ace-style-2-m-st253m890-01-html-103",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike ace style 2 M",
       "brand": "SERGIO TACCHINI",
@@ -1429,10 +1338,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-ace-style-2-m-st253m890-01.html",
       "imageUrl": "/images/planeta/st253m890-01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:05.830Z"
+      "scrapedAt": "2026-01-14T23:20:28.587Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cizme-riella-w-wif233f204-01-html-111",
+      "id": "planeta-planetasport-rs-wintro-cizme-riella-w-wif233f204-01-html-104",
       "store": "planeta",
       "name": "WINTRO Čizme riella W",
       "brand": "WINTRO",
@@ -1442,10 +1351,10 @@
       "url": "https://planetasport.rs/wintro-cizme-riella-w-wif233f204-01.html",
       "imageUrl": "/images/planeta/wif233f204-01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:05.830Z"
+      "scrapedAt": "2026-01-14T23:20:28.587Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-patike-abilogym-m-jf42145-3-html-112",
+      "id": "planeta-planetasport-rs-wink-patike-abilogym-m-jf42145-3-html-105",
       "store": "planeta",
       "name": "WINK Patike abilogym M",
       "brand": "WINK",
@@ -1455,23 +1364,10 @@
       "url": "https://planetasport.rs/wink-patike-abilogym-m-jf42145-3.html",
       "imageUrl": "/images/planeta/jf42145-3.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:05.830Z"
+      "scrapedAt": "2026-01-14T23:20:28.587Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cipele-dorel-w-wif243f304-76-html-113",
-      "store": "planeta",
-      "name": "WINTRO Cipele dorel W",
-      "brand": "WINTRO",
-      "originalPrice": 10000,
-      "salePrice": 4250,
-      "discountPercent": 50,
-      "url": "https://planetasport.rs/wintro-cipele-dorel-w-wif243f304-76.html",
-      "imageUrl": "/images/planeta/wif243f304-76.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T12:36:20.470Z"
-    },
-    {
-      "id": "planeta-planetasport-rs-wintro-cipele-armon-m-wif243m302-90-html-114",
+      "id": "planeta-planetasport-rs-wintro-cipele-armon-m-wif243m302-90-html-106",
       "store": "planeta",
       "name": "WINTRO Cipele armon M",
       "brand": "WINTRO",
@@ -1481,10 +1377,10 @@
       "url": "https://planetasport.rs/wintro-cipele-armon-m-wif243m302-90.html",
       "imageUrl": "/images/planeta/wif243m302-90.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:20.470Z"
+      "scrapedAt": "2026-01-14T23:20:44.879Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-cizme-perilla-w-br42202-1-html-115",
+      "id": "planeta-planetasport-rs-wink-cizme-perilla-w-br42202-1-html-107",
       "store": "planeta",
       "name": "WINK Čizme perilla W",
       "brand": "WINK",
@@ -1494,10 +1390,10 @@
       "url": "https://planetasport.rs/wink-cizme-perilla-w-br42202-1.html",
       "imageUrl": "/images/planeta/br42202-1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:20.471Z"
+      "scrapedAt": "2026-01-14T23:20:44.879Z"
     },
     {
-      "id": "planeta-planetasport-rs-slazenger-patike-noah-mid-m-slf253m103-10-html-116",
+      "id": "planeta-planetasport-rs-slazenger-patike-noah-mid-m-slf253m103-10-html-108",
       "store": "planeta",
       "name": "SLAZENGER Patike noah mid M",
       "brand": "SLAZENGER",
@@ -1507,10 +1403,10 @@
       "url": "https://planetasport.rs/slazenger-patike-noah-mid-m-slf253m103-10.html",
       "imageUrl": "/images/planeta/slf253m103-10.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:20.471Z"
+      "scrapedAt": "2026-01-14T23:20:44.879Z"
     },
     {
-      "id": "planeta-planetasport-rs-patike-stelt-w-stw328720-02-html-117",
+      "id": "planeta-planetasport-rs-patike-stelt-w-stw328720-02-html-109",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike stelt W",
       "brand": "SERGIO TACCHINI",
@@ -1520,10 +1416,10 @@
       "url": "https://planetasport.rs/patike-stelt-w-stw328720-02.html",
       "imageUrl": "/images/planeta/stw328720-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:20.471Z"
+      "scrapedAt": "2026-01-14T23:20:44.879Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-valzer-w-stw524717-03-html-118",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-valzer-w-stw524717-03-html-110",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike valzer W",
       "brand": "SERGIO TACCHINI",
@@ -1533,10 +1429,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-valzer-w-stw524717-03.html",
       "imageUrl": "/images/planeta/stw524717-03.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:20.471Z"
+      "scrapedAt": "2026-01-14T23:20:44.879Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cipele-fergus-m-wif243m306-62-html-119",
+      "id": "planeta-planetasport-rs-wintro-cipele-fergus-m-wif243m306-62-html-111",
       "store": "planeta",
       "name": "WINTRO Cipele fergus M",
       "brand": "WINTRO",
@@ -1546,10 +1442,10 @@
       "url": "https://planetasport.rs/wintro-cipele-fergus-m-wif243m306-62.html",
       "imageUrl": "/images/planeta/wif243m306-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:20.471Z"
+      "scrapedAt": "2026-01-14T23:20:44.879Z"
     },
     {
-      "id": "planeta-planetasport-rs-cizme-sound-w-sound-81-html-120",
+      "id": "planeta-planetasport-rs-cizme-sound-w-sound-81-html-112",
       "store": "planeta",
       "name": "OLANG Čizme sound W",
       "brand": "OLANG",
@@ -1559,10 +1455,10 @@
       "url": "https://planetasport.rs/cizme-sound-w-sound-81.html",
       "imageUrl": "/images/planeta/sound-81.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:20.471Z"
+      "scrapedAt": "2026-01-14T23:20:44.879Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-laggio-m-st253m032-20-html-121",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-laggio-m-st253m032-20-html-113",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike laggio M",
       "brand": "SERGIO TACCHINI",
@@ -1572,10 +1468,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-laggio-m-st253m032-20.html",
       "imageUrl": "/images/planeta/st253m032-20.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:20.471Z"
+      "scrapedAt": "2026-01-14T23:20:44.879Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-wintro-cipele-fidias-m-wif243m305-62-html-122",
+      "id": "planeta-planetasport-rs-wintro-wintro-cipele-fidias-m-wif243m305-62-html-114",
       "store": "planeta",
       "name": "WINTRO Cipele fidias M",
       "brand": "WINTRO",
@@ -1585,10 +1481,10 @@
       "url": "https://planetasport.rs/wintro-wintro-cipele-fidias-m-wif243m305-62.html",
       "imageUrl": "/images/planeta/wif243m305-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:20.471Z"
+      "scrapedAt": "2026-01-14T23:20:44.879Z"
     },
     {
-      "id": "planeta-planetasport-rs-rang-cipele-advik-m-xmf25300-02-html-123",
+      "id": "planeta-planetasport-rs-rang-cipele-advik-m-xmf25300-02-html-115",
       "store": "planeta",
       "name": "RANG Cipele advik  M",
       "brand": "RANG",
@@ -1598,10 +1494,10 @@
       "url": "https://planetasport.rs/rang-cipele-advik-m-xmf25300-02.html",
       "imageUrl": "/images/planeta/xmf25300-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:20.471Z"
+      "scrapedAt": "2026-01-14T23:20:44.879Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-cipele-navius-m-lx42189-1-html-124",
+      "id": "planeta-planetasport-rs-wink-cipele-navius-m-lx42189-1-html-116",
       "store": "planeta",
       "name": "WINK Cipele navius M",
       "brand": "WINK",
@@ -1611,10 +1507,10 @@
       "url": "https://planetasport.rs/wink-cipele-navius-m-lx42189-1.html",
       "imageUrl": "/images/planeta/lx42189-1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:20.471Z"
+      "scrapedAt": "2026-01-14T23:20:44.879Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cizme-milani-w-wif253f305-62-html-125",
+      "id": "planeta-planetasport-rs-wintro-cizme-milani-w-wif253f305-62-html-117",
       "store": "planeta",
       "name": "WINTRO Čizme milani W",
       "brand": "WINTRO",
@@ -1624,10 +1520,10 @@
       "url": "https://planetasport.rs/wintro-cizme-milani-w-wif253f305-62.html",
       "imageUrl": "/images/planeta/wif253f305-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:20.471Z"
+      "scrapedAt": "2026-01-14T23:20:44.879Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-ace-style-2-m-st253m890-01-html-126",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-ace-style-2-m-st253m890-01-html-118",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike ace style 2 M",
       "brand": "SERGIO TACCHINI",
@@ -1637,10 +1533,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-ace-style-2-m-st253m890-01.html",
       "imageUrl": "/images/planeta/st253m890-01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:20.471Z"
+      "scrapedAt": "2026-01-14T23:20:44.879Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cizme-riella-w-wif233f204-01-html-127",
+      "id": "planeta-planetasport-rs-wintro-cizme-riella-w-wif233f204-01-html-119",
       "store": "planeta",
       "name": "WINTRO Čizme riella W",
       "brand": "WINTRO",
@@ -1650,10 +1546,10 @@
       "url": "https://planetasport.rs/wintro-cizme-riella-w-wif233f204-01.html",
       "imageUrl": "/images/planeta/wif233f204-01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:20.471Z"
+      "scrapedAt": "2026-01-14T23:20:44.879Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-patike-abilogym-m-jf42145-3-html-128",
+      "id": "planeta-planetasport-rs-wink-patike-abilogym-m-jf42145-3-html-120",
       "store": "planeta",
       "name": "WINK Patike abilogym M",
       "brand": "WINK",
@@ -1663,23 +1559,10 @@
       "url": "https://planetasport.rs/wink-patike-abilogym-m-jf42145-3.html",
       "imageUrl": "/images/planeta/jf42145-3.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:20.471Z"
+      "scrapedAt": "2026-01-14T23:20:44.879Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cipele-dorel-w-wif243f304-76-html-129",
-      "store": "planeta",
-      "name": "WINTRO Cipele dorel W",
-      "brand": "WINTRO",
-      "originalPrice": 10000,
-      "salePrice": 4250,
-      "discountPercent": 50,
-      "url": "https://planetasport.rs/wintro-cipele-dorel-w-wif243f304-76.html",
-      "imageUrl": "/images/planeta/wif243f304-76.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T12:36:36.012Z"
-    },
-    {
-      "id": "planeta-planetasport-rs-wintro-cipele-armon-m-wif243m302-90-html-130",
+      "id": "planeta-planetasport-rs-wintro-cipele-armon-m-wif243m302-90-html-121",
       "store": "planeta",
       "name": "WINTRO Cipele armon M",
       "brand": "WINTRO",
@@ -1689,10 +1572,10 @@
       "url": "https://planetasport.rs/wintro-cipele-armon-m-wif243m302-90.html",
       "imageUrl": "/images/planeta/wif243m302-90.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:36.012Z"
+      "scrapedAt": "2026-01-14T23:21:02.419Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-cizme-perilla-w-br42202-1-html-131",
+      "id": "planeta-planetasport-rs-wink-cizme-perilla-w-br42202-1-html-122",
       "store": "planeta",
       "name": "WINK Čizme perilla W",
       "brand": "WINK",
@@ -1702,10 +1585,10 @@
       "url": "https://planetasport.rs/wink-cizme-perilla-w-br42202-1.html",
       "imageUrl": "/images/planeta/br42202-1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:36.012Z"
+      "scrapedAt": "2026-01-14T23:21:02.419Z"
     },
     {
-      "id": "planeta-planetasport-rs-slazenger-patike-noah-mid-m-slf253m103-10-html-132",
+      "id": "planeta-planetasport-rs-slazenger-patike-noah-mid-m-slf253m103-10-html-123",
       "store": "planeta",
       "name": "SLAZENGER Patike noah mid M",
       "brand": "SLAZENGER",
@@ -1715,10 +1598,10 @@
       "url": "https://planetasport.rs/slazenger-patike-noah-mid-m-slf253m103-10.html",
       "imageUrl": "/images/planeta/slf253m103-10.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:36.012Z"
+      "scrapedAt": "2026-01-14T23:21:02.419Z"
     },
     {
-      "id": "planeta-planetasport-rs-patike-stelt-w-stw328720-02-html-133",
+      "id": "planeta-planetasport-rs-patike-stelt-w-stw328720-02-html-124",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike stelt W",
       "brand": "SERGIO TACCHINI",
@@ -1728,10 +1611,10 @@
       "url": "https://planetasport.rs/patike-stelt-w-stw328720-02.html",
       "imageUrl": "/images/planeta/stw328720-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:36.012Z"
+      "scrapedAt": "2026-01-14T23:21:02.419Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-valzer-w-stw524717-03-html-134",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-valzer-w-stw524717-03-html-125",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike valzer W",
       "brand": "SERGIO TACCHINI",
@@ -1741,10 +1624,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-valzer-w-stw524717-03.html",
       "imageUrl": "/images/planeta/stw524717-03.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:36.012Z"
+      "scrapedAt": "2026-01-14T23:21:02.419Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cipele-fergus-m-wif243m306-62-html-135",
+      "id": "planeta-planetasport-rs-wintro-cipele-fergus-m-wif243m306-62-html-126",
       "store": "planeta",
       "name": "WINTRO Cipele fergus M",
       "brand": "WINTRO",
@@ -1754,10 +1637,10 @@
       "url": "https://planetasport.rs/wintro-cipele-fergus-m-wif243m306-62.html",
       "imageUrl": "/images/planeta/wif243m306-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:36.012Z"
+      "scrapedAt": "2026-01-14T23:21:02.419Z"
     },
     {
-      "id": "planeta-planetasport-rs-cizme-sound-w-sound-81-html-136",
+      "id": "planeta-planetasport-rs-cizme-sound-w-sound-81-html-127",
       "store": "planeta",
       "name": "OLANG Čizme sound W",
       "brand": "OLANG",
@@ -1767,10 +1650,10 @@
       "url": "https://planetasport.rs/cizme-sound-w-sound-81.html",
       "imageUrl": "/images/planeta/sound-81.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:36.012Z"
+      "scrapedAt": "2026-01-14T23:21:02.419Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-laggio-m-st253m032-20-html-137",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-laggio-m-st253m032-20-html-128",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike laggio M",
       "brand": "SERGIO TACCHINI",
@@ -1780,10 +1663,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-laggio-m-st253m032-20.html",
       "imageUrl": "/images/planeta/st253m032-20.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:36.012Z"
+      "scrapedAt": "2026-01-14T23:21:02.419Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-wintro-cipele-fidias-m-wif243m305-62-html-138",
+      "id": "planeta-planetasport-rs-wintro-wintro-cipele-fidias-m-wif243m305-62-html-129",
       "store": "planeta",
       "name": "WINTRO Cipele fidias M",
       "brand": "WINTRO",
@@ -1793,10 +1676,10 @@
       "url": "https://planetasport.rs/wintro-wintro-cipele-fidias-m-wif243m305-62.html",
       "imageUrl": "/images/planeta/wif243m305-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:36.012Z"
+      "scrapedAt": "2026-01-14T23:21:02.419Z"
     },
     {
-      "id": "planeta-planetasport-rs-rang-cipele-advik-m-xmf25300-02-html-139",
+      "id": "planeta-planetasport-rs-rang-cipele-advik-m-xmf25300-02-html-130",
       "store": "planeta",
       "name": "RANG Cipele advik  M",
       "brand": "RANG",
@@ -1806,10 +1689,10 @@
       "url": "https://planetasport.rs/rang-cipele-advik-m-xmf25300-02.html",
       "imageUrl": "/images/planeta/xmf25300-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:36.012Z"
+      "scrapedAt": "2026-01-14T23:21:02.419Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-cipele-navius-m-lx42189-1-html-140",
+      "id": "planeta-planetasport-rs-wink-cipele-navius-m-lx42189-1-html-131",
       "store": "planeta",
       "name": "WINK Cipele navius M",
       "brand": "WINK",
@@ -1819,10 +1702,10 @@
       "url": "https://planetasport.rs/wink-cipele-navius-m-lx42189-1.html",
       "imageUrl": "/images/planeta/lx42189-1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:36.012Z"
+      "scrapedAt": "2026-01-14T23:21:02.419Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cizme-milani-w-wif253f305-62-html-141",
+      "id": "planeta-planetasport-rs-wintro-cizme-milani-w-wif253f305-62-html-132",
       "store": "planeta",
       "name": "WINTRO Čizme milani W",
       "brand": "WINTRO",
@@ -1832,10 +1715,10 @@
       "url": "https://planetasport.rs/wintro-cizme-milani-w-wif253f305-62.html",
       "imageUrl": "/images/planeta/wif253f305-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:36.012Z"
+      "scrapedAt": "2026-01-14T23:21:02.420Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-ace-style-2-m-st253m890-01-html-142",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-ace-style-2-m-st253m890-01-html-133",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike ace style 2 M",
       "brand": "SERGIO TACCHINI",
@@ -1845,10 +1728,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-ace-style-2-m-st253m890-01.html",
       "imageUrl": "/images/planeta/st253m890-01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:36.012Z"
+      "scrapedAt": "2026-01-14T23:21:02.420Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cizme-riella-w-wif233f204-01-html-143",
+      "id": "planeta-planetasport-rs-wintro-cizme-riella-w-wif233f204-01-html-134",
       "store": "planeta",
       "name": "WINTRO Čizme riella W",
       "brand": "WINTRO",
@@ -1858,10 +1741,10 @@
       "url": "https://planetasport.rs/wintro-cizme-riella-w-wif233f204-01.html",
       "imageUrl": "/images/planeta/wif233f204-01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:36.012Z"
+      "scrapedAt": "2026-01-14T23:21:02.420Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-patike-abilogym-m-jf42145-3-html-144",
+      "id": "planeta-planetasport-rs-wink-patike-abilogym-m-jf42145-3-html-135",
       "store": "planeta",
       "name": "WINK Patike abilogym M",
       "brand": "WINK",
@@ -1871,23 +1754,10 @@
       "url": "https://planetasport.rs/wink-patike-abilogym-m-jf42145-3.html",
       "imageUrl": "/images/planeta/jf42145-3.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:36.012Z"
+      "scrapedAt": "2026-01-14T23:21:02.420Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cipele-dorel-w-wif243f304-76-html-145",
-      "store": "planeta",
-      "name": "WINTRO Cipele dorel W",
-      "brand": "WINTRO",
-      "originalPrice": 10000,
-      "salePrice": 4250,
-      "discountPercent": 50,
-      "url": "https://planetasport.rs/wintro-cipele-dorel-w-wif243f304-76.html",
-      "imageUrl": "/images/planeta/wif243f304-76.jpg",
-      "category": null,
-      "scrapedAt": "2026-01-14T12:36:52.523Z"
-    },
-    {
-      "id": "planeta-planetasport-rs-wintro-cipele-armon-m-wif243m302-90-html-146",
+      "id": "planeta-planetasport-rs-wintro-cipele-armon-m-wif243m302-90-html-136",
       "store": "planeta",
       "name": "WINTRO Cipele armon M",
       "brand": "WINTRO",
@@ -1897,10 +1767,10 @@
       "url": "https://planetasport.rs/wintro-cipele-armon-m-wif243m302-90.html",
       "imageUrl": "/images/planeta/wif243m302-90.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:52.523Z"
+      "scrapedAt": "2026-01-14T23:21:18.583Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-cizme-perilla-w-br42202-1-html-147",
+      "id": "planeta-planetasport-rs-wink-cizme-perilla-w-br42202-1-html-137",
       "store": "planeta",
       "name": "WINK Čizme perilla W",
       "brand": "WINK",
@@ -1910,10 +1780,10 @@
       "url": "https://planetasport.rs/wink-cizme-perilla-w-br42202-1.html",
       "imageUrl": "/images/planeta/br42202-1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:52.523Z"
+      "scrapedAt": "2026-01-14T23:21:18.583Z"
     },
     {
-      "id": "planeta-planetasport-rs-slazenger-patike-noah-mid-m-slf253m103-10-html-148",
+      "id": "planeta-planetasport-rs-slazenger-patike-noah-mid-m-slf253m103-10-html-138",
       "store": "planeta",
       "name": "SLAZENGER Patike noah mid M",
       "brand": "SLAZENGER",
@@ -1923,10 +1793,10 @@
       "url": "https://planetasport.rs/slazenger-patike-noah-mid-m-slf253m103-10.html",
       "imageUrl": "/images/planeta/slf253m103-10.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:52.523Z"
+      "scrapedAt": "2026-01-14T23:21:18.583Z"
     },
     {
-      "id": "planeta-planetasport-rs-patike-stelt-w-stw328720-02-html-149",
+      "id": "planeta-planetasport-rs-patike-stelt-w-stw328720-02-html-139",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike stelt W",
       "brand": "SERGIO TACCHINI",
@@ -1936,10 +1806,10 @@
       "url": "https://planetasport.rs/patike-stelt-w-stw328720-02.html",
       "imageUrl": "/images/planeta/stw328720-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:52.523Z"
+      "scrapedAt": "2026-01-14T23:21:18.583Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-valzer-w-stw524717-03-html-150",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-valzer-w-stw524717-03-html-140",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike valzer W",
       "brand": "SERGIO TACCHINI",
@@ -1949,10 +1819,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-valzer-w-stw524717-03.html",
       "imageUrl": "/images/planeta/stw524717-03.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:52.523Z"
+      "scrapedAt": "2026-01-14T23:21:18.583Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cipele-fergus-m-wif243m306-62-html-151",
+      "id": "planeta-planetasport-rs-wintro-cipele-fergus-m-wif243m306-62-html-141",
       "store": "planeta",
       "name": "WINTRO Cipele fergus M",
       "brand": "WINTRO",
@@ -1962,10 +1832,10 @@
       "url": "https://planetasport.rs/wintro-cipele-fergus-m-wif243m306-62.html",
       "imageUrl": "/images/planeta/wif243m306-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:52.523Z"
+      "scrapedAt": "2026-01-14T23:21:18.583Z"
     },
     {
-      "id": "planeta-planetasport-rs-cizme-sound-w-sound-81-html-152",
+      "id": "planeta-planetasport-rs-cizme-sound-w-sound-81-html-142",
       "store": "planeta",
       "name": "OLANG Čizme sound W",
       "brand": "OLANG",
@@ -1975,10 +1845,10 @@
       "url": "https://planetasport.rs/cizme-sound-w-sound-81.html",
       "imageUrl": "/images/planeta/sound-81.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:52.523Z"
+      "scrapedAt": "2026-01-14T23:21:18.583Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-laggio-m-st253m032-20-html-153",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-laggio-m-st253m032-20-html-143",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike laggio M",
       "brand": "SERGIO TACCHINI",
@@ -1988,10 +1858,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-laggio-m-st253m032-20.html",
       "imageUrl": "/images/planeta/st253m032-20.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:52.523Z"
+      "scrapedAt": "2026-01-14T23:21:18.583Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-wintro-cipele-fidias-m-wif243m305-62-html-154",
+      "id": "planeta-planetasport-rs-wintro-wintro-cipele-fidias-m-wif243m305-62-html-144",
       "store": "planeta",
       "name": "WINTRO Cipele fidias M",
       "brand": "WINTRO",
@@ -2001,10 +1871,10 @@
       "url": "https://planetasport.rs/wintro-wintro-cipele-fidias-m-wif243m305-62.html",
       "imageUrl": "/images/planeta/wif243m305-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:52.523Z"
+      "scrapedAt": "2026-01-14T23:21:18.583Z"
     },
     {
-      "id": "planeta-planetasport-rs-rang-cipele-advik-m-xmf25300-02-html-155",
+      "id": "planeta-planetasport-rs-rang-cipele-advik-m-xmf25300-02-html-145",
       "store": "planeta",
       "name": "RANG Cipele advik  M",
       "brand": "RANG",
@@ -2014,10 +1884,10 @@
       "url": "https://planetasport.rs/rang-cipele-advik-m-xmf25300-02.html",
       "imageUrl": "/images/planeta/xmf25300-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:52.523Z"
+      "scrapedAt": "2026-01-14T23:21:18.583Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-cipele-navius-m-lx42189-1-html-156",
+      "id": "planeta-planetasport-rs-wink-cipele-navius-m-lx42189-1-html-146",
       "store": "planeta",
       "name": "WINK Cipele navius M",
       "brand": "WINK",
@@ -2027,10 +1897,10 @@
       "url": "https://planetasport.rs/wink-cipele-navius-m-lx42189-1.html",
       "imageUrl": "/images/planeta/lx42189-1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:52.523Z"
+      "scrapedAt": "2026-01-14T23:21:18.583Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cizme-milani-w-wif253f305-62-html-157",
+      "id": "planeta-planetasport-rs-wintro-cizme-milani-w-wif253f305-62-html-147",
       "store": "planeta",
       "name": "WINTRO Čizme milani W",
       "brand": "WINTRO",
@@ -2040,10 +1910,10 @@
       "url": "https://planetasport.rs/wintro-cizme-milani-w-wif253f305-62.html",
       "imageUrl": "/images/planeta/wif253f305-62.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:52.523Z"
+      "scrapedAt": "2026-01-14T23:21:18.583Z"
     },
     {
-      "id": "planeta-planetasport-rs-sergio-tacchini-patike-ace-style-2-m-st253m890-01-html-158",
+      "id": "planeta-planetasport-rs-sergio-tacchini-patike-ace-style-2-m-st253m890-01-html-148",
       "store": "planeta",
       "name": "SERGIO TACCHINI Patike ace style 2 M",
       "brand": "SERGIO TACCHINI",
@@ -2053,10 +1923,10 @@
       "url": "https://planetasport.rs/sergio-tacchini-patike-ace-style-2-m-st253m890-01.html",
       "imageUrl": "/images/planeta/st253m890-01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:52.523Z"
+      "scrapedAt": "2026-01-14T23:21:18.583Z"
     },
     {
-      "id": "planeta-planetasport-rs-wintro-cizme-riella-w-wif233f204-01-html-159",
+      "id": "planeta-planetasport-rs-wintro-cizme-riella-w-wif233f204-01-html-149",
       "store": "planeta",
       "name": "WINTRO Čizme riella W",
       "brand": "WINTRO",
@@ -2066,10 +1936,10 @@
       "url": "https://planetasport.rs/wintro-cizme-riella-w-wif233f204-01.html",
       "imageUrl": "/images/planeta/wif233f204-01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:52.523Z"
+      "scrapedAt": "2026-01-14T23:21:18.583Z"
     },
     {
-      "id": "planeta-planetasport-rs-wink-patike-abilogym-m-jf42145-3-html-160",
+      "id": "planeta-planetasport-rs-wink-patike-abilogym-m-jf42145-3-html-150",
       "store": "planeta",
       "name": "WINK Patike abilogym M",
       "brand": "WINK",
@@ -2079,11 +1949,11 @@
       "url": "https://planetasport.rs/wink-patike-abilogym-m-jf42145-3.html",
       "imageUrl": "/images/planeta/jf42145-3.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:36:52.523Z"
+      "scrapedAt": "2026-01-14T23:21:18.583Z"
     }
   ],
-  "totalScraped": 470,
-  "filteredCount": 160,
-  "scrapedAt": "2026-01-14T12:36:52.644Z",
+  "totalScraped": 460,
+  "filteredCount": 150,
+  "scrapedAt": "2026-01-14T23:21:18.704Z",
   "errors": []
 }

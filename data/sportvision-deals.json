@@ -12,7 +12,7 @@
       "url": "https://www.sportvision.rs/dukserica/69939217-ellesse-crewneck",
       "imageUrl": "/images/sportvision/ela231f608-01_350_350px.jpg.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:38:38.190Z"
+      "scrapedAt": "2026-01-14T23:23:22.066Z"
     },
     {
       "id": "sportvision-www-sportvision-rs-patike-69858482-ellesse-lolita-2",
@@ -25,7 +25,7 @@
       "url": "https://www.sportvision.rs/patike/69858482-ellesse-lolita",
       "imageUrl": "/images/sportvision/elf213f115-08_350_350px.jpg.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:38:38.190Z"
+      "scrapedAt": "2026-01-14T23:23:22.066Z"
     },
     {
       "id": "sportvision-www-sportvision-rs-dukserica-70004439-lussari-soft-3",
@@ -38,10 +38,88 @@
       "url": "https://www.sportvision.rs/dukserica/70004439-lussari-soft",
       "imageUrl": "/images/sportvision/ssa243f620-52_350_350px.jpg.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:38:38.190Z"
+      "scrapedAt": "2026-01-14T23:23:22.066Z"
     },
     {
-      "id": "sportvision-www-sportvision-rs-donji-deo-trenerke-70015613-nike-psg-4",
+      "id": "sportvision-www-sportvision-rs-patike-69975560-skechers-tres-air-4",
+      "store": "sportvision",
+      "name": "Skechers Tres-Air women",
+      "brand": "Skechers",
+      "originalPrice": 10499,
+      "salePrice": 4999,
+      "discountPercent": 52,
+      "url": "https://www.sportvision.rs/patike/69975560-skechers-tres-air",
+      "imageUrl": "/images/sportvision/177426-ntor_350_350px.jpg.jpg",
+      "category": null,
+      "scrapedAt": "2026-01-14T23:23:22.073Z"
+    },
+    {
+      "id": "sportvision-www-sportvision-rs-donji-deo-trenerke-69946207-new-balance-essentials-5",
+      "store": "sportvision",
+      "name": "New Balance ESSENTIALS women",
+      "brand": "New Balance",
+      "originalPrice": 7499,
+      "salePrice": 2999,
+      "discountPercent": 60,
+      "url": "https://www.sportvision.rs/donji-deo-trenerke/69946207-new-balance-essentials",
+      "imageUrl": "/images/sportvision/wp31508-mbm_350_350px.jpg.jpg",
+      "category": null,
+      "scrapedAt": "2026-01-14T23:23:22.075Z"
+    },
+    {
+      "id": "sportvision-www-sportvision-rs-donji-deo-trenerke-69983221-new-balance-sport-essentials-6",
+      "store": "sportvision",
+      "name": "New Balance Sport Essentials women",
+      "brand": "New Balance",
+      "originalPrice": 6799,
+      "salePrice": 2999,
+      "discountPercent": 55,
+      "url": "https://www.sportvision.rs/donji-deo-trenerke/69983221-new-balance-sport-essentials",
+      "imageUrl": "/images/sportvision/wp41500-bk_350_350px.jpg.jpg",
+      "category": null,
+      "scrapedAt": "2026-01-14T23:23:22.077Z"
+    },
+    {
+      "id": "sportvision-www-sportvision-rs-helanke-69943322-puma-evostripe-7",
+      "store": "sportvision",
+      "name": "Puma EVOSTRIPE women",
+      "brand": "Puma",
+      "originalPrice": 5399,
+      "salePrice": 2499,
+      "discountPercent": 53,
+      "url": "https://www.sportvision.rs/helanke/69943322-puma-evostripe",
+      "imageUrl": "/images/sportvision/673082-51_350_350px.jpg.jpg",
+      "category": null,
+      "scrapedAt": "2026-01-14T23:23:22.080Z"
+    },
+    {
+      "id": "sportvision-www-sportvision-rs-helanke-69925661-puma-modern-sports-8",
+      "store": "sportvision",
+      "name": "Puma MODERN SPORTS women",
+      "brand": "Puma",
+      "originalPrice": 5399,
+      "salePrice": 2499,
+      "discountPercent": 53,
+      "url": "https://www.sportvision.rs/helanke/69925661-puma-modern-sports",
+      "imageUrl": "/images/sportvision/849829-75_350_350px.jpg.jpg",
+      "category": null,
+      "scrapedAt": "2026-01-14T23:23:22.083Z"
+    },
+    {
+      "id": "sportvision-www-sportvision-rs-pantalone-69980541-columbia-shafer-canyon-9",
+      "store": "sportvision",
+      "name": "Columbia Shafer Canyon™ women",
+      "brand": "Columbia",
+      "originalPrice": 14999,
+      "salePrice": 6999,
+      "discountPercent": 53,
+      "url": "https://www.sportvision.rs/pantalone/69980541-columbia-shafer-canyon",
+      "imageUrl": "/images/sportvision/1954011321_350_350px.jpg.jpg",
+      "category": null,
+      "scrapedAt": "2026-01-14T23:23:22.085Z"
+    },
+    {
+      "id": "sportvision-www-sportvision-rs-donji-deo-trenerke-70015613-nike-psg-10",
       "store": "sportvision",
       "name": "Nike PSG kids",
       "brand": "Nike",
@@ -51,10 +129,10 @@
       "url": "https://www.sportvision.rs/donji-deo-trenerke/70015613-nike-psg",
       "imageUrl": "/images/sportvision/95d288-g0t_350_350px.jpg.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:38:58.140Z"
+      "scrapedAt": "2026-01-14T23:23:42.955Z"
     },
     {
-      "id": "sportvision-www-sportvision-rs-patike-69974534-champion-cross-5",
+      "id": "sportvision-www-sportvision-rs-patike-69974534-champion-cross-11",
       "store": "sportvision",
       "name": "Champion CROSS kids",
       "brand": "Champion",
@@ -64,10 +142,10 @@
       "url": "https://www.sportvision.rs/patike/69974534-champion-cross",
       "imageUrl": "/images/sportvision/chf223b111-02_350_350px.jpg.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:38:58.140Z"
+      "scrapedAt": "2026-01-14T23:23:42.955Z"
     },
     {
-      "id": "sportvision-www-sportvision-rs-patike-69994339-adidas-x-crazifast-club-messi-6",
+      "id": "sportvision-www-sportvision-rs-patike-69994339-adidas-x-crazifast-club-messi-12",
       "store": "sportvision",
       "name": "adidas X Crazifast Club Messi kids",
       "brand": "adidas",
@@ -77,12 +155,12 @@
       "url": "https://www.sportvision.rs/patike/69994339-adidas-x-crazifast-club-messi",
       "imageUrl": "/images/sportvision/id0722_350_350px.jpg.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T12:38:58.140Z"
+      "scrapedAt": "2026-01-14T23:23:42.955Z"
     }
   ],
-  "totalScraped": 96,
-  "filteredCount": 6,
-  "scrapedAt": "2026-01-14T12:39:02.143Z",
+  "totalScraped": 192,
+  "filteredCount": 12,
+  "scrapedAt": "2026-01-14T23:23:47.271Z",
   "errors": [
     "men: Navigation timeout of 60000 ms exceeded"
   ]
