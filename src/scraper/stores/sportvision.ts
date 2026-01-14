@@ -227,6 +227,7 @@ async function clickShowMore(page: Page): Promise<boolean> {
 async function scrapeSportVision(): Promise<ScrapeResult> {
   const errors: string[] = [];
   const allDeals: RawDeal[] = [];
+  const seenUrls = new Set<string>();
   let totalScraped = 0;
 
   console.log("Starting SportVision scraper with stealth mode...");
@@ -292,6 +293,10 @@ async function scrapeSportVision(): Promise<ScrapeResult> {
         }
 
         for (const product of products) {
+          // Skip duplicates
+          if (seenUrls.has(product.url)) continue;
+          seenUrls.add(product.url);
+
           const originalPrice = parsePrice(product.originalPrice);
           const salePrice = parsePrice(product.salePrice);
 

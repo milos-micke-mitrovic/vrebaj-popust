@@ -68,7 +68,6 @@ const STORE_FILES: Record<Store, string> = {
   djaksport: "djaksport-deals.json",
   planeta: "planeta-deals.json",
   sportvision: "sportvision-deals.json",
-  fashionandfriends: "fashionandfriends-deals.json",
 };
 
 export const STORE_INFO: Record<
@@ -90,15 +89,11 @@ export const STORE_INFO: Record<
     logo: "/logos/sportvision.png",
     url: "https://www.sportvision.rs",
   },
-  fashionandfriends: {
-    name: "Fashion & Friends",
-    logo: "/logos/fashionandfriends.png",
-    url: "https://www.fashionandfriends.com",
-  },
 };
 
 export function getAllDeals(): Deal[] {
   const allDeals: Deal[] = [];
+  const seenUrls = new Set<string>();
 
   for (const [store, filename] of Object.entries(STORE_FILES)) {
     const filePath = path.join(DATA_DIR, filename);
@@ -107,13 +102,18 @@ export function getAllDeals(): Deal[] {
         const data = JSON.parse(
           fs.readFileSync(filePath, "utf-8")
         ) as ScrapeResult;
-        // Enrich deals with gender and category
-        const enrichedDeals: Deal[] = data.deals.map((deal: RawDeal) => ({
-          ...deal,
-          gender: extractGender(deal.name),
-          category: extractCategory(deal.name),
-        }));
-        allDeals.push(...enrichedDeals);
+        // Enrich deals with gender and category, filter duplicates by URL
+        for (const deal of data.deals) {
+          if (seenUrls.has(deal.url)) continue;
+          seenUrls.add(deal.url);
+
+          const enrichedDeal: Deal = {
+            ...deal,
+            gender: extractGender(deal.name),
+            category: extractCategory(deal.name),
+          };
+          allDeals.push(enrichedDeal);
+        }
       }
     } catch {
       console.error(`Error loading ${store} deals`);

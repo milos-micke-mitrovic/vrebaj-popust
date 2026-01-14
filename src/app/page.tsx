@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import { Suspense } from "react";
 import {
   getAllDeals,
   getUniqueBrands,
@@ -11,7 +12,7 @@ import { DealsGrid } from "@/components/deals-grid";
 export const metadata: Metadata = {
   title: "VrebajPopust | Najbolji popusti preko 50% u Srbiji",
   description:
-    "Pronađi najbolje popuste preko 50% na DjakSport, Planeta Sport, Fashion and Friends i drugim prodavnicama u Srbiji. Ažurirano svakodnevno.",
+    "Pronađi najbolje popuste preko 50% na DjakSport, Planeta Sport, Sport Vision i drugim prodavnicama u Srbiji. Ažurirano svakodnevno.",
   keywords: [
     "popusti",
     "akcije",
@@ -19,14 +20,14 @@ export const metadata: Metadata = {
     "srbija",
     "djak sport",
     "planeta sport",
-    "fashion and friends",
+    "sport vision",
     "online kupovina",
     "jeftino",
   ],
   openGraph: {
     title: "VrebajPopust | Najbolji popusti preko 50% u Srbiji",
     description:
-      "Pronađi najbolje popuste preko 50% na DjakSport, Planeta Sport i drugim prodavnicama.",
+      "Pronađi najbolje popuste preko 50% na DjakSport, Planeta Sport, Sport Vision i drugim prodavnicama.",
     type: "website",
     locale: "sr_RS",
   },
@@ -141,13 +142,15 @@ export default function Home() {
 
         {/* Main content */}
         <main className="mx-auto max-w-7xl px-4 py-6">
-          <DealsGrid
-            deals={deals}
-            brands={brands}
-            stores={stores}
-            categories={categories}
-            priceRange={priceRange}
-          />
+          <Suspense fallback={<div className="py-12 text-center text-gray-500">Učitavanje...</div>}>
+            <DealsGrid
+              deals={deals}
+              brands={brands}
+              stores={stores}
+              categories={categories}
+              priceRange={priceRange}
+            />
+          </Suspense>
         </main>
 
         {/* Footer */}
@@ -170,15 +173,21 @@ export default function Home() {
                 </div>
               </div>
               <div className="flex items-center gap-4">
+                <span className="text-xs text-gray-400 hidden sm:block">Pretražujemo:</span>
                 <img
                   src="/logos/djaksport.png"
                   alt="Djak Sport"
-                  className="h-5 opacity-70"
+                  className="h-5 opacity-70 hover:opacity-100 transition-opacity"
                 />
                 <img
                   src="/logos/planeta.png"
                   alt="Planeta Sport"
-                  className="h-5 opacity-70"
+                  className="h-5 opacity-70 hover:opacity-100 transition-opacity"
+                />
+                <img
+                  src="/logos/sportvision.png"
+                  alt="Sport Vision"
+                  className="h-5 opacity-70 hover:opacity-100 transition-opacity"
                 />
               </div>
             </div>

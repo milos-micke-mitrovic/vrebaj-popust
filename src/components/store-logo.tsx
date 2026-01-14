@@ -7,7 +7,6 @@ const STORE_STYLES: Record<Store, { name: string; color: string }> = {
   djaksport: { name: "DJAK", color: "bg-red-600" },
   planeta: { name: "PLANETA", color: "bg-blue-600" },
   sportvision: { name: "SV", color: "bg-orange-600" },
-  fashionandfriends: { name: "F&F", color: "bg-black" },
 };
 
 interface StoreLogoProps {

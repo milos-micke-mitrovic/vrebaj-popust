@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback, useRef } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { Deal, Store, Gender, Category } from "@/types/deal";
 import { DealCard } from "./deal-card";
 import { Badge } from "@/components/ui/badge";
@@ -17,13 +18,12 @@ interface DealsGridProps {
 
 type SortOption = "discount" | "price-low" | "price-high" | "name";
 
-const ITEMS_PER_PAGE = 24;
+const ITEMS_PER_PAGE = 30;
 
 const STORE_NAMES: Record<Store, string> = {
   djaksport: "Djak Sport",
   planeta: "Planeta Sport",
   sportvision: "Sport Vision",
-  fashionandfriends: "Fashion & Friends",
 };
 
 const GENDER_NAMES: Record<Gender, string> = {
@@ -54,17 +54,70 @@ export function DealsGrid({
   categories,
   priceRange,
 }: DealsGridProps) {
-  const [search, setSearch] = useState("");
-  const [selectedStores, setSelectedStores] = useState<Store[]>([]);
-  const [selectedBrands, setSelectedBrands] = useState<string[]>([]);
-  const [selectedGenders, setSelectedGenders] = useState<Gender[]>([]);
-  const [selectedCategories, setSelectedCategories] = useState<Category[]>([]);
-  const [minDiscount, setMinDiscount] = useState(50);
-  const [maxPrice, setMaxPrice] = useState<number | null>(null);
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // Initialize state from URL params
+  const [search, setSearch] = useState(searchParams.get("q") || "");
+  const [selectedStores, setSelectedStores] = useState<Store[]>(
+    (searchParams.get("stores")?.split(",").filter(Boolean) as Store[]) || []
+  );
+  const [selectedBrands, setSelectedBrands] = useState<string[]>(
+    searchParams.get("brands")?.split(",").filter(Boolean) || []
+  );
+  const [selectedGenders, setSelectedGenders] = useState<Gender[]>(
+    (searchParams.get("genders")?.split(",").filter(Boolean) as Gender[]) || []
+  );
+  const [selectedCategories, setSelectedCategories] = useState<Category[]>(
+    (searchParams.get("categories")?.split(",").filter(Boolean) as Category[]) || []
+  );
+  const [minDiscount, setMinDiscount] = useState(
+    Number(searchParams.get("minDiscount")) || 50
+  );
+  const [maxPrice, setMaxPrice] = useState<number | null>(
+    searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : null
+  );
   const [brandSearch, setBrandSearch] = useState("");
-  const [sortBy, setSortBy] = useState<SortOption>("discount");
-  const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState<SortOption>(
+    (searchParams.get("sort") as SortOption) || "discount"
+  );
+  const [currentPage, setCurrentPage] = useState(
+    Number(searchParams.get("page")) || 1
+  );
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+
+  // Debounced URL update to prevent re-renders while typing/dragging
+  const urlUpdateTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    // Debounce URL updates by 300ms
+    if (urlUpdateTimeout.current) {
+      clearTimeout(urlUpdateTimeout.current);
+    }
+
+    urlUpdateTimeout.current = setTimeout(() => {
+      const params = new URLSearchParams();
+      if (search) params.set("q", search);
+      if (selectedStores.length) params.set("stores", selectedStores.join(","));
+      if (selectedBrands.length) params.set("brands", selectedBrands.join(","));
+      if (selectedGenders.length) params.set("genders", selectedGenders.join(","));
+      if (selectedCategories.length) params.set("categories", selectedCategories.join(","));
+      if (minDiscount > 50) params.set("minDiscount", String(minDiscount));
+      if (maxPrice !== null) params.set("maxPrice", String(maxPrice));
+      if (sortBy !== "discount") params.set("sort", sortBy);
+      if (currentPage > 1) params.set("page", String(currentPage));
+
+      const newUrl = params.toString() ? `${pathname}?${params}` : pathname;
+      router.replace(newUrl, { scroll: false });
+    }, 300);
+
+    return () => {
+      if (urlUpdateTimeout.current) {
+        clearTimeout(urlUpdateTimeout.current);
+      }
+    };
+  }, [search, selectedStores, selectedBrands, selectedGenders, selectedCategories, minDiscount, maxPrice, sortBy, currentPage, pathname, router]);
 
   const filteredBrands = useMemo(() => {
     if (!brandSearch) return brands.slice(0, 20);
@@ -205,8 +258,8 @@ export function DealsGrid({
     (minDiscount > 50 ? 1 : 0) +
     (maxPrice !== null ? 1 : 0);
 
-  // Filter content - reused in sidebar and drawer
-  const FilterContent = () => (
+  // Filter content JSX - rendered directly to avoid re-creating on each render
+  const filterContentJSX = (
     <div className="space-y-5">
       <div>
         <Input
@@ -324,7 +377,7 @@ export function DealsGrid({
         />
         <div className="flex justify-between text-xs text-gray-400">
           <span>{priceRange.min.toLocaleString()}</span>
-          <span>Bez limita</span>
+          <span>{priceRange.max.toLocaleString()}</span>
         </div>
       </div>
 
@@ -430,7 +483,7 @@ export function DealsGrid({
               </Button>
             </div>
             <div className="p-4 pb-8">
-              <FilterContent />
+              {filterContentJSX}
             </div>
           </div>
         </div>
@@ -444,7 +497,7 @@ export function DealsGrid({
             className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-lg bg-white p-4 shadow-sm"
             onWheel={(e) => e.stopPropagation()}
           >
-            <FilterContent />
+            {filterContentJSX}
           </div>
         </aside>
 
@@ -552,26 +605,73 @@ export function DealsGrid({
 
           {/* Pagination */}
           {totalPages > 1 && (
-            <div className="mt-8 flex items-center justify-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage((p) => p - 1)}
-              >
-                ←
-              </Button>
-              <span className="text-sm text-gray-600">
-                {currentPage} / {totalPages}
-              </span>
-              <Button
-                variant="outline"
-                size="sm"
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage((p) => p + 1)}
-              >
-                →
-              </Button>
+            <div className="mt-8 flex flex-col items-center gap-4">
+              <div className="flex items-center gap-1">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(1)}
+                  className="hidden sm:inline-flex"
+                >
+                  ««
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage((p) => p - 1)}
+                >
+                  ‹ Nazad
+                </Button>
+
+                <div className="flex items-center gap-1 mx-2">
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    let pageNum: number;
+                    if (totalPages <= 5) {
+                      pageNum = i + 1;
+                    } else if (currentPage <= 3) {
+                      pageNum = i + 1;
+                    } else if (currentPage >= totalPages - 2) {
+                      pageNum = totalPages - 4 + i;
+                    } else {
+                      pageNum = currentPage - 2 + i;
+                    }
+                    return (
+                      <Button
+                        key={pageNum}
+                        variant={currentPage === pageNum ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setCurrentPage(pageNum)}
+                        className="w-9 h-9"
+                      >
+                        {pageNum}
+                      </Button>
+                    );
+                  })}
+                </div>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage((p) => p + 1)}
+                >
+                  Dalje ›
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={currentPage === totalPages}
+                  onClick={() => setCurrentPage(totalPages)}
+                  className="hidden sm:inline-flex"
+                >
+                  »»
+                </Button>
+              </div>
+              <p className="text-sm text-gray-500">
+                Stranica {currentPage} od {totalPages} ({filteredDeals.length} proizvoda)
+              </p>
             </div>
           )}
         </div>

@@ -6,6 +6,7 @@ import { formatPrice } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { StoreLogo } from "@/components/store-logo";
+import { BackButton } from "@/components/back-button";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -214,9 +215,9 @@ export default async function DealPage({ params }: Props) {
           </div>
         </header>
 
-        {/* Breadcrumb */}
+        {/* Breadcrumb with Back Button */}
         <nav
-          className="mx-auto max-w-7xl px-4 py-4"
+          className="mx-auto max-w-7xl px-4 py-4 flex items-center justify-between"
           aria-label="Breadcrumb"
         >
           <ol className="flex items-center text-sm text-gray-500">
@@ -227,7 +228,9 @@ export default async function DealPage({ params }: Props) {
             </li>
             <li className="mx-2">/</li>
             <li>
-              <span className="text-gray-400">{categoryText}</span>
+              <Link href={`/?categories=${deal.category}`} className="hover:text-red-500">
+                {categoryText}
+              </Link>
             </li>
             <li className="mx-2">/</li>
             <li>
@@ -236,6 +239,7 @@ export default async function DealPage({ params }: Props) {
               </span>
             </li>
           </ol>
+          <BackButton />
         </nav>
 
         {/* Product Details */}
