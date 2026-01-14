@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 import { getAllDeals, getUniqueStores, STORE_INFO } from "@/lib/deals";
 
 export const metadata: Metadata = {
@@ -218,26 +219,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Footer */}
-        <footer className="border-t bg-white py-8">
-          <div className="mx-auto max-w-7xl px-4">
-            <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
-              <div className="flex items-center gap-3">
-                <img
-                  src="/logos/logo.png"
-                  alt="VrebajPopust"
-                  className="h-8 w-8"
-                />
-                <span className="text-lg font-semibold text-gray-900">
-                  Vrebaj<span className="text-red-500">Popust</span>
-                </span>
-              </div>
-              <p className="text-sm text-gray-500">
-                Cene se ažuriraju automatski. Nismo odgovorni za tačnost cena.
-              </p>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </>
   );

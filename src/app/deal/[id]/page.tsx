@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { StoreLogo } from "@/components/store-logo";
 import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 import { DealCard } from "@/components/deal-card";
 
 // Calculate price valid date at build time (7 days from build)
@@ -183,22 +184,7 @@ export default async function DealPage({ params }: Props) {
           )}
         </main>
 
-        {/* Footer */}
-        <footer className="border-t bg-white py-8 mt-12">
-          <div className="mx-auto max-w-7xl px-4">
-            <div className="flex flex-col items-center gap-4 sm:flex-row sm:justify-between">
-              <div className="flex items-center gap-3">
-                <img src="/logos/logo.png" alt="VrebajPopust" className="h-8 w-8" />
-                <span className="text-lg font-semibold text-gray-900">
-                  Vrebaj<span className="text-red-500">Popust</span>
-                </span>
-              </div>
-              <p className="text-sm text-gray-500">
-                Agregator popusta preko 50% u Srbiji
-              </p>
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </div>
     );
   }
@@ -513,44 +499,7 @@ export default async function DealPage({ params }: Props) {
           </section>
         )}
 
-        {/* Footer */}
-        <footer className="border-t bg-white py-8">
-          <div className="mx-auto max-w-7xl px-4">
-            <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
-              <div className="flex items-center gap-3">
-                <img
-                  src="/logos/logo.png"
-                  alt="VrebajPopust"
-                  className="h-8 w-8"
-                />
-                <div>
-                  <span className="text-lg font-semibold text-gray-900">
-                    Vrebaj<span className="text-red-500">Popust</span>
-                  </span>
-                  <p className="text-xs text-gray-500">
-                    Agregator popusta preko 50%
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-6 text-sm">
-                <Link href="/ponude" className="text-gray-600 hover:text-red-500">
-                  Sve ponude
-                </Link>
-                <Link href={`/ponude?stores=${deal.store}`} className="text-gray-600 hover:text-red-500">
-                  {storeInfo.name} ponude
-                </Link>
-                {deal.brand && (
-                  <Link href={`/ponude?brands=${deal.brand}`} className="text-gray-600 hover:text-red-500">
-                    {deal.brand} ponude
-                  </Link>
-                )}
-              </div>
-            </div>
-            <p className="mt-6 text-xs text-gray-400">
-              Cene se ažuriraju automatski. VrebajPopust nije odgovoran za tačnost cena.
-            </p>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </>
   );

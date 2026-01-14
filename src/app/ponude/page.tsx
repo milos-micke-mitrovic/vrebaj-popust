@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import { Suspense } from "react";
-import Link from "next/link";
 import {
   getAllDeals,
   getUniqueBrands,
@@ -10,6 +9,7 @@ import {
 } from "@/lib/deals";
 import { DealsGrid } from "@/components/deals-grid";
 import { Header } from "@/components/header";
+import { Footer } from "@/components/footer";
 
 export const metadata: Metadata = {
   title: "Sve ponude | VrebajPopust - Popusti preko 50%",
@@ -120,67 +120,7 @@ export default function PonudePage() {
           </Suspense>
         </main>
 
-        {/* Footer */}
-        <footer className="border-t bg-white py-6">
-          <div className="mx-auto max-w-7xl px-4">
-            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-              <div className="flex items-center gap-3">
-                <img
-                  src="/logos/logo.png"
-                  alt="VrebajPopust"
-                  className="h-8 w-8"
-                />
-                <div>
-                  <span className="text-lg font-semibold text-gray-900">
-                    Vrebaj<span className="text-red-500">Popust</span>
-                  </span>
-                  <p className="text-xs text-gray-500">
-                    Agregator popusta preko 50%
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-4">
-                <span className="hidden text-xs text-gray-400 sm:block">
-                  Pretražujemo:
-                </span>
-                <img
-                  src="/logos/djaksport.png"
-                  alt="Djak Sport"
-                  className="h-5 opacity-70 transition-opacity hover:opacity-100"
-                />
-                <img
-                  src="/logos/planeta.png"
-                  alt="Planeta Sport"
-                  className="h-5 opacity-70 transition-opacity hover:opacity-100"
-                />
-                <img
-                  src="/logos/sportvision.png"
-                  alt="Sport Vision"
-                  className="h-5 opacity-70 transition-opacity hover:opacity-100"
-                />
-                <img
-                  src="/logos/nsport.jpg"
-                  alt="N Sport"
-                  className="h-5 opacity-70 transition-opacity hover:opacity-100"
-                />
-                <img
-                  src="/logos/buzz.png"
-                  alt="Buzz Sneakers"
-                  className="h-5 opacity-70 transition-opacity hover:opacity-100"
-                />
-                <img
-                  src="/logos/officeshoes.png"
-                  alt="Office Shoes"
-                  className="h-5 opacity-70 transition-opacity hover:opacity-100"
-                />
-              </div>
-            </div>
-            <p className="mt-4 text-xs text-gray-400">
-              Cene se ažuriraju automatski. VrebajPopust nije odgovoran za tačnost
-              cena.
-            </p>
-          </div>
-        </footer>
+        <Footer />
       </div>
     </>
   );

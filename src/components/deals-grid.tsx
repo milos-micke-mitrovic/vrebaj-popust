@@ -4,6 +4,7 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { Deal, Store, Gender, Category } from "@/types/deal";
 import { DealCard } from "./deal-card";
+import { ScrollFade } from "./scroll-fade";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -55,7 +56,7 @@ export function DealsGrid({
   brands,
   stores,
   categories,
-  priceRange,
+  priceRange: _priceRange,
 }: DealsGridProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -77,6 +78,9 @@ export function DealsGrid({
   );
   const [minDiscount, setMinDiscount] = useState(
     Number(searchParams.get("minDiscount")) || 50
+  );
+  const [minPrice, setMinPrice] = useState<number | null>(
+    searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : null
   );
   const [maxPrice, setMaxPrice] = useState<number | null>(
     searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : null
@@ -105,6 +109,7 @@ export function DealsGrid({
     if (selectedGenders.length) currentParams.set("genders", selectedGenders.join(","));
     if (selectedCategories.length) currentParams.set("categories", selectedCategories.join(","));
     if (minDiscount > 50) currentParams.set("minDiscount", String(minDiscount));
+    if (minPrice !== null) currentParams.set("minPrice", String(minPrice));
     if (maxPrice !== null) currentParams.set("maxPrice", String(maxPrice));
     if (sortBy !== "discount") currentParams.set("sort", sortBy);
     if (currentPage > 1) currentParams.set("page", String(currentPage));
@@ -119,6 +124,7 @@ export function DealsGrid({
       setSelectedGenders((searchParams.get("genders")?.split(",").filter(Boolean) as Gender[]) || []);
       setSelectedCategories((searchParams.get("categories")?.split(",").filter(Boolean) as Category[]) || []);
       setMinDiscount(Number(searchParams.get("minDiscount")) || 50);
+      setMinPrice(searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : null);
       setMaxPrice(searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : null);
       setSortBy((searchParams.get("sort") as SortOption) || "discount");
       setCurrentPage(Number(searchParams.get("page")) || 1);
@@ -145,6 +151,7 @@ export function DealsGrid({
       if (selectedGenders.length) params.set("genders", selectedGenders.join(","));
       if (selectedCategories.length) params.set("categories", selectedCategories.join(","));
       if (minDiscount > 50) params.set("minDiscount", String(minDiscount));
+      if (minPrice !== null) params.set("minPrice", String(minPrice));
       if (maxPrice !== null) params.set("maxPrice", String(maxPrice));
       if (sortBy !== "discount") params.set("sort", sortBy);
       if (currentPage > 1) params.set("page", String(currentPage));
@@ -158,7 +165,7 @@ export function DealsGrid({
         clearTimeout(urlUpdateTimeout.current);
       }
     };
-  }, [search, selectedStores, selectedBrands, selectedGenders, selectedCategories, minDiscount, maxPrice, sortBy, currentPage, pathname, router]);
+  }, [search, selectedStores, selectedBrands, selectedGenders, selectedCategories, minDiscount, minPrice, maxPrice, sortBy, currentPage, pathname, router]);
 
   const filteredBrands = useMemo(() => {
     if (!brandSearch) return brands.slice(0, 20);
@@ -201,6 +208,10 @@ export function DealsGrid({
 
     result = result.filter((deal) => deal.discountPercent >= minDiscount);
 
+    if (minPrice !== null) {
+      result = result.filter((deal) => deal.salePrice >= minPrice);
+    }
+
     if (maxPrice !== null) {
       result = result.filter((deal) => deal.salePrice <= maxPrice);
     }
@@ -229,6 +240,7 @@ export function DealsGrid({
     selectedGenders,
     selectedCategories,
     minDiscount,
+    minPrice,
     maxPrice,
     sortBy,
   ]);
@@ -245,6 +257,7 @@ export function DealsGrid({
     setSelectedGenders([]);
     setSelectedCategories([]);
     setMinDiscount(50);
+    setMinPrice(null);
     setMaxPrice(null);
     setSearch("");
     setBrandSearch("");
@@ -290,6 +303,7 @@ export function DealsGrid({
     selectedCategories.length > 0 ||
     selectedBrands.length > 0 ||
     minDiscount > 50 ||
+    minPrice !== null ||
     maxPrice !== null;
 
   const activeFilterCount =
@@ -299,11 +313,38 @@ export function DealsGrid({
     selectedCategories.length +
     selectedBrands.length +
     (minDiscount > 50 ? 1 : 0) +
+    (minPrice !== null ? 1 : 0) +
     (maxPrice !== null ? 1 : 0);
+
+  // Discount level options
+  const discountLevels = [
+    { value: 50, label: "50%+" },
+    { value: 60, label: "60%+" },
+    { value: 70, label: "70%+" },
+    { value: 80, label: "80%+" },
+  ];
+
+  // Price range options - "from"
+  const priceFromOptions = [
+    { value: null, label: "0" },
+    { value: 2000, label: "2.000" },
+    { value: 5000, label: "5.000" },
+    { value: 10000, label: "10.000" },
+  ];
+
+  // Price range options - "to"
+  const priceToOptions = [
+    { value: 3000, label: "3.000" },
+    { value: 5000, label: "5.000" },
+    { value: 10000, label: "10.000" },
+    { value: 15000, label: "15.000" },
+    { value: null, label: "Max" },
+  ];
 
   // Filter content JSX - rendered directly to avoid re-creating on each render
   const filterContentJSX = (
-    <div className="space-y-5">
+    <div className="space-y-6">
+      {/* Search */}
       <div>
         <Input
           type="search"
@@ -313,6 +354,7 @@ export function DealsGrid({
             setSearch(e.target.value);
             setCurrentPage(1);
           }}
+          className="bg-gray-50 border-gray-200 focus:bg-white"
         />
       </div>
 
@@ -321,149 +363,225 @@ export function DealsGrid({
           variant="outline"
           size="sm"
           onClick={resetFilters}
-          className="w-full"
+          className="w-full border-red-200 text-red-600 hover:bg-red-50"
         >
-          Resetuj filtere
+          Resetuj filtere ✕
         </Button>
       )}
 
+      {/* Discount Level */}
       <div>
-        <h3 className="mb-2 text-sm font-semibold text-gray-700">Pol</h3>
-        <div className="space-y-1.5">
-          {(["men", "women", "kids", "unisex"] as Gender[]).map((gender) => (
-            <label
-              key={gender}
-              className="flex cursor-pointer items-center gap-2 text-sm hover:text-red-600"
+        <h3 className="mb-3 text-sm font-semibold text-gray-900">Popust</h3>
+        <div className="flex flex-wrap gap-2">
+          {discountLevels.map((level) => (
+            <button
+              key={level.value}
+              onClick={() => {
+                setMinDiscount(minDiscount === level.value ? 50 : level.value);
+                setCurrentPage(1);
+              }}
+              className={`cursor-pointer px-3 py-1.5 text-sm rounded-full transition-colors ${
+                minDiscount === level.value
+                  ? "bg-red-500 text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
             >
-              <input
-                type="checkbox"
-                checked={selectedGenders.includes(gender)}
-                onChange={() => toggleGender(gender)}
-                className="h-4 w-4 rounded accent-red-500"
-              />
-              <span>{GENDER_NAMES[gender]}</span>
-            </label>
+              {level.label}
+            </button>
           ))}
         </div>
       </div>
 
+      {/* Price Range */}
       <div>
-        <h3 className="mb-2 text-sm font-semibold text-gray-700">Prodavnica</h3>
-        <div className="space-y-1.5">
+        <h3 className="mb-3 text-sm font-semibold text-gray-900">Cena (RSD)</h3>
+        <div className="space-y-2">
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-gray-500 w-6">Od</span>
+            <div className="flex flex-wrap gap-1.5">
+              {priceFromOptions.map((option) => (
+                <button
+                  key={`from-${option.label}`}
+                  onClick={() => {
+                    setMinPrice(option.value);
+                    setCurrentPage(1);
+                  }}
+                  className={`cursor-pointer px-2.5 py-1 text-xs rounded-full transition-colors ${
+                    minPrice === option.value
+                      ? "bg-red-500 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-gray-500 w-6">Do</span>
+            <div className="flex flex-wrap gap-1.5">
+              {priceToOptions.map((option) => (
+                <button
+                  key={`to-${option.label}`}
+                  onClick={() => {
+                    setMaxPrice(option.value);
+                    setCurrentPage(1);
+                  }}
+                  className={`cursor-pointer px-2.5 py-1 text-xs rounded-full transition-colors ${
+                    maxPrice === option.value
+                      ? "bg-red-500 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                  }`}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Gender */}
+      <div>
+        <h3 className="mb-3 text-sm font-semibold text-gray-900">Pol</h3>
+        <div className="flex flex-wrap gap-2">
+          {(["men", "women", "kids", "unisex"] as Gender[]).map((gender) => (
+            <button
+              key={gender}
+              onClick={() => toggleGender(gender)}
+              className={`cursor-pointer px-3 py-1.5 text-sm rounded-full transition-colors ${
+                selectedGenders.includes(gender)
+                  ? "bg-red-500 text-white"
+                  : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+              }`}
+            >
+              {GENDER_NAMES[gender]}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Store */}
+      <div>
+        <h3 className="mb-3 text-sm font-semibold text-gray-900">Prodavnica</h3>
+        <div className="space-y-2">
           {stores.map((store) => (
             <label
               key={store}
-              className="flex cursor-pointer items-center gap-2 text-sm hover:text-red-600"
+              className={`flex cursor-pointer items-center gap-3 p-2 rounded-lg transition-colors ${
+                selectedStores.includes(store)
+                  ? "bg-red-50 border border-red-200"
+                  : "hover:bg-gray-50"
+              }`}
             >
               <input
                 type="checkbox"
                 checked={selectedStores.includes(store)}
                 onChange={() => toggleStore(store)}
-                className="h-4 w-4 rounded accent-red-500"
+                className="sr-only"
               />
-              <span>{STORE_NAMES[store]}</span>
+              <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                selectedStores.includes(store)
+                  ? "bg-red-500 border-red-500"
+                  : "border-gray-300"
+              }`}>
+                {selectedStores.includes(store) && (
+                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                  </svg>
+                )}
+              </div>
+              <span className="text-sm text-gray-700">{STORE_NAMES[store]}</span>
             </label>
           ))}
         </div>
       </div>
 
+      {/* Category */}
       <div>
-        <h3 className="mb-1 text-sm font-semibold text-gray-700">Kategorija</h3>
-        <p className="mb-2 text-xs text-gray-400">* Filteri nisu precizni</p>
-        <div className="space-y-1.5 max-h-44 overflow-y-auto pr-2">
-          {categories.map((category) => (
-            <label
-              key={category}
-              className="flex cursor-pointer items-center gap-2 text-sm hover:text-red-600"
-            >
-              <input
-                type="checkbox"
-                checked={selectedCategories.includes(category)}
-                onChange={() => toggleCategory(category)}
-                className="h-4 w-4 rounded accent-red-500"
-              />
-              <span>{CATEGORY_NAMES[category]}</span>
-            </label>
-          ))}
-        </div>
+        <h3 className="mb-1 text-sm font-semibold text-gray-900">Kategorija</h3>
+        <p className="mb-3 text-xs text-gray-400">* Filteri nisu precizni</p>
+        <ScrollFade maxHeight="200px">
+          <div className="space-y-1 pr-1">
+            {categories.map((category) => (
+              <label
+                key={category}
+                className={`flex cursor-pointer items-center gap-3 p-2 rounded-lg transition-colors ${
+                  selectedCategories.includes(category)
+                    ? "bg-red-50 border border-red-200"
+                    : "hover:bg-gray-50"
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedCategories.includes(category)}
+                  onChange={() => toggleCategory(category)}
+                  className="sr-only"
+                />
+                <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+                  selectedCategories.includes(category)
+                    ? "bg-red-500 border-red-500"
+                    : "border-gray-300"
+                }`}>
+                  {selectedCategories.includes(category) && (
+                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  )}
+                </div>
+                <span className="text-sm text-gray-700">{CATEGORY_NAMES[category]}</span>
+              </label>
+            ))}
+          </div>
+        </ScrollFade>
       </div>
 
+      {/* Brand */}
       <div>
-        <h3 className="mb-2 text-sm font-semibold text-gray-700">
-          Min. popust: {minDiscount}%
-        </h3>
-        <input
-          type="range"
-          min={50}
-          max={90}
-          step={5}
-          value={minDiscount}
-          onChange={(e) => {
-            setMinDiscount(Number(e.target.value));
-            setCurrentPage(1);
-          }}
-          className="w-full accent-red-500 cursor-pointer"
-        />
-        <div className="flex justify-between text-xs text-gray-400">
-          <span>50%</span>
-          <span>90%</span>
-        </div>
-      </div>
-
-      <div>
-        <h3 className="mb-2 text-sm font-semibold text-gray-700">
-          Max cena:{" "}
-          {maxPrice === null
-            ? "Bez limita"
-            : `${maxPrice.toLocaleString()} RSD`}
-        </h3>
-        <input
-          type="range"
-          min={priceRange.min}
-          max={priceRange.max}
-          step={1000}
-          value={maxPrice ?? priceRange.max}
-          onChange={(e) => {
-            const val = Number(e.target.value);
-            setMaxPrice(val >= priceRange.max ? null : val);
-            setCurrentPage(1);
-          }}
-          className="w-full accent-red-500 cursor-pointer"
-        />
-        <div className="flex justify-between text-xs text-gray-400">
-          <span>{priceRange.min.toLocaleString()}</span>
-          <span>{priceRange.max.toLocaleString()}</span>
-        </div>
-      </div>
-
-      <div>
-        <h3 className="mb-2 text-sm font-semibold text-gray-700">Brend</h3>
+        <h3 className="mb-3 text-sm font-semibold text-gray-900">Brend</h3>
         <Input
           type="search"
           placeholder="Pretraži brendove..."
           value={brandSearch}
           onChange={(e) => setBrandSearch(e.target.value)}
-          className="mb-2 h-8 text-sm"
+          className="mb-3 h-9 text-sm bg-gray-50 border-gray-200 focus:bg-white"
         />
-        <div className="space-y-1.5 max-h-40 overflow-y-auto pr-2">
-          {filteredBrands.map((brand) => (
-            <label
-              key={brand}
-              className="flex cursor-pointer items-center gap-2 text-sm hover:text-red-600"
-            >
-              <input
-                type="checkbox"
-                checked={selectedBrands.includes(brand)}
-                onChange={() => toggleBrand(brand)}
-                className="h-4 w-4 rounded accent-red-500"
-              />
-              <span className="truncate">{brand}</span>
-            </label>
-          ))}
-          {filteredBrands.length === 0 && (
-            <p className="text-xs text-gray-400">Nema rezultata</p>
-          )}
-        </div>
+        <ScrollFade maxHeight="200px">
+          <div className="space-y-1 pr-1">
+            {filteredBrands.map((brand) => (
+              <label
+                key={brand}
+                className={`flex cursor-pointer items-center gap-3 p-2 rounded-lg transition-colors ${
+                  selectedBrands.includes(brand)
+                    ? "bg-red-50 border border-red-200"
+                    : "hover:bg-gray-50"
+                }`}
+              >
+                <input
+                  type="checkbox"
+                  checked={selectedBrands.includes(brand)}
+                  onChange={() => toggleBrand(brand)}
+                  className="sr-only"
+                />
+                <div className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 ${
+                  selectedBrands.includes(brand)
+                    ? "bg-red-500 border-red-500"
+                    : "border-gray-300"
+                }`}>
+                  {selectedBrands.includes(brand) && (
+                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                    </svg>
+                  )}
+                </div>
+                <span className="text-sm text-gray-700 truncate">{brand}</span>
+              </label>
+            ))}
+            {filteredBrands.length === 0 && (
+              <p className="text-sm text-gray-400 p-2">Nema rezultata</p>
+            )}
+          </div>
+        </ScrollFade>
       </div>
     </div>
   );
@@ -498,8 +616,8 @@ export function DealsGrid({
             className="absolute inset-0 bg-black/50 animate-[fadeIn_0.2s_ease-out]"
             onClick={() => setShowMobileFilters(false)}
           />
-          <div className="absolute top-0 left-0 bottom-0 w-72 max-w-[80vw] overflow-y-auto bg-white shadow-xl rounded-r-2xl animate-[slideInLeft_0.25s_ease-out]">
-            <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white p-4">
+          <div className="absolute top-0 left-0 bottom-0 w-72 max-w-[80vw] bg-white shadow-xl rounded-r-2xl animate-[slideInLeft_0.25s_ease-out] flex flex-col overflow-hidden">
+            <div className="flex items-center justify-between border-b bg-white p-4 flex-shrink-0">
               <h2 className="text-lg font-semibold">Filteri</h2>
               <button
                 onClick={() => setShowMobileFilters(false)}
@@ -510,22 +628,23 @@ export function DealsGrid({
                 </svg>
               </button>
             </div>
-            <div className="p-4 pb-8">
-              {filterContentJSX}
+            <div className="flex-1 overflow-hidden">
+              <ScrollFade maxHeight="100%" className="p-4 pb-8 h-full">
+                {filterContentJSX}
+              </ScrollFade>
             </div>
           </div>
         </div>
       )}
 
       {/* Desktop Layout */}
-      <div className="lg:grid lg:grid-cols-[240px_1fr] lg:gap-6">
+      <div className="lg:grid lg:grid-cols-[260px_1fr] lg:gap-6">
         {/* Desktop Sidebar - hidden on mobile/tablet */}
         <aside className="hidden lg:block">
-          <div
-            className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto rounded-lg bg-white p-4 shadow-sm"
-            onWheel={(e) => e.stopPropagation()}
-          >
-            {filterContentJSX}
+          <div className="sticky top-20 rounded-xl bg-white shadow-sm border border-gray-100 overflow-hidden">
+            <ScrollFade maxHeight="calc(100vh - 6rem)" className="p-5">
+              {filterContentJSX}
+            </ScrollFade>
           </div>
         </aside>
 
@@ -615,6 +734,18 @@ export function DealsGrid({
                   Min {minDiscount}% ✕
                 </Badge>
               )}
+              {minPrice !== null && (
+                <Badge
+                  variant="secondary"
+                  className="cursor-pointer"
+                  onClick={() => {
+                    setMinPrice(null);
+                    setCurrentPage(1);
+                  }}
+                >
+                  Od {minPrice.toLocaleString()} RSD ✕
+                </Badge>
+              )}
               {maxPrice !== null && (
                 <Badge
                   variant="secondary"
@@ -624,7 +755,7 @@ export function DealsGrid({
                     setCurrentPage(1);
                   }}
                 >
-                  Max {maxPrice.toLocaleString()} RSD ✕
+                  Do {maxPrice.toLocaleString()} RSD ✕
                 </Badge>
               )}
             </div>
