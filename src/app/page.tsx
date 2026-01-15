@@ -7,9 +7,9 @@ import { HeroBanner } from "@/components/hero-banner";
 import { getAllDeals, getUniqueStores, STORE_INFO } from "@/lib/deals";
 
 export const metadata: Metadata = {
-  title: "VrebajPopust | Najbolji sportski popusti preko 50% u Srbiji",
+  title: "VrebajPopust | Najveći sportski popusti preko 50% u Srbiji",
   description:
-    "Pronađi najbolje popuste preko 50% na sportsku opremu, patike i odeću. Pratimo DjakSport, Planeta Sport, Sport Vision, N Sport, Buzz i Office Shoes. Ažurirano svakodnevno.",
+    "Pronađi najveće popuste preko 50% na sportsku opremu, patike i odeću. Pratimo DjakSport, Planeta Sport, Sport Vision, N Sport, Buzz i Office Shoes. Ažurirano svakodnevno.",
   keywords: [
     "popusti",
     "akcije",
@@ -23,9 +23,9 @@ export const metadata: Metadata = {
     "online kupovina",
   ],
   openGraph: {
-    title: "VrebajPopust | Najbolji sportski popusti preko 50% u Srbiji",
+    title: "VrebajPopust | Najveći sportski popusti preko 50% u Srbiji",
     description:
-      "Pronađi najbolje popuste preko 50% na sportsku opremu, patike i odeću u Srbiji.",
+      "Pronađi najveće popuste preko 50% na sportsku opremu, patike i odeću u Srbiji.",
     type: "website",
     locale: "sr_RS",
   },
@@ -44,7 +44,7 @@ export default function Home() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "VrebajPopust",
-    description: "Agregator sportskih popusta preko 50% u Srbiji",
+    description: "Pronađi najveće sportske popuste preko 50% u Srbiji",
     url: "https://vrebajpopust.rs",
     potentialAction: {
       "@type": "SearchAction",
@@ -76,7 +76,7 @@ export default function Home() {
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-300 sm:text-xl">
               Svakodnevno pretražujemo najveće sportske prodavnice u Srbiji i
-              pronalazimo najbolje popuste za tebe. Uštedi vreme i novac.
+              pronalazimo najveće popuste za tebe. Uštedi vreme i novac.
             </p>
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link

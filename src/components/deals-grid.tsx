@@ -18,7 +18,7 @@ interface DealsGridProps {
   priceRange: { min: number; max: number };
 }
 
-type SortOption = "discount" | "price-low" | "price-high" | "name";
+type SortOption = "discount" | "price-low" | "price-high" | "newest";
 
 const ITEMS_PER_PAGE = 32;
 
@@ -87,9 +87,18 @@ export function DealsGrid({
     searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : null
   );
   const [brandSearch, setBrandSearch] = useState("");
-  const [sortBy, setSortBy] = useState<SortOption>(
-    (searchParams.get("sort") as SortOption) || "discount"
-  );
+  const [sortBy, setSortBy] = useState<SortOption>(() => {
+    // First check URL, then localStorage, then default
+    const urlSort = searchParams.get("sort") as SortOption;
+    if (urlSort) return urlSort;
+    if (typeof window !== "undefined") {
+      const savedSort = localStorage.getItem("sortPreference") as SortOption;
+      if (savedSort && ["discount", "price-low", "price-high", "newest"].includes(savedSort)) {
+        return savedSort;
+      }
+    }
+    return "discount";
+  });
   const [currentPage, setCurrentPage] = useState(
     Number(searchParams.get("page")) || 1
   );
@@ -106,6 +115,11 @@ export function DealsGrid({
       document.body.style.overflow = "";
     };
   }, [showMobileFilters]);
+
+  // Save sort preference to localStorage
+  useEffect(() => {
+    localStorage.setItem("sortPreference", sortBy);
+  }, [sortBy]);
 
   // Track if we're updating from URL to prevent sync loops
   const isUpdatingFromUrl = useRef(false);
@@ -239,8 +253,9 @@ export function DealsGrid({
       case "price-high":
         result.sort((a, b) => b.salePrice - a.salePrice);
         break;
-      case "name":
-        result.sort((a, b) => a.name.localeCompare(b.name));
+      case "newest":
+        // Reverse order - newest items are at the end of the data array
+        result.reverse();
         break;
     }
 
@@ -307,6 +322,12 @@ export function DealsGrid({
       prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
     );
     setCurrentPage(1);
+  };
+
+  // Handle page change with scroll to top
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const hasActiveFilters =
@@ -383,7 +404,7 @@ export function DealsGrid({
       )}
 
       {/* Discount Level */}
-      <div>
+      <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
         <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Popust</h3>
         <div className="flex flex-wrap gap-2">
           {discountLevels.map((level) => (
@@ -406,11 +427,11 @@ export function DealsGrid({
       </div>
 
       {/* Price Range */}
-      <div>
+      <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
         <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Cena (RSD)</h3>
-        <div className="space-y-2">
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-500 dark:text-gray-400 w-6">Od</span>
+        <div className="space-y-3">
+          <div>
+            <span className="text-xs text-gray-500 dark:text-gray-400 block mb-1.5">Od</span>
             <div className="flex flex-wrap gap-1.5">
               {priceFromOptions.map((option) => (
                 <button
@@ -430,8 +451,8 @@ export function DealsGrid({
               ))}
             </div>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-gray-500 dark:text-gray-400 w-6">Do</span>
+          <div>
+            <span className="text-xs text-gray-500 dark:text-gray-400 block mb-1.5">Do</span>
             <div className="flex flex-wrap gap-1.5">
               {priceToOptions.map((option) => (
                 <button
@@ -455,7 +476,7 @@ export function DealsGrid({
       </div>
 
       {/* Gender */}
-      <div>
+      <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
         <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Pol</h3>
         <div className="flex flex-wrap gap-2">
           {(["men", "women", "kids", "unisex"] as Gender[]).map((gender) => (
@@ -475,7 +496,7 @@ export function DealsGrid({
       </div>
 
       {/* Store */}
-      <div>
+      <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
         <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Prodavnica</h3>
         <div className="space-y-2">
           {stores.map((store) => (
@@ -511,7 +532,7 @@ export function DealsGrid({
       </div>
 
       {/* Category */}
-      <div>
+      <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
         <h3 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">Kategorija</h3>
         <p className="mb-3 text-xs text-gray-400 dark:text-gray-500">* Filteri nisu precizni</p>
         <ScrollFade maxHeight="200px">
@@ -550,7 +571,7 @@ export function DealsGrid({
       </div>
 
       {/* Brand */}
-      <div>
+      <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
         <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Brend</h3>
         <Input
           type="search"
@@ -667,7 +688,7 @@ export function DealsGrid({
             <div className="sm:flex sm:items-center sm:gap-4">
               {/* Active Filters - left side on sm+, with padding for toggle button on tablet */}
               {hasActiveFilters && (
-                <div className="hidden sm:flex sm:flex-1 flex-wrap gap-2 pl-10 lg:pl-0">
+                <div className="hidden sm:flex sm:flex-1 flex-wrap gap-2 pl-14 lg:pl-0">
                   {search && (
                     <Badge
                       variant="secondary"
@@ -766,13 +787,16 @@ export function DealsGrid({
                 </p>
                 <select
                   value={sortBy}
-                  onChange={(e) => setSortBy(e.target.value as SortOption)}
-                  className="rounded border border-gray-200 bg-white px-3 py-1.5 text-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white"
+                  onChange={(e) => {
+                    setSortBy(e.target.value as SortOption);
+                    setCurrentPage(1);
+                  }}
+                  className="appearance-none rounded border border-gray-200 bg-white pl-3 pr-8 py-1.5 text-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white cursor-pointer bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Cpath%20fill%3D%22%236b7280%22%20d%3D%22M6%208L1%203h10z%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[right_0.5rem_center]"
                 >
                   <option value="discount">Sortiraj: Popust ↓</option>
                   <option value="price-low">Sortiraj: Cena ↑</option>
                   <option value="price-high">Sortiraj: Cena ↓</option>
-                  <option value="name">Sortiraj: Naziv</option>
+                  <option value="newest">Sortiraj: Najnovije</option>
                 </select>
               </div>
             </div>
@@ -912,7 +936,7 @@ export function DealsGrid({
                   variant="outline"
                   size="sm"
                   disabled={currentPage === 1}
-                  onClick={() => setCurrentPage(1)}
+                  onClick={() => handlePageChange(1)}
                   className="hidden sm:inline-flex"
                 >
                   ««
@@ -921,7 +945,7 @@ export function DealsGrid({
                   variant="outline"
                   size="sm"
                   disabled={currentPage === 1}
-                  onClick={() => setCurrentPage((p) => p - 1)}
+                  onClick={() => handlePageChange(currentPage - 1)}
                 >
                   ‹ Nazad
                 </Button>
@@ -943,7 +967,7 @@ export function DealsGrid({
                         key={pageNum}
                         variant={currentPage === pageNum ? "default" : "outline"}
                         size="sm"
-                        onClick={() => setCurrentPage(pageNum)}
+                        onClick={() => handlePageChange(pageNum)}
                         className="w-9 h-9"
                       >
                         {pageNum}
@@ -956,7 +980,7 @@ export function DealsGrid({
                   variant="outline"
                   size="sm"
                   disabled={currentPage === totalPages}
-                  onClick={() => setCurrentPage((p) => p + 1)}
+                  onClick={() => handlePageChange(currentPage + 1)}
                 >
                   Dalje ›
                 </Button>
@@ -964,7 +988,7 @@ export function DealsGrid({
                   variant="outline"
                   size="sm"
                   disabled={currentPage === totalPages}
-                  onClick={() => setCurrentPage(totalPages)}
+                  onClick={() => handlePageChange(totalPages)}
                   className="hidden sm:inline-flex"
                 >
                   »»

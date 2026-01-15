@@ -76,7 +76,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const savings = deal.originalPrice - deal.salePrice;
   const title = `${deal.name} - ${deal.discountPercent}% popust | VrebajPopust`;
-  const description = `${deal.brand || ""} ${categoryText} ${genderText} na akciji u ${storeInfo.name}. Stara cena: ${formatPrice(deal.originalPrice)}, nova cena: ${formatPrice(deal.salePrice)}. Uštedi ${formatPrice(savings)}! Pronađi najbolje sportske popuste u Srbiji.`.trim();
+  const description = `${deal.brand || ""} ${categoryText} ${genderText} na akciji u ${storeInfo.name}. Stara cena: ${formatPrice(deal.originalPrice)}, nova cena: ${formatPrice(deal.salePrice)}. Uštedi ${formatPrice(savings)}! Pronađi najveće sportske popuste u Srbiji.`.trim();
 
   const imageUrl = deal.imageUrl?.startsWith("/")
     ? `https://vrebajpopust.rs${deal.imageUrl}`
@@ -486,7 +486,7 @@ export default async function DealPage({ params }: Props) {
                 Kupovinom ovog proizvoda uštedećete {formatPrice(savings)}.
               </p>
               <p className="text-gray-600 dark:text-gray-300 mt-3 leading-relaxed">
-                VrebajPopust svakodnevno pretražuje najveće sportske prodavnice u Srbiji kako bi pronašao najbolje popuste preko 50%.
+                VrebajPopust svakodnevno pretražuje najveće sportske prodavnice u Srbiji kako bi pronašao najveće popuste preko 50%.
                 Svi prikazani proizvodi su dostupni za kupovinu online.
               </p>
               <div className="mt-4 flex flex-wrap gap-2">
@@ -519,7 +519,7 @@ export default async function DealPage({ params }: Props) {
                 Slične ponude
               </h2>
               <Link
-                href={`/ponude?categories=${deal.category}`}
+                href={`/ponude?categories=${deal.category}&genders=${deal.gender}`}
                 className="text-sm text-red-500 hover:underline"
               >
                 Prikaži sve →

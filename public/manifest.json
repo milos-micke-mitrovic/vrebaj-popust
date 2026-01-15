@@ -1,7 +1,7 @@
 {
-  "name": "VrebajPopust - Najbolji popusti u Srbiji",
+  "name": "VrebajPopust - Najveći popusti u Srbiji",
   "short_name": "VrebajPopust",
-  "description": "Pronađi najbolje popuste preko 50% u Srbiji",
+  "description": "Pronađi najveće popuste preko 50% u Srbiji",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

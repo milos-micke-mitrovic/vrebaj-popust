@@ -22,11 +22,11 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   metadataBase: new URL("https://vrebajpopust.rs"),
   title: {
-    default: "VrebajPopust | Najbolji popusti preko 50% u Srbiji",
+    default: "VrebajPopust | Najveći popusti preko 50% u Srbiji",
     template: "%s | VrebajPopust",
   },
   description:
-    "Pronađi najbolje popuste i sniženja preko 50% na sportsku opremu, obuću i odeću u Srbiji. DjakSport, Planeta Sport i druge prodavnice. Ažurirano svakodnevno.",
+    "Pronađi najveće popuste i sniženja preko 50% na sportsku opremu, obuću i odeću u Srbiji. DjakSport, Planeta Sport i druge prodavnice. Ažurirano svakodnevno.",
   keywords: [
     "popusti",
     "sniženja",
@@ -59,22 +59,22 @@ export const metadata: Metadata = {
     locale: "sr_RS",
     url: "https://vrebajpopust.rs",
     siteName: "VrebajPopust",
-    title: "VrebajPopust | Najbolji popusti preko 50% u Srbiji",
+    title: "VrebajPopust | Najveći popusti preko 50% u Srbiji",
     description:
-      "Pronađi najbolje popuste i sniženja preko 50% na sportsku opremu u Srbiji. Ažurirano svakodnevno.",
+      "Pronađi najveće popuste i sniženja preko 50% na sportsku opremu u Srbiji. Ažurirano svakodnevno.",
     images: [
       {
         url: "/opengraph-image.png",
         width: 1200,
         height: 630,
-        alt: "VrebajPopust - Najbolji popusti u Srbiji",
+        alt: "VrebajPopust - Najveći popusti u Srbiji",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "VrebajPopust | Najbolji popusti preko 50% u Srbiji",
-    description: "Pronađi najbolje popuste preko 50% u Srbiji.",
+    title: "VrebajPopust | Najveći popusti preko 50% u Srbiji",
+    description: "Pronađi najveće popuste preko 50% u Srbiji.",
     images: ["/opengraph-image.png"],
   },
   robots: {
@@ -106,7 +106,7 @@ const organizationSchema = {
   name: "VrebajPopust",
   url: "https://vrebajpopust.rs",
   logo: "https://vrebajpopust.rs/logos/logo.png",
-  description: "Agregator najboljih popusta preko 50% u Srbiji",
+  description: "Pronađi najveće popuste preko 50% u Srbiji",
   foundingDate: "2024",
   areaServed: {
     "@type": "Country",

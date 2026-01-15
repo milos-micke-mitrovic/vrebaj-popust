@@ -25,7 +25,7 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-3 text-sm text-gray-600 dark:text-gray-400">
-              Pronađi najbolje sportske popuste preko 50% u Srbiji.
+              Pronađi najveće sportske popuste preko 50% u Srbiji.
               Ažuriramo ponude svakodnevno.
             </p>
           </div>

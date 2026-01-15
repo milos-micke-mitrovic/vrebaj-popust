@@ -6,11 +6,11 @@ import { getAllDeals, getUniqueStores } from "@/lib/deals";
 export const metadata: Metadata = {
   title: "O nama | VrebajPopust",
   description:
-    "VrebajPopust je agregator popusta koji svakodnevno pretražuje najveće sportske prodavnice u Srbiji i pronalazi proizvode sa popustima preko 50%.",
+    "VrebajPopust svakodnevno pretražuje najveće sportske prodavnice u Srbiji i pronalazi proizvode sa popustima preko 50%.",
   openGraph: {
     title: "O nama | VrebajPopust",
     description:
-      "Saznaj više o VrebajPopust - agregatoru sportskih popusta u Srbiji.",
+      "Saznaj više o VrebajPopust - sajtu za praćenje sportskih popusta u Srbiji.",
     type: "website",
     locale: "sr_RS",
   },
@@ -30,9 +30,9 @@ export default function AboutPage() {
 
           <div className="prose prose-gray max-w-none dark:prose-invert">
             <p className="text-lg text-gray-600 dark:text-gray-300 mb-6">
-              <strong>VrebajPopust</strong> je besplatan agregator popusta koji
-              pomaže kupcima u Srbiji da pronađu najbolje ponude na sportsku
-              opremu, obuću i odeću.
+              <strong>VrebajPopust</strong> je besplatan sajt koji pomaže
+              kupcima u Srbiji da pronađu najveće popuste na sportsku opremu,
+              obuću i odeću.
             </p>
 
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
@@ -58,7 +58,7 @@ export default function AboutPage() {
               Napomena
             </h2>
             <p className="text-gray-600 dark:text-gray-300 mb-4">
-              VrebajPopust nije prodavnica - mi samo agregiramo i prikazujemo
+              VrebajPopust nije prodavnica - mi samo prikupljamo i prikazujemo
               ponude iz drugih prodavnica. Sve kupovine se obavljaju direktno na
               sajtovima prodavnica. Cene i dostupnost proizvoda mogu se promeniti
               bez prethodne najave.

@@ -42,10 +42,10 @@ export default function TermsPage() {
               Opis servisa
             </h2>
             <p className="mb-4">
-              VrebajPopust je agregator popusta koji prikazuje proizvode sa
-              popustima iz različitih online prodavnica. Mi ne prodajemo proizvode
-              direktno - samo prikazujemo informacije o ponudama dostupnim u
-              drugim prodavnicama.
+              VrebajPopust je sajt koji prikazuje proizvode sa popustima iz
+              različitih online prodavnica. Mi ne prodajemo proizvode direktno -
+              samo prikazujemo informacije o ponudama dostupnim u drugim
+              prodavnicama.
             </p>
 
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">

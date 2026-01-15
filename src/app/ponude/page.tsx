@@ -51,7 +51,7 @@ export default function PonudePage() {
   const itemListSchema = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "Najbolji popusti",
+    name: "Najveći popusti",
     description: "Proizvodi sa najvećim popustima preko 50%",
     numberOfItems: deals.length,
     itemListElement: deals.slice(0, 10).map((deal, index) => ({
