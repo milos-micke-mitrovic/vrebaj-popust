@@ -228,6 +228,72 @@ async function autoScroll(page: Page): Promise<void> {
   `);
 }
 
+async function clickLoadMoreUntilDone(page: Page): Promise<void> {
+  const maxClicks = 50; // Safety limit
+  let clicks = 0;
+
+  while (clicks < maxClicks) {
+    // Click the load more button by finding it via text content
+    const clicked = await page.evaluate(() => {
+      // Try common selectors first
+      const selectors = [
+        'a.load-more',
+        'button.load-more',
+        '.load-more',
+        '.show-more',
+        '[class*="load-more"]',
+        '[class*="show-more"]'
+      ];
+
+      for (const sel of selectors) {
+        const el = document.querySelector(sel);
+        if (el && (el as HTMLElement).offsetParent !== null) {
+          (el as HTMLElement).click();
+          return true;
+        }
+      }
+
+      // Try finding by text content
+      const buttons = document.querySelectorAll('a, button, div[onclick], span[onclick]');
+      for (const btn of buttons) {
+        const text = btn.textContent?.toLowerCase().trim() || '';
+        if (
+          text.includes('prikaži više') ||
+          text.includes('prikazi vise') ||
+          text.includes('load more') ||
+          text.includes('učitaj još') ||
+          text.includes('ucitaj jos') ||
+          text === 'više' ||
+          text === 'vise'
+        ) {
+          // Check if visible
+          const htmlEl = btn as HTMLElement;
+          if (htmlEl.offsetParent !== null) {
+            htmlEl.click();
+            return true;
+          }
+        }
+      }
+      return false;
+    });
+
+    if (!clicked) {
+      console.log("No more 'Load More' button found or clickable");
+      break;
+    }
+
+    clicks++;
+    console.log(`  Clicked 'Load More' (${clicks})`);
+
+    // Wait for new products to load
+    await sleep(2500 + Math.random() * 1500);
+    await autoScroll(page);
+    await sleep(1000);
+  }
+
+  console.log(`Total 'Load More' clicks: ${clicks}`);
+}
+
 async function scrapeBuzz(): Promise<ScrapeResult> {
   const errors: string[] = [];
   const allDeals: RawDeal[] = [];
@@ -247,145 +313,117 @@ async function scrapeBuzz(): Promise<ScrapeResult> {
     for (const salePage of SALE_PAGES) {
       console.log(`\n=== Scraping: ${salePage.url} (${salePage.gender}) ===`);
 
-      let currentPage = 1;
-      const maxPages = 20;
+      try {
+        await page.goto(salePage.url, {
+          waitUntil: "networkidle2",
+          timeout: 90000,
+        });
 
-      while (currentPage <= maxPages) {
-        const pageUrl = currentPage === 1
-          ? salePage.url
-          : `${salePage.url}/page-${currentPage}`;
-        console.log(`\nScraping page ${currentPage}: ${pageUrl}`);
-
+        // Wait for products to load
         try {
-          await page.goto(pageUrl, {
-            waitUntil: "networkidle2",
-            timeout: 60000,
-          });
-
-          // Wait for products to load
-          try {
-            await page.waitForSelector('.product-item, [data-productid]', { timeout: 15000 });
-            console.log("Product grid loaded");
-          } catch {
-            console.log("Waiting for product grid timed out, continuing...");
-          }
-
-          await sleep(2000 + Math.random() * 2000);
-          await autoScroll(page);
-          await sleep(2000);
-
-          // Save debug screenshot for first page of first section only
-          if (currentPage === 1 && salePage === SALE_PAGES[0]) {
-            await page.screenshot({
-              path: path.join(process.cwd(), "data", "buzz-page-1.png"),
-            });
-            const html = await page.content();
-            fs.writeFileSync(
-              path.join(process.cwd(), "data", "buzz-page-1.html"),
-              html
-            );
-            console.log("Saved debug screenshot and HTML");
-          }
-
-          const products = await extractProducts(page);
-          console.log(`Found ${products.length} product elements`);
-
-          if (products.length === 0) {
-            console.log("No products found, ending pagination");
-            break;
-          }
-
-          if (products.length > 0 && currentPage === 1 && salePage === SALE_PAGES[0]) {
-            console.log("Sample product:", JSON.stringify(products[0], null, 2));
-          }
-
-          // Gender marker for extractGender() to detect
-          const genderMarker = salePage.gender === "men" ? " men"
-            : salePage.gender === "women" ? " women"
-            : " kids";
-
-          for (const product of products) {
-            // Skip duplicates
-            if (seenUrls.has(product.url)) continue;
-            seenUrls.add(product.url);
-
-            const originalPrice = parsePrice(product.originalPrice);
-            const salePrice = parsePrice(product.salePrice);
-
-            if (originalPrice <= 0 || salePrice <= 0) continue;
-            if (salePrice >= originalPrice) continue;
-
-            const discountPercent =
-              product.discountPercent || calcDiscount(originalPrice, salePrice);
-
-            if (discountPercent >= MIN_DISCOUNT) {
-              let localImageUrl: string | null = null;
-              if (product.imageUrl) {
-                const imgFilename =
-                  product.imageUrl.split("/").pop()?.split("?")[0] || `${idCounter}.jpg`;
-                localImageUrl = await downloadImage(
-                  product.imageUrl,
-                  imgFilename,
-                  page
-                );
-              }
-
-              // Append gender marker to name for extractGender() to detect
-              const nameWithGender = product.name + genderMarker;
-
-              allDeals.push({
-                id: generateId(product.url),
-                store: STORE,
-                name: nameWithGender,
-                brand: product.brand,
-                originalPrice,
-                salePrice,
-                discountPercent,
-                url: product.url,
-                imageUrl: localImageUrl || product.imageUrl,
-                category: null,
-                scrapedAt: new Date(),
-              });
-            }
-          }
-
-          totalScraped += products.length;
-          console.log(
-            `Deals with ${MIN_DISCOUNT}%+ discount: ${allDeals.length} (total scraped: ${totalScraped})`
-          );
-
-          // Check if there's a next page
-          const hasNextPage = await page.evaluate(`
-            (function() {
-              // Look for "Prikaži više" or pagination links
-              var loadMoreBtn = document.querySelector('a[href*="page-"], .load-more, .show-more, [class*="load-more"]');
-              if (loadMoreBtn) {
-                var href = loadMoreBtn.getAttribute('href') || '';
-                var currentPageMatch = window.location.pathname.match(/page-(\\d+)/);
-                var currentNum = currentPageMatch ? parseInt(currentPageMatch[1]) : 1;
-                var nextPagePattern = 'page-' + (currentNum + 1);
-                // Check if there's a link to the next page
-                var nextLink = document.querySelector('a[href*="' + nextPagePattern + '"]');
-                return !!nextLink;
-              }
-              return false;
-            })()
-          `) as boolean;
-
-          if (!hasNextPage) {
-            console.log("No more pages");
-            break;
-          }
-
-          currentPage++;
-          await sleep(3000 + Math.random() * 2000);
-
-        } catch (err) {
-          const message = err instanceof Error ? err.message : String(err);
-          errors.push(`Page ${currentPage}: ${message}`);
-          console.error(`Error on page ${currentPage}:`, message);
-          break;
+          await page.waitForSelector('.product-item, [data-productid]', { timeout: 15000 });
+          console.log("Product grid loaded");
+        } catch {
+          console.log("Waiting for product grid timed out, continuing...");
         }
+
+        await sleep(2000 + Math.random() * 2000);
+        await autoScroll(page);
+        await sleep(2000);
+
+        // Click "Load More" button repeatedly until all products are loaded
+        console.log("Loading all products via 'Load More' button...");
+        await clickLoadMoreUntilDone(page);
+
+        // Final scroll to ensure all images are loaded
+        await autoScroll(page);
+        await sleep(2000);
+
+        // Save debug screenshot for first section only
+        if (salePage === SALE_PAGES[0]) {
+          await page.screenshot({
+            path: path.join(process.cwd(), "data", "buzz-page-1.png"),
+          });
+          console.log("Saved debug screenshot");
+        }
+
+        const products = await extractProducts(page);
+        console.log(`Found ${products.length} product elements after loading all`);
+
+        if (products.length === 0) {
+          console.log("No products found");
+          continue;
+        }
+
+        if (products.length > 0 && salePage === SALE_PAGES[0]) {
+          console.log("Sample product:", JSON.stringify(products[0], null, 2));
+        }
+
+        // Gender marker for extractGender() to detect
+        const genderMarker = salePage.gender === "men" ? " men"
+          : salePage.gender === "women" ? " women"
+          : " kids";
+
+        let sectionDeals = 0;
+        for (const product of products) {
+          // Skip duplicates
+          if (seenUrls.has(product.url)) continue;
+          seenUrls.add(product.url);
+
+          const originalPrice = parsePrice(product.originalPrice);
+          const salePrice = parsePrice(product.salePrice);
+
+          if (originalPrice <= 0 || salePrice <= 0) continue;
+          if (salePrice >= originalPrice) continue;
+
+          const discountPercent =
+            product.discountPercent || calcDiscount(originalPrice, salePrice);
+
+          if (discountPercent >= MIN_DISCOUNT) {
+            let localImageUrl: string | null = null;
+            if (product.imageUrl) {
+              const imgFilename =
+                product.imageUrl.split("/").pop()?.split("?")[0] || `${idCounter}.jpg`;
+              localImageUrl = await downloadImage(
+                product.imageUrl,
+                imgFilename,
+                page
+              );
+            }
+
+            // Append gender marker to name for extractGender() to detect
+            const nameWithGender = product.name + genderMarker;
+
+            allDeals.push({
+              id: generateId(product.url),
+              store: STORE,
+              name: nameWithGender,
+              brand: product.brand,
+              originalPrice,
+              salePrice,
+              discountPercent,
+              url: product.url,
+              imageUrl: localImageUrl || product.imageUrl,
+              category: null,
+              scrapedAt: new Date(),
+            });
+            sectionDeals++;
+          }
+        }
+
+        totalScraped += products.length;
+        console.log(
+          `Section ${salePage.gender}: ${sectionDeals} deals with ${MIN_DISCOUNT}%+ (total products: ${products.length})`
+        );
+        console.log(`Running total: ${allDeals.length} deals (${totalScraped} scraped)`);
+
+        // Delay between sections
+        await sleep(3000 + Math.random() * 2000);
+
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        errors.push(`${salePage.gender}: ${message}`);
+        console.error(`Error scraping ${salePage.gender}:`, message);
       }
     }
   } finally {

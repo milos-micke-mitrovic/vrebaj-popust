@@ -4,41 +4,63 @@ import { Deal, ScrapeResult, Store, Gender, Category } from "@/types/deal";
 
 const DATA_DIR = path.join(process.cwd(), "data");
 
+// Normalize Serbian characters to ASCII equivalents
+function normalizeSerbianChars(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/š/g, "s")
+    .replace(/ž/g, "z")
+    .replace(/č/g, "c")
+    .replace(/ć/g, "c")
+    .replace(/đ/g, "dj");
+}
+
 // Extract gender from product name
 function extractGender(name: string): Gender {
-  const nameLower = name.toLowerCase();
+  const normalized = normalizeSerbianChars(name);
 
-  // Kids patterns
+  // Kids patterns - check first as it's most specific
+  // dečiji/deciji, deca, devojčice/devojcice, dečak/dečaci, kid, junior
   if (
-    nameLower.includes(" kid") ||
-    nameLower.includes(" deca") ||
-    nameLower.includes(" decij") ||
-    nameLower.includes(" bp") ||
-    nameLower.includes(" bg") ||
-    nameLower.includes(" junior")
+    normalized.includes("decij") ||
+    normalized.includes("deca") ||
+    normalized.includes("decak") ||
+    normalized.includes("decac") ||
+    normalized.includes("devojc") ||
+    normalized.includes(" kid") ||
+    normalized.includes(" bp") ||
+    normalized.includes(" bg") ||
+    normalized.includes(" junior")
   ) {
     return "deciji";
   }
 
   // Women patterns
+  // ženski/zenski, žene/zene, za žene, women, wmns
   if (
-    nameLower.includes("za žene") ||
-    nameLower.includes("za zene") ||
-    nameLower.includes(" w ") ||
-    nameLower.endsWith(" w") ||
-    nameLower.includes(" wmns") ||
-    nameLower.includes(" women")
+    normalized.includes("zenski") ||
+    normalized.includes("zensk") ||
+    normalized.includes("za zene") ||
+    normalized.includes(" zene") ||
+    normalized.includes(" w ") ||
+    normalized.endsWith(" w") ||
+    normalized.includes(" wmns") ||
+    normalized.includes(" women") ||
+    normalized.includes("woman")
   ) {
     return "zenski";
   }
 
   // Men patterns
+  // muški/muski, muškarci/muskarci, za muškarce, men
   if (
-    nameLower.includes("za muškarce") ||
-    nameLower.includes("za muskarce") ||
-    nameLower.includes(" m ") ||
-    nameLower.endsWith(" m") ||
-    nameLower.includes(" men")
+    normalized.includes("muski") ||
+    normalized.includes("musk") ||
+    normalized.includes("muskarc") ||
+    normalized.includes("za muskarce") ||
+    normalized.includes(" m ") ||
+    normalized.endsWith(" m") ||
+    normalized.includes(" men ")
   ) {
     return "muski";
   }

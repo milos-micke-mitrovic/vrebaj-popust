@@ -50,22 +50,24 @@ const CATEGORY_MAPPINGS: CategoryMapping[] = [
   { keywords: ["patofn", "slipper"], category: "obuca/patofne" },
 
   // Odeca (clothing)
-  { keywords: ["jakn", "jacket"], category: "odeca/jakne" },
-  { keywords: ["prsluk", "prsluci"], category: "odeca/prsluci" },
+  // Note: "donji deo trenerke" must be checked before generic "donji deo"
+  { keywords: ["donji deo trenerke", "trenerk", "tracksuit"], category: "odeca/trenerke" },
+  { keywords: ["jakn", "jacket", "suskav"], category: "odeca/jakne" },
+  { keywords: ["prsluk", "prsluci", "vest"], category: "odeca/prsluci" },
   { keywords: ["aktivni ves", "aktivni_ves"], category: "odeca/aktivni_ves" },
-  { keywords: ["duks", "hoodie", "sweatshirt", "dukser"], category: "odeca/duksevi" },
+  { keywords: ["duks", "hoodie", "sweatshirt", "dukseric"], category: "odeca/duksevi" },
   { keywords: ["majic", "t-shirt", "tshirt", "top "], category: "odeca/majice" },
   { keywords: ["pantalon", "pants", "trousers", "donji deo"], category: "odeca/pantalone" },
-  { keywords: ["trenerk", "tracksuit"], category: "odeca/trenerke" },
   { keywords: ["helank", "leggings", "tajice"], category: "odeca/helanke" },
   { keywords: ["sortev", "sorc", "shorts"], category: "odeca/sortevi" },
   { keywords: ["kupac", "swim", "kupaon"], category: "odeca/kupaci" },
   { keywords: ["haljin", "dress"], category: "odeca/haljine" },
   { keywords: ["vetrovk", "windbreaker"], category: "odeca/vetrovke" },
+  { keywords: ["sukn", "skirt"], category: "odeca/haljine" },
 
   // Oprema (equipment/accessories)
   { keywords: ["torb", "torbic"], category: "oprema/torbe" },
-  { keywords: ["ranac", "ranca", "backpack", "ruksak"], category: "oprema/rancevi" },
+  { keywords: ["ranac", "ranca", "backpack", "ruksak", "rancev"], category: "oprema/rancevi" },
   { keywords: ["kacket", "silterica"], category: "oprema/kacketi" },
   { keywords: ["carap", "carape", "socks"], category: "oprema/carape" },
   { keywords: ["kapa ", " kapa", "beanie"], category: "oprema/kape" },
@@ -107,7 +109,9 @@ function mapToGender(polValue: string): Gender {
     normalized.includes("djec") ||
     normalized.includes("kid") ||
     normalized.includes("junior") ||
-    normalized.includes("beb")
+    normalized.includes("beb") ||
+    normalized.includes("za decake") ||
+    normalized.includes("za devojcice")
   ) {
     return "deciji";
   }
@@ -116,7 +120,8 @@ function mapToGender(polValue: string): Gender {
   if (
     normalized.includes("musk") ||
     normalized.includes("men") ||
-    normalized.includes("muski")
+    normalized.includes("muski") ||
+    normalized.includes("za muskarce")
   ) {
     return "muski";
   }
@@ -126,7 +131,8 @@ function mapToGender(polValue: string): Gender {
     normalized.includes("zensk") ||
     normalized.includes("women") ||
     normalized.includes("zenski") ||
-    normalized.includes("dame")
+    normalized.includes("dame") ||
+    normalized.includes("za zene")
   ) {
     return "zenski";
   }
@@ -371,7 +377,7 @@ async function extractNSportDetails(page: Page): Promise<ProductDetails> {
   return { ...rawData, categories: [], gender: null };
 }
 
-async function extractBuzzDetails(page: Page): Promise<ProductDetails> {
+async function extractBuzzDetails(page: Page, dealName: string = ""): Promise<ProductDetails> {
   // Wait for size selector to load
   await page.waitForSelector("ul.product-attributes li, [class*='size'], .sizes", { timeout: 5000 }).catch(() => {});
 
@@ -379,15 +385,15 @@ async function extractBuzzDetails(page: Page): Promise<ProductDetails> {
     const sizes: string[] = [];
     const validClothingSizes = ["XS", "S", "M", "L", "XL", "XXL", "2XL", "3XL"];
 
-    // Buzz uses ul.product-attributes li with data-productsize-name attribute
+    // Buzz uses ul.product-attributes li - get EU size from text content
     // Skip disabled items (out of stock)
     const sizeElements = document.querySelectorAll("ul.product-attributes li:not(.disabled)");
     sizeElements.forEach((el) => {
-      // Get size from data attribute or text content
-      const size = el.getAttribute("data-productsize-name") || el.textContent?.trim();
+      // Get size from text content (EU size displayed in the element)
+      const size = el.textContent?.trim();
       if (size && size.length <= 8) {
         // Accept shoe sizes (35-50) or clothing sizes (S, M, L, etc.)
-        const numericPart = parseFloat(size.split(" ")[0]);
+        const numericPart = parseFloat(size);
         const isShoeSize = !isNaN(numericPart) && numericPart >= 35 && numericPart <= 50;
         const isClothingSize = validClothingSizes.includes(size.toUpperCase());
         if ((isShoeSize || isClothingSize) && !sizes.includes(size)) {
@@ -402,7 +408,7 @@ async function extractBuzzDetails(page: Page): Promise<ProductDetails> {
       selectOptions.forEach((opt) => {
         const size = opt.textContent?.trim();
         if (size && size.length <= 8) {
-          const numericPart = parseFloat(size.split(" ")[0]);
+          const numericPart = parseFloat(size);
           const isShoeSize = !isNaN(numericPart) && numericPart >= 35 && numericPart <= 50;
           const isClothingSize = validClothingSizes.includes(size.toUpperCase());
           if ((isShoeSize || isClothingSize) && !sizes.includes(size)) {
@@ -424,10 +430,52 @@ async function extractBuzzDetails(page: Page): Promise<ProductDetails> {
       detailImageUrl = (imgEl as HTMLImageElement).src || null;
     }
 
-    return { sizes, description, detailImageUrl };
+    // Extract from Specifikacija table
+    let kategorijaValue = "";
+    let polValue = "";
+    let uzrastValue = "";
+
+    const specRows = document.querySelectorAll(".product-attrbite-table tbody tr");
+    specRows.forEach((row) => {
+      const cells = row.querySelectorAll("td");
+      if (cells.length >= 2) {
+        const label = cells[0].textContent?.trim() || "";
+        const value = cells[1].textContent?.trim() || "";
+
+        if (label === "Kategorija") {
+          kategorijaValue = value;
+        }
+        if (label === "Pol") {
+          polValue = value;
+        }
+        if (label === "Uzrast") {
+          uzrastValue = value;
+        }
+      }
+    });
+
+    return { sizes, description, detailImageUrl, kategorijaValue, polValue, uzrastValue };
   });
 
-  return { ...rawData, categories: [], gender: null };
+  // Map the extracted values to our category/gender system
+  const categories = mapToCategories(rawData.kategorijaValue, dealName);
+
+  // Determine gender - check uzrast first for kids detection
+  let gender: Gender | null = null;
+  const uzrastNorm = normalizeSerbianText(rawData.uzrastValue);
+  if (uzrastNorm.includes("tinejdzer") || uzrastNorm.includes("dec") || uzrastNorm.includes("beb")) {
+    gender = "deciji";
+  } else if (rawData.polValue) {
+    gender = mapToGender(rawData.polValue);
+  }
+
+  return {
+    sizes: rawData.sizes,
+    description: rawData.description,
+    detailImageUrl: rawData.detailImageUrl,
+    categories,
+    gender,
+  };
 }
 
 async function extractOfficeShoesDetails(page: Page): Promise<ProductDetails> {
@@ -547,7 +595,7 @@ async function extractDetails(page: Page, store: Store, dealName: string = ""): 
     case "nsport":
       return extractNSportDetails(page);
     case "buzz":
-      return extractBuzzDetails(page);
+      return extractBuzzDetails(page, dealName);
     case "officeshoes":
       return extractOfficeShoesDetails(page);
     default:

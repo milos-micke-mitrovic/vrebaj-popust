@@ -36,16 +36,16 @@ const CATEGORY_NAMES: Record<string, string> = {
 };
 
 const GENDER_TAGS: Record<string, string> = {
-  men: "Muškarci",
-  women: "Žene",
-  kids: "Deca",
+  muski: "Muškarci",
+  zenski: "Žene",
+  deciji: "Deca",
   unisex: "",
 };
 
 const GENDER_TEXT: Record<string, string> = {
-  men: "za muškarce",
-  women: "za žene",
-  kids: "za decu",
+  muski: "za muškarce",
+  zenski: "za žene",
+  deciji: "za decu",
   unisex: "",
 };
 
