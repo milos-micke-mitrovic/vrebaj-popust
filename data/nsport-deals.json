@@ -12,7 +12,13 @@
       "url": "https://www.n-sport.net/kacket/unisex-kacket-puma-ess-cap-no-2-2.html",
       "imageUrl": "/images/nsport/unisex-kacket-puma-ess-cap-no-2-022885-05.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:21:32.976Z"
+      "scrapedAt": "2026-01-14T23:21:32.976Z",
+      "sizes": [
+        "ADULT"
+      ],
+      "description": "Kolačiće upotrebljavamo kako bi ova web stranica radila pravilno i kako bismo bili u stanju\n                            da vršimo dalja unapređenja stranice sa svrhom poboljšanja Vašeg korisničkog iskustva, kako\n                            bismo personalizovali sadržaj i oglase, omogućili značaj društvenih medija i analizirali\n                            promet. Nastavkom korišćenja naših stranica prihvatate upotrebu kolačića.",
+      "detailImageUrl": null,
+      "detailsScrapedAt": "2026-01-15T11:54:59.588Z"
     },
     {
       "id": "nsport-www-n-sport-net-fitnes-majica-zenski-top-puma-mid-impact-4keeps-bra-2-html-2",
@@ -25,7 +31,15 @@
       "url": "https://www.n-sport.net/fitnes-majica/zenski-top-puma-mid-impact-4keeps-bra-2.html",
       "imageUrl": "/images/nsport/zenski-top-puma-mid-impact-4keeps-bra-520304-19.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:21:40.716Z"
+      "scrapedAt": "2026-01-14T23:21:40.716Z",
+      "sizes": [
+        "XS",
+        "S",
+        "M"
+      ],
+      "description": "Kolačiće upotrebljavamo kako bi ova web stranica radila pravilno i kako bismo bili u stanju\n                            da vršimo dalja unapređenja stranice sa svrhom poboljšanja Vašeg korisničkog iskustva, kako\n                            bismo personalizovali sadržaj i oglase, omogućili značaj društvenih medija i analizirali\n                            promet. Nastavkom korišćenja naših stranica prihvatate upotrebu kolačića.",
+      "detailImageUrl": null,
+      "detailsScrapedAt": "2026-01-15T11:55:06.258Z"
     },
     {
       "id": "nsport-www-n-sport-net-lifestyle-patike-decije-patike-puma-carina-lift-ps-3-html-3",
@@ -38,7 +52,16 @@
       "url": "https://www.n-sport.net/lifestyle-patike/decije-patike-puma-carina-lift-ps-3.html",
       "imageUrl": "/images/nsport/decije-patike-puma-carina-lift-ps-374226-08.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:21:48.791Z"
+      "scrapedAt": "2026-01-14T23:21:48.791Z",
+      "sizes": [
+        "29",
+        "30",
+        "31",
+        "33"
+      ],
+      "description": "Kolačiće upotrebljavamo kako bi ova web stranica radila pravilno i kako bismo bili u stanju\n                            da vršimo dalja unapređenja stranice sa svrhom poboljšanja Vašeg korisničkog iskustva, kako\n                            bismo personalizovali sadržaj i oglase, omogućili značaj društvenih medija i analizirali\n                            promet. Nastavkom korišćenja naših stranica prihvatate upotrebu kolačića.",
+      "detailImageUrl": null,
+      "detailsScrapedAt": "2026-01-15T11:55:11.862Z"
     }
   ],
   "totalScraped": 69,

@@ -12,7 +12,18 @@
       "url": "https://www.djaksport.com/cipele-242752-dolomo-304ul70-921",
       "imageUrl": "/images/djaksport/304ul70-921_1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:15:27.025Z"
+      "scrapedAt": "2026-01-14T23:15:27.025Z",
+      "sizes": [
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/0/304UL70-921_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:17:00.484Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-patike-243240-dixton-za-zene-321g7lw-a5i-2",
@@ -25,7 +36,16 @@
       "url": "https://www.djaksport.com/kappa-patike-243240-dixton-za-zene-321g7lw-a5i",
       "imageUrl": "/images/djaksport/1729608918321g7lw-a5i.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:15:27.025Z"
+      "scrapedAt": "2026-01-14T23:15:27.025Z",
+      "sizes": [
+        "37",
+        "38",
+        "39",
+        "40"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1729608918321G7LW-A5I.JPG",
+      "detailsScrapedAt": "2026-01-15T12:17:08.919Z"
     },
     {
       "id": "djaksport-www-djaksport-com-copperminer-patike-storm-za-muskarce-q231m-storm-gry-3",
@@ -38,7 +58,13 @@
       "url": "https://www.djaksport.com/copperminer-patike-storm-za-muskarce-q231m-storm-gry",
       "imageUrl": "/images/djaksport/1759931829q231m-storm-gry.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:15:27.026Z"
+      "scrapedAt": "2026-01-14T23:15:27.026Z",
+      "sizes": [
+        "41"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1759931829Q231M-STORM-GRY.webp",
+      "detailsScrapedAt": "2026-01-15T12:17:15.138Z"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-jakna-hmlpuff-jacket-short-sportswear-za-muskarce-22594-4",
@@ -51,7 +77,15 @@
       "url": "https://www.djaksport.com/hummel-jakna-hmlpuff-jacket-short-sportswear-za-muskarce-225948-2001",
       "imageUrl": "/images/djaksport/1732550127225948-2001.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:15:27.026Z"
+      "scrapedAt": "2026-01-14T23:15:27.026Z",
+      "sizes": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1732550127225948-2001.webp",
+      "detailsScrapedAt": "2026-01-15T12:17:22.338Z"
     },
     {
       "id": "djaksport-www-djaksport-com-cipele-nike-city-classic-boot-dq5601-710-5",
@@ -64,7 +98,75 @@
       "url": "https://www.djaksport.com/cipele-nike-city-classic-boot-dq5601-710",
       "imageUrl": "/images/djaksport/dq5601-710.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:15:27.026Z"
+      "scrapedAt": "2026-01-14T23:15:27.026Z",
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "2XL",
+        "XS",
+        "S",
+        "5.0",
+        "UNSZ",
+        "36",
+        "36.5",
+        "37.5",
+        "38",
+        "38.5",
+        "39",
+        "40",
+        "40.5",
+        "41",
+        "42",
+        "42.5",
+        "43",
+        "44",
+        "44.5",
+        "45",
+        "45.5",
+        "47",
+        "46",
+        "47.5",
+        "29.5",
+        "28",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35",
+        "48.5",
+        "21",
+        "22",
+        "23.5",
+        "25",
+        "26",
+        "27",
+        "1.0",
+        "3.0",
+        "4.0",
+        "6.0",
+        "19.5",
+        "31.5",
+        "50.5",
+        "10.0",
+        "11.0",
+        "164",
+        "33.5",
+        "35.5",
+        "9.0",
+        "49.5",
+        "7.0",
+        "8.0",
+        "L/XL",
+        "M/L",
+        "PRO",
+        "XS/S",
+        "S/M"
+      ],
+      "description": null,
+      "detailImageUrl": null,
+      "detailsScrapedAt": "2026-01-15T12:17:30.189Z"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-nike-court-vision-mid-nn-dn3577-600-6",
@@ -77,7 +179,13 @@
       "url": "https://www.djaksport.com/patike-nike-court-vision-mid-nn-dn3577-600",
       "imageUrl": "/images/djaksport/dn3577-600_1_1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:15:27.026Z"
+      "scrapedAt": "2026-01-14T23:15:27.026Z",
+      "sizes": [
+        "44"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/D/N/DN3577-600_1_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:17:36.597Z"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-logo-maserta-md-v-35164dw-001-7",
@@ -90,7 +198,13 @@
       "url": "https://www.djaksport.com/patike-logo-maserta-md-v-35164dw-001",
       "imageUrl": "/images/djaksport/35164dw-001_1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:15:27.026Z"
+      "scrapedAt": "2026-01-14T23:15:27.026Z",
+      "sizes": [
+        "44"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/5/35164DW-001_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:17:43.624Z"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-muska-eastbound-jakna-iapetus-za-muskarce-ebm990-nvy-8",
@@ -103,7 +217,16 @@
       "url": "https://www.djaksport.com/eastbound-muska-eastbound-jakna-iapetus-za-muskarce-ebm990-nvy",
       "imageUrl": "/images/djaksport/1735660577ebm990-nvy.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:15:27.026Z"
+      "scrapedAt": "2026-01-14T23:15:27.026Z",
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1735660577EBM990-NVY.webp",
+      "detailsScrapedAt": "2026-01-15T12:17:50.925Z"
     },
     {
       "id": "djaksport-www-djaksport-com-361-degrees-patike-meraki-4-stk-za-muskarce-y2102-7209-9",
@@ -116,7 +239,19 @@
       "url": "https://www.djaksport.com/361-degrees-patike-meraki-4-stk-za-muskarce-y2102-7209",
       "imageUrl": "/images/djaksport/1731945445y2102-7209.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:15:27.026Z"
+      "scrapedAt": "2026-01-14T23:15:27.026Z",
+      "sizes": [
+        "40",
+        "41.5",
+        "42",
+        "43.5",
+        "44",
+        "45",
+        "46"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1731945445Y2102-7209.webp",
+      "detailsScrapedAt": "2026-01-15T12:17:58.918Z"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-duks-eastbound-eitan-za-muskarce-ebm507-blk-10",
@@ -129,7 +264,13 @@
       "url": "https://www.djaksport.com/eastbound-duks-eastbound-eitan-za-muskarce-ebm507-blk",
       "imageUrl": "/images/djaksport/1729090549ebm507-blk.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:15:27.026Z"
+      "scrapedAt": "2026-01-14T23:15:27.026Z",
+      "sizes": [
+        "L"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1729090549EBM507-BLK.JPG",
+      "detailsScrapedAt": "2026-01-15T10:00:04.303Z"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-logo-maserta-32193cw-005-11",
@@ -142,7 +283,17 @@
       "url": "https://www.djaksport.com/patike-logo-maserta-32193cw-005",
       "imageUrl": "/images/djaksport/32193cw-005_1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:15:27.026Z"
+      "scrapedAt": "2026-01-14T23:15:27.026Z",
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "41"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/2/32193CW-005_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:18:39.779Z"
     },
     {
       "id": "djaksport-www-djaksport-com-donji-deo-logo-zanty-304ilh0-77m-12",
@@ -155,7 +306,13 @@
       "url": "https://www.djaksport.com/donji-deo-logo-zanty-304ilh0-77m",
       "imageUrl": "/images/djaksport/1765292166304ilh0-77m.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:15:27.026Z"
+      "scrapedAt": "2026-01-14T23:15:27.026Z",
+      "sizes": [
+        "XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1765292166304ILH0-77M.webp",
+      "detailsScrapedAt": "2026-01-15T12:18:46.827Z"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-muska-eastbound-jakna-iapetus-za-muskarce-ebm990-blk-13",
@@ -168,7 +325,15 @@
       "url": "https://www.djaksport.com/eastbound-muska-eastbound-jakna-iapetus-za-muskarce-ebm990-blk",
       "imageUrl": "/images/djaksport/1735660574ebm990-blk.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:15:27.026Z"
+      "scrapedAt": "2026-01-14T23:15:27.026Z",
+      "sizes": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1735660574EBM990-BLK.webp",
+      "detailsScrapedAt": "2026-01-15T12:18:54.369Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-donji-deo-trenerke-logo-feligio-za-muskarce-381s2tw-005-14",
@@ -181,7 +346,15 @@
       "url": "https://www.djaksport.com/kappa-donji-deo-trenerke-logo-feligio-za-muskarce-381s2tw-005",
       "imageUrl": "/images/djaksport/1747234588381s2tw-005.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:15.975Z"
+      "scrapedAt": "2026-01-14T23:16:15.975Z",
+      "sizes": [
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1747234588381S2TW-005.webp",
+      "detailsScrapedAt": "2026-01-15T12:19:01.210Z"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-jakna-hmlpuff-jacket-short-sportswear-za-muskarce-22594-15",
@@ -194,7 +367,15 @@
       "url": "https://www.djaksport.com/hummel-jakna-hmlpuff-jacket-short-sportswear-za-muskarce-225948-7459",
       "imageUrl": "/images/djaksport/1732550132225948-7459.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:15.975Z"
+      "scrapedAt": "2026-01-14T23:16:15.975Z",
+      "sizes": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1732550132225948-7459.webp",
+      "detailsScrapedAt": "2026-01-15T12:19:09.730Z"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-zenska-eastbound-jakna-spruce-za-zene-ebw981-beg-16",
@@ -207,7 +388,15 @@
       "url": "https://www.djaksport.com/eastbound-zenska-eastbound-jakna-spruce-za-zene-ebw981-beg",
       "imageUrl": "/images/djaksport/1728658597ebw981-beg.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:15.975Z"
+      "scrapedAt": "2026-01-14T23:16:15.975Z",
+      "sizes": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1728658597EBW981-BEG.JPG",
+      "detailsScrapedAt": "2026-01-15T12:19:17.219Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-patike-logo-mave-za-muskarce-32238qw-a4g-17",
@@ -220,7 +409,19 @@
       "url": "https://www.djaksport.com/kappa-patike-logo-mave-za-muskarce-32238qw-a4g",
       "imageUrl": "/images/djaksport/174740732732238qw-a4g.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:15.975Z"
+      "scrapedAt": "2026-01-14T23:16:15.975Z",
+      "sizes": [
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/174740732732238QW-A4G.webp",
+      "detailsScrapedAt": "2026-01-15T12:19:26.724Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kid-cizme-malu-q320td-malu-blue-18",
@@ -233,7 +434,19 @@
       "url": "https://www.djaksport.com/kid-cizme-malu-q320td-malu-blue",
       "imageUrl": "/images/djaksport/q320td-malu-blue_1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:15.975Z"
+      "scrapedAt": "2026-01-14T23:16:15.975Z",
+      "sizes": [
+        "20",
+        "21",
+        "22",
+        "24",
+        "25",
+        "26",
+        "27"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/Q/3/Q320TD-MALU-BLUE_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:19:35.321Z"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-decije-patike-rainbow-za-decake-ebgb525-gry-19",
@@ -246,7 +459,18 @@
       "url": "https://www.djaksport.com/eastbound-decije-patike-rainbow-za-decake-ebgb525-gry",
       "imageUrl": "/images/djaksport/1742227071ebgb525-gry.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:15.975Z"
+      "scrapedAt": "2026-01-14T23:16:15.975Z",
+      "sizes": [
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1742227071EBGB525-GRY.webp",
+      "detailsScrapedAt": "2026-01-15T12:19:42.871Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-patike-logo-rernal-ev-kid-za-devojcice-381u2iw-a1m-20",
@@ -259,7 +483,17 @@
       "url": "https://www.djaksport.com/kappa-patike-logo-rernal-ev-kid-za-devojcice-381u2iw-a1m",
       "imageUrl": "/images/djaksport/1739289336381u2iw-a1m.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:15.975Z"
+      "scrapedAt": "2026-01-14T23:16:15.975Z",
+      "sizes": [
+        "28",
+        "29",
+        "32",
+        "33",
+        "34"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1739289336381U2IW-A1M.webp",
+      "detailsScrapedAt": "2026-01-15T12:19:48.874Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-patike-authentic-ciarra-1-za-zene-311c1dw-a2x-21",
@@ -272,7 +506,16 @@
       "url": "https://www.djaksport.com/kappa-patike-authentic-ciarra-1-za-zene-311c1dw-a2x",
       "imageUrl": "/images/djaksport/1719240924311c1dw-a2x.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:15.975Z"
+      "scrapedAt": "2026-01-14T23:16:15.975Z",
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1719240924311C1DW-A2X.JPG",
+      "detailsScrapedAt": "2026-01-15T12:19:57.830Z"
     },
     {
       "id": "djaksport-www-djaksport-com-adidas-patike-strutter-za-muskarce-ih4904-22",
@@ -285,7 +528,15 @@
       "url": "https://www.djaksport.com/adidas-patike-strutter-za-muskarce-ih4904",
       "imageUrl": "/images/djaksport/1720623603ih4904.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:15.975Z"
+      "scrapedAt": "2026-01-14T23:16:15.975Z",
+      "sizes": [
+        "40",
+        "42",
+        "44"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1720623603IH4904.webp",
+      "detailsScrapedAt": "2026-01-15T12:20:17.082Z"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-thabo-tex-341645w-921-23",
@@ -298,7 +549,17 @@
       "url": "https://www.djaksport.com/patike-thabo-tex-341645w-921",
       "imageUrl": "/images/djaksport/1731081581341645w-921.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:15.975Z"
+      "scrapedAt": "2026-01-14T23:16:15.975Z",
+      "sizes": [
+        "41",
+        "42",
+        "43",
+        "44",
+        "45"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1731081581341645W-921.webp",
+      "detailsScrapedAt": "2026-01-15T12:20:24.996Z"
     },
     {
       "id": "djaksport-www-djaksport-com-jakna-lory-710032-oliv-24",
@@ -311,7 +572,15 @@
       "url": "https://www.djaksport.com/jakna-lory-710032-oliv",
       "imageUrl": "/images/djaksport/1709881301710032-oliv.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:16.172Z"
+      "scrapedAt": "2026-01-14T23:16:16.172Z",
+      "sizes": [
+        "140",
+        "152",
+        "164"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1709881301710032-OLIV.webp",
+      "detailsScrapedAt": "2026-01-15T12:20:31.444Z"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-jakna-level-za-muskarce-ebm907-nvy-25",
@@ -324,7 +593,17 @@
       "url": "https://www.djaksport.com/eastbound-jakna-level-za-muskarce-ebm907-nvy",
       "imageUrl": "/images/djaksport/1758549445ebm907-nvy.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:16.358Z"
+      "scrapedAt": "2026-01-14T23:16:16.358Z",
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "2XL",
+        "3XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1758549445EBM907-NVY.webp",
+      "detailsScrapedAt": "2026-01-15T12:20:40.390Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-donji-deo-kappa-222-banda-rastoria-2-graphik-slim-za-mus-26",
@@ -337,7 +616,15 @@
       "url": "https://www.djaksport.com/kappa-donji-deo-kappa-222-banda-rastoria-2-graphik-slim-za-muskarce-371p89w-p04",
       "imageUrl": "/images/djaksport/1727276179371p89w-p04.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:16.358Z"
+      "scrapedAt": "2026-01-14T23:16:16.358Z",
+      "sizes": [
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1727276179371P89W-P04.JPG",
+      "detailsScrapedAt": "2026-01-15T12:20:48.284Z"
     },
     {
       "id": "djaksport-www-djaksport-com-ice-peak-jakna-icepeak-brimfield-za-muskarce-4-57970-682-990-27",
@@ -350,7 +637,17 @@
       "url": "https://www.djaksport.com/ice-peak-jakna-icepeak-brimfield-za-muskarce-4-57970-682-990",
       "imageUrl": "/images/djaksport/17436921484-57970-682-990.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:33.158Z"
+      "scrapedAt": "2026-01-14T23:16:33.158Z",
+      "sizes": [
+        "50",
+        "52",
+        "54",
+        "56",
+        "58"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/17436921484-57970-682-990.webp",
+      "detailsScrapedAt": "2026-01-15T12:20:55.702Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kid-jakna-hmlnorth-jacket-203899-6453-28",
@@ -363,7 +660,13 @@
       "url": "https://www.djaksport.com/kid-jakna-hmlnorth-jacket-203899-6453",
       "imageUrl": "/images/djaksport/203899-6453_1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:33.159Z"
+      "scrapedAt": "2026-01-14T23:16:33.159Z",
+      "sizes": [
+        "140"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/2/0/203899-6453_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:21:02.069Z"
     },
     {
       "id": "djaksport-www-djaksport-com-donji-ves-logo-teo-2pack-304vmq0-903-29",
@@ -376,7 +679,16 @@
       "url": "https://www.djaksport.com/donji-ves-logo-teo-2pack-304vmq0-903",
       "imageUrl": "/images/djaksport/1731081557304vmq0-903.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:33.159Z"
+      "scrapedAt": "2026-01-14T23:16:33.159Z",
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/0/304VMQ0-903_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:21:09.587Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-patike-280004m-rajo-m-decaci-uzrasta-0-4-godine-311e8fw--30",
@@ -389,7 +701,15 @@
       "url": "https://www.djaksport.com/kappa-patike-280004m-rajo-m-decaci-uzrasta-0-4-godine-311e8fw-a5z",
       "imageUrl": "/images/djaksport/1720522535311e8fw-a5z.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:33.159Z"
+      "scrapedAt": "2026-01-14T23:16:33.159Z",
+      "sizes": [
+        "21",
+        "22",
+        "23"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1720522535311E8FW-A5Z.JPG",
+      "detailsScrapedAt": "2026-01-15T12:21:16.888Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-decije-patike-logo-marker-kid-za-devojcice-382821w-a1u-31",
@@ -402,7 +722,16 @@
       "url": "https://www.djaksport.com/kappa-decije-patike-logo-marker-kid-za-devojcice-382821w-a1u",
       "imageUrl": "/images/djaksport/1737388565382821w-a1u.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:33.159Z"
+      "scrapedAt": "2026-01-14T23:16:33.159Z",
+      "sizes": [
+        "35",
+        "36",
+        "37",
+        "38"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1737388565382821W-A1U.webp",
+      "detailsScrapedAt": "2026-01-15T12:21:23.929Z"
     },
     {
       "id": "djaksport-www-djaksport-com-komplet-trenerka-kappa4soccer-dalcito-321e1iw-a02d-32",
@@ -415,7 +744,16 @@
       "url": "https://www.djaksport.com/komplet-trenerka-kappa4soccer-dalcito-321e1iw-a02d",
       "imageUrl": "/images/djaksport/321e1iw-a02d_1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:33.159Z"
+      "scrapedAt": "2026-01-14T23:16:33.159Z",
+      "sizes": [
+        "128",
+        "152",
+        "164",
+        "176"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/2/321E1IW-A02D_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:21:32.132Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-patike-logo-tango-za-zene-361k7mw-a41-33",
@@ -428,7 +766,17 @@
       "url": "https://www.djaksport.com/kappa-patike-logo-tango-za-zene-361k7mw-a41",
       "imageUrl": "/images/djaksport/1752846965361k7mw-a41.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:33.159Z"
+      "scrapedAt": "2026-01-14T23:16:33.159Z",
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1752846965361K7MW-A41.webp",
+      "detailsScrapedAt": "2026-01-15T12:21:38.641Z"
     },
     {
       "id": "djaksport-www-djaksport-com-361-degrees-patike-meraki-4-stk-za-muskarce-y2102-0009-34",
@@ -441,7 +789,14 @@
       "url": "https://www.djaksport.com/361-degrees-patike-meraki-4-stk-za-muskarce-y2102-0009",
       "imageUrl": "/images/djaksport/1731945439y2102-0009.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:33.159Z"
+      "scrapedAt": "2026-01-14T23:16:33.159Z",
+      "sizes": [
+        "43.5",
+        "44"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1731945439Y2102-0009.webp",
+      "detailsScrapedAt": "2026-01-15T12:21:56.654Z"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-patike-st-power-play-wt-za-muskarce-226222-2267-35",
@@ -454,7 +809,18 @@
       "url": "https://www.djaksport.com/hummel-patike-st-power-play-wt-za-muskarce-226222-2267",
       "imageUrl": "/images/djaksport/1728053749226222-2267.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:33.159Z"
+      "scrapedAt": "2026-01-14T23:16:33.159Z",
+      "sizes": [
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1728053749226222-2267.webp",
+      "detailsScrapedAt": "2026-01-15T12:22:04.301Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-cizme-261045k-flake-ii-tex-k-za-devojcice-371n61w-a79-36",
@@ -467,7 +833,14 @@
       "url": "https://www.djaksport.com/kappa-cizme-261045k-flake-ii-tex-k-za-devojcice-371n61w-a79",
       "imageUrl": "/images/djaksport/1728917746371n61w-a79.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:33.159Z"
+      "scrapedAt": "2026-01-14T23:16:33.159Z",
+      "sizes": [
+        "34",
+        "35"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1728917746371N61W-A79.JPG",
+      "detailsScrapedAt": "2026-01-15T12:22:12.189Z"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-skechers-delson-selecto-65801-blk-37",
@@ -480,7 +853,18 @@
       "url": "https://www.djaksport.com/patike-skechers-delson-selecto-65801-blk",
       "imageUrl": "/images/djaksport/175287951265801-blk.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:33.159Z"
+      "scrapedAt": "2026-01-14T23:16:33.159Z",
+      "sizes": [
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/175287951265801-BLK.webp",
+      "detailsScrapedAt": "2026-01-15T12:22:19.357Z"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-logo-sanpuerto-36161rw-s00-38",
@@ -493,7 +877,20 @@
       "url": "https://www.djaksport.com/patike-logo-sanpuerto-36161rw-s00",
       "imageUrl": "/images/djaksport/36161rw-s00_1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:33.159Z"
+      "scrapedAt": "2026-01-14T23:16:33.159Z",
+      "sizes": [
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/6/36161RW-S00_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:22:26.801Z"
     },
     {
       "id": "djaksport-www-djaksport-com-cipele-pitsburg-q321m-pitsbu-blk-39",
@@ -506,7 +903,13 @@
       "url": "https://www.djaksport.com/cipele-pitsburg-q321m-pitsbu-blk",
       "imageUrl": "/images/djaksport/q321m-pitsbu-blk_1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:33.159Z"
+      "scrapedAt": "2026-01-14T23:16:33.159Z",
+      "sizes": [
+        "44"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/Q/3/Q321M-PITSBU-BLK_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:22:37.619Z"
     },
     {
       "id": "djaksport-www-djaksport-com-adidas-patike-courtblock-j-cblack-cblack-cblack-za-decake-id65-40",
@@ -519,7 +922,14 @@
       "url": "https://www.djaksport.com/adidas-patike-courtblock-j-cblack-cblack-cblack-za-decake-id6502",
       "imageUrl": "/images/djaksport/1718866693id6502.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:49.888Z"
+      "scrapedAt": "2026-01-14T23:16:49.888Z",
+      "sizes": [
+        "36",
+        "38"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1718866693ID6502.webp",
+      "detailsScrapedAt": "2026-01-15T12:22:50.383Z"
     },
     {
       "id": "djaksport-www-djaksport-com-copperminer-cipele-felix-kid-za-decake-q324ps-felix-blu-41",
@@ -532,7 +942,18 @@
       "url": "https://www.djaksport.com/copperminer-cipele-felix-kid-za-decake-q324ps-felix-blu",
       "imageUrl": "/images/djaksport/1732723052q324ps-felix-blu.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:49.888Z"
+      "scrapedAt": "2026-01-14T23:16:49.888Z",
+      "sizes": [
+        "28",
+        "29",
+        "30",
+        "31",
+        "34",
+        "35"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1732723052Q324PS-FELIX-BLU.webp",
+      "detailsScrapedAt": "2026-01-15T12:22:58.156Z"
     },
     {
       "id": "djaksport-www-djaksport-com-merrell-cipele-moab-speed-2-mid-wtrpf-za-decake-mk267548-42",
@@ -545,7 +966,15 @@
       "url": "https://www.djaksport.com/merrell-cipele-moab-speed-2-mid-wtrpf-za-decake-mk267548",
       "imageUrl": "/images/djaksport/1724944212mk267548.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:49.888Z"
+      "scrapedAt": "2026-01-14T23:16:49.888Z",
+      "sizes": [
+        "35",
+        "37",
+        "38"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1724944212MK267548.webp",
+      "detailsScrapedAt": "2026-01-15T12:23:04.414Z"
     },
     {
       "id": "djaksport-www-djaksport-com-361-degrees-patike-kid-s-skateboard-za-devojcice-wk72513709-1g-43",
@@ -558,7 +987,15 @@
       "url": "https://www.djaksport.com/361-degrees-patike-kid-s-skateboard-za-devojcice-wk72513709-1g",
       "imageUrl": "/images/djaksport/1745449079wk72513709-1g.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:49.888Z"
+      "scrapedAt": "2026-01-14T23:16:49.888Z",
+      "sizes": [
+        "34",
+        "36",
+        "37"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1745449079WK72513709-1G.webp",
+      "detailsScrapedAt": "2026-01-15T12:23:12.141Z"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-zenski-duks-eastbound-fruma-za-zene-ebw507-blk-44",
@@ -571,7 +1008,13 @@
       "url": "https://www.djaksport.com/eastbound-zenski-duks-eastbound-fruma-za-zene-ebw507-blk",
       "imageUrl": "/images/djaksport/1730735791ebw507-blk.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:49.888Z"
+      "scrapedAt": "2026-01-14T23:16:49.888Z",
+      "sizes": [
+        "L"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1730735791EBW507-BLK.webp",
+      "detailsScrapedAt": "2026-01-15T12:23:19.841Z"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-patike-camden-high-jr-unisex-deciji-216088-3913-45",
@@ -584,7 +1027,20 @@
       "url": "https://www.djaksport.com/hummel-patike-camden-high-jr-unisex-deciji-216088-3913",
       "imageUrl": "/images/djaksport/1730735736216088-3913.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:49.888Z"
+      "scrapedAt": "2026-01-14T23:16:49.888Z",
+      "sizes": [
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1730735736216088-3913.webp",
+      "detailsScrapedAt": "2026-01-15T12:23:28.186Z"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-hml-dragon-jr-t900380-9031-46",
@@ -597,7 +1053,15 @@
       "url": "https://www.djaksport.com/patike-hml-dragon-jr-t900380-9031",
       "imageUrl": "/images/djaksport/1699315253t900380-9031.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:49.889Z"
+      "scrapedAt": "2026-01-14T23:16:49.889Z",
+      "sizes": [
+        "30",
+        "31",
+        "32"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/6/1699315253T900380-9031.JPG",
+      "detailsScrapedAt": "2026-01-15T12:23:47.443Z"
     },
     {
       "id": "djaksport-www-djaksport-com-komplet-trenerka-kappa4soccer-dalcito-321e1iw-a01d-47",
@@ -610,7 +1074,17 @@
       "url": "https://www.djaksport.com/komplet-trenerka-kappa4soccer-dalcito-321e1iw-a01d",
       "imageUrl": "/images/djaksport/321e1iw-a01d_1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:49.889Z"
+      "scrapedAt": "2026-01-14T23:16:49.889Z",
+      "sizes": [
+        "128",
+        "140",
+        "152",
+        "164",
+        "176"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/2/321E1IW-A01D_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:23:55.149Z"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-smooth-street-405633l-bkw-48",
@@ -623,7 +1097,13 @@
       "url": "https://www.djaksport.com/patike-smooth-street-405633l-bkw",
       "imageUrl": "/images/djaksport/405633l-bkw_1_1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:49.889Z"
+      "scrapedAt": "2026-01-14T23:16:49.889Z",
+      "sizes": [
+        "31"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/4/0/405633L-BKW_1_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:24:02.865Z"
     },
     {
       "id": "djaksport-www-djaksport-com-puma-donji-deo-puma-evostripe-core-pants-za-muskarce-631533-07-49",
@@ -636,7 +1116,14 @@
       "url": "https://www.djaksport.com/puma-donji-deo-puma-evostripe-core-pants-za-muskarce-631533-07",
       "imageUrl": "/images/djaksport/1740671827631533-07.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:49.889Z"
+      "scrapedAt": "2026-01-14T23:16:49.889Z",
+      "sizes": [
+        "M",
+        "XXL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1740671827631533-07.webp",
+      "detailsScrapedAt": "2026-01-15T12:24:09.770Z"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-puma-caven-2-0-392290-03-50",
@@ -649,7 +1136,17 @@
       "url": "https://www.djaksport.com/patike-puma-caven-2-0-392290-03",
       "imageUrl": "/images/djaksport/392290-03_1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:49.889Z"
+      "scrapedAt": "2026-01-14T23:16:49.889Z",
+      "sizes": [
+        "42.5",
+        "43",
+        "44",
+        "44.5",
+        "45"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/9/392290-03_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:24:15.922Z"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-puma-carina-2-0-385849-02-51",
@@ -662,7 +1159,14 @@
       "url": "https://www.djaksport.com/patike-puma-carina-2-0-385849-02",
       "imageUrl": "/images/djaksport/1731081866385849-02.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:49.889Z"
+      "scrapedAt": "2026-01-14T23:16:49.889Z",
+      "sizes": [
+        "38",
+        "39"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1731081866385849-02.webp",
+      "detailsScrapedAt": "2026-01-15T12:24:22.989Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-duks-kappa-logo-firti-za-muskarce-341p89w-005-52",
@@ -675,7 +1179,14 @@
       "url": "https://www.djaksport.com/kappa-duks-kappa-logo-firti-za-muskarce-341p89w-005",
       "imageUrl": "/images/djaksport/1727362555341p89w-005.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:49.889Z"
+      "scrapedAt": "2026-01-14T23:16:49.889Z",
+      "sizes": [
+        "S",
+        "M"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1727362555341P89W-005.JPG",
+      "detailsScrapedAt": "2026-01-15T12:37:20.905Z"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-converse-chuck-taylor-all-star-core-m7650-53",
@@ -688,7 +1199,14 @@
       "url": "https://www.djaksport.com/patike-converse-chuck-taylor-all-star-core-m7650",
       "imageUrl": "/images/djaksport/m7650_1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:49.889Z"
+      "scrapedAt": "2026-01-14T23:16:49.889Z",
+      "sizes": [
+        "36",
+        "42"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/M/7/M7650_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:25:04.375Z"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-zenski-duks-eastbound-fruma-za-zene-ebw507-wht-54",
@@ -701,7 +1219,13 @@
       "url": "https://www.djaksport.com/eastbound-zenski-duks-eastbound-fruma-za-zene-ebw507-wht",
       "imageUrl": "/images/djaksport/1730735793ebw507-wht.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:49.889Z"
+      "scrapedAt": "2026-01-14T23:16:49.889Z",
+      "sizes": [
+        "XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1730735793EBW507-WHT.webp",
+      "detailsScrapedAt": "2026-01-15T12:25:12.373Z"
     },
     {
       "id": "djaksport-www-djaksport-com-joma-patike-dribling-za-muskarce-driw2401-in-55",
@@ -714,7 +1238,18 @@
       "url": "https://www.djaksport.com/joma-patike-dribling-za-muskarce-driw2401-in",
       "imageUrl": "/images/djaksport/1726066571driw2401.in.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:49.889Z"
+      "scrapedAt": "2026-01-14T23:16:49.889Z",
+      "sizes": [
+        "40.5",
+        "42",
+        "42.5",
+        "43",
+        "44.5",
+        "45"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1726066571DRIW2401.IN.webp",
+      "detailsScrapedAt": "2026-01-15T12:25:21.587Z"
     },
     {
       "id": "djaksport-www-djaksport-com-cizme-keepsakes-wedge-cozy-peak-49811-tan-56",
@@ -727,7 +1262,13 @@
       "url": "https://www.djaksport.com/cizme-keepsakes-wedge-cozy-peak-49811-tan",
       "imageUrl": "/images/djaksport/172615294649811-tan.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:16:49.889Z"
+      "scrapedAt": "2026-01-14T23:16:49.889Z",
+      "sizes": [
+        "40"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/172615294649811-TAN.webp",
+      "detailsScrapedAt": "2026-01-15T10:07:09.124Z"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-grand-court-2-0-el-k-gy2327-57",
@@ -740,7 +1281,18 @@
       "url": "https://www.djaksport.com/patike-grand-court-2-0-el-k-gy2327",
       "imageUrl": "/images/djaksport/1720191820gy2327.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:05.012Z"
+      "scrapedAt": "2026-01-14T23:17:05.012Z",
+      "sizes": [
+        "31.5",
+        "28",
+        "29",
+        "30",
+        "31",
+        "34"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1720191820GY2327.webp",
+      "detailsScrapedAt": "2026-01-15T12:26:04.663Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-patike-260782k-rave-nc-k-za-devojcice-371355w-901-58",
@@ -753,7 +1305,13 @@
       "url": "https://www.djaksport.com/kappa-patike-260782k-rave-nc-k-za-devojcice-371355w-901",
       "imageUrl": "/images/djaksport/1721213743371355w-901.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:05.012Z"
+      "scrapedAt": "2026-01-14T23:17:05.012Z",
+      "sizes": [
+        "28"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1721213743371355W-901.JPG",
+      "detailsScrapedAt": "2026-01-15T12:26:12.423Z"
     },
     {
       "id": "djaksport-www-djaksport-com-joma-patike-toledo-jr-za-decake-tojs2502-in-59",
@@ -766,7 +1324,19 @@
       "url": "https://www.djaksport.com/joma-patike-toledo-jr-za-decake-tojs2502-in",
       "imageUrl": "/images/djaksport/1741103930tojs2502.in.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:05.012Z"
+      "scrapedAt": "2026-01-14T23:17:05.012Z",
+      "sizes": [
+        "32",
+        "33",
+        "34",
+        "35",
+        "36",
+        "37",
+        "38"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1741103930TOJS2502.IN.webp",
+      "detailsScrapedAt": "2026-01-15T12:26:21.316Z"
     },
     {
       "id": "djaksport-www-djaksport-com-donji-ves-logo-bum-2pack-304vmu0-905-60",
@@ -779,7 +1349,16 @@
       "url": "https://www.djaksport.com/donji-ves-logo-bum-2pack-304vmu0-905",
       "imageUrl": "/images/djaksport/1731081565304vmu0-905.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:05.012Z"
+      "scrapedAt": "2026-01-14T23:17:05.012Z",
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/0/304VMU0-905_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:26:28.544Z"
     },
     {
       "id": "djaksport-www-djaksport-com-lumberjack-cipele-poryna-za-muskarce-smk0501001-cb003-61",
@@ -792,7 +1371,13 @@
       "url": "https://www.djaksport.com/lumberjack-cipele-poryna-za-muskarce-smk0501001-cb003",
       "imageUrl": "/images/djaksport/1729781822smk0501001-cb003.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:05.012Z"
+      "scrapedAt": "2026-01-14T23:17:05.012Z",
+      "sizes": [
+        "45"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1729781822SMK0501001-CB003.webp",
+      "detailsScrapedAt": "2026-01-15T12:26:36.273Z"
     },
     {
       "id": "djaksport-www-djaksport-com-donji-ves-logo-bit-2pack-331c4tw-a01-62",
@@ -805,7 +1390,16 @@
       "url": "https://www.djaksport.com/donji-ves-logo-bit-2pack-331c4tw-a01",
       "imageUrl": "/images/djaksport/1731081570331c4tw-a01.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:05.012Z"
+      "scrapedAt": "2026-01-14T23:17:05.012Z",
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/3/331C4TW-A01_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:26:43.729Z"
     },
     {
       "id": "djaksport-www-djaksport-com-cipele-ultra-trek-32-q317m-ultra-blk-63",
@@ -818,7 +1412,20 @@
       "url": "https://www.djaksport.com/cipele-ultra-trek-32-q317m-ultra-blk",
       "imageUrl": "/images/djaksport/q317m-ultra-blk_1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:05.012Z"
+      "scrapedAt": "2026-01-14T23:17:05.012Z",
+      "sizes": [
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/Q/3/Q317M-ULTRA-BLK_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:26:52.504Z"
     },
     {
       "id": "djaksport-www-djaksport-com-copperminer-cipele-stone-za-muskarce-q232m-stone-olv-64",
@@ -831,7 +1438,16 @@
       "url": "https://www.djaksport.com/copperminer-cipele-stone-za-muskarce-q232m-stone-olv",
       "imageUrl": "/images/djaksport/1759931845q232m-stone-olv.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:05.012Z"
+      "scrapedAt": "2026-01-14T23:17:05.012Z",
+      "sizes": [
+        "41",
+        "42",
+        "44",
+        "46"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1759931845Q232M-STONE-OLV.webp",
+      "detailsScrapedAt": "2026-01-15T10:08:16.418Z"
     },
     {
       "id": "djaksport-www-djaksport-com-under-armour-patike-charged-bandit-tr-3-za-muskarce-3028657-00-65",
@@ -844,7 +1460,16 @@
       "url": "https://www.djaksport.com/under-armour-patike-charged-bandit-tr-3-za-muskarce-3028657-001",
       "imageUrl": "/images/djaksport/17478393433028657-001.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:05.012Z"
+      "scrapedAt": "2026-01-14T23:17:05.012Z",
+      "sizes": [
+        "42",
+        "42.5",
+        "43",
+        "44"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/17478393433028657-001.webp",
+      "detailsScrapedAt": "2026-01-15T12:27:31.236Z"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-patike-hml-lemos-za-muskarce-t900375-2594-66",
@@ -857,7 +1482,13 @@
       "url": "https://www.djaksport.com/hummel-patike-hml-lemos-za-muskarce-t900375-2594",
       "imageUrl": "/images/djaksport/1730361365t900375-2594.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:23.565Z"
+      "scrapedAt": "2026-01-14T23:17:23.565Z",
+      "sizes": [
+        "43"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1730361365T900375-2594.webp",
+      "detailsScrapedAt": "2026-01-15T12:27:38.348Z"
     },
     {
       "id": "djaksport-www-djaksport-com-joma-patike-toledo-jr-turf-za-decake-tojw2401-tf-67",
@@ -870,7 +1501,18 @@
       "url": "https://www.djaksport.com/joma-patike-toledo-jr-turf-za-decake-tojw2401-tf",
       "imageUrl": "/images/djaksport/1752898184tojw2401.tf.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:23.565Z"
+      "scrapedAt": "2026-01-14T23:17:23.565Z",
+      "sizes": [
+        "31",
+        "32",
+        "33",
+        "35",
+        "36",
+        "37"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1752898184TOJW2401.TF.webp",
+      "detailsScrapedAt": "2026-01-15T12:27:46.783Z"
     },
     {
       "id": "djaksport-www-djaksport-com-trn-patike-base-ii-3032030-900-68",
@@ -883,7 +1525,20 @@
       "url": "https://www.djaksport.com/trn-patike-base-ii-3032030-900",
       "imageUrl": "/images/djaksport/17370429253032030-900.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:23.565Z"
+      "scrapedAt": "2026-01-14T23:17:23.565Z",
+      "sizes": [
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/17370429253032030-900.webp",
+      "detailsScrapedAt": "2026-01-15T10:08:51.473Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-cizme-261044k-claw-ii-tex-k-za-decake-371n62w-a7n-69",
@@ -896,7 +1551,20 @@
       "url": "https://www.djaksport.com/kappa-cizme-261044k-claw-ii-tex-k-za-decake-371n62w-a7n",
       "imageUrl": "/images/djaksport/1727276175371n62w-a7n.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:23.565Z"
+      "scrapedAt": "2026-01-14T23:17:23.565Z",
+      "sizes": [
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1727276175371N62W-A7N.JPG",
+      "detailsScrapedAt": "2026-01-15T12:28:27.938Z"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-majica-hmldivide-t-shirt-ss-za-muskarce-t911794-2523-70",
@@ -909,7 +1577,16 @@
       "url": "https://www.djaksport.com/hummel-majica-hmldivide-t-shirt-ss-za-muskarce-t911794-2523",
       "imageUrl": "/images/djaksport/1710932547t911794-2523.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:23.565Z"
+      "scrapedAt": "2026-01-14T23:17:23.565Z",
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1710932547T911794-2523.webp",
+      "detailsScrapedAt": "2026-01-15T12:43:29.698Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-patike-243412-branja-za-zene-331s3jw-912-71",
@@ -922,7 +1599,14 @@
       "url": "https://www.djaksport.com/kappa-patike-243412-branja-za-zene-331s3jw-912",
       "imageUrl": "/images/djaksport/1703734253331s3jw-912.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:23.565Z"
+      "scrapedAt": "2026-01-14T23:17:23.565Z",
+      "sizes": [
+        "40",
+        "41"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1703734253331S3JW-912.JPG",
+      "detailsScrapedAt": "2026-01-15T12:29:07.070Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-decije-patike-logo-saigon-ev-kid-za-decake-311l3lw-a0b-72",
@@ -935,7 +1619,14 @@
       "url": "https://www.djaksport.com/kappa-decije-patike-logo-saigon-ev-kid-za-decake-311l3lw-a0b",
       "imageUrl": "/images/djaksport/1745938539311l3lw-a0b.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:23.565Z"
+      "scrapedAt": "2026-01-14T23:17:23.565Z",
+      "sizes": [
+        "28",
+        "30"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1745938539311L3LW-A0B.webp",
+      "detailsScrapedAt": "2026-01-15T12:29:14.444Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-cizme-260632k-road-tex-k-za-decake-304jt20-961-73",
@@ -948,7 +1639,16 @@
       "url": "https://www.djaksport.com/kappa-cizme-260632k-road-tex-k-za-decake-304jt20-961",
       "imageUrl": "/images/djaksport/1729608913304jt20-961.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:23.565Z"
+      "scrapedAt": "2026-01-14T23:17:23.565Z",
+      "sizes": [
+        "32",
+        "33",
+        "34",
+        "35"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1729608913304JT20-961.JPG",
+      "detailsScrapedAt": "2026-01-15T12:29:20.582Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-cizme-260903k-cekis-tex-k-decaci-uzrasta-0-4-godine-3815-74",
@@ -961,7 +1661,18 @@
       "url": "https://www.djaksport.com/kappa-cizme-260903k-cekis-tex-k-decaci-uzrasta-0-4-godine-38158uw-a79",
       "imageUrl": "/images/djaksport/172891775438158uw-a79.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:23.565Z"
+      "scrapedAt": "2026-01-14T23:17:23.565Z",
+      "sizes": [
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/172891775438158UW-A79.JPG",
+      "detailsScrapedAt": "2026-01-15T12:29:27.326Z"
     },
     {
       "id": "djaksport-www-djaksport-com-adidas-patike-grand-court-base-2-0-za-muskarce-id1183-75",
@@ -974,7 +1685,15 @@
       "url": "https://www.djaksport.com/adidas-patike-grand-court-base-2-0-za-muskarce-id1183",
       "imageUrl": "/images/djaksport/1719917807id1183.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:23.565Z"
+      "scrapedAt": "2026-01-14T23:17:23.565Z",
+      "sizes": [
+        "40",
+        "42",
+        "44"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1719917807ID1183.webp",
+      "detailsScrapedAt": "2026-01-15T10:10:11.948Z"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-duks-eastbound-aron-za-muskarce-ebm501-blk-76",
@@ -987,7 +1706,14 @@
       "url": "https://www.djaksport.com/eastbound-duks-eastbound-aron-za-muskarce-ebm501-blk",
       "imageUrl": "/images/djaksport/1728917849ebm501-blk.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:41.440Z"
+      "scrapedAt": "2026-01-14T23:17:41.440Z",
+      "sizes": [
+        "L",
+        "XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1728917849EBM501-BLK.JPG",
+      "detailsScrapedAt": "2026-01-15T13:26:27.525Z"
     },
     {
       "id": "djaksport-www-djaksport-com-skechers-cipele-relment-za-muskarce-65529-bbk-77",
@@ -1000,7 +1726,14 @@
       "url": "https://www.djaksport.com/skechers-cipele-relment-za-muskarce-65529-bbk",
       "imageUrl": "/images/djaksport/172537540265529-bbk.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:41.440Z"
+      "scrapedAt": "2026-01-14T23:17:41.440Z",
+      "sizes": [
+        "43",
+        "45"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/172537540265529-BBK.webp",
+      "detailsScrapedAt": "2026-01-15T12:30:40.083Z"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-donji-deo-hmlessential-training-pants-za-muskarce-22454-78",
@@ -1013,7 +1746,17 @@
       "url": "https://www.djaksport.com/hummel-donji-deo-hmlessential-training-pants-za-muskarce-224549-7026",
       "imageUrl": "/images/djaksport/1709609496224549-7026.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:41.440Z"
+      "scrapedAt": "2026-01-14T23:17:41.440Z",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1709609496224549-7026.JPG",
+      "detailsScrapedAt": "2026-01-15T12:30:47.902Z"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-patike-camden-jr-za-devojcice-213401-3188-79",
@@ -1026,7 +1769,19 @@
       "url": "https://www.djaksport.com/hummel-patike-camden-jr-za-devojcice-213401-3188",
       "imageUrl": "/images/djaksport/1730735721213401-3188.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:41.440Z"
+      "scrapedAt": "2026-01-14T23:17:41.440Z",
+      "sizes": [
+        "28",
+        "29",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1730735721213401-3188.webp",
+      "detailsScrapedAt": "2026-01-15T12:30:54.932Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kid-jakna-hmlnorth-jacket-203899-2001-80",
@@ -1039,7 +1794,11 @@
       "url": "https://www.djaksport.com/kid-jakna-hmlnorth-jacket-203899-2001",
       "imageUrl": "/images/djaksport/203899-2001_1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:41.440Z"
+      "scrapedAt": "2026-01-14T23:17:41.440Z",
+      "sizes": [],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/2/0/203899-2001_1.webp",
+      "detailsScrapedAt": "2026-01-15T13:35:31.122Z"
     },
     {
       "id": "djaksport-www-djaksport-com-carape-life-low-3p-blk-16024-blk-81",
@@ -1052,7 +1811,11 @@
       "url": "https://www.djaksport.com/carape-life-low-3p-blk-16024-blk",
       "imageUrl": "/images/djaksport/16024-blk_1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:41.440Z"
+      "scrapedAt": "2026-01-14T23:17:41.440Z",
+      "sizes": [],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/6/16024-BLK_1.webp",
+      "detailsScrapedAt": "2026-01-15T13:35:37.354Z"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-jakna-hmlpuff-jacket-short-sportswear-za-muskarce-22594-82",
@@ -1065,7 +1828,17 @@
       "url": "https://www.djaksport.com/hummel-jakna-hmlpuff-jacket-short-sportswear-za-muskarce-225948-6565",
       "imageUrl": "/images/djaksport/1732550129225948-6565.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:41.440Z"
+      "scrapedAt": "2026-01-14T23:17:41.440Z",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1732550129225948-6565.webp",
+      "detailsScrapedAt": "2026-01-15T12:31:13.392Z"
     },
     {
       "id": "djaksport-www-djaksport-com-nike-patike-wmns-nike-court-royale-2-nn-za-zene-dh3159-100-83",
@@ -1078,7 +1851,18 @@
       "url": "https://www.djaksport.com/nike-patike-wmns-nike-court-royale-2-nn-za-zene-dh3159-100",
       "imageUrl": "/images/djaksport/1722250602dh3159-100.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:41.440Z"
+      "scrapedAt": "2026-01-14T23:17:41.440Z",
+      "sizes": [
+        "37.5",
+        "38",
+        "38.5",
+        "39",
+        "40",
+        "40.5"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1722250602DH3159-100.webp",
+      "detailsScrapedAt": "2026-01-15T12:31:21.132Z"
     },
     {
       "id": "djaksport-www-djaksport-com-nike-duks-m-nsw-club-hoodie-po-bb-za-muskarce-bv2654-365-84",
@@ -1091,7 +1875,16 @@
       "url": "https://www.djaksport.com/nike-duks-m-nsw-club-hoodie-po-bb-za-muskarce-bv2654-365",
       "imageUrl": "/images/djaksport/1707363109bv2654-365.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:41.440Z"
+      "scrapedAt": "2026-01-14T23:17:41.440Z",
+      "sizes": [
+        "S",
+        "M",
+        "L",
+        "XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1707363109BV2654-365.webp",
+      "detailsScrapedAt": "2026-01-15T10:11:50.276Z"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-bash-pf-gc-351419w-906-85",
@@ -1104,7 +1897,16 @@
       "url": "https://www.djaksport.com/patike-bash-pf-gc-351419w-906",
       "imageUrl": "/images/djaksport/1707967843351419w-906.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:41.440Z"
+      "scrapedAt": "2026-01-14T23:17:41.440Z",
+      "sizes": [
+        "37",
+        "38",
+        "39",
+        "40"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1707967843351419W-906.JPG",
+      "detailsScrapedAt": "2026-01-15T12:32:05.206Z"
     },
     {
       "id": "djaksport-www-djaksport-com-donji-ves-logo-ben-2pack-304vmt0-904-86",
@@ -1117,7 +1919,16 @@
       "url": "https://www.djaksport.com/donji-ves-logo-ben-2pack-304vmt0-904",
       "imageUrl": "/images/djaksport/1731081561304vmt0-904.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:41.440Z"
+      "scrapedAt": "2026-01-14T23:17:41.440Z",
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/0/304VMT0-904_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:32:12.671Z"
     },
     {
       "id": "djaksport-www-djaksport-com-copperminer-cipele-gigi-kid-za-decake-q324ps-gigi-gre-87",
@@ -1130,7 +1941,20 @@
       "url": "https://www.djaksport.com/copperminer-cipele-gigi-kid-za-decake-q324ps-gigi-gre",
       "imageUrl": "/images/djaksport/1732723062q324ps-gigi-gre.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:58.452Z"
+      "scrapedAt": "2026-01-14T23:17:58.452Z",
+      "sizes": [
+        "28",
+        "29",
+        "30",
+        "31",
+        "32",
+        "33",
+        "34",
+        "35"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1732723062Q324PS-GIGI-GRE.webp",
+      "detailsScrapedAt": "2026-01-15T12:32:19.311Z"
     },
     {
       "id": "djaksport-www-djaksport-com-muske-patike-nike-blazer-bq6806-100-88",
@@ -1143,7 +1967,13 @@
       "url": "https://www.djaksport.com/muske-patike-nike-blazer-bq6806-100",
       "imageUrl": "/images/djaksport/bq6806-100_1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:58.452Z"
+      "scrapedAt": "2026-01-14T23:17:58.452Z",
+      "sizes": [
+        "43"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/B/Q/BQ6806-100_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:32:25.990Z"
     },
     {
       "id": "djaksport-www-djaksport-com-cipele-pitsburg-q321m-pitsbu-gry-89",
@@ -1156,7 +1986,17 @@
       "url": "https://www.djaksport.com/cipele-pitsburg-q321m-pitsbu-gry",
       "imageUrl": "/images/djaksport/1738166315q321m-pitsbu-gry.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:58.452Z"
+      "scrapedAt": "2026-01-14T23:17:58.452Z",
+      "sizes": [
+        "42",
+        "43",
+        "44",
+        "45",
+        "46"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1738166315Q321M-PITSBU-GRY.webp",
+      "detailsScrapedAt": "2026-01-15T12:32:34.216Z"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-hoops-mid-3-0-ac-i-gw0408-90",
@@ -1169,7 +2009,17 @@
       "url": "https://www.djaksport.com/patike-hoops-mid-3-0-ac-i-gw0408",
       "imageUrl": "/images/djaksport/gw0408_1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:58.452Z"
+      "scrapedAt": "2026-01-14T23:17:58.452Z",
+      "sizes": [
+        "22",
+        "23",
+        "25",
+        "26",
+        "27"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/G/W/GW0408_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:32:41.987Z"
     },
     {
       "id": "djaksport-www-djaksport-com-nike-patike-lebron-witness-viii-za-muskarce-fb2239-402-91",
@@ -1182,7 +2032,13 @@
       "url": "https://www.djaksport.com/nike-patike-lebron-witness-viii-za-muskarce-fb2239-402",
       "imageUrl": "/images/djaksport/1724684395fb2239-402.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:58.452Z"
+      "scrapedAt": "2026-01-14T23:17:58.452Z",
+      "sizes": [
+        "43"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1724684395FB2239-402.webp",
+      "detailsScrapedAt": "2026-01-15T13:35:44.735Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-duks-logo-fomino-za-muskarce-371l7zw-005-92",
@@ -1195,7 +2051,15 @@
       "url": "https://www.djaksport.com/kappa-duks-logo-fomino-za-muskarce-371l7zw-005",
       "imageUrl": "/images/djaksport/1707449454371l7zw-005.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:58.452Z"
+      "scrapedAt": "2026-01-14T23:17:58.452Z",
+      "sizes": [
+        "S",
+        "M",
+        "L"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1707449454371L7ZW-005.JPG",
+      "detailsScrapedAt": "2026-01-15T13:35:50.411Z"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-patike-court-line-za-muskarce-225943-9035-93",
@@ -1208,7 +2072,24 @@
       "url": "https://www.djaksport.com/hummel-patike-court-line-za-muskarce-225943-9035",
       "imageUrl": "/images/djaksport/1728053723225943-9035.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:58.452Z"
+      "scrapedAt": "2026-01-14T23:17:58.452Z",
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39",
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46",
+        "47"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1728053723225943-9035.webp",
+      "detailsScrapedAt": "2026-01-15T12:33:53.267Z"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-bokserice-freedom-2-pack-za-muskarce-ebun001-bny-94",
@@ -1221,7 +2102,16 @@
       "url": "https://www.djaksport.com/eastbound-bokserice-freedom-2-pack-za-muskarce-ebun001-bny",
       "imageUrl": "/images/djaksport/1727967392ebun001-bny.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:58.452Z"
+      "scrapedAt": "2026-01-14T23:17:58.452Z",
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1727967392EBUN001-BNY.JPG",
+      "detailsScrapedAt": "2026-01-15T12:34:00.231Z"
     },
     {
       "id": "djaksport-www-djaksport-com-joma-patike-dribling-turf-za-muskarce-driw2401-tf-95",
@@ -1234,7 +2124,17 @@
       "url": "https://www.djaksport.com/joma-patike-dribling-turf-za-muskarce-driw2401-tf",
       "imageUrl": "/images/djaksport/1752897889driw2401.tf.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:58.452Z"
+      "scrapedAt": "2026-01-14T23:17:58.452Z",
+      "sizes": [
+        "40",
+        "41",
+        "43",
+        "44",
+        "46"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1752897889DRIW2401.TF.webp",
+      "detailsScrapedAt": "2026-01-15T12:34:08.899Z"
     },
     {
       "id": "djaksport-www-djaksport-com-adidas-patike-strutter-za-muskarce-ih4906-96",
@@ -1247,7 +2147,13 @@
       "url": "https://www.djaksport.com/adidas-patike-strutter-za-muskarce-ih4906",
       "imageUrl": "/images/djaksport/1718377727ih4906.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:58.452Z"
+      "scrapedAt": "2026-01-14T23:17:58.452Z",
+      "sizes": [
+        "40"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1718377727IH4906.webp",
+      "detailsScrapedAt": "2026-01-15T12:34:16.323Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-patike-243333-naveen-za-muskarce-351h33w-950-97",
@@ -1260,7 +2166,17 @@
       "url": "https://www.djaksport.com/kappa-patike-243333-naveen-za-muskarce-351h33w-950",
       "imageUrl": "/images/djaksport/1709881264351h33w-950.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:17:58.452Z"
+      "scrapedAt": "2026-01-14T23:17:58.452Z",
+      "sizes": [
+        "40",
+        "41",
+        "42",
+        "43",
+        "44"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1709881264351H33W-950.JPG",
+      "detailsScrapedAt": "2026-01-15T12:34:23.040Z"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-donji-deo-eastbound-fast-za-muskarce-ebm500-blk-98",
@@ -1273,7 +2189,13 @@
       "url": "https://www.djaksport.com/eastbound-donji-deo-eastbound-fast-za-muskarce-ebm500-blk",
       "imageUrl": "/images/djaksport/1728485853ebm500-blk.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:18:13.351Z"
+      "scrapedAt": "2026-01-14T23:18:13.351Z",
+      "sizes": [
+        "M"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1728485853EBM500-BLK.JPG",
+      "detailsScrapedAt": "2026-01-15T12:34:29.389Z"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-nike-court-legacy-bg-da5380-116-99",
@@ -1286,7 +2208,15 @@
       "url": "https://www.djaksport.com/patike-nike-court-legacy-bg-da5380-116",
       "imageUrl": "/images/djaksport/da5380-116_1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:18:13.351Z"
+      "scrapedAt": "2026-01-14T23:18:13.351Z",
+      "sizes": [
+        "38.5",
+        "39",
+        "40"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/D/A/DA5380-116_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:34:37.315Z"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-duks-hmlfelix-zip-jacket-za-muskarce-t921955-2001-100",
@@ -1299,7 +2229,14 @@
       "url": "https://www.djaksport.com/hummel-duks-hmlfelix-zip-jacket-za-muskarce-t921955-2001",
       "imageUrl": "/images/djaksport/1730476600t921955-2001.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:18:13.351Z"
+      "scrapedAt": "2026-01-14T23:18:13.351Z",
+      "sizes": [
+        "M",
+        "XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1730476600T921955-2001.webp",
+      "detailsScrapedAt": "2026-01-15T13:35:56.121Z"
     },
     {
       "id": "djaksport-www-djaksport-com-adidas-patike-strutter-za-muskarce-id3072-101",
@@ -1312,7 +2249,15 @@
       "url": "https://www.djaksport.com/adidas-patike-strutter-za-muskarce-id3072",
       "imageUrl": "/images/djaksport/1708572959id3072.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:18:13.351Z"
+      "scrapedAt": "2026-01-14T23:18:13.351Z",
+      "sizes": [
+        "40",
+        "42",
+        "44"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1708572959ID3072.webp",
+      "detailsScrapedAt": "2026-01-15T12:35:17.271Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-patike-logo-roockey-za-muskarce-351h2uw-a05-102",
@@ -1325,7 +2270,19 @@
       "url": "https://www.djaksport.com/kappa-patike-logo-roockey-za-muskarce-351h2uw-a05",
       "imageUrl": "/images/djaksport/1704857449351h2uw-a05.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:18:13.351Z"
+      "scrapedAt": "2026-01-14T23:18:13.351Z",
+      "sizes": [
+        "40",
+        "41",
+        "42",
+        "43",
+        "44",
+        "45",
+        "46"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1704857449351H2UW-A05.webp",
+      "detailsScrapedAt": "2026-01-15T12:35:25.303Z"
     },
     {
       "id": "djaksport-www-djaksport-com-invento-jakna-smit-za-decake-710035-black-103",
@@ -1338,7 +2295,16 @@
       "url": "https://www.djaksport.com/invento-jakna-smit-za-decake-710035-black",
       "imageUrl": "/images/djaksport/1763718976710035-black.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:18:13.351Z"
+      "scrapedAt": "2026-01-14T23:18:13.351Z",
+      "sizes": [
+        "128",
+        "140",
+        "152",
+        "164"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1763718976710035-BLACK.webp",
+      "detailsScrapedAt": "2026-01-15T12:35:32.858Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-decije-patike-logo-saigon-ev-kid-za-devojcice-311l3lw-a1-104",
@@ -1351,7 +2317,17 @@
       "url": "https://www.djaksport.com/kappa-decije-patike-logo-saigon-ev-kid-za-devojcice-311l3lw-a1p",
       "imageUrl": "/images/djaksport/1743062127311l3lw-a1p.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:18:13.351Z"
+      "scrapedAt": "2026-01-14T23:18:13.351Z",
+      "sizes": [
+        "28",
+        "29",
+        "30",
+        "31",
+        "32"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1743062127311L3LW-A1P.webp",
+      "detailsScrapedAt": "2026-01-15T12:35:40.720Z"
     },
     {
       "id": "djaksport-www-djaksport-com-nike-patike-court-borough-mid-2-bpv-za-decake-cd7783-118-105",
@@ -1364,7 +2340,16 @@
       "url": "https://www.djaksport.com/nike-patike-court-borough-mid-2-bpv-za-decake-cd7783-118",
       "imageUrl": "/images/djaksport/1730476551cd7783-118.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:18:13.351Z"
+      "scrapedAt": "2026-01-14T23:18:13.351Z",
+      "sizes": [
+        "29.5",
+        "28",
+        "30",
+        "31"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1730476551CD7783-118.webp",
+      "detailsScrapedAt": "2026-01-15T12:35:47.435Z"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-bash-pf-gc-351419w-a2n-106",
@@ -1377,7 +2362,16 @@
       "url": "https://www.djaksport.com/patike-bash-pf-gc-351419w-a2n",
       "imageUrl": "/images/djaksport/351419w-a2n_1.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:18:13.557Z"
+      "scrapedAt": "2026-01-14T23:18:13.557Z",
+      "sizes": [
+        "36",
+        "37",
+        "38",
+        "39"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/5/351419W-A2N_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:35:54.831Z"
     },
     {
       "id": "djaksport-www-djaksport-com-donji-ves-logo-leo-2pack-304uc30-a00-107",
@@ -1390,7 +2384,16 @@
       "url": "https://www.djaksport.com/donji-ves-logo-leo-2pack-304uc30-a00",
       "imageUrl": "/images/djaksport/1731081544304uc30-a00.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:18:13.745Z"
+      "scrapedAt": "2026-01-14T23:18:13.745Z",
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "2XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/0/304UC30-A00_1.webp",
+      "detailsScrapedAt": "2026-01-15T12:36:02.646Z"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-jakna-up-za-muskarce-ebm908-blk-108",
@@ -1403,7 +2406,17 @@
       "url": "https://www.djaksport.com/eastbound-jakna-up-za-muskarce-ebm908-blk",
       "imageUrl": "/images/djaksport/1758549447ebm908-blk.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:18:13.761Z"
+      "scrapedAt": "2026-01-14T23:18:13.761Z",
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "2XL",
+        "3XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1758549447EBM908-BLK.webp",
+      "detailsScrapedAt": "2026-01-15T12:36:10.943Z"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-muski-duks-303mkj0-a07-109",
@@ -1416,7 +2429,17 @@
       "url": "https://www.djaksport.com/kappa-muski-duks-303mkj0-a07",
       "imageUrl": "/images/djaksport/1744124149303mkj0-a07.jpg",
       "category": null,
-      "scrapedAt": "2026-01-14T23:18:13.946Z"
+      "scrapedAt": "2026-01-14T23:18:13.946Z",
+      "sizes": [
+        "M",
+        "L",
+        "XL",
+        "2XL",
+        "3XL"
+      ],
+      "description": null,
+      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1744124149303MKJ0-A07.webp",
+      "detailsScrapedAt": "2026-01-15T12:36:18.503Z"
     }
   ],
   "totalScraped": 323,

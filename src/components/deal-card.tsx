@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { usePathname, useSearchParams } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Deal, Store } from "@/types/deal";
@@ -27,9 +28,19 @@ export function DealCard({ deal }: DealCardProps) {
   const [imgLoaded, setImgLoaded] = useState(false);
   const [logoError, setLogoError] = useState(false);
   const storeInfo = STORE_INFO[deal.store];
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  // Save current URL with filters when clicking a product
+  const handleClick = () => {
+    const currentUrl = searchParams.toString()
+      ? `${pathname}?${searchParams.toString()}`
+      : pathname;
+    sessionStorage.setItem("dealsReturnUrl", currentUrl);
+  };
 
   return (
-    <Link href={`/ponuda/${deal.id}`}>
+    <Link href={`/ponuda/${deal.id}`} onClick={handleClick}>
       <Card className="group h-full overflow-hidden transition-shadow hover:shadow-lg dark:bg-gray-800 dark:border-gray-700">
         <div className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-700">
           {deal.imageUrl && !imgError ? (

@@ -12,7 +12,9 @@
     "format:check": "prettier --check .",
     "scrape": "npx tsx src/scraper/index.ts",
     "scrape:djak": "npx tsx src/scraper/stores/djaksport.ts",
-    "scrape:planeta": "npx tsx src/scraper/stores/planeta.ts"
+    "scrape:planeta": "npx tsx src/scraper/stores/planeta.ts",
+    "scrape:details": "npx tsx src/scraper/detail-scraper.ts",
+    "scrape:details:djak": "npx tsx src/scraper/detail-scraper.ts djaksport"
   },
   "dependencies": {
     "@next/third-parties": "^16.1.1",

@@ -10,6 +10,7 @@ import { DealCard } from "@/components/deal-card";
 import { ShareButton } from "@/components/share-button";
 import { ProductWishlistButton } from "@/components/product-wishlist-button";
 import { ProductImage } from "@/components/product-image";
+import { DealsBackLink } from "@/components/deals-back-link";
 
 // Calculate price valid date at build time (7 days from build)
 const priceValidUntilDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
@@ -351,9 +352,7 @@ export default async function DealPage({ params }: Props) {
         >
           <ol className="flex items-center text-sm text-gray-500 dark:text-gray-400">
             <li>
-              <Link href="/ponude" className="hover:text-red-500">
-                Ponude
-              </Link>
+              <DealsBackLink />
             </li>
             <li className="mx-2">/</li>
             <li>
@@ -386,7 +385,7 @@ export default async function DealPage({ params }: Props) {
                     Nema slike
                   </div>
                 )}
-                <Badge className="absolute left-4 top-4 bg-red-500 px-3 py-1 text-lg text-white">
+                <Badge className="absolute left-6 top-6 bg-red-500 px-3 py-1 text-lg text-white shadow-md">
                   -{deal.discountPercent}%
                 </Badge>
               </div>
@@ -439,23 +438,68 @@ export default async function DealPage({ params }: Props) {
                 </div>
 
                 {/* Sizes */}
-                {deal.sizes && deal.sizes.length > 0 && (
-                  <div className="mt-4">
-                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                      Dostupne veličine:
-                    </p>
-                    <div className="flex flex-wrap gap-2">
-                      {deal.sizes.map((size) => (
-                        <span
-                          key={size}
-                          className="inline-flex items-center justify-center min-w-[40px] px-2 py-1 rounded border border-gray-300 dark:border-gray-600 text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800"
-                        >
-                          {size}
-                        </span>
-                      ))}
+                {deal.sizes && deal.sizes.length > 0 && (() => {
+                  // Filter sizes based on product category
+                  // Also check URL for footwear keywords when category is null
+                  // Match both /patike/ (sportvision) and cipele- (officeshoes) URL patterns
+                  const isFootwear = ["patike", "cipele", "cizme"].includes(deal.category) ||
+                    /(patike|cipele|cizme)[\/\-]/.test(deal.url);
+                  const validClothingSizes = ["XS", "S", "M", "L", "XL", "XXL", "2XL", "3XL", "4XL", "5XL"];
+                  const invalidSizes = ["ADULT", "PRO", "UNSZ", "BV"];
+
+                  const filteredSizes = deal.sizes.filter((size) => {
+                    // Skip obviously invalid sizes
+                    if (invalidSizes.includes(size)) return false;
+                    // Skip range sizes
+                    if (size.includes("-") || size.includes("/")) return false;
+                    // Skip decimal junk (1.0, 5.0, etc. but allow 36.5)
+                    if (/^\d\.\d$/.test(size)) return false;
+
+                    const num = parseFloat(size);
+
+                    if (isFootwear) {
+                      // For shoes: only show numeric sizes 18-50
+                      return !isNaN(num) && num >= 18 && num <= 50;
+                    } else {
+                      // For clothing: show letter sizes OR kids height sizes (92-176)
+                      if (validClothingSizes.includes(size.toUpperCase())) return true;
+                      // Kids height sizes
+                      if (!isNaN(num) && num >= 92 && num <= 176) return true;
+                      // Men's EU sizes (48-60)
+                      if (!isNaN(num) && num >= 48 && num <= 60) return true;
+                      return false;
+                    }
+                  });
+
+                  // Sort sizes
+                  const sortedSizes = filteredSizes.sort((a, b) => {
+                    const aNum = parseFloat(a);
+                    const bNum = parseFloat(b);
+                    if (!isNaN(aNum) && !isNaN(bNum)) return aNum - bNum;
+                    const order = ["XS", "S", "M", "L", "XL", "XXL", "2XL", "3XL", "4XL", "5XL"];
+                    return order.indexOf(a.toUpperCase()) - order.indexOf(b.toUpperCase());
+                  });
+
+                  if (sortedSizes.length === 0) return null;
+
+                  return (
+                    <div className="mt-4">
+                      <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Dostupne veličine:
+                      </p>
+                      <div className="flex flex-wrap gap-2">
+                        {sortedSizes.map((size) => (
+                          <span
+                            key={size}
+                            className="inline-flex items-center justify-center min-w-[40px] px-2 py-1 rounded border border-gray-300 dark:border-gray-600 text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800"
+                          >
+                            {size}
+                          </span>
+                        ))}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  );
+                })()}
 
                 {/* Prices */}
                 <div

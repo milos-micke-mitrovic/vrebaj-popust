@@ -35,7 +35,7 @@ export function ScrollFade({ children, maxHeight, className = "" }: ScrollFadePr
         resizeObserver.disconnect();
       };
     }
-  }, []);
+  }, [children]); // Re-check when children change
 
   return (
     <div className="relative overflow-hidden">

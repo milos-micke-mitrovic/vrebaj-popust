@@ -55,6 +55,11 @@ jobs:
         run: npx tsx src/scraper/stores/officeshoes.ts
         continue-on-error: true
 
+      - name: Run detail scraper for all stores
+        run: npx tsx src/scraper/detail-scraper.ts
+        continue-on-error: true
+        timeout-minutes: 30
+
       - name: Cleanup orphaned images
         run: npx tsx src/scraper/cleanup-images.ts
 

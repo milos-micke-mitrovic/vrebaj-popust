@@ -90,9 +90,9 @@ export function Footer() {
           </div>
 
           {/* Stores we track */}
-          <div>
+          <div className="lg:w-fit">
             <h3 className="font-semibold text-gray-900 dark:text-white">Pratimo prodavnice</h3>
-            <div className="mt-3 flex flex-wrap gap-3">
+            <div className="mt-3 flex flex-wrap gap-3 lg:max-w-[160px]">
               {STORES.map((store) => (
                 <Image
                   key={store.name}

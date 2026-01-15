@@ -159,8 +159,8 @@ async function extractProducts(page: Page): Promise<RawProduct[]> {
       var items = document.querySelectorAll('.product-article_wrapper, article[data-product_id]');
 
       items.forEach(function(el) {
-        // Get product link
-        var linkEl = el.querySelector('a[href*="/"]');
+        // Get product link - use send-search class or data-product_id to avoid brand logo links
+        var linkEl = el.querySelector('a.send-search, a[data-product_id]');
         var url = linkEl ? linkEl.href : '';
 
         // Get product name from h2 or title

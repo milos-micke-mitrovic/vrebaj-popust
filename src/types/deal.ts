@@ -26,6 +26,11 @@ export interface RawDeal {
   imageUrl: string | null;
   category: string | null;
   scrapedAt: Date;
+  // Detail scraper fields (optional - added by detail-scraper)
+  sizes?: string[];
+  description?: string | null;
+  detailImageUrl?: string | null;
+  detailsScrapedAt?: Date;
 }
 
 // Enriched deal with gender and category

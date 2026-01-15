@@ -87,6 +87,9 @@ export function DealsGrid({
     searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : null
   );
   const [brandSearch, setBrandSearch] = useState("");
+  const [selectedSizes, setSelectedSizes] = useState<string[]>(
+    searchParams.get("sizes")?.split(",").filter(Boolean) || []
+  );
   const [sortBy, setSortBy] = useState<SortOption>(() => {
     // First check URL, then localStorage, then default
     const urlSort = searchParams.get("sort") as SortOption;
@@ -135,6 +138,7 @@ export function DealsGrid({
     if (selectedBrands.length) currentParams.set("brands", selectedBrands.join(","));
     if (selectedGenders.length) currentParams.set("genders", selectedGenders.join(","));
     if (selectedCategories.length) currentParams.set("categories", selectedCategories.join(","));
+    if (selectedSizes.length) currentParams.set("sizes", selectedSizes.join(","));
     if (minDiscount > 50) currentParams.set("minDiscount", String(minDiscount));
     if (minPrice !== null) currentParams.set("minPrice", String(minPrice));
     if (maxPrice !== null) currentParams.set("maxPrice", String(maxPrice));
@@ -150,6 +154,7 @@ export function DealsGrid({
       setSelectedBrands(searchParams.get("brands")?.split(",").filter(Boolean) || []);
       setSelectedGenders((searchParams.get("genders")?.split(",").filter(Boolean) as Gender[]) || []);
       setSelectedCategories((searchParams.get("categories")?.split(",").filter(Boolean) as Category[]) || []);
+      setSelectedSizes(searchParams.get("sizes")?.split(",").filter(Boolean) || []);
       setMinDiscount(Number(searchParams.get("minDiscount")) || 50);
       setMinPrice(searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : null);
       setMaxPrice(searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : null);
@@ -177,6 +182,7 @@ export function DealsGrid({
       if (selectedBrands.length) params.set("brands", selectedBrands.join(","));
       if (selectedGenders.length) params.set("genders", selectedGenders.join(","));
       if (selectedCategories.length) params.set("categories", selectedCategories.join(","));
+      if (selectedSizes.length) params.set("sizes", selectedSizes.join(","));
       if (minDiscount > 50) params.set("minDiscount", String(minDiscount));
       if (minPrice !== null) params.set("minPrice", String(minPrice));
       if (maxPrice !== null) params.set("maxPrice", String(maxPrice));
@@ -192,7 +198,7 @@ export function DealsGrid({
         clearTimeout(urlUpdateTimeout.current);
       }
     };
-  }, [search, selectedStores, selectedBrands, selectedGenders, selectedCategories, minDiscount, minPrice, maxPrice, sortBy, currentPage, pathname, router]);
+  }, [search, selectedStores, selectedBrands, selectedGenders, selectedCategories, selectedSizes, minDiscount, minPrice, maxPrice, sortBy, currentPage, pathname, router]);
 
   const filteredBrands = useMemo(() => {
     if (!brandSearch) return brands.slice(0, 20);
@@ -200,6 +206,53 @@ export function DealsGrid({
       b.toLowerCase().includes(brandSearch.toLowerCase())
     );
   }, [brands, brandSearch]);
+
+  // Valid clothing sizes (in display order)
+  const CLOTHING_SIZES = ["XS", "S", "M", "L", "XL", "XXL", "2XL", "3XL", "4XL", "5XL"];
+
+  // Check if a size is a valid shoe size (18-50 range, including half sizes and fractions)
+  const isShoeSize = (size: string): boolean => {
+    // Skip range sizes like "23-26" or "S/M"
+    if (size.includes("-") || size.includes("/")) return false;
+    const num = parseFloat(size);
+    if (isNaN(num)) return false;
+    // Shoe sizes are typically 35-50 for adults, 18-34 for kids
+    return num >= 18 && num <= 50;
+  };
+
+  // Extract unique sizes from all deals, separated by type
+  const { shoeSizes, clothingSizes } = useMemo(() => {
+    const shoes = new Set<string>();
+    const clothes = new Set<string>();
+
+    deals.forEach((deal) => {
+      if (deal.sizes) {
+        deal.sizes.forEach((size) => {
+          // Check if it's a clothing size
+          if (CLOTHING_SIZES.includes(size.toUpperCase())) {
+            clothes.add(size);
+          }
+          // Check if it's a shoe size
+          else if (isShoeSize(size)) {
+            shoes.add(size);
+          }
+          // Skip invalid sizes like "ADULT", "BV", single digits, kids height sizes (128, 140, etc.)
+        });
+      }
+    });
+
+    // Sort shoe sizes numerically
+    const sortedShoes = Array.from(shoes).sort((a, b) => parseFloat(a) - parseFloat(b));
+
+    // Sort clothing sizes by predefined order
+    const sortedClothes = Array.from(clothes).sort((a, b) => {
+      const aIndex = CLOTHING_SIZES.indexOf(a.toUpperCase());
+      const bIndex = CLOTHING_SIZES.indexOf(b.toUpperCase());
+      return aIndex - bIndex;
+    });
+
+    return { shoeSizes: sortedShoes, clothingSizes: sortedClothes };
+  }, [deals]);
 
   const filteredDeals = useMemo(() => {
     let result = [...deals];
@@ -243,6 +296,12 @@ export function DealsGrid({
       result = result.filter((deal) => deal.salePrice <= maxPrice);
     }
 
+    if (selectedSizes.length > 0) {
+      result = result.filter(
+        (deal) => deal.sizes && deal.sizes.some((size) => selectedSizes.includes(size))
+      );
+    }
+
     switch (sortBy) {
       case "discount":
         result.sort((a, b) => b.discountPercent - a.discountPercent);
@@ -267,6 +326,7 @@ export function DealsGrid({
     selectedBrands,
     selectedGenders,
     selectedCategories,
+    selectedSizes,
     minDiscount,
     minPrice,
     maxPrice,
@@ -284,6 +344,7 @@ export function DealsGrid({
     setSelectedBrands([]);
     setSelectedGenders([]);
     setSelectedCategories([]);
+    setSelectedSizes([]);
     setMinDiscount(50);
     setMinPrice(null);
     setMaxPrice(null);
@@ -324,6 +385,13 @@ export function DealsGrid({
     setCurrentPage(1);
   };
 
+  const toggleSize = (size: string) => {
+    setSelectedSizes((prev) =>
+      prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
+    );
+    setCurrentPage(1);
+  };
+
   // Handle page change with scroll to top
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -336,6 +404,7 @@ export function DealsGrid({
     selectedGenders.length > 0 ||
     selectedCategories.length > 0 ||
     selectedBrands.length > 0 ||
+    selectedSizes.length > 0 ||
     minDiscount > 50 ||
     minPrice !== null ||
     maxPrice !== null;
@@ -346,6 +415,7 @@ export function DealsGrid({
     selectedGenders.length +
     selectedCategories.length +
     selectedBrands.length +
+    selectedSizes.length +
     (minDiscount > 50 ? 1 : 0) +
     (minPrice !== null ? 1 : 0) +
     (maxPrice !== null ? 1 : 0);
@@ -500,21 +570,17 @@ export function DealsGrid({
         <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Prodavnica</h3>
         <div className="space-y-2">
           {stores.map((store) => (
-            <label
+            <button
               key={store}
-              className={`flex cursor-pointer items-center gap-3 p-2 rounded-lg transition-colors ${
+              type="button"
+              onClick={() => toggleStore(store)}
+              className={`flex w-full cursor-pointer items-center gap-3 p-2 rounded-lg transition-colors text-left ${
                 selectedStores.includes(store)
                   ? "bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800"
                   : "hover:bg-gray-50 dark:hover:bg-gray-800"
               }`}
             >
-              <input
-                type="checkbox"
-                checked={selectedStores.includes(store)}
-                onChange={() => toggleStore(store)}
-                className="sr-only"
-              />
-              <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
+              <div className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 ${
                 selectedStores.includes(store)
                   ? "bg-red-500 border-red-500"
                   : "border-gray-300 dark:border-gray-600"
@@ -526,7 +592,7 @@ export function DealsGrid({
                 )}
               </div>
               <span className="text-sm text-gray-700 dark:text-gray-300">{STORE_NAMES[store]}</span>
-            </label>
+            </button>
           ))}
         </div>
       </div>
@@ -569,6 +635,52 @@ export function DealsGrid({
           </div>
         </ScrollFade>
       </div>
+
+      {/* Shoe Size */}
+      {shoeSizes.length > 0 && (
+        <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+          <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Veličina obuće</h3>
+          <ScrollFade maxHeight="120px">
+            <div className="flex flex-wrap gap-1.5 pr-1">
+              {shoeSizes.map((size) => (
+                <button
+                  key={size}
+                  onClick={() => toggleSize(size)}
+                  className={`cursor-pointer px-2.5 py-1 text-xs rounded-full transition-colors ${
+                    selectedSizes.includes(size)
+                      ? "bg-red-500 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                  }`}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
+          </ScrollFade>
+        </div>
+      )}
+
+      {/* Clothing Size */}
+      {clothingSizes.length > 0 && (
+        <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
+          <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Veličina odeće</h3>
+          <div className="flex flex-wrap gap-1.5">
+            {clothingSizes.map((size) => (
+              <button
+                key={size}
+                onClick={() => toggleSize(size)}
+                className={`cursor-pointer px-2.5 py-1 text-xs rounded-full transition-colors ${
+                  selectedSizes.includes(size)
+                    ? "bg-red-500 text-white"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                }`}
+              >
+                {size}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Brand */}
       <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
@@ -673,10 +785,10 @@ export function DealsGrid({
       <div className="lg:grid lg:grid-cols-[260px_1fr] lg:gap-6">
         {/* Desktop Sidebar - hidden on mobile/tablet */}
         <aside className="hidden lg:block">
-          <div className="sticky top-20 rounded-xl bg-white dark:bg-gray-900 shadow-sm border border-gray-100 dark:border-gray-800 overflow-hidden">
-            <ScrollFade maxHeight="calc(100vh - 6rem)" className="p-5">
+          <div className="sticky top-20 rounded-xl bg-white dark:bg-gray-900 shadow-sm border border-gray-100 dark:border-gray-800">
+            <div className="max-h-[calc(100vh-6rem)] overflow-y-auto scrollbar-thin p-5">
               {filterContentJSX}
-            </ScrollFade>
+            </div>
           </div>
         </aside>
 
@@ -739,6 +851,16 @@ export function DealsGrid({
                       onClick={() => toggleBrand(brand)}
                     >
                       {brand} ✕
+                    </Badge>
+                  ))}
+                  {selectedSizes.map((size) => (
+                    <Badge
+                      key={size}
+                      variant="secondary"
+                      className="cursor-pointer px-3 py-1.5 text-sm"
+                      onClick={() => toggleSize(size)}
+                    >
+                      Vel. {size} ✕
                     </Badge>
                   ))}
                   {minDiscount > 50 && (
@@ -854,6 +976,16 @@ export function DealsGrid({
                     onClick={() => toggleBrand(brand)}
                   >
                     {brand} ✕
+                  </Badge>
+                ))}
+                {selectedSizes.map((size) => (
+                  <Badge
+                    key={size}
+                    variant="secondary"
+                    className="cursor-pointer px-3 py-1.5 text-sm"
+                    onClick={() => toggleSize(size)}
+                  >
+                    Vel. {size} ✕
                   </Badge>
                 ))}
                 {minDiscount > 50 && (
