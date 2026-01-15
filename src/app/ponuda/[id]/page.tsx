@@ -253,6 +253,36 @@ export default async function DealPage({ params }: Props) {
         priceCurrency: "RSD",
         valueAddedTaxIncluded: true,
       },
+      shippingDetails: {
+        "@type": "OfferShippingDetails",
+        shippingDestination: {
+          "@type": "DefinedRegion",
+          addressCountry: "RS",
+        },
+        deliveryTime: {
+          "@type": "ShippingDeliveryTime",
+          handlingTime: {
+            "@type": "QuantitativeValue",
+            minValue: 1,
+            maxValue: 3,
+            unitCode: "d",
+          },
+          transitTime: {
+            "@type": "QuantitativeValue",
+            minValue: 1,
+            maxValue: 5,
+            unitCode: "d",
+          },
+        },
+      },
+      hasMerchantReturnPolicy: {
+        "@type": "MerchantReturnPolicy",
+        applicableCountry: "RS",
+        returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+        merchantReturnDays: 14,
+        returnMethod: "https://schema.org/ReturnByMail",
+        returnFees: "https://schema.org/FreeReturn",
+      },
     },
   };
 
@@ -407,6 +437,25 @@ export default async function DealPage({ params }: Props) {
                     </span>
                   )}
                 </div>
+
+                {/* Sizes */}
+                {deal.sizes && deal.sizes.length > 0 && (
+                  <div className="mt-4">
+                    <p className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                      Dostupne veličine:
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {deal.sizes.map((size) => (
+                        <span
+                          key={size}
+                          className="inline-flex items-center justify-center min-w-[40px] px-2 py-1 rounded border border-gray-300 dark:border-gray-600 text-sm text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800"
+                        >
+                          {size}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
 
                 {/* Prices */}
                 <div
