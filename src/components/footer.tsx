@@ -18,7 +18,7 @@ export function Footer() {
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
           {/* Logo and description */}
           <div className="sm:col-span-2 lg:col-span-1">
-            <Link href="/" className="flex items-center gap-2">
+            <Link href="/" className="flex items-center gap-1.5">
               <Image src="/logos/logo.png" alt="VrebajPopust" width={40} height={40} className="h-10 w-10" />
               <span className="text-xl font-bold text-gray-900 dark:text-white">
                 Vrebaj<span className="text-red-500">Popust</span>

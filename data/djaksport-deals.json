@@ -4,7 +4,7 @@
     {
       "id": "djaksport-www-djaksport-com-cipele-242752-dolomo-304ul70-921-1",
       "store": "djaksport",
-      "name": "KAPPA CIPELE 242752 DOLOMO ZA MUŠKARCE",
+      "name": "KAPPA CIPELE 242752 DOLOMO ZA MU\u0160KARCE",
       "brand": "KAPPA",
       "originalPrice": 5999,
       "salePrice": 1999,
@@ -23,12 +23,17 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/0/304UL70-921_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:17:00.484Z"
+      "detailsScrapedAt": "2026-01-15T16:13:17.630Z",
+      "categories": [
+        "obuca/cipele",
+        "obuca/cizme"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-patike-243240-dixton-za-zene-321g7lw-a5i-2",
       "store": "djaksport",
-      "name": "KAPPA PATIKE 243240 DIXTON ZA ŽENE",
+      "name": "KAPPA PATIKE 243240 DIXTON ZA \u017dENE",
       "brand": "KAPPA",
       "originalPrice": 5999,
       "salePrice": 2499,
@@ -45,12 +50,17 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1729608918321G7LW-A5I.JPG",
-      "detailsScrapedAt": "2026-01-15T12:17:08.919Z"
+      "detailsScrapedAt": "2026-01-15T16:13:24.304Z",
+      "categories": [
+        "obuca/patike",
+        "obuca/cizme"
+      ],
+      "gender": "zenski"
     },
     {
       "id": "djaksport-www-djaksport-com-copperminer-patike-storm-za-muskarce-q231m-storm-gry-3",
       "store": "djaksport",
-      "name": "COPPERMINER PATIKE STORM ZA MUŠKARCE",
+      "name": "COPPERMINER PATIKE STORM ZA MU\u0160KARCE",
       "brand": "COPPERMINER",
       "originalPrice": 10999,
       "salePrice": 4899,
@@ -64,12 +74,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1759931829Q231M-STORM-GRY.webp",
-      "detailsScrapedAt": "2026-01-15T12:17:15.138Z"
+      "detailsScrapedAt": "2026-01-15T16:13:30.164Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-jakna-hmlpuff-jacket-short-sportswear-za-muskarce-22594-4",
       "store": "djaksport",
-      "name": "HUMMEL JAKNA HMLPUFF JACKET SHORT SPORTSWEAR ZA MUŠKARCE",
+      "name": "HUMMEL JAKNA HMLPUFF JACKET SHORT SPORTSWEAR ZA MU\u0160KARCE",
       "brand": "HUMMEL",
       "originalPrice": 12499,
       "salePrice": 3989,
@@ -85,12 +99,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1732550127225948-2001.webp",
-      "detailsScrapedAt": "2026-01-15T12:17:22.338Z"
+      "detailsScrapedAt": "2026-01-15T16:13:36.081Z",
+      "categories": [
+        "odeca/jakne"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-cipele-nike-city-classic-boot-dq5601-710-5",
       "store": "djaksport",
-      "name": "NIKE CIPELE CITY CLASSIC BOOT ZA ŽENE",
+      "name": "NIKE CIPELE CITY CLASSIC BOOT ZA \u017dENE",
       "brand": "NIKE",
       "originalPrice": 15499,
       "salePrice": 4999,
@@ -99,79 +117,19 @@
       "imageUrl": "/images/djaksport/dq5601-710.jpg",
       "category": null,
       "scrapedAt": "2026-01-14T23:15:27.026Z",
-      "sizes": [
-        "M",
-        "L",
-        "XL",
-        "2XL",
-        "XS",
-        "S",
-        "5.0",
-        "UNSZ",
-        "36",
-        "36.5",
-        "37.5",
-        "38",
-        "38.5",
-        "39",
-        "40",
-        "40.5",
-        "41",
-        "42",
-        "42.5",
-        "43",
-        "44",
-        "44.5",
-        "45",
-        "45.5",
-        "47",
-        "46",
-        "47.5",
-        "29.5",
-        "28",
-        "30",
-        "31",
-        "32",
-        "33",
-        "34",
-        "35",
-        "48.5",
-        "21",
-        "22",
-        "23.5",
-        "25",
-        "26",
-        "27",
-        "1.0",
-        "3.0",
-        "4.0",
-        "6.0",
-        "19.5",
-        "31.5",
-        "50.5",
-        "10.0",
-        "11.0",
-        "164",
-        "33.5",
-        "35.5",
-        "9.0",
-        "49.5",
-        "7.0",
-        "8.0",
-        "L/XL",
-        "M/L",
-        "PRO",
-        "XS/S",
-        "S/M"
-      ],
+      "sizes": [],
       "description": null,
       "detailImageUrl": null,
-      "detailsScrapedAt": "2026-01-15T12:17:30.189Z"
+      "detailsScrapedAt": null,
+      "categories": [
+        "obuca/cipele",
+        "obuca/cizme"
+      ]
     },
     {
       "id": "djaksport-www-djaksport-com-patike-nike-court-vision-mid-nn-dn3577-600-6",
       "store": "djaksport",
-      "name": "NIKE   COURT VISION MID NN PATIKE ZA MUŠKARCE",
+      "name": "NIKE   COURT VISION MID NN PATIKE ZA MU\u0160KARCE",
       "brand": "NIKE",
       "originalPrice": 11799,
       "salePrice": 3499,
@@ -180,17 +138,19 @@
       "imageUrl": "/images/djaksport/dn3577-600_1_1.jpg",
       "category": null,
       "scrapedAt": "2026-01-14T23:15:27.026Z",
-      "sizes": [
-        "44"
-      ],
+      "sizes": [],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/D/N/DN3577-600_1_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:17:36.597Z"
+      "detailsScrapedAt": "2026-01-15T16:13:47.559Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-logo-maserta-md-v-35164dw-001-7",
       "store": "djaksport",
-      "name": "KAPPA PATIKE LOGO MASERTA MD V ZA MUŠKARCE",
+      "name": "KAPPA PATIKE LOGO MASERTA MD V ZA MU\u0160KARCE",
       "brand": "KAPPA",
       "originalPrice": 5499,
       "salePrice": 1485,
@@ -204,12 +164,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/5/35164DW-001_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:17:43.624Z"
+      "detailsScrapedAt": "2026-01-15T16:13:53.618Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-muska-eastbound-jakna-iapetus-za-muskarce-ebm990-nvy-8",
       "store": "djaksport",
-      "name": "EASTBOUND MUSKA EASTBOUND JAKNA IAPETUS ZA MUŠKARCE",
+      "name": "EASTBOUND MUSKA EASTBOUND JAKNA IAPETUS ZA MU\u0160KARCE",
       "brand": "EASTBOUND",
       "originalPrice": 7999,
       "salePrice": 2939,
@@ -221,17 +185,20 @@
       "sizes": [
         "M",
         "L",
-        "XL",
-        "2XL"
+        "XL"
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1735660577EBM990-NVY.webp",
-      "detailsScrapedAt": "2026-01-15T12:17:50.925Z"
+      "detailsScrapedAt": "2026-01-15T16:13:59.630Z",
+      "categories": [
+        "odeca/jakne"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-361-degrees-patike-meraki-4-stk-za-muskarce-y2102-7209-9",
       "store": "djaksport",
-      "name": "361 DEGREES PATIKE MERAKI 4 STK ZA MUŠKARCE",
+      "name": "361 DEGREES PATIKE MERAKI 4 STK ZA MU\u0160KARCE",
       "brand": "361",
       "originalPrice": 11999,
       "salePrice": 3499,
@@ -251,12 +218,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1731945445Y2102-7209.webp",
-      "detailsScrapedAt": "2026-01-15T12:17:58.918Z"
+      "detailsScrapedAt": "2026-01-15T16:14:05.932Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-duks-eastbound-eitan-za-muskarce-ebm507-blk-10",
       "store": "djaksport",
-      "name": "EASTBOUND DUKS EASTBOUND EITAN ZA MUŠKARCE",
+      "name": "EASTBOUND DUKS EASTBOUND EITAN ZA MU\u0160KARCE",
       "brand": "EASTBOUND",
       "originalPrice": 2799,
       "salePrice": 896,
@@ -270,12 +241,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1729090549EBM507-BLK.JPG",
-      "detailsScrapedAt": "2026-01-15T10:00:04.303Z"
+      "detailsScrapedAt": "2026-01-15T16:14:11.773Z",
+      "categories": [
+        "odeca/duksevi"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-logo-maserta-32193cw-005-11",
       "store": "djaksport",
-      "name": "KAPPA PATIKE LOGO MASERTA ZA MUŠKARCE",
+      "name": "KAPPA PATIKE LOGO MASERTA ZA MU\u0160KARCE",
       "brand": "KAPPA",
       "originalPrice": 5499,
       "salePrice": 2695,
@@ -293,12 +268,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/2/32193CW-005_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:18:39.779Z"
+      "detailsScrapedAt": "2026-01-15T16:14:17.532Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-donji-deo-logo-zanty-304ilh0-77m-12",
       "store": "djaksport",
-      "name": "KAPPA DONJI DEO LOGO ZANTY ZA MUŠKARCE",
+      "name": "KAPPA DONJI DEO LOGO ZANTY ZA MU\u0160KARCE",
       "brand": "KAPPA",
       "originalPrice": 3799,
       "salePrice": 1862,
@@ -312,12 +291,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1765292166304ILH0-77M.webp",
-      "detailsScrapedAt": "2026-01-15T12:18:46.827Z"
+      "detailsScrapedAt": "2026-01-15T16:14:24.176Z",
+      "categories": [
+        "odeca/pantalone"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-muska-eastbound-jakna-iapetus-za-muskarce-ebm990-blk-13",
       "store": "djaksport",
-      "name": "EASTBOUND MUSKA EASTBOUND JAKNA IAPETUS ZA MUŠKARCE",
+      "name": "EASTBOUND MUSKA EASTBOUND JAKNA IAPETUS ZA MU\u0160KARCE",
       "brand": "EASTBOUND",
       "originalPrice": 7999,
       "salePrice": 2999,
@@ -333,12 +316,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1735660574EBM990-BLK.webp",
-      "detailsScrapedAt": "2026-01-15T12:18:54.369Z"
+      "detailsScrapedAt": "2026-01-15T16:14:30.953Z",
+      "categories": [
+        "odeca/jakne"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-donji-deo-trenerke-logo-feligio-za-muskarce-381s2tw-005-14",
       "store": "djaksport",
-      "name": "KAPPA DONJI DEO TRENERKE LOGO  FELIGIO ZA MUŠKARCE",
+      "name": "KAPPA DONJI DEO TRENERKE LOGO  FELIGIO ZA MU\u0160KARCE",
       "brand": "KAPPA",
       "originalPrice": 3699,
       "salePrice": 1776,
@@ -354,12 +341,17 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1747234588381S2TW-005.webp",
-      "detailsScrapedAt": "2026-01-15T12:19:01.210Z"
+      "detailsScrapedAt": "2026-01-15T16:14:37.861Z",
+      "categories": [
+        "odeca/pantalone",
+        "odeca/trenerke"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-jakna-hmlpuff-jacket-short-sportswear-za-muskarce-22594-15",
       "store": "djaksport",
-      "name": "HUMMEL JAKNA HMLPUFF JACKET SHORT SPORTSWEAR ZA MUŠKARCE",
+      "name": "HUMMEL JAKNA HMLPUFF JACKET SHORT SPORTSWEAR ZA MU\u0160KARCE",
       "brand": "HUMMEL",
       "originalPrice": 12499,
       "salePrice": 3989,
@@ -375,12 +367,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1732550132225948-7459.webp",
-      "detailsScrapedAt": "2026-01-15T12:19:09.730Z"
+      "detailsScrapedAt": "2026-01-15T16:14:43.692Z",
+      "categories": [
+        "odeca/jakne"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-zenska-eastbound-jakna-spruce-za-zene-ebw981-beg-16",
       "store": "djaksport",
-      "name": "EASTBOUND ZENSKA EASTBOUND JAKNA SPRUCE ZA ŽENE",
+      "name": "EASTBOUND ZENSKA EASTBOUND JAKNA SPRUCE ZA \u017dENE",
       "brand": "EASTBOUND",
       "originalPrice": 14999,
       "salePrice": 5700,
@@ -396,12 +392,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1728658597EBW981-BEG.JPG",
-      "detailsScrapedAt": "2026-01-15T12:19:17.219Z"
+      "detailsScrapedAt": "2026-01-15T16:14:51.501Z",
+      "categories": [
+        "odeca/jakne"
+      ],
+      "gender": "zenski"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-patike-logo-mave-za-muskarce-32238qw-a4g-17",
       "store": "djaksport",
-      "name": "KAPPA PATIKE LOGO MAVE ZA MUŠKARCE",
+      "name": "KAPPA PATIKE LOGO MAVE ZA MU\u0160KARCE",
       "brand": "KAPPA",
       "originalPrice": 4499,
       "salePrice": 2099,
@@ -421,12 +421,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/174740732732238QW-A4G.webp",
-      "detailsScrapedAt": "2026-01-15T12:19:26.724Z"
+      "detailsScrapedAt": "2026-01-15T16:15:00.232Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-kid-cizme-malu-q320td-malu-blue-18",
       "store": "djaksport",
-      "name": "COPPERMINER KID CIZME MALU ZA DEČAKE",
+      "name": "COPPERMINER KID CIZME MALU ZA DE\u010cAKE",
       "brand": "COPPERMINER",
       "originalPrice": 3999,
       "salePrice": 1999,
@@ -442,16 +446,21 @@
         "24",
         "25",
         "26",
-        "27"
+        "27",
+        "28"
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/Q/3/Q320TD-MALU-BLUE_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:19:35.321Z"
+      "detailsScrapedAt": "2026-01-15T16:15:08.742Z",
+      "categories": [
+        "obuca/cizme"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-decije-patike-rainbow-za-decake-ebgb525-gry-19",
       "store": "djaksport",
-      "name": "EASTBOUND DECIJE PATIKE RAINBOW ZA DEČAKE",
+      "name": "EASTBOUND DECIJE PATIKE RAINBOW ZA DE\u010cAKE",
       "brand": "EASTBOUND",
       "originalPrice": 3999,
       "salePrice": 1999,
@@ -470,12 +479,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1742227071EBGB525-GRY.webp",
-      "detailsScrapedAt": "2026-01-15T12:19:42.871Z"
+      "detailsScrapedAt": "2026-01-15T16:15:16.572Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-patike-logo-rernal-ev-kid-za-devojcice-381u2iw-a1m-20",
       "store": "djaksport",
-      "name": "KAPPA PATIKE LOGO  RERNAL EV KID ZA DEVOJČICE",
+      "name": "KAPPA PATIKE LOGO  RERNAL EV KID ZA DEVOJ\u010cICE",
       "brand": "KAPPA",
       "originalPrice": 3799,
       "salePrice": 1799,
@@ -493,12 +506,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1739289336381U2IW-A1M.webp",
-      "detailsScrapedAt": "2026-01-15T12:19:48.874Z"
+      "detailsScrapedAt": "2026-01-15T16:15:25.029Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "unisex"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-patike-authentic-ciarra-1-za-zene-311c1dw-a2x-21",
       "store": "djaksport",
-      "name": "KAPPA PATIKE AUTHENTIC CIARRA 1 ZA ŽENE",
+      "name": "KAPPA PATIKE AUTHENTIC CIARRA 1 ZA \u017dENE",
       "brand": "KAPPA",
       "originalPrice": 5999,
       "salePrice": 2340,
@@ -515,12 +532,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1719240924311C1DW-A2X.JPG",
-      "detailsScrapedAt": "2026-01-15T12:19:57.830Z"
+      "detailsScrapedAt": "2026-01-15T16:15:33.916Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "zenski"
     },
     {
       "id": "djaksport-www-djaksport-com-adidas-patike-strutter-za-muskarce-ih4904-22",
       "store": "djaksport",
-      "name": "ADIDAS PATIKE STRUTTER ZA MUŠKARCE",
+      "name": "ADIDAS PATIKE STRUTTER ZA MU\u0160KARCE",
       "brand": "ADIDAS",
       "originalPrice": 7799,
       "salePrice": 3744,
@@ -536,12 +557,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1720623603IH4904.webp",
-      "detailsScrapedAt": "2026-01-15T12:20:17.082Z"
+      "detailsScrapedAt": "2026-01-15T16:15:42.534Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-thabo-tex-341645w-921-23",
       "store": "djaksport",
-      "name": "KAPPA PATIKE THABO TEX ZA MUŠKARCE",
+      "name": "KAPPA PATIKE THABO TEX ZA MU\u0160KARCE",
       "brand": "KAPPA",
       "originalPrice": 9499,
       "salePrice": 4199,
@@ -559,12 +584,17 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1731081581341645W-921.webp",
-      "detailsScrapedAt": "2026-01-15T12:20:24.996Z"
+      "detailsScrapedAt": "2026-01-15T16:15:50.295Z",
+      "categories": [
+        "obuca/patike",
+        "obuca/cizme"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-jakna-lory-710032-oliv-24",
       "store": "djaksport",
-      "name": "INVENTO JAKNA LORY ZA DEČAKE",
+      "name": "INVENTO JAKNA LORY ZA DE\u010cAKE",
       "brand": "INVENTO",
       "originalPrice": 9299,
       "salePrice": 4650,
@@ -580,12 +610,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1709881301710032-OLIV.webp",
-      "detailsScrapedAt": "2026-01-15T12:20:31.444Z"
+      "detailsScrapedAt": "2026-01-15T16:15:57.214Z",
+      "categories": [
+        "odeca/jakne"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-jakna-level-za-muskarce-ebm907-nvy-25",
       "store": "djaksport",
-      "name": "EASTBOUND JAKNA LEVEL ZA MUŠKARCE",
+      "name": "EASTBOUND JAKNA LEVEL ZA MU\u0160KARCE",
       "brand": "EASTBOUND",
       "originalPrice": 5499,
       "salePrice": 2750,
@@ -603,12 +637,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1758549445EBM907-NVY.webp",
-      "detailsScrapedAt": "2026-01-15T12:20:40.390Z"
+      "detailsScrapedAt": "2026-01-15T16:16:06.201Z",
+      "categories": [
+        "odeca/jakne"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-donji-deo-kappa-222-banda-rastoria-2-graphik-slim-za-mus-26",
       "store": "djaksport",
-      "name": "KAPPA DONJI DEO KAPPA 222 BANDA  RASTORIA 2 GRAPHIK SLIM ZA MUŠKARCE",
+      "name": "KAPPA DONJI DEO KAPPA 222 BANDA  RASTORIA 2 GRAPHIK SLIM ZA MU\u0160KARCE",
       "brand": "KAPPA",
       "originalPrice": 4499,
       "salePrice": 1800,
@@ -624,12 +662,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1727276179371P89W-P04.JPG",
-      "detailsScrapedAt": "2026-01-15T12:20:48.284Z"
+      "detailsScrapedAt": "2026-01-15T16:16:12.757Z",
+      "categories": [
+        "odeca/pantalone"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-ice-peak-jakna-icepeak-brimfield-za-muskarce-4-57970-682-990-27",
       "store": "djaksport",
-      "name": "ICE PEAK JAKNA ICEPEAK BRIMFIELD ZA MUŠKARCE",
+      "name": "ICE PEAK JAKNA ICEPEAK BRIMFIELD ZA MU\u0160KARCE",
       "brand": "ICE",
       "originalPrice": 10299,
       "salePrice": 4299,
@@ -647,12 +689,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/17436921484-57970-682-990.webp",
-      "detailsScrapedAt": "2026-01-15T12:20:55.702Z"
+      "detailsScrapedAt": "2026-01-15T16:16:20.543Z",
+      "categories": [
+        "odeca/jakne"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-kid-jakna-hmlnorth-jacket-203899-6453-28",
       "store": "djaksport",
-      "name": "HUMMEL KID JAKNA HMLNORTH JACKET ZA DEČAKE",
+      "name": "HUMMEL KID JAKNA HMLNORTH JACKET ZA DE\u010cAKE",
       "brand": "HUMMEL",
       "originalPrice": 8999,
       "salePrice": 1999,
@@ -666,12 +712,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/2/0/203899-6453_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:21:02.069Z"
+      "detailsScrapedAt": "2026-01-15T16:16:27.811Z",
+      "categories": [
+        "odeca/jakne"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-donji-ves-logo-teo-2pack-304vmq0-903-29",
       "store": "djaksport",
-      "name": "KAPPA DONJI VES LOGO TEO 2PACK ZA MUŠKARCE",
+      "name": "KAPPA DONJI VES LOGO TEO 2PACK ZA MU\u0160KARCE",
       "brand": "KAPPA",
       "originalPrice": 1699,
       "salePrice": 714,
@@ -688,12 +738,13 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/0/304VMQ0-903_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:21:09.587Z"
+      "detailsScrapedAt": "2026-01-15T16:16:36.905Z",
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-patike-280004m-rajo-m-decaci-uzrasta-0-4-godine-311e8fw--30",
       "store": "djaksport",
-      "name": "KAPPA PATIKE 280004M RAJO M DEČACI UZRASTA 0-4 GODINE",
+      "name": "KAPPA PATIKE 280004M RAJO M DE\u010cACI UZRASTA 0-4 GODINE",
       "brand": "KAPPA",
       "originalPrice": 3999,
       "salePrice": 1160,
@@ -709,12 +760,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1720522535311E8FW-A5Z.JPG",
-      "detailsScrapedAt": "2026-01-15T12:21:16.888Z"
+      "detailsScrapedAt": "2026-01-15T16:16:43.249Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-decije-patike-logo-marker-kid-za-devojcice-382821w-a1u-31",
       "store": "djaksport",
-      "name": "KAPPA DECIJE PATIKE LOGO MARKER KID ZA DEČAKE",
+      "name": "KAPPA DECIJE PATIKE LOGO MARKER KID ZA DE\u010cAKE",
       "brand": "KAPPA",
       "originalPrice": 3999,
       "salePrice": 1999,
@@ -731,12 +786,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1737388565382821W-A1U.webp",
-      "detailsScrapedAt": "2026-01-15T12:21:23.929Z"
+      "detailsScrapedAt": "2026-01-15T16:16:51.481Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-komplet-trenerka-kappa4soccer-dalcito-321e1iw-a02d-32",
       "store": "djaksport",
-      "name": "KAPPA KOMPLET TRENERKA 4SOCCER DALCITO ZA DEČAKE",
+      "name": "KAPPA KOMPLET TRENERKA 4SOCCER DALCITO ZA DE\u010cAKE",
       "brand": "KAPPA",
       "originalPrice": 6499,
       "salePrice": 3185,
@@ -753,12 +812,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/2/321E1IW-A02D_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:21:32.132Z"
+      "detailsScrapedAt": "2026-01-15T16:16:59.158Z",
+      "categories": [
+        "odeca/trenerke"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-patike-logo-tango-za-zene-361k7mw-a41-33",
       "store": "djaksport",
-      "name": "KAPPA PATIKE LOGO TANGO ZA ŽENE",
+      "name": "KAPPA PATIKE LOGO TANGO ZA \u017dENE",
       "brand": "KAPPA",
       "originalPrice": 3999,
       "salePrice": 1999,
@@ -776,12 +839,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1752846965361K7MW-A41.webp",
-      "detailsScrapedAt": "2026-01-15T12:21:38.641Z"
+      "detailsScrapedAt": "2026-01-15T16:17:08.278Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "zenski"
     },
     {
       "id": "djaksport-www-djaksport-com-361-degrees-patike-meraki-4-stk-za-muskarce-y2102-0009-34",
       "store": "djaksport",
-      "name": "361 DEGREES PATIKE MERAKI 4 STK ZA MUŠKARCE",
+      "name": "361 DEGREES PATIKE MERAKI 4 STK ZA MU\u0160KARCE",
       "brand": "361",
       "originalPrice": 11999,
       "salePrice": 2999,
@@ -796,12 +863,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1731945439Y2102-0009.webp",
-      "detailsScrapedAt": "2026-01-15T12:21:56.654Z"
+      "detailsScrapedAt": "2026-01-15T16:17:15.563Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-patike-st-power-play-wt-za-muskarce-226222-2267-35",
       "store": "djaksport",
-      "name": "HUMMEL PATIKE ST POWER PLAY WT ZA MUŠKARCE",
+      "name": "HUMMEL PATIKE ST POWER PLAY WT ZA MU\u0160KARCE",
       "brand": "HUMMEL",
       "originalPrice": 8799,
       "salePrice": 2640,
@@ -820,12 +891,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1728053749226222-2267.webp",
-      "detailsScrapedAt": "2026-01-15T12:22:04.301Z"
+      "detailsScrapedAt": "2026-01-15T16:17:23.057Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-cizme-261045k-flake-ii-tex-k-za-devojcice-371n61w-a79-36",
       "store": "djaksport",
-      "name": "KAPPA CIZME 261045K FLAKE II TEX K ZA DEVOJČICE",
+      "name": "KAPPA CIZME 261045K FLAKE II TEX K ZA DEVOJ\u010cICE",
       "brand": "KAPPA",
       "originalPrice": 5899,
       "salePrice": 2239,
@@ -840,12 +915,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1728917746371N61W-A79.JPG",
-      "detailsScrapedAt": "2026-01-15T12:22:12.189Z"
+      "detailsScrapedAt": "2026-01-15T16:17:31.213Z",
+      "categories": [
+        "obuca/cizme"
+      ],
+      "gender": "unisex"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-skechers-delson-selecto-65801-blk-37",
       "store": "djaksport",
-      "name": "SKECHERS   DELSON SELECTO PATIKE ZA MUŠKARCE",
+      "name": "SKECHERS   DELSON SELECTO PATIKE ZA MU\u0160KARCE",
       "brand": "SKECHERS",
       "originalPrice": 10999,
       "salePrice": 5400,
@@ -864,12 +943,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/175287951265801-BLK.webp",
-      "detailsScrapedAt": "2026-01-15T12:22:19.357Z"
+      "detailsScrapedAt": "2026-01-15T16:17:38.976Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-logo-sanpuerto-36161rw-s00-38",
       "store": "djaksport",
-      "name": "KAPPA PATIKE LOGO SANPUERTO ZA MUŠKARCE",
+      "name": "KAPPA PATIKE LOGO SANPUERTO ZA MU\u0160KARCE",
       "brand": "KAPPA",
       "originalPrice": 5999,
       "salePrice": 2449,
@@ -890,12 +973,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/6/36161RW-S00_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:22:26.801Z"
+      "detailsScrapedAt": "2026-01-15T16:17:47.216Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-cipele-pitsburg-q321m-pitsbu-blk-39",
       "store": "djaksport",
-      "name": "COPPERMINER CIPELE PITSBURG ZA MUŠKARCE",
+      "name": "COPPERMINER CIPELE PITSBURG ZA MU\u0160KARCE",
       "brand": "COPPERMINER",
       "originalPrice": 15499,
       "salePrice": 5599,
@@ -909,12 +996,17 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/Q/3/Q321M-PITSBU-BLK_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:22:37.619Z"
+      "detailsScrapedAt": "2026-01-15T16:17:54.410Z",
+      "categories": [
+        "obuca/cipele",
+        "obuca/cizme"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-adidas-patike-courtblock-j-cblack-cblack-cblack-za-decake-id65-40",
       "store": "djaksport",
-      "name": "ADIDAS PATIKE COURTBLOCK J CBLACK/CBLACK/CBLACK ZA DEČAKE",
+      "name": "ADIDAS PATIKE COURTBLOCK J CBLACK/CBLACK/CBLACK ZA DE\u010cAKE",
       "brand": "ADIDAS",
       "originalPrice": 6299,
       "salePrice": 2646,
@@ -929,12 +1021,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1718866693ID6502.webp",
-      "detailsScrapedAt": "2026-01-15T12:22:50.383Z"
+      "detailsScrapedAt": "2026-01-15T16:18:02.124Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-copperminer-cipele-felix-kid-za-decake-q324ps-felix-blu-41",
       "store": "djaksport",
-      "name": "COPPERMINER CIPELE FELIX KID ZA DEČAKE",
+      "name": "COPPERMINER CIPELE FELIX KID ZA DE\u010cAKE",
       "brand": "COPPERMINER",
       "originalPrice": 9599,
       "salePrice": 4704,
@@ -953,12 +1049,17 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1732723052Q324PS-FELIX-BLU.webp",
-      "detailsScrapedAt": "2026-01-15T12:22:58.156Z"
+      "detailsScrapedAt": "2026-01-15T16:18:10.068Z",
+      "categories": [
+        "obuca/cipele",
+        "obuca/cizme"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-merrell-cipele-moab-speed-2-mid-wtrpf-za-decake-mk267548-42",
       "store": "djaksport",
-      "name": "MERRELL CIPELE MOAB SPEED 2 MID WTRPF ZA DEČAKE",
+      "name": "MERRELL CIPELE MOAB SPEED 2 MID WTRPF ZA DE\u010cAKE",
       "brand": "MERRELL",
       "originalPrice": 9399,
       "salePrice": 4606,
@@ -974,12 +1075,17 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1724944212MK267548.webp",
-      "detailsScrapedAt": "2026-01-15T12:23:04.414Z"
+      "detailsScrapedAt": "2026-01-15T16:18:17.200Z",
+      "categories": [
+        "obuca/cipele",
+        "obuca/cizme"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-361-degrees-patike-kid-s-skateboard-za-devojcice-wk72513709-1g-43",
       "store": "djaksport",
-      "name": "361 DEGREES PATIKE KID'S SKATEBOARD ZA DEVOJČICE",
+      "name": "361 DEGREES PATIKE KID'S SKATEBOARD ZA DEVOJ\u010cICE",
       "brand": "361",
       "originalPrice": 6899,
       "salePrice": 2599,
@@ -995,12 +1101,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1745449079WK72513709-1G.webp",
-      "detailsScrapedAt": "2026-01-15T12:23:12.141Z"
+      "detailsScrapedAt": "2026-01-15T16:18:24.062Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "unisex"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-zenski-duks-eastbound-fruma-za-zene-ebw507-blk-44",
       "store": "djaksport",
-      "name": "EASTBOUND ZENSKA MAJICA FRUMA PRINT ZA ŽENE",
+      "name": "EASTBOUND ZENSKA MAJICA FRUMA PRINT ZA \u017dENE",
       "brand": "EASTBOUND",
       "originalPrice": 1999,
       "salePrice": 1000,
@@ -1014,12 +1124,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1730735791EBW507-BLK.webp",
-      "detailsScrapedAt": "2026-01-15T12:23:19.841Z"
+      "detailsScrapedAt": "2026-01-15T16:18:31.686Z",
+      "categories": [
+        "odeca/majice"
+      ],
+      "gender": "zenski"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-patike-camden-high-jr-unisex-deciji-216088-3913-45",
       "store": "djaksport",
-      "name": "HUMMEL PATIKE CAMDEN HIGH JR UNISEX DEČIJI",
+      "name": "HUMMEL PATIKE CAMDEN HIGH JR UNISEX DE\u010cIJI",
       "brand": "HUMMEL",
       "originalPrice": 6099,
       "salePrice": 1891,
@@ -1040,12 +1154,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1730735736216088-3913.webp",
-      "detailsScrapedAt": "2026-01-15T12:23:28.186Z"
+      "detailsScrapedAt": "2026-01-15T16:18:39.136Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-hml-dragon-jr-t900380-9031-46",
       "store": "djaksport",
-      "name": "HUMMEL PATIKE HML DRAGON JR. ZA DEČAKE",
+      "name": "HUMMEL PATIKE HML DRAGON JR. ZA DE\u010cAKE",
       "brand": "HUMMEL",
       "originalPrice": 6599,
       "salePrice": 1999,
@@ -1061,12 +1179,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/6/1699315253T900380-9031.JPG",
-      "detailsScrapedAt": "2026-01-15T12:23:47.443Z"
+      "detailsScrapedAt": "2026-01-15T16:18:47.604Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-komplet-trenerka-kappa4soccer-dalcito-321e1iw-a01d-47",
       "store": "djaksport",
-      "name": "KAPPA KOMPLET TRENERKA 4SOCCER DALCITO ZA DEČAKE",
+      "name": "KAPPA KOMPLET TRENERKA 4SOCCER DALCITO ZA DE\u010cAKE",
       "brand": "KAPPA",
       "originalPrice": 6499,
       "salePrice": 3185,
@@ -1084,12 +1206,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/2/321E1IW-A01D_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:23:55.149Z"
+      "detailsScrapedAt": "2026-01-15T16:18:55.634Z",
+      "categories": [
+        "odeca/trenerke"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-smooth-street-405633l-bkw-48",
       "store": "djaksport",
-      "name": "SKECHERS  SMOOTH STREET PATIKE ZA DEČAKE",
+      "name": "SKECHERS  SMOOTH STREET PATIKE ZA DE\u010cAKE",
       "brand": "SKECHERS",
       "originalPrice": 6499,
       "salePrice": 2299,
@@ -1103,12 +1229,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/4/0/405633L-BKW_1_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:24:02.865Z"
+      "detailsScrapedAt": "2026-01-15T16:19:03.909Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-puma-donji-deo-puma-evostripe-core-pants-za-muskarce-631533-07-49",
       "store": "djaksport",
-      "name": "PUMA DONJI DEO PUMA EVOSTRIPE CORE PANTS ZA MUŠKARCE",
+      "name": "PUMA DONJI DEO PUMA EVOSTRIPE CORE PANTS ZA MU\u0160KARCE",
       "brand": "PUMA",
       "originalPrice": 6599,
       "salePrice": 3299,
@@ -1118,17 +1248,22 @@
       "category": null,
       "scrapedAt": "2026-01-14T23:16:49.889Z",
       "sizes": [
+        "S",
         "M",
         "XXL"
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1740671827631533-07.webp",
-      "detailsScrapedAt": "2026-01-15T12:24:09.770Z"
+      "detailsScrapedAt": "2026-01-15T16:19:10.838Z",
+      "categories": [
+        "odeca/pantalone"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-puma-caven-2-0-392290-03-50",
       "store": "djaksport",
-      "name": "PUMA   CAVEN 2.0 PATIKE ZA MUŠKARCE",
+      "name": "PUMA   CAVEN 2.0 PATIKE ZA MU\u0160KARCE",
       "brand": "PUMA",
       "originalPrice": 7799,
       "salePrice": 3432,
@@ -1146,12 +1281,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/9/392290-03_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:24:15.922Z"
+      "detailsScrapedAt": "2026-01-15T16:19:18.337Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-puma-carina-2-0-385849-02-51",
       "store": "djaksport",
-      "name": "PUMA PATIKE CARINA 2.0 ZA ŽENE",
+      "name": "PUMA PATIKE CARINA 2.0 ZA \u017dENE",
       "brand": "PUMA",
       "originalPrice": 7799,
       "salePrice": 3200,
@@ -1166,12 +1305,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1731081866385849-02.webp",
-      "detailsScrapedAt": "2026-01-15T12:24:22.989Z"
+      "detailsScrapedAt": "2026-01-15T16:19:25.055Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "zenski"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-duks-kappa-logo-firti-za-muskarce-341p89w-005-52",
       "store": "djaksport",
-      "name": "KAPPA DUKS KAPPA LOGO  FIRTI ZA MUŠKARCE",
+      "name": "KAPPA DUKS KAPPA LOGO  FIRTI ZA MU\u0160KARCE",
       "brand": "KAPPA",
       "originalPrice": 5999,
       "salePrice": 2220,
@@ -1186,12 +1329,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1727362555341P89W-005.JPG",
-      "detailsScrapedAt": "2026-01-15T12:37:20.905Z"
+      "detailsScrapedAt": "2026-01-15T16:19:32.910Z",
+      "categories": [
+        "odeca/duksevi"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-converse-chuck-taylor-all-star-core-m7650-53",
       "store": "djaksport",
-      "name": "CONVERSE PATIKE CHUCK TAYLOR ALL STAR CORE ZA MUŠKARCE",
+      "name": "CONVERSE PATIKE CHUCK TAYLOR ALL STAR CORE ZA MU\u0160KARCE",
       "brand": "CONVERSE",
       "originalPrice": 8499,
       "salePrice": 2465,
@@ -1206,12 +1353,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/M/7/M7650_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:25:04.375Z"
+      "detailsScrapedAt": "2026-01-15T16:19:40.785Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-zenski-duks-eastbound-fruma-za-zene-ebw507-wht-54",
       "store": "djaksport",
-      "name": "EASTBOUND ZENSKA MAJICA FRUMA PRINT ZA ŽENE",
+      "name": "EASTBOUND ZENSKA MAJICA FRUMA PRINT ZA \u017dENE",
       "brand": "EASTBOUND",
       "originalPrice": 1999,
       "salePrice": 1000,
@@ -1225,12 +1376,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1730735793EBW507-WHT.webp",
-      "detailsScrapedAt": "2026-01-15T12:25:12.373Z"
+      "detailsScrapedAt": "2026-01-15T16:19:48.024Z",
+      "categories": [
+        "odeca/majice"
+      ],
+      "gender": "zenski"
     },
     {
       "id": "djaksport-www-djaksport-com-joma-patike-dribling-za-muskarce-driw2401-in-55",
       "store": "djaksport",
-      "name": "JOMA PATIKE DRIBLING ZA MUŠKARCE",
+      "name": "JOMA PATIKE DRIBLING ZA MU\u0160KARCE",
       "brand": "JOMA",
       "originalPrice": 5999,
       "salePrice": 2340,
@@ -1249,12 +1404,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1726066571DRIW2401.IN.webp",
-      "detailsScrapedAt": "2026-01-15T12:25:21.587Z"
+      "detailsScrapedAt": "2026-01-15T16:19:56.366Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-cizme-keepsakes-wedge-cozy-peak-49811-tan-56",
       "store": "djaksport",
-      "name": "SKECHERS CIZME KEEPSAKES WEDGE COZY PEAK ZA ŽENE",
+      "name": "SKECHERS CIZME KEEPSAKES WEDGE COZY PEAK ZA \u017dENE",
       "brand": "SKECHERS",
       "originalPrice": 11499,
       "salePrice": 5750,
@@ -1268,12 +1427,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/172615294649811-TAN.webp",
-      "detailsScrapedAt": "2026-01-15T10:07:09.124Z"
+      "detailsScrapedAt": "2026-01-15T16:20:03.462Z",
+      "categories": [
+        "obuca/cizme"
+      ],
+      "gender": "zenski"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-grand-court-2-0-el-k-gy2327-57",
       "store": "djaksport",
-      "name": "ADIDAS PATIKE GRAND COURT 2.0 EL K ZA DEVOJČICE",
+      "name": "ADIDAS PATIKE GRAND COURT 2.0 EL K ZA DEVOJ\u010cICE",
       "brand": "ADIDAS",
       "originalPrice": 5999,
       "salePrice": 1999,
@@ -1292,12 +1455,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1720191820GY2327.webp",
-      "detailsScrapedAt": "2026-01-15T12:26:04.663Z"
+      "detailsScrapedAt": "2026-01-15T16:20:10.254Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "unisex"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-patike-260782k-rave-nc-k-za-devojcice-371355w-901-58",
       "store": "djaksport",
-      "name": "KAPPA PATIKE 260782K RAVE NC K ZA DEVOJČICE",
+      "name": "KAPPA PATIKE 260782K RAVE NC K ZA DEVOJ\u010cICE",
       "brand": "KAPPA",
       "originalPrice": 4199,
       "salePrice": 1344,
@@ -1311,12 +1478,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1721213743371355W-901.JPG",
-      "detailsScrapedAt": "2026-01-15T12:26:12.423Z"
+      "detailsScrapedAt": "2026-01-15T16:20:17.425Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "unisex"
     },
     {
       "id": "djaksport-www-djaksport-com-joma-patike-toledo-jr-za-decake-tojs2502-in-59",
       "store": "djaksport",
-      "name": "JOMA PATIKE TOLEDO JR ZA DEČAKE",
+      "name": "JOMA PATIKE TOLEDO JR ZA DE\u010cAKE",
       "brand": "JOMA",
       "originalPrice": 4499,
       "salePrice": 1980,
@@ -1336,12 +1507,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1741103930TOJS2502.IN.webp",
-      "detailsScrapedAt": "2026-01-15T12:26:21.316Z"
+      "detailsScrapedAt": "2026-01-15T16:20:25.708Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-donji-ves-logo-bum-2pack-304vmu0-905-60",
       "store": "djaksport",
-      "name": "KAPPA DONJI VES LOGO BUM 2PACK ZA MUŠKARCE",
+      "name": "KAPPA DONJI VES LOGO BUM 2PACK ZA MU\u0160KARCE",
       "brand": "KAPPA",
       "originalPrice": 1699,
       "salePrice": 680,
@@ -1358,12 +1533,13 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/0/304VMU0-905_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:26:28.544Z"
+      "detailsScrapedAt": "2026-01-15T16:20:33.804Z",
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-lumberjack-cipele-poryna-za-muskarce-smk0501001-cb003-61",
       "store": "djaksport",
-      "name": "LUMBERJACK CIPELE PORYNA ZA MUŠKARCE",
+      "name": "LUMBERJACK CIPELE PORYNA ZA MU\u0160KARCE",
       "brand": "LUMBERJACK",
       "originalPrice": 11999,
       "salePrice": 5400,
@@ -1377,12 +1553,17 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1729781822SMK0501001-CB003.webp",
-      "detailsScrapedAt": "2026-01-15T12:26:36.273Z"
+      "detailsScrapedAt": "2026-01-15T16:20:42.609Z",
+      "categories": [
+        "obuca/cipele",
+        "obuca/cizme"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-donji-ves-logo-bit-2pack-331c4tw-a01-62",
       "store": "djaksport",
-      "name": "KAPPA DONJI VES LOGO BIT 2PACK ZA MUŠKARCE",
+      "name": "KAPPA DONJI VES LOGO BIT 2PACK ZA MU\u0160KARCE",
       "brand": "KAPPA",
       "originalPrice": 1699,
       "salePrice": 714,
@@ -1399,12 +1580,13 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/3/331C4TW-A01_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:26:43.729Z"
+      "detailsScrapedAt": "2026-01-15T16:20:50.568Z",
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-cipele-ultra-trek-32-q317m-ultra-blk-63",
       "store": "djaksport",
-      "name": "COPPERMINER CIPELE ULTRA TREK 32 ZA MUŠKARCE",
+      "name": "COPPERMINER CIPELE ULTRA TREK 32 ZA MU\u0160KARCE",
       "brand": "COPPERMINER",
       "originalPrice": 11599,
       "salePrice": 5099,
@@ -1425,12 +1607,17 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/Q/3/Q317M-ULTRA-BLK_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:26:52.504Z"
+      "detailsScrapedAt": "2026-01-15T16:20:58.309Z",
+      "categories": [
+        "obuca/cipele",
+        "obuca/cizme"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-copperminer-cipele-stone-za-muskarce-q232m-stone-olv-64",
       "store": "djaksport",
-      "name": "COPPERMINER CIPELE STONE ZA MUŠKARCE",
+      "name": "COPPERMINER CIPELE STONE ZA MU\u0160KARCE",
       "brand": "COPPERMINER",
       "originalPrice": 10999,
       "salePrice": 4899,
@@ -1447,12 +1634,17 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1759931845Q232M-STONE-OLV.webp",
-      "detailsScrapedAt": "2026-01-15T10:08:16.418Z"
+      "detailsScrapedAt": "2026-01-15T16:21:06.834Z",
+      "categories": [
+        "obuca/cipele",
+        "obuca/cizme"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-under-armour-patike-charged-bandit-tr-3-za-muskarce-3028657-00-65",
       "store": "djaksport",
-      "name": "UNDER ARMOUR PATIKE CHARGED BANDIT TR 3 ZA MUŠKARCE",
+      "name": "UNDER ARMOUR PATIKE CHARGED BANDIT TR 3 ZA MU\u0160KARCE",
       "brand": "UNDER",
       "originalPrice": 11899,
       "salePrice": 5999,
@@ -1469,12 +1661,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/17478393433028657-001.webp",
-      "detailsScrapedAt": "2026-01-15T12:27:31.236Z"
+      "detailsScrapedAt": "2026-01-15T16:21:16.387Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-patike-hml-lemos-za-muskarce-t900375-2594-66",
       "store": "djaksport",
-      "name": "HUMMEL PATIKE HML LEMOS ZA MUŠKARCE",
+      "name": "HUMMEL PATIKE HML LEMOS ZA MU\u0160KARCE",
       "brand": "HUMMEL",
       "originalPrice": 10999,
       "salePrice": 4400,
@@ -1488,12 +1684,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1730361365T900375-2594.webp",
-      "detailsScrapedAt": "2026-01-15T12:27:38.348Z"
+      "detailsScrapedAt": "2026-01-15T16:21:24.105Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-joma-patike-toledo-jr-turf-za-decake-tojw2401-tf-67",
       "store": "djaksport",
-      "name": "JOMA PATIKE TOLEDO JR TURF ZA DEČAKE",
+      "name": "JOMA PATIKE TOLEDO JR TURF ZA DE\u010cAKE",
       "brand": "JOMA",
       "originalPrice": 4499,
       "salePrice": 1620,
@@ -1512,12 +1712,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1752898184TOJW2401.TF.webp",
-      "detailsScrapedAt": "2026-01-15T12:27:46.783Z"
+      "detailsScrapedAt": "2026-01-15T16:21:31.571Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-trn-patike-base-ii-3032030-900-68",
       "store": "djaksport",
-      "name": "KAPPA TRN PATIKE BASE II ZA MUŠKARCE",
+      "name": "KAPPA TRN PATIKE BASE II ZA MU\u0160KARCE",
       "brand": "KAPPA",
       "originalPrice": 5999,
       "salePrice": 2700,
@@ -1538,12 +1742,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/17370429253032030-900.webp",
-      "detailsScrapedAt": "2026-01-15T10:08:51.473Z"
+      "detailsScrapedAt": "2026-01-15T16:21:40.543Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-cizme-261044k-claw-ii-tex-k-za-decake-371n62w-a7n-69",
       "store": "djaksport",
-      "name": "KAPPA CIZME 261044K CLAW II TEX K ZA DEČAKE",
+      "name": "KAPPA CIZME 261044K CLAW II TEX K ZA DE\u010cAKE",
       "brand": "KAPPA",
       "originalPrice": 5899,
       "salePrice": 2899,
@@ -1564,12 +1772,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1727276175371N62W-A7N.JPG",
-      "detailsScrapedAt": "2026-01-15T12:28:27.938Z"
+      "detailsScrapedAt": "2026-01-15T16:21:48.603Z",
+      "categories": [
+        "obuca/cizme"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-majica-hmldivide-t-shirt-ss-za-muskarce-t911794-2523-70",
       "store": "djaksport",
-      "name": "HUMMEL MAJICA HMLDIVIDE T-SHIRT SS ZA MUŠKARCE",
+      "name": "HUMMEL MAJICA HMLDIVIDE T-SHIRT SS ZA MU\u0160KARCE",
       "brand": "HUMMEL",
       "originalPrice": 3499,
       "salePrice": 700,
@@ -1586,12 +1798,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1710932547T911794-2523.webp",
-      "detailsScrapedAt": "2026-01-15T12:43:29.698Z"
+      "detailsScrapedAt": "2026-01-15T16:21:56.649Z",
+      "categories": [
+        "odeca/majice"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-patike-243412-branja-za-zene-331s3jw-912-71",
       "store": "djaksport",
-      "name": "KAPPA PATIKE 243412 BRANJA ZA ŽENE",
+      "name": "KAPPA PATIKE 243412 BRANJA ZA \u017dENE",
       "brand": "KAPPA",
       "originalPrice": 5499,
       "salePrice": 2310,
@@ -1606,12 +1822,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1703734253331S3JW-912.JPG",
-      "detailsScrapedAt": "2026-01-15T12:29:07.070Z"
+      "detailsScrapedAt": "2026-01-15T16:22:03.893Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "zenski"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-decije-patike-logo-saigon-ev-kid-za-decake-311l3lw-a0b-72",
       "store": "djaksport",
-      "name": "KAPPA DECIJE PATIKE LOGO  SAIGON EV KID ZA DEČAKE",
+      "name": "KAPPA DECIJE PATIKE LOGO  SAIGON EV KID ZA DE\u010cAKE",
       "brand": "KAPPA",
       "originalPrice": 4599,
       "salePrice": 2300,
@@ -1626,12 +1846,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1745938539311L3LW-A0B.webp",
-      "detailsScrapedAt": "2026-01-15T12:29:14.444Z"
+      "detailsScrapedAt": "2026-01-15T16:22:12.072Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-cizme-260632k-road-tex-k-za-decake-304jt20-961-73",
       "store": "djaksport",
-      "name": "KAPPA CIZME 260632K ROAD TEX K ZA DEČAKE",
+      "name": "KAPPA CIZME 260632K ROAD TEX K ZA DE\u010cAKE",
       "brand": "KAPPA",
       "originalPrice": 6999,
       "salePrice": 2800,
@@ -1648,12 +1872,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1729608913304JT20-961.JPG",
-      "detailsScrapedAt": "2026-01-15T12:29:20.582Z"
+      "detailsScrapedAt": "2026-01-15T16:22:20.900Z",
+      "categories": [
+        "obuca/cizme"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-cizme-260903k-cekis-tex-k-decaci-uzrasta-0-4-godine-3815-74",
       "store": "djaksport",
-      "name": "KAPPA CIZME 260903K CEKIS TEX K DEVOJČICE uzrasta 0-4 godine",
+      "name": "KAPPA CIZME 260903K CEKIS TEX K DEVOJ\u010cICE uzrasta 0-4 godine",
       "brand": "KAPPA",
       "originalPrice": 5999,
       "salePrice": 2999,
@@ -1672,12 +1900,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/172891775438158UW-A79.JPG",
-      "detailsScrapedAt": "2026-01-15T12:29:27.326Z"
+      "detailsScrapedAt": "2026-01-15T16:22:31.209Z",
+      "categories": [
+        "obuca/cizme"
+      ],
+      "gender": "unisex"
     },
     {
       "id": "djaksport-www-djaksport-com-adidas-patike-grand-court-base-2-0-za-muskarce-id1183-75",
       "store": "djaksport",
-      "name": "ADIDAS PATIKE GRAND COURT BASE 2.0 ZA MUŠKARCE",
+      "name": "ADIDAS PATIKE GRAND COURT BASE 2.0 ZA MU\u0160KARCE",
       "brand": "ADIDAS",
       "originalPrice": 6599,
       "salePrice": 3234,
@@ -1693,12 +1925,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1719917807ID1183.webp",
-      "detailsScrapedAt": "2026-01-15T10:10:11.948Z"
+      "detailsScrapedAt": "2026-01-15T16:22:41.107Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-duks-eastbound-aron-za-muskarce-ebm501-blk-76",
       "store": "djaksport",
-      "name": "EASTBOUND DUKS EASTBOUND ARON ZA MUŠKARCE",
+      "name": "EASTBOUND DUKS EASTBOUND ARON ZA MU\u0160KARCE",
       "brand": "EASTBOUND",
       "originalPrice": 3999,
       "salePrice": 1600,
@@ -1713,12 +1949,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1728917849EBM501-BLK.JPG",
-      "detailsScrapedAt": "2026-01-15T13:26:27.525Z"
+      "detailsScrapedAt": "2026-01-15T16:22:49.983Z",
+      "categories": [
+        "odeca/duksevi"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-skechers-cipele-relment-za-muskarce-65529-bbk-77",
       "store": "djaksport",
-      "name": "SKECHERS CIPELE RELMENT ZA MUŠKARCE",
+      "name": "SKECHERS CIPELE RELMENT ZA MU\u0160KARCE",
       "brand": "SKECHERS",
       "originalPrice": 13499,
       "salePrice": 6615,
@@ -1733,12 +1973,17 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/172537540265529-BBK.webp",
-      "detailsScrapedAt": "2026-01-15T12:30:40.083Z"
+      "detailsScrapedAt": "2026-01-15T16:22:57.997Z",
+      "categories": [
+        "obuca/cipele",
+        "obuca/cizme"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-donji-deo-hmlessential-training-pants-za-muskarce-22454-78",
       "store": "djaksport",
-      "name": "HUMMEL DONJI DEO HMLESSENTIAL TRAINING PANTS ZA MUŠKARCE",
+      "name": "HUMMEL DONJI DEO HMLESSENTIAL TRAINING PANTS ZA MU\u0160KARCE",
       "brand": "HUMMEL",
       "originalPrice": 3799,
       "salePrice": 1748,
@@ -1756,12 +2001,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1709609496224549-7026.JPG",
-      "detailsScrapedAt": "2026-01-15T12:30:47.902Z"
+      "detailsScrapedAt": "2026-01-15T16:23:06.297Z",
+      "categories": [
+        "odeca/pantalone"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-patike-camden-jr-za-devojcice-213401-3188-79",
       "store": "djaksport",
-      "name": "HUMMEL PATIKE CAMDEN JR ZA DEVOJČICE",
+      "name": "HUMMEL PATIKE CAMDEN JR ZA DEVOJ\u010cICE",
       "brand": "HUMMEL",
       "originalPrice": 5099,
       "salePrice": 1836,
@@ -1781,12 +2030,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1730735721213401-3188.webp",
-      "detailsScrapedAt": "2026-01-15T12:30:54.932Z"
+      "detailsScrapedAt": "2026-01-15T16:23:14.255Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "unisex"
     },
     {
       "id": "djaksport-www-djaksport-com-kid-jakna-hmlnorth-jacket-203899-2001-80",
       "store": "djaksport",
-      "name": "HUMMEL KID JAKNA HMLNORTH JACKET ZA DEČAKE",
+      "name": "HUMMEL KID JAKNA HMLNORTH JACKET ZA DE\u010cAKE",
       "brand": "HUMMEL",
       "originalPrice": 8999,
       "salePrice": 1999,
@@ -1797,8 +2050,11 @@
       "scrapedAt": "2026-01-14T23:17:41.440Z",
       "sizes": [],
       "description": null,
-      "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/2/0/203899-2001_1.webp",
-      "detailsScrapedAt": "2026-01-15T13:35:31.122Z"
+      "detailImageUrl": null,
+      "detailsScrapedAt": "2026-01-15T16:23:20.487Z",
+      "categories": [
+        "odeca/jakne"
+      ]
     },
     {
       "id": "djaksport-www-djaksport-com-carape-life-low-3p-blk-16024-blk-81",
@@ -1815,12 +2071,17 @@
       "sizes": [],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/6/16024-BLK_1.webp",
-      "detailsScrapedAt": "2026-01-15T13:35:37.354Z"
+      "detailsScrapedAt": "2026-01-15T16:23:27.886Z",
+      "categories": [
+        "oprema/carape",
+        "oprema/salovi"
+      ],
+      "gender": "unisex"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-jakna-hmlpuff-jacket-short-sportswear-za-muskarce-22594-82",
       "store": "djaksport",
-      "name": "HUMMEL JAKNA HMLPUFF JACKET SHORT SPORTSWEAR ZA MUŠKARCE",
+      "name": "HUMMEL JAKNA HMLPUFF JACKET SHORT SPORTSWEAR ZA MU\u0160KARCE",
       "brand": "HUMMEL",
       "originalPrice": 12499,
       "salePrice": 2999,
@@ -1838,12 +2099,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1732550129225948-6565.webp",
-      "detailsScrapedAt": "2026-01-15T12:31:13.392Z"
+      "detailsScrapedAt": "2026-01-15T16:23:35.309Z",
+      "categories": [
+        "odeca/jakne"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-nike-patike-wmns-nike-court-royale-2-nn-za-zene-dh3159-100-83",
       "store": "djaksport",
-      "name": "NIKE PATIKE WMNS NIKE COURT ROYALE 2 NN ZA ŽENE",
+      "name": "NIKE PATIKE WMNS NIKE COURT ROYALE 2 NN ZA \u017dENE",
       "brand": "NIKE",
       "originalPrice": 9199,
       "salePrice": 3999,
@@ -1862,12 +2127,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1722250602DH3159-100.webp",
-      "detailsScrapedAt": "2026-01-15T12:31:21.132Z"
+      "detailsScrapedAt": "2026-01-15T16:23:42.292Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "zenski"
     },
     {
       "id": "djaksport-www-djaksport-com-nike-duks-m-nsw-club-hoodie-po-bb-za-muskarce-bv2654-365-84",
       "store": "djaksport",
-      "name": "NIKE DUKS M NSW CLUB HOODIE PO BB ZA MUŠKARCE",
+      "name": "NIKE DUKS M NSW CLUB HOODIE PO BB ZA MU\u0160KARCE",
       "brand": "NIKE",
       "originalPrice": 8599,
       "salePrice": 4300,
@@ -1884,12 +2153,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1707363109BV2654-365.webp",
-      "detailsScrapedAt": "2026-01-15T10:11:50.276Z"
+      "detailsScrapedAt": "2026-01-15T16:23:50.254Z",
+      "categories": [
+        "odeca/duksevi"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-bash-pf-gc-351419w-906-85",
       "store": "djaksport",
-      "name": "KAPPA PATIKE BASH PF GC ZA ŽENE",
+      "name": "KAPPA PATIKE BASH PF GC ZA \u017dENE",
       "brand": "KAPPA",
       "originalPrice": 5499,
       "salePrice": 2695,
@@ -1906,12 +2179,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1707967843351419W-906.JPG",
-      "detailsScrapedAt": "2026-01-15T12:32:05.206Z"
+      "detailsScrapedAt": "2026-01-15T16:23:57.931Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "zenski"
     },
     {
       "id": "djaksport-www-djaksport-com-donji-ves-logo-ben-2pack-304vmt0-904-86",
       "store": "djaksport",
-      "name": "KAPPA DONJI VES LOGO BEN 2PACK ZA MUŠKARCE",
+      "name": "KAPPA DONJI VES LOGO BEN 2PACK ZA MU\u0160KARCE",
       "brand": "KAPPA",
       "originalPrice": 1699,
       "salePrice": 714,
@@ -1928,12 +2205,13 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/0/304VMT0-904_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:32:12.671Z"
+      "detailsScrapedAt": "2026-01-15T16:24:05.810Z",
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-copperminer-cipele-gigi-kid-za-decake-q324ps-gigi-gre-87",
       "store": "djaksport",
-      "name": "COPPERMINER CIPELE GIGI KID ZA DEČAKE",
+      "name": "COPPERMINER CIPELE GIGI KID ZA DE\u010cAKE",
       "brand": "COPPERMINER",
       "originalPrice": 9699,
       "salePrice": 4753,
@@ -1954,12 +2232,17 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1732723062Q324PS-GIGI-GRE.webp",
-      "detailsScrapedAt": "2026-01-15T12:32:19.311Z"
+      "detailsScrapedAt": "2026-01-15T16:24:13.547Z",
+      "categories": [
+        "obuca/cipele",
+        "obuca/cizme"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-muske-patike-nike-blazer-bq6806-100-88",
       "store": "djaksport",
-      "name": "NIKE PATIKE BLAZER ZA MUŠKARCE",
+      "name": "NIKE PATIKE BLAZER ZA MU\u0160KARCE",
       "brand": "NIKE",
       "originalPrice": 14199,
       "salePrice": 3976,
@@ -1973,12 +2256,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/B/Q/BQ6806-100_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:32:25.990Z"
+      "detailsScrapedAt": "2026-01-15T16:24:20.753Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-cipele-pitsburg-q321m-pitsbu-gry-89",
       "store": "djaksport",
-      "name": "COPPERMINER CIPELE PITSBURG ZA MUŠKARCE",
+      "name": "COPPERMINER CIPELE PITSBURG ZA MU\u0160KARCE",
       "brand": "COPPERMINER",
       "originalPrice": 13499,
       "salePrice": 5599,
@@ -1996,12 +2283,17 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1738166315Q321M-PITSBU-GRY.webp",
-      "detailsScrapedAt": "2026-01-15T12:32:34.216Z"
+      "detailsScrapedAt": "2026-01-15T16:24:27.821Z",
+      "categories": [
+        "obuca/cipele",
+        "obuca/cizme"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-hoops-mid-3-0-ac-i-gw0408-90",
       "store": "djaksport",
-      "name": "ADIDAS PATIKE HOOPS MID 3.0 AC I ZA DEČAKE",
+      "name": "ADIDAS PATIKE HOOPS MID 3.0 AC I ZA DE\u010cAKE",
       "brand": "ADIDAS",
       "originalPrice": 6299,
       "salePrice": 2961,
@@ -2019,12 +2311,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/G/W/GW0408_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:32:41.987Z"
+      "detailsScrapedAt": "2026-01-15T16:24:35.466Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-nike-patike-lebron-witness-viii-za-muskarce-fb2239-402-91",
       "store": "djaksport",
-      "name": "NIKE PATIKE LEBRON WITNESS VIII ZA MUŠKARCE",
+      "name": "NIKE PATIKE LEBRON WITNESS VIII ZA MU\u0160KARCE",
       "brand": "NIKE",
       "originalPrice": 15499,
       "salePrice": 6975,
@@ -2038,12 +2334,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1724684395FB2239-402.webp",
-      "detailsScrapedAt": "2026-01-15T13:35:44.735Z"
+      "detailsScrapedAt": "2026-01-15T16:24:42.903Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-duks-logo-fomino-za-muskarce-371l7zw-005-92",
       "store": "djaksport",
-      "name": "KAPPA DUKS LOGO FOMINO ZA MUŠKARCE",
+      "name": "KAPPA DUKS LOGO FOMINO ZA MU\u0160KARCE",
       "brand": "KAPPA",
       "originalPrice": 5999,
       "salePrice": 1980,
@@ -2059,12 +2359,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1707449454371L7ZW-005.JPG",
-      "detailsScrapedAt": "2026-01-15T13:35:50.411Z"
+      "detailsScrapedAt": "2026-01-15T16:24:50.691Z",
+      "categories": [
+        "odeca/duksevi"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-patike-court-line-za-muskarce-225943-9035-93",
       "store": "djaksport",
-      "name": "HUMMEL PATIKE COURT LINE ZA MUŠKARCE",
+      "name": "HUMMEL PATIKE COURT LINE ZA MU\u0160KARCE",
       "brand": "HUMMEL",
       "originalPrice": 5099,
       "salePrice": 2169,
@@ -2089,12 +2393,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1728053723225943-9035.webp",
-      "detailsScrapedAt": "2026-01-15T12:33:53.267Z"
+      "detailsScrapedAt": "2026-01-15T16:24:58.902Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-bokserice-freedom-2-pack-za-muskarce-ebun001-bny-94",
       "store": "djaksport",
-      "name": "EASTBOUND BOKSERICE FREEDOM 2 PACK ZA MUŠKARCE",
+      "name": "EASTBOUND BOKSERICE FREEDOM 2 PACK ZA MU\u0160KARCE",
       "brand": "EASTBOUND",
       "originalPrice": 1699,
       "salePrice": 680,
@@ -2111,12 +2419,13 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1727967392EBUN001-BNY.JPG",
-      "detailsScrapedAt": "2026-01-15T12:34:00.231Z"
+      "detailsScrapedAt": "2026-01-15T16:25:06.778Z",
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-joma-patike-dribling-turf-za-muskarce-driw2401-tf-95",
       "store": "djaksport",
-      "name": "JOMA PATIKE DRIBLING TURF ZA MUŠKARCE",
+      "name": "JOMA PATIKE DRIBLING TURF ZA MU\u0160KARCE",
       "brand": "JOMA",
       "originalPrice": 5999,
       "salePrice": 2160,
@@ -2134,12 +2443,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1752897889DRIW2401.TF.webp",
-      "detailsScrapedAt": "2026-01-15T12:34:08.899Z"
+      "detailsScrapedAt": "2026-01-15T16:25:13.968Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-adidas-patike-strutter-za-muskarce-ih4906-96",
       "store": "djaksport",
-      "name": "ADIDAS PATIKE STRUTTER ZA MUŠKARCE",
+      "name": "ADIDAS PATIKE STRUTTER ZA MU\u0160KARCE",
       "brand": "ADIDAS",
       "originalPrice": 7799,
       "salePrice": 3709,
@@ -2153,12 +2466,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1718377727IH4906.webp",
-      "detailsScrapedAt": "2026-01-15T12:34:16.323Z"
+      "detailsScrapedAt": "2026-01-15T16:25:20.957Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-patike-243333-naveen-za-muskarce-351h33w-950-97",
       "store": "djaksport",
-      "name": "KAPPA PATIKE 243333 NAVEEN ZA MUŠKARCE",
+      "name": "KAPPA PATIKE 243333 NAVEEN ZA MU\u0160KARCE",
       "brand": "KAPPA",
       "originalPrice": 4999,
       "salePrice": 2200,
@@ -2176,12 +2493,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1709881264351H33W-950.JPG",
-      "detailsScrapedAt": "2026-01-15T12:34:23.040Z"
+      "detailsScrapedAt": "2026-01-15T16:25:27.997Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-donji-deo-eastbound-fast-za-muskarce-ebm500-blk-98",
       "store": "djaksport",
-      "name": "EASTBOUND DONJI DEO EASTBOUND FAST ZA MUŠKARCE",
+      "name": "EASTBOUND DONJI DEO EASTBOUND FAST ZA MU\u0160KARCE",
       "brand": "EASTBOUND",
       "originalPrice": 4699,
       "salePrice": 1880,
@@ -2195,12 +2516,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1728485853EBM500-BLK.JPG",
-      "detailsScrapedAt": "2026-01-15T12:34:29.389Z"
+      "detailsScrapedAt": "2026-01-15T16:25:35.276Z",
+      "categories": [
+        "odeca/pantalone"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-nike-court-legacy-bg-da5380-116-99",
       "store": "djaksport",
-      "name": "NIKE PATIKE COURT LEGACY BG ZA DEVOJČICE",
+      "name": "NIKE PATIKE COURT LEGACY BG ZA DEVOJ\u010cICE",
       "brand": "NIKE",
       "originalPrice": 8599,
       "salePrice": 2999,
@@ -2216,12 +2541,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/D/A/DA5380-116_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:34:37.315Z"
+      "detailsScrapedAt": "2026-01-15T16:25:42.796Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "unisex"
     },
     {
       "id": "djaksport-www-djaksport-com-hummel-duks-hmlfelix-zip-jacket-za-muskarce-t921955-2001-100",
       "store": "djaksport",
-      "name": "HUMMEL DUKS HMLFELIX ZIP JACKET ZA MUŠKARCE",
+      "name": "HUMMEL DUKS HMLFELIX ZIP JACKET ZA MU\u0160KARCE",
       "brand": "HUMMEL",
       "originalPrice": 6499,
       "salePrice": 2470,
@@ -2236,12 +2565,17 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1730476600T921955-2001.webp",
-      "detailsScrapedAt": "2026-01-15T13:35:56.121Z"
+      "detailsScrapedAt": "2026-01-15T16:25:50.160Z",
+      "categories": [
+        "odeca/jakne",
+        "odeca/duksevi"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-adidas-patike-strutter-za-muskarce-id3072-101",
       "store": "djaksport",
-      "name": "ADIDAS PATIKE STRUTTER ZA MUŠKARCE",
+      "name": "ADIDAS PATIKE STRUTTER ZA MU\u0160KARCE",
       "brand": "ADIDAS",
       "originalPrice": 7799,
       "salePrice": 3744,
@@ -2257,12 +2591,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1708572959ID3072.webp",
-      "detailsScrapedAt": "2026-01-15T12:35:17.271Z"
+      "detailsScrapedAt": "2026-01-15T16:25:57.362Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-patike-logo-roockey-za-muskarce-351h2uw-a05-102",
       "store": "djaksport",
-      "name": "KAPPA PATIKE LOGO ROOCKEY ZA MUŠKARCE",
+      "name": "KAPPA PATIKE LOGO ROOCKEY ZA MU\u0160KARCE",
       "brand": "KAPPA",
       "originalPrice": 5499,
       "salePrice": 2449,
@@ -2282,12 +2620,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1704857449351H2UW-A05.webp",
-      "detailsScrapedAt": "2026-01-15T12:35:25.303Z"
+      "detailsScrapedAt": "2026-01-15T16:26:04.973Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-invento-jakna-smit-za-decake-710035-black-103",
       "store": "djaksport",
-      "name": "INVENTO JAKNA SMIT ZA DEČAKE",
+      "name": "INVENTO JAKNA SMIT ZA DE\u010cAKE",
       "brand": "INVENTO",
       "originalPrice": 9299,
       "salePrice": 3999,
@@ -2304,12 +2646,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1763718976710035-BLACK.webp",
-      "detailsScrapedAt": "2026-01-15T12:35:32.858Z"
+      "detailsScrapedAt": "2026-01-15T16:26:12.069Z",
+      "categories": [
+        "odeca/jakne"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-decije-patike-logo-saigon-ev-kid-za-devojcice-311l3lw-a1-104",
       "store": "djaksport",
-      "name": "KAPPA DECIJE PATIKE LOGO  SAIGON EV KID ZA DEVOJČICE",
+      "name": "KAPPA DECIJE PATIKE LOGO  SAIGON EV KID ZA DEVOJ\u010cICE",
       "brand": "KAPPA",
       "originalPrice": 4499,
       "salePrice": 2250,
@@ -2327,12 +2673,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1743062127311L3LW-A1P.webp",
-      "detailsScrapedAt": "2026-01-15T12:35:40.720Z"
+      "detailsScrapedAt": "2026-01-15T16:26:19.329Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "unisex"
     },
     {
       "id": "djaksport-www-djaksport-com-nike-patike-court-borough-mid-2-bpv-za-decake-cd7783-118-105",
       "store": "djaksport",
-      "name": "NIKE PATIKE COURT BOROUGH MID 2 BPV ZA DEČAKE",
+      "name": "NIKE PATIKE COURT BOROUGH MID 2 BPV ZA DE\u010cAKE",
       "brand": "NIKE",
       "originalPrice": 8399,
       "salePrice": 3864,
@@ -2349,12 +2699,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1730476551CD7783-118.webp",
-      "detailsScrapedAt": "2026-01-15T12:35:47.435Z"
+      "detailsScrapedAt": "2026-01-15T16:26:26.572Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "deciji"
     },
     {
       "id": "djaksport-www-djaksport-com-patike-bash-pf-gc-351419w-a2n-106",
       "store": "djaksport",
-      "name": "KAPPA PATIKE BASH PF GC ZA ŽENE",
+      "name": "KAPPA PATIKE BASH PF GC ZA \u017dENE",
       "brand": "KAPPA",
       "originalPrice": 5999,
       "salePrice": 2820,
@@ -2371,12 +2725,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/5/351419W-A2N_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:35:54.831Z"
+      "detailsScrapedAt": "2026-01-15T16:26:34.036Z",
+      "categories": [
+        "obuca/patike"
+      ],
+      "gender": "zenski"
     },
     {
       "id": "djaksport-www-djaksport-com-donji-ves-logo-leo-2pack-304uc30-a00-107",
       "store": "djaksport",
-      "name": "KAPPA DONJI VES LOGO LEO 2PACK ZA MUŠKARCE",
+      "name": "KAPPA DONJI VES LOGO LEO 2PACK ZA MU\u0160KARCE",
       "brand": "KAPPA",
       "originalPrice": 1699,
       "salePrice": 714,
@@ -2393,12 +2751,13 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/3/0/304UC30-A00_1.webp",
-      "detailsScrapedAt": "2026-01-15T12:36:02.646Z"
+      "detailsScrapedAt": "2026-01-15T16:26:40.993Z",
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-eastbound-jakna-up-za-muskarce-ebm908-blk-108",
       "store": "djaksport",
-      "name": "EASTBOUND JAKNA UP ZA MUŠKARCE",
+      "name": "EASTBOUND JAKNA UP ZA MU\u0160KARCE",
       "brand": "EASTBOUND",
       "originalPrice": 4999,
       "salePrice": 2500,
@@ -2416,12 +2775,16 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1758549447EBM908-BLK.webp",
-      "detailsScrapedAt": "2026-01-15T12:36:10.943Z"
+      "detailsScrapedAt": "2026-01-15T16:26:47.972Z",
+      "categories": [
+        "odeca/jakne"
+      ],
+      "gender": "muski"
     },
     {
       "id": "djaksport-www-djaksport-com-kappa-muski-duks-303mkj0-a07-109",
       "store": "djaksport",
-      "name": "KAPPA MUŠKI DUKS",
+      "name": "KAPPA MU\u0160KI DUKS",
       "brand": "KAPPA",
       "originalPrice": 3999,
       "salePrice": 1720,
@@ -2439,7 +2802,11 @@
       ],
       "description": null,
       "detailImageUrl": "https://www.djaksport.com/media/opti_image/webp/catalog/product/cache/d25c7ffaa33cd077a5eb0dc50e0fb1f1/1/7/1744124149303MKJ0-A07.webp",
-      "detailsScrapedAt": "2026-01-15T12:36:18.503Z"
+      "detailsScrapedAt": "2026-01-15T16:26:54.830Z",
+      "categories": [
+        "odeca/duksevi"
+      ],
+      "gender": "muski"
     }
   ],
   "totalScraped": 323,

@@ -17,7 +17,7 @@ function extractGender(name: string): Gender {
     nameLower.includes(" bg") ||
     nameLower.includes(" junior")
   ) {
-    return "kids";
+    return "deciji";
   }
 
   // Women patterns
@@ -29,7 +29,7 @@ function extractGender(name: string): Gender {
     nameLower.includes(" wmns") ||
     nameLower.includes(" women")
   ) {
-    return "women";
+    return "zenski";
   }
 
   // Men patterns
@@ -40,7 +40,7 @@ function extractGender(name: string): Gender {
     nameLower.endsWith(" m") ||
     nameLower.includes(" men")
   ) {
-    return "men";
+    return "muski";
   }
 
   return "unisex";
@@ -127,7 +127,10 @@ export function getAllDeals(): Deal[] {
 
           const enrichedDeal: Deal = {
             ...deal,
-            gender: extractGender(deal.name),
+            // Normalize brand for consistent filtering
+            brand: deal.brand ? normalizeBrand(deal.brand) : null,
+            // Use scraped gender if available, otherwise extract from name
+            gender: deal.gender || extractGender(deal.name),
             category: extractCategory(deal.name),
           };
           allDeals.push(enrichedDeal);
@@ -152,11 +155,16 @@ export function getDealsByStore(store: Store): Deal[] {
   return allDeals.filter((deal) => deal.store === store);
 }
 
+// Normalize brand name to consistent format (uppercase)
+function normalizeBrand(brand: string): string {
+  return brand.toUpperCase().trim();
+}
+
 export function getUniqueBrands(): string[] {
   const allDeals = getAllDeals();
   const brands = new Set<string>();
   allDeals.forEach((deal) => {
-    if (deal.brand) brands.add(deal.brand);
+    if (deal.brand) brands.add(normalizeBrand(deal.brand));
   });
   return Array.from(brands).sort();
 }
@@ -173,7 +181,7 @@ export function getAllDealIds(): string[] {
 }
 
 export function getUniqueGenders(): Gender[] {
-  return ["men", "women", "kids", "unisex"];
+  return ["muski", "zenski", "deciji", "unisex"];
 }
 
 export function getUniqueCategories(): Category[] {

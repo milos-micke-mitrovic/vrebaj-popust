@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { Deal, Store, Gender, Category } from "@/types/deal";
+import { Deal, Store, Gender, Category, CategoryPath, MainCategory, Subcategory } from "@/types/deal";
 import { DealCard } from "./deal-card";
 import { ScrollFade } from "./scroll-fade";
 import { Badge } from "@/components/ui/badge";
@@ -32,9 +32,9 @@ const STORE_NAMES: Record<Store, string> = {
 };
 
 const GENDER_NAMES: Record<Gender, string> = {
-  men: "Muškarci",
-  women: "Žene",
-  kids: "Deca",
+  muski: "Muškarci",
+  zenski: "Žene",
+  deciji: "Deca",
   unisex: "Unisex",
 };
 
@@ -52,11 +52,57 @@ const CATEGORY_NAMES: Record<Category, string> = {
   ostalo: "Ostalo",
 };
 
+// Hierarchical category structure
+const MAIN_CATEGORY_NAMES: Record<MainCategory, string> = {
+  obuca: "Obuća",
+  odeca: "Odeća",
+  oprema: "Oprema",
+};
+
+const SUBCATEGORY_NAMES: Record<Subcategory, string> = {
+  // Obuca
+  patike: "Patike",
+  cipele: "Cipele",
+  cizme: "Čizme",
+  papuce: "Papuče",
+  sandale: "Sandale",
+  japanke: "Japanke",
+  patofne: "Patofne",
+  // Odeca
+  jakne: "Jakne",
+  prsluci: "Prsluci",
+  aktivni_ves: "Aktivni veš",
+  duksevi: "Duksevi",
+  majice: "Majice",
+  pantalone: "Pantalone",
+  trenerke: "Trenerke",
+  helanke: "Helanke",
+  sortevi: "Šorcevi",
+  kupaci: "Kupaći",
+  haljine: "Haljine",
+  vetrovke: "Vetrovke",
+  // Oprema
+  torbe: "Torbe",
+  rancevi: "Rančevi",
+  kacketi: "Kačketi",
+  carape: "Čarape",
+  kape: "Kape",
+  salovi: "Šalovi",
+  rukavice: "Rukavice",
+  vrece: "Vreće",
+};
+
+const CATEGORY_HIERARCHY: Record<MainCategory, Subcategory[]> = {
+  obuca: ["patike", "cipele", "cizme", "papuce", "sandale", "japanke", "patofne"],
+  odeca: ["jakne", "prsluci", "aktivni_ves", "duksevi", "majice", "pantalone", "trenerke", "helanke", "sortevi", "kupaci", "haljine", "vetrovke"],
+  oprema: ["torbe", "rancevi", "kacketi", "carape", "kape", "salovi", "rukavice", "vrece"],
+};
+
 export function DealsGrid({
   deals,
   brands,
   stores,
-  categories,
+  categories: _categories,
   priceRange: _priceRange,
 }: DealsGridProps) {
   const router = useRouter();
@@ -77,6 +123,10 @@ export function DealsGrid({
   const [selectedCategories, setSelectedCategories] = useState<Category[]>(
     (searchParams.get("categories")?.split(",").filter(Boolean) as Category[]) || []
   );
+  const [selectedCategoryPaths, setSelectedCategoryPaths] = useState<CategoryPath[]>(
+    (searchParams.get("catPaths")?.split(",").filter(Boolean) as CategoryPath[]) || []
+  );
+  const [expandedCategories, setExpandedCategories] = useState<MainCategory[]>([]);
   const [minDiscount, setMinDiscount] = useState(
     Number(searchParams.get("minDiscount")) || 50
   );
@@ -138,6 +188,7 @@ export function DealsGrid({
     if (selectedBrands.length) currentParams.set("brands", selectedBrands.join(","));
     if (selectedGenders.length) currentParams.set("genders", selectedGenders.join(","));
     if (selectedCategories.length) currentParams.set("categories", selectedCategories.join(","));
+    if (selectedCategoryPaths.length) currentParams.set("catPaths", selectedCategoryPaths.join(","));
     if (selectedSizes.length) currentParams.set("sizes", selectedSizes.join(","));
     if (minDiscount > 50) currentParams.set("minDiscount", String(minDiscount));
     if (minPrice !== null) currentParams.set("minPrice", String(minPrice));
@@ -154,6 +205,7 @@ export function DealsGrid({
       setSelectedBrands(searchParams.get("brands")?.split(",").filter(Boolean) || []);
       setSelectedGenders((searchParams.get("genders")?.split(",").filter(Boolean) as Gender[]) || []);
       setSelectedCategories((searchParams.get("categories")?.split(",").filter(Boolean) as Category[]) || []);
+      setSelectedCategoryPaths((searchParams.get("catPaths")?.split(",").filter(Boolean) as CategoryPath[]) || []);
       setSelectedSizes(searchParams.get("sizes")?.split(",").filter(Boolean) || []);
       setMinDiscount(Number(searchParams.get("minDiscount")) || 50);
       setMinPrice(searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : null);
@@ -182,6 +234,7 @@ export function DealsGrid({
       if (selectedBrands.length) params.set("brands", selectedBrands.join(","));
       if (selectedGenders.length) params.set("genders", selectedGenders.join(","));
       if (selectedCategories.length) params.set("categories", selectedCategories.join(","));
+      if (selectedCategoryPaths.length) params.set("catPaths", selectedCategoryPaths.join(","));
       if (selectedSizes.length) params.set("sizes", selectedSizes.join(","));
       if (minDiscount > 50) params.set("minDiscount", String(minDiscount));
       if (minPrice !== null) params.set("minPrice", String(minPrice));
@@ -198,10 +251,10 @@ export function DealsGrid({
         clearTimeout(urlUpdateTimeout.current);
       }
     };
-  }, [search, selectedStores, selectedBrands, selectedGenders, selectedCategories, selectedSizes, minDiscount, minPrice, maxPrice, sortBy, currentPage, pathname, router]);
+  }, [search, selectedStores, selectedBrands, selectedGenders, selectedCategories, selectedCategoryPaths, selectedSizes, minDiscount, minPrice, maxPrice, sortBy, currentPage, pathname, router]);
 
   const filteredBrands = useMemo(() => {
-    if (!brandSearch) return brands.slice(0, 20);
+    if (!brandSearch) return brands;
     return brands.filter((b) =>
       b.toLowerCase().includes(brandSearch.toLowerCase())
     );
@@ -286,6 +339,14 @@ export function DealsGrid({
       );
     }
 
+    // Filter by new category paths (from detail scraper)
+    if (selectedCategoryPaths.length > 0) {
+      result = result.filter((deal) => {
+        if (!deal.categories || deal.categories.length === 0) return false;
+        return selectedCategoryPaths.some((path) => deal.categories?.includes(path));
+      });
+    }
+
     result = result.filter((deal) => deal.discountPercent >= minDiscount);
 
     if (minPrice !== null) {
@@ -326,6 +387,7 @@ export function DealsGrid({
     selectedBrands,
     selectedGenders,
     selectedCategories,
+    selectedCategoryPaths,
     selectedSizes,
     minDiscount,
     minPrice,
@@ -344,6 +406,7 @@ export function DealsGrid({
     setSelectedBrands([]);
     setSelectedGenders([]);
     setSelectedCategories([]);
+    setSelectedCategoryPaths([]);
     setSelectedSizes([]);
     setMinDiscount(50);
     setMinPrice(null);
@@ -392,6 +455,34 @@ export function DealsGrid({
     setCurrentPage(1);
   };
 
+  const toggleCategoryPath = (path: CategoryPath) => {
+    setSelectedCategoryPaths((prev) =>
+      prev.includes(path) ? prev.filter((p) => p !== path) : [...prev, path]
+    );
+    setCurrentPage(1);
+  };
+
+  const toggleExpandedCategory = (cat: MainCategory) => {
+    setExpandedCategories((prev) =>
+      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
+    );
+  };
+
+  const toggleMainCategory = (mainCat: MainCategory) => {
+    const subcats = CATEGORY_HIERARCHY[mainCat];
+    const paths = subcats.map((sub) => `${mainCat}/${sub}` as CategoryPath);
+    const allSelected = paths.every((p) => selectedCategoryPaths.includes(p));
+
+    if (allSelected) {
+      // Deselect all subcategories of this main category
+      setSelectedCategoryPaths((prev) => prev.filter((p) => !paths.includes(p)));
+    } else {
+      // Select all subcategories of this main category
+      setSelectedCategoryPaths((prev) => [...new Set([...prev, ...paths])]);
+    }
+    setCurrentPage(1);
+  };
+
   // Handle page change with scroll to top
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -403,6 +494,7 @@ export function DealsGrid({
     selectedStores.length > 0 ||
     selectedGenders.length > 0 ||
     selectedCategories.length > 0 ||
+    selectedCategoryPaths.length > 0 ||
     selectedBrands.length > 0 ||
     selectedSizes.length > 0 ||
     minDiscount > 50 ||
@@ -414,6 +506,7 @@ export function DealsGrid({
     selectedStores.length +
     selectedGenders.length +
     selectedCategories.length +
+    selectedCategoryPaths.length +
     selectedBrands.length +
     selectedSizes.length +
     (minDiscount > 50 ? 1 : 0) +
@@ -549,7 +642,7 @@ export function DealsGrid({
       <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
         <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Pol</h3>
         <div className="flex flex-wrap gap-2">
-          {(["men", "women", "kids", "unisex"] as Gender[]).map((gender) => (
+          {(["muski", "zenski", "deciji", "unisex"] as Gender[]).map((gender) => (
             <button
               key={gender}
               onClick={() => toggleGender(gender)}
@@ -568,13 +661,13 @@ export function DealsGrid({
       {/* Store */}
       <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
         <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Prodavnica</h3>
-        <div className="space-y-2">
+        <div className="space-y-1">
           {stores.map((store) => (
             <button
               key={store}
               type="button"
               onClick={() => toggleStore(store)}
-              className={`flex w-full cursor-pointer items-center gap-3 p-2 rounded-lg transition-colors text-left ${
+              className={`flex w-full cursor-pointer items-center gap-2 p-1.5 rounded-lg transition-colors text-left ${
                 selectedStores.includes(store)
                   ? "bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800"
                   : "hover:bg-gray-50 dark:hover:bg-gray-800"
@@ -597,43 +690,100 @@ export function DealsGrid({
         </div>
       </div>
 
-      {/* Category */}
+      {/* Category - Hierarchical */}
       <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-        <h3 className="mb-1 text-sm font-semibold text-gray-900 dark:text-white">Kategorija</h3>
-        <p className="mb-3 text-xs text-gray-400 dark:text-gray-500">* Filteri nisu precizni</p>
-        <ScrollFade maxHeight="200px">
-          <div className="space-y-1 pr-1">
-            {categories.map((category) => (
-              <label
-                key={category}
-                className={`flex cursor-pointer items-center gap-3 p-2 rounded-lg transition-colors ${
-                  selectedCategories.includes(category)
-                    ? "bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800"
-                    : "hover:bg-gray-50 dark:hover:bg-gray-800"
-                }`}
-              >
-                <input
-                  type="checkbox"
-                  checked={selectedCategories.includes(category)}
-                  onChange={() => toggleCategory(category)}
-                  className="sr-only"
-                />
-                <div className={`w-4 h-4 rounded border-2 flex items-center justify-center ${
-                  selectedCategories.includes(category)
-                    ? "bg-red-500 border-red-500"
-                    : "border-gray-300 dark:border-gray-600"
-                }`}>
-                  {selectedCategories.includes(category) && (
-                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+        <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Kategorija</h3>
+        <div className="space-y-2">
+          {(Object.keys(CATEGORY_HIERARCHY) as MainCategory[]).map((mainCat) => {
+            const subcats = CATEGORY_HIERARCHY[mainCat];
+            const paths = subcats.map((sub) => `${mainCat}/${sub}` as CategoryPath);
+            const selectedCount = paths.filter((p) => selectedCategoryPaths.includes(p)).length;
+            const allSelected = selectedCount === paths.length;
+            const someSelected = selectedCount > 0 && selectedCount < paths.length;
+            const isExpanded = expandedCategories.includes(mainCat);
+
+            return (
+              <div key={mainCat} className="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                {/* Main category header */}
+                <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-800">
+                  <button
+                    type="button"
+                    onClick={() => toggleMainCategory(mainCat)}
+                    className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 cursor-pointer ${
+                      allSelected
+                        ? "bg-red-500 border-red-500"
+                        : someSelected
+                        ? "bg-red-200 border-red-500"
+                        : "border-gray-300 dark:border-gray-600"
+                    }`}
+                  >
+                    {(allSelected || someSelected) && (
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => toggleExpandedCategory(mainCat)}
+                    className="flex-1 flex items-center justify-between cursor-pointer text-left"
+                  >
+                    <span className="text-sm font-medium text-gray-900 dark:text-white">
+                      {MAIN_CATEGORY_NAMES[mainCat]}
+                      {selectedCount > 0 && (
+                        <span className="ml-2 text-xs text-red-500">({selectedCount})</span>
+                      )}
+                    </span>
+                    <svg
+                      className={`w-4 h-4 text-gray-500 transition-transform ${isExpanded ? "rotate-180" : ""}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
-                  )}
+                  </button>
                 </div>
-                <span className="text-sm text-gray-700 dark:text-gray-300">{CATEGORY_NAMES[category]}</span>
-              </label>
-            ))}
-          </div>
-        </ScrollFade>
+
+                {/* Subcategories */}
+                {isExpanded && (
+                  <div className="p-2 space-y-1 bg-white dark:bg-gray-900">
+                    {subcats.map((subcat) => {
+                      const path = `${mainCat}/${subcat}` as CategoryPath;
+                      const isSelected = selectedCategoryPaths.includes(path);
+
+                      return (
+                        <button
+                          key={subcat}
+                          type="button"
+                          onClick={() => toggleCategoryPath(path)}
+                          className={`w-full flex items-center gap-2 p-1.5 rounded text-left transition-colors cursor-pointer ${
+                            isSelected
+                              ? "bg-red-50 dark:bg-red-900/20"
+                              : "hover:bg-gray-50 dark:hover:bg-gray-800"
+                          }`}
+                        >
+                          <div className={`w-3.5 h-3.5 rounded border-2 flex items-center justify-center shrink-0 ${
+                            isSelected
+                              ? "bg-red-500 border-red-500"
+                              : "border-gray-300 dark:border-gray-600"
+                          }`}>
+                            {isSelected && (
+                              <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                              </svg>
+                            )}
+                          </div>
+                          <span className="text-sm text-gray-700 dark:text-gray-300">{SUBCATEGORY_NAMES[subcat]}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Shoe Size */}
@@ -692,24 +842,20 @@ export function DealsGrid({
           onChange={(e) => setBrandSearch(e.target.value)}
           className="mb-3 h-9 text-sm bg-gray-50 border-gray-200 focus:bg-white dark:bg-gray-800 dark:border-gray-700 dark:focus:bg-gray-700 dark:text-white dark:placeholder-gray-400"
         />
-        <ScrollFade maxHeight="200px">
-          <div className="space-y-1 pr-1">
+        <div className="max-h-[200px] overflow-y-auto scrollbar-thin">
+          <div className="space-y-0.5 pr-1">
             {filteredBrands.map((brand) => (
-              <label
+              <button
                 key={brand}
-                className={`flex cursor-pointer items-center gap-3 p-2 rounded-lg transition-colors ${
+                type="button"
+                onClick={() => toggleBrand(brand)}
+                className={`flex w-full cursor-pointer items-center gap-2 p-1.5 rounded-lg transition-colors text-left ${
                   selectedBrands.includes(brand)
                     ? "bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800"
                     : "hover:bg-gray-50 dark:hover:bg-gray-800"
                 }`}
               >
-                <input
-                  type="checkbox"
-                  checked={selectedBrands.includes(brand)}
-                  onChange={() => toggleBrand(brand)}
-                  className="sr-only"
-                />
-                <div className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 ${
+                <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${
                   selectedBrands.includes(brand)
                     ? "bg-red-500 border-red-500"
                     : "border-gray-300 dark:border-gray-600"
@@ -721,13 +867,13 @@ export function DealsGrid({
                   )}
                 </div>
                 <span className="text-sm text-gray-700 dark:text-gray-300 truncate">{brand}</span>
-              </label>
+              </button>
             ))}
             {filteredBrands.length === 0 && (
               <p className="text-sm text-gray-400 dark:text-gray-500 p-2">Nema rezultata</p>
             )}
           </div>
-        </ScrollFade>
+        </div>
       </div>
     </div>
   );
@@ -843,6 +989,19 @@ export function DealsGrid({
                       {CATEGORY_NAMES[category]} ✕
                     </Badge>
                   ))}
+                  {selectedCategoryPaths.map((path) => {
+                    const [, sub] = path.split("/") as [MainCategory, Subcategory];
+                    return (
+                      <Badge
+                        key={path}
+                        variant="secondary"
+                        className="cursor-pointer px-3 py-1.5 text-sm"
+                        onClick={() => toggleCategoryPath(path)}
+                      >
+                        {SUBCATEGORY_NAMES[sub]} ✕
+                      </Badge>
+                    );
+                  })}
                   {selectedBrands.map((brand) => (
                     <Badge
                       key={brand}
@@ -968,6 +1127,19 @@ export function DealsGrid({
                     {CATEGORY_NAMES[category]} ✕
                   </Badge>
                 ))}
+                {selectedCategoryPaths.map((path) => {
+                  const [, sub] = path.split("/") as [MainCategory, Subcategory];
+                  return (
+                    <Badge
+                      key={path}
+                      variant="secondary"
+                      className="cursor-pointer px-3 py-1.5 text-sm"
+                      onClick={() => toggleCategoryPath(path)}
+                    >
+                      {SUBCATEGORY_NAMES[sub]} ✕
+                    </Badge>
+                  );
+                })}
                 {selectedBrands.map((brand) => (
                   <Badge
                     key={brand}
@@ -1127,7 +1299,7 @@ export function DealsGrid({
                 </Button>
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                Stranica {currentPage} od {totalPages} ({filteredDeals.length} proizvoda)
+                Prikazano {(currentPage - 1) * ITEMS_PER_PAGE + 1}-{Math.min(currentPage * ITEMS_PER_PAGE, filteredDeals.length)} od {filteredDeals.length} proizvoda
               </p>
             </div>
           )}

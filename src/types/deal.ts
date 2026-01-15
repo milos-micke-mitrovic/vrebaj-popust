@@ -1,5 +1,19 @@
-export type Gender = "men" | "women" | "kids" | "unisex";
+export type Gender = "muski" | "zenski" | "deciji" | "unisex";
 
+// Main categories
+export type MainCategory = "obuca" | "odeca" | "oprema";
+
+// Subcategories by main category
+export type ObucaSubcategory = "patike" | "cipele" | "cizme" | "papuce" | "sandale" | "japanke" | "patofne";
+export type OdecaSubcategory = "jakne" | "prsluci" | "aktivni_ves" | "duksevi" | "majice" | "pantalone" | "trenerke" | "helanke" | "sortevi" | "kupaci" | "haljine" | "vetrovke";
+export type OpremaSubcategory = "torbe" | "rancevi" | "kacketi" | "carape" | "kape" | "salovi" | "rukavice" | "vrece";
+
+export type Subcategory = ObucaSubcategory | OdecaSubcategory | OpremaSubcategory;
+
+// Full category path (e.g., "obuca/patike", "odeca/jakne")
+export type CategoryPath = `${MainCategory}/${Subcategory}`;
+
+// Legacy single category type for backwards compatibility
 export type Category =
   | "patike"
   | "cipele"
@@ -31,6 +45,9 @@ export interface RawDeal {
   description?: string | null;
   detailImageUrl?: string | null;
   detailsScrapedAt?: Date;
+  // Category and gender fields (added by detail-scraper)
+  categories?: CategoryPath[];
+  gender?: Gender;
 }
 
 // Enriched deal with gender and category
