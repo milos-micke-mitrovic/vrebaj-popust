@@ -24,7 +24,8 @@ async function getProductCounts() {
   return Object.fromEntries(counts.map((c) => [c.store, c._count.id]));
 }
 
-function formatDate(date: Date): string {
+function formatDate(date: Date | null): string {
+  if (!date) return "unknown";
   return new Intl.DateTimeFormat("sr-RS", {
     day: "2-digit",
     month: "2-digit",
@@ -34,7 +35,8 @@ function formatDate(date: Date): string {
   }).format(date);
 }
 
-function timeAgo(date: Date): string {
+function timeAgo(date: Date | null): string {
+  if (!date) return "unknown";
   const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
   if (seconds < 60) return `${seconds}s ago`;
   const minutes = Math.floor(seconds / 60);
