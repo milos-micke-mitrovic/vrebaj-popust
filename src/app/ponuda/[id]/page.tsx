@@ -4,7 +4,7 @@ import { getDealByIdAsync, getAllDealsAsync, STORE_INFO } from "@/lib/deals";
 
 // Revalidate every 5 minutes
 export const revalidate = 300;
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, getProxiedImageUrl } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { StoreLogo } from "@/components/store-logo";
 import { Header } from "@/components/header";
@@ -417,7 +417,7 @@ export default async function DealPage({ params }: Props) {
               <div className="relative aspect-square overflow-hidden rounded-lg bg-white dark:bg-gray-800 shadow">
                 {deal.imageUrl ? (
                   <ProductImage
-                    src={deal.imageUrl}
+                    src={getProxiedImageUrl(deal.imageUrl)}
                     alt={`${deal.name} - ${deal.brand || ""} ${categoryText}`}
                   />
                 ) : (

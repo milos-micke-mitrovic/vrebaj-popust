@@ -59,3 +59,24 @@ export function formatPrice(price: number): string {
     maximumFractionDigits: 0,
   }).format(price);
 }
+
+/**
+ * Stores that have hotlink protection and need image proxying
+ */
+const PROXY_IMAGE_DOMAINS = ["djaksport.com"];
+
+/**
+ * Get image URL, using proxy for stores with hotlink protection
+ */
+export function getProxiedImageUrl(imageUrl: string | null | undefined): string {
+  if (!imageUrl) return "/images/placeholder.png";
+
+  // Check if image needs proxying based on domain
+  const needsProxy = PROXY_IMAGE_DOMAINS.some((domain) => imageUrl.includes(domain));
+
+  if (needsProxy) {
+    return `/api/image-proxy?url=${encodeURIComponent(imageUrl)}`;
+  }
+
+  return imageUrl;
+}

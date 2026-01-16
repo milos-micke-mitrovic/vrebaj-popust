@@ -7,7 +7,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Deal, Store } from "@/types/deal";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, getProxiedImageUrl } from "@/lib/utils";
 import { WishlistButton } from "@/components/wishlist-button";
 
 interface DealCardProps {
@@ -44,7 +44,7 @@ export function DealCard({ deal }: DealCardProps) {
       <Card className="group h-full overflow-hidden transition-shadow hover:shadow-lg dark:bg-gray-800 dark:border-gray-700">
         <div className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-700">
           <Image
-            src={deal.imageUrl && !imgError ? deal.imageUrl : "/images/placeholder.png"}
+            src={!imgError ? getProxiedImageUrl(deal.imageUrl) : "/images/placeholder.png"}
             alt={deal.name}
             fill
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
