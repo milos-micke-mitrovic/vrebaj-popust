@@ -270,14 +270,6 @@ async function scrapeBuzz(): Promise<void> {
         await autoScroll(page);
         await sleep(2000);
 
-        // Save debug screenshot for first section only
-        if (salePage === SALE_PAGES[0]) {
-          await page.screenshot({
-            path: path.join(process.cwd(), "data", "buzz-page-1.png"),
-          });
-          console.log("Saved debug screenshot");
-        }
-
         const products = await extractProducts(page);
         console.log(`Found ${products.length} product elements after loading all`);
 

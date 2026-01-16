@@ -197,19 +197,6 @@ async function scrapeNSport(): Promise<void> {
         await autoScroll(page);
         await sleep(2000);
 
-        // Save debug screenshot for first page only
-        if (currentPage === 1) {
-          await page.screenshot({
-            path: path.join(process.cwd(), "data", "nsport-page-1.png"),
-          });
-          const html = await page.content();
-          fs.writeFileSync(
-            path.join(process.cwd(), "data", "nsport-page-1.html"),
-            html
-          );
-          console.log("Saved debug screenshot and HTML");
-        }
-
         const products = await extractProducts(page);
         console.log(`Found ${products.length} product elements`);
 

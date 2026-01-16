@@ -170,12 +170,6 @@ async function scrapeOfficeShoes(): Promise<void> {
 
     await sleep(2000);
 
-    // Save debug screenshot
-    await page.screenshot({
-      path: path.join(process.cwd(), "data", "officeshoes-page-1.png"),
-    });
-    console.log("Saved debug screenshot");
-
     // Click "Load more" button until we hit products < 50% discount
     let loadMoreClicks = 0;
     const maxClicks = 50; // Safety limit

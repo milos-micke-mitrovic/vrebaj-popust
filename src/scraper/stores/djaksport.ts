@@ -208,10 +208,7 @@ async function scrapeDjakSport(): Promise<void> {
         `);
 
         if (isBlocked) {
-          console.log("Detected Cloudflare block, saving screenshot...");
-          await page.screenshot({
-            path: path.join(process.cwd(), "data", `blocked-page-${pageNum}.png`),
-          });
+          console.log("Detected Cloudflare block");
           break;
         }
 

@@ -144,17 +144,6 @@ async function scrapeSportVision(): Promise<void> {
 
       await sleep(2000 + Math.random() * 2000);
 
-      // Save debug screenshot
-      await page.screenshot({
-        path: path.join(process.cwd(), "data", "sportvision-page-1.png"),
-      });
-      const html = await page.content();
-      fs.writeFileSync(
-        path.join(process.cwd(), "data", "sportvision-page-1.html"),
-        html
-      );
-      console.log("Saved debug screenshot and HTML");
-
       // Click "Load more" button until all products are loaded
       let loadMoreClicks = 0;
       const maxClicks = 200; // 160 pages on outlet

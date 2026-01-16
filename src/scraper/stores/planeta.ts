@@ -201,14 +201,6 @@ async function scrapePlaneta(): Promise<void> {
           await autoScroll(page);
           await sleep(1000);
 
-          // Save debug screenshot for first page
-          if (currentPage === 1 && salePage === SALE_PAGES[0]) {
-            await page.screenshot({
-              path: path.join(process.cwd(), "data", "planeta-page-1.png"),
-            });
-            console.log("Saved debug screenshot");
-          }
-
           const products = await extractProducts(page);
           console.log(`Found ${products.length} products`);
 
