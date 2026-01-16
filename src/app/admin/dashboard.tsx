@@ -1,11 +1,12 @@
 "use client";
 
 interface ScrapeRun {
-  id: number;
+  id: string;
   store: string;
   totalScraped: number;
   filteredCount: number;
   errors: string[];
+  startedAt: Date;
   completedAt: Date | null;
 }
 
