@@ -75,12 +75,26 @@ async function extractProducts(page: Page): Promise<RawProduct[]> {
       var items = document.querySelectorAll('.product-item[data-productid]');
 
       items.forEach(function(el) {
-        // Get data from data attributes - Buzz stores all info there
+        // Get data from data attributes
         var name = el.dataset.productname || '';
         var brand = el.dataset.productbrand || null;
         var salePrice = el.dataset.productprice || '';
-        var originalPrice = el.dataset.productprevprice || '';
-        var discountPercent = el.dataset.productdiscount ? parseInt(el.dataset.productdiscount, 10) : null;
+
+        // Buzz has stacked discounts - need to get the ORIGINAL price (highest one)
+        // prev-price-third is the original price before all discounts
+        var originalPrice = '';
+        var prevPriceThird = el.querySelector('.prev-price.prev-old-price, .prev-price-third, .prev-price.prev-price-third');
+        if (prevPriceThird) {
+          originalPrice = prevPriceThird.textContent.trim().replace(/RSD/gi, '').trim();
+        }
+        // Fallback to data attribute if not found
+        if (!originalPrice) {
+          originalPrice = el.dataset.productprevprice || '';
+        }
+
+        // Don't use data-productdiscount as it only shows partial discount
+        // We'll calculate the real discount from prices
+        var discountPercent = null;
 
         // Get product link
         var linkEl = el.querySelector('a[href*="/patike/"], a[href*="/odeca/"], a[href*="/obu"]');
