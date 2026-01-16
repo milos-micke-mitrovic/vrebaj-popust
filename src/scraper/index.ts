@@ -4,6 +4,8 @@ import { scrapeNSport } from "./stores/nsport";
 import { scrapeSportVision } from "./stores/sportvision";
 import { scrapeBuzz } from "./stores/buzz";
 import { scrapeOfficeShoes } from "./stores/officeshoes";
+import { scrapePlanetaDetails } from "./stores/planeta-details";
+import { scrapeOfficeShoeDetails } from "./stores/officeshoes-details";
 
 interface ScraperDef {
   name: string;
@@ -42,34 +44,50 @@ async function runAllScrapers(): Promise<void> {
   console.log("=== Starting All Scrapers (Parallel Batches) ===\n");
   const startTime = Date.now();
 
+  // === LIST SCRAPERS (find products) ===
+
   // Batch 1: DjakSport, Planeta, NSport
-  const batch1: ScraperDef[] = [
+  const listBatch1: ScraperDef[] = [
     { name: "DjakSport", fn: scrapeDjakSport },
     { name: "Planeta Sport", fn: scrapePlaneta },
     { name: "N-Sport", fn: scrapeNSport },
   ];
 
   // Batch 2: SportVision, Buzz, OfficeShoes
-  const batch2: ScraperDef[] = [
+  const listBatch2: ScraperDef[] = [
     { name: "SportVision", fn: scrapeSportVision },
     { name: "Buzz Sneakers", fn: scrapeBuzz },
     { name: "Office Shoes", fn: scrapeOfficeShoes },
   ];
 
-  console.log("=== Running Batch 1: DjakSport, Planeta, NSport ===\n");
-  const result1 = await runBatch(batch1);
+  console.log("=== List Scrapers Batch 1: DjakSport, Planeta, NSport ===\n");
+  const listResult1 = await runBatch(listBatch1);
 
-  console.log("\n=== Running Batch 2: SportVision, Buzz, OfficeShoes ===\n");
-  const result2 = await runBatch(batch2);
+  console.log("\n=== List Scrapers Batch 2: SportVision, Buzz, OfficeShoes ===\n");
+  const listResult2 = await runBatch(listBatch2);
 
-  const totalSucceeded = [...result1.succeeded, ...result2.succeeded];
-  const totalFailed = [...result1.failed, ...result2.failed];
+  // === DETAIL SCRAPERS (enrich products with sizes, categories, etc.) ===
+
+  const detailBatch: ScraperDef[] = [
+    { name: "Planeta Details", fn: scrapePlanetaDetails },
+    { name: "OfficeShoes Details", fn: scrapeOfficeShoeDetails },
+  ];
+
+  console.log("\n=== Detail Scrapers: Planeta, OfficeShoes ===\n");
+  const detailResult = await runBatch(detailBatch);
+
+  // === SUMMARY ===
+
+  const allSucceeded = [...listResult1.succeeded, ...listResult2.succeeded, ...detailResult.succeeded];
+  const allFailed = [...listResult1.failed, ...listResult2.failed, ...detailResult.failed];
   const elapsed = Math.round((Date.now() - startTime) / 1000);
+  const minutes = Math.floor(elapsed / 60);
+  const seconds = elapsed % 60;
 
   console.log("\n=== All Scrapers Complete ===");
-  console.log(`Time: ${elapsed} seconds`);
-  console.log(`Succeeded (${totalSucceeded.length}): ${totalSucceeded.join(", ") || "none"}`);
-  console.log(`Failed (${totalFailed.length}): ${totalFailed.join(", ") || "none"}`);
+  console.log(`Time: ${minutes}m ${seconds}s`);
+  console.log(`Succeeded (${allSucceeded.length}): ${allSucceeded.join(", ") || "none"}`);
+  console.log(`Failed (${allFailed.length}): ${allFailed.join(", ") || "none"}`);
 }
 
 // Run if called directly
