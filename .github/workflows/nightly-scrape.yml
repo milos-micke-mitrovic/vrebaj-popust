@@ -186,27 +186,6 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 45
 
-  scrape-djaksport-details:
-    runs-on: ubuntu-latest
-    needs: scrape-djaksport
-    if: always()
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 9
-      - run: pnpm install
-      - run: pnpm prisma generate
-      - run: npx puppeteer browsers install chrome
-      - name: Run DjakSport Details
-        run: pnpm tsx src/scraper/stores/djaksport-details.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        timeout-minutes: 45
-
   scrape-nsport-details:
     runs-on: ubuntu-latest
     needs: scrape-nsport

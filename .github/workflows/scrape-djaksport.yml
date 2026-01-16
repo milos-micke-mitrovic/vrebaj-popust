@@ -2,21 +2,10 @@ name: Scrape DjakSport
 
 on:
   workflow_dispatch:
-    inputs:
-      mode:
-        description: 'What to run'
-        required: true
-        default: 'both'
-        type: choice
-        options:
-          - 'both'
-          - 'list_only'
-          - 'details_only'
 
 jobs:
-  scrape-list:
+  scrape:
     runs-on: ubuntu-latest
-    if: ${{ inputs.mode == 'both' || inputs.mode == 'list_only' }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -30,47 +19,6 @@ jobs:
       - run: npx puppeteer browsers install chrome
       - name: Run DjakSport scraper
         run: pnpm tsx src/scraper/stores/djaksport.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        timeout-minutes: 30
-
-  scrape-details:
-    runs-on: ubuntu-latest
-    needs: scrape-list
-    if: ${{ always() && inputs.mode == 'both' && needs.scrape-list.result == 'success' }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 9
-      - run: pnpm install
-      - run: pnpm prisma generate
-      - run: npx puppeteer browsers install chrome
-      - name: Run DjakSport Details
-        run: pnpm tsx src/scraper/stores/djaksport-details.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        timeout-minutes: 45
-
-  scrape-details-only:
-    runs-on: ubuntu-latest
-    if: ${{ inputs.mode == 'details_only' }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-      - uses: pnpm/action-setup@v2
-        with:
-          version: 9
-      - run: pnpm install
-      - run: pnpm prisma generate
-      - run: npx puppeteer browsers install chrome
-      - name: Run DjakSport Details
-        run: pnpm tsx src/scraper/stores/djaksport-details.ts
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 45
