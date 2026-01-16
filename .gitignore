@@ -40,9 +40,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# debug data (keep deals JSON)
+# debug data (screenshots and temp files)
 /data/*.html
 /data/*.png
+/data/*.json
 
 # PWA generated files
 /public/sw.js

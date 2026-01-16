@@ -4,7 +4,11 @@ import { scrapeNSport } from "./stores/nsport";
 import { scrapeSportVision } from "./stores/sportvision";
 import { scrapeBuzz } from "./stores/buzz";
 import { scrapeOfficeShoes } from "./stores/officeshoes";
+import { scrapeDjakSportDetails } from "./stores/djaksport-details";
 import { scrapePlanetaDetails } from "./stores/planeta-details";
+import { scrapeNSportDetails } from "./stores/nsport-details";
+import { scrapeSportVisionDetails } from "./stores/sportvision-details";
+import { scrapeBuzzDetails } from "./stores/buzz-details";
 import { scrapeOfficeShoeDetails } from "./stores/officeshoes-details";
 
 interface ScraperDef {
@@ -42,6 +46,7 @@ async function runBatch(scrapers: ScraperDef[]): Promise<{ succeeded: string[]; 
 
 async function runAllScrapers(): Promise<void> {
   console.log("=== Starting All Scrapers (Parallel Batches) ===\n");
+  console.log(`Started at: ${new Date().toISOString()}\n`);
   const startTime = Date.now();
 
   // === LIST SCRAPERS (find products) ===
@@ -66,26 +71,49 @@ async function runAllScrapers(): Promise<void> {
   console.log("\n=== List Scrapers Batch 2: SportVision, Buzz, OfficeShoes ===\n");
   const listResult2 = await runBatch(listBatch2);
 
-  // === DETAIL SCRAPERS (enrich products with sizes, categories, etc.) ===
+  // === DETAIL SCRAPERS (enrich products with sizes, categories, gender) ===
 
-  const detailBatch: ScraperDef[] = [
+  // Batch 3: DjakSport, Planeta, NSport details
+  const detailBatch1: ScraperDef[] = [
+    { name: "DjakSport Details", fn: scrapeDjakSportDetails },
     { name: "Planeta Details", fn: scrapePlanetaDetails },
+    { name: "N-Sport Details", fn: scrapeNSportDetails },
+  ];
+
+  // Batch 4: SportVision, Buzz, OfficeShoes details
+  const detailBatch2: ScraperDef[] = [
+    { name: "SportVision Details", fn: scrapeSportVisionDetails },
+    { name: "Buzz Details", fn: scrapeBuzzDetails },
     { name: "OfficeShoes Details", fn: scrapeOfficeShoeDetails },
   ];
 
-  console.log("\n=== Detail Scrapers: Planeta, OfficeShoes ===\n");
-  const detailResult = await runBatch(detailBatch);
+  console.log("\n=== Detail Scrapers Batch 1: DjakSport, Planeta, NSport ===\n");
+  const detailResult1 = await runBatch(detailBatch1);
+
+  console.log("\n=== Detail Scrapers Batch 2: SportVision, Buzz, OfficeShoes ===\n");
+  const detailResult2 = await runBatch(detailBatch2);
 
   // === SUMMARY ===
 
-  const allSucceeded = [...listResult1.succeeded, ...listResult2.succeeded, ...detailResult.succeeded];
-  const allFailed = [...listResult1.failed, ...listResult2.failed, ...detailResult.failed];
+  const allSucceeded = [
+    ...listResult1.succeeded,
+    ...listResult2.succeeded,
+    ...detailResult1.succeeded,
+    ...detailResult2.succeeded,
+  ];
+  const allFailed = [
+    ...listResult1.failed,
+    ...listResult2.failed,
+    ...detailResult1.failed,
+    ...detailResult2.failed,
+  ];
   const elapsed = Math.round((Date.now() - startTime) / 1000);
   const minutes = Math.floor(elapsed / 60);
   const seconds = elapsed % 60;
 
   console.log("\n=== All Scrapers Complete ===");
-  console.log(`Time: ${minutes}m ${seconds}s`);
+  console.log(`Finished at: ${new Date().toISOString()}`);
+  console.log(`Total time: ${minutes}m ${seconds}s`);
   console.log(`Succeeded (${allSucceeded.length}): ${allSucceeded.join(", ") || "none"}`);
   console.log(`Failed (${allFailed.length}): ${allFailed.join(", ") || "none"}`);
 }
