@@ -20,6 +20,7 @@ interface RawProduct {
   brand: string | null;
   discountPercent: number;
   productId: string;
+  sizes: string[];
 }
 
 interface FetchResult {
@@ -154,6 +155,27 @@ async function fetchPageProducts(page: Page, pageNum: number): Promise<FetchResu
             brand = nameParts[0];
           }
 
+          // Get sizes from Magento init script (sizes are loaded via JS, not in DOM)
+          var sizes = [];
+          var scriptEl = el.querySelector('script[type="text/x-magento-init"]');
+          if (scriptEl) {
+            var scriptContent = scriptEl.textContent || '';
+            // Find size options in the JSON - pattern: "label":"XS" or "label":"42"
+            var sizeMatches = scriptContent.match(/"label":"([^"]+)"/g);
+            if (sizeMatches) {
+              sizeMatches.forEach(function(match) {
+                var sizeMatch = match.match(/"label":"([^"]+)"/);
+                if (sizeMatch) {
+                  var size = sizeMatch[1];
+                  // Filter out non-size labels (colors, etc)
+                  if (size && !sizes.includes(size) && size.length <= 5) {
+                    sizes.push(size);
+                  }
+                }
+              });
+            }
+          }
+
           if (name && url && originalPrice > 0 && salePrice > 0) {
             results.push({
               name: name,
@@ -163,7 +185,8 @@ async function fetchPageProducts(page: Page, pageNum: number): Promise<FetchResu
               imageUrl: imageUrl,
               brand: brand,
               discountPercent: discountPercent,
-              productId: productId
+              productId: productId,
+              sizes: sizes
             });
           }
         });
@@ -247,6 +270,7 @@ async function scrapeDjakSport(): Promise<void> {
             discountPercent: product.discountPercent,
             url: product.url,
             imageUrl: product.imageUrl,
+            sizes: product.sizes,
             gender: gender,
           });
           totalDeals++;
