@@ -183,7 +183,7 @@ async function scrapeDjakSport(): Promise<void> {
       try {
         await page.goto(currentUrl, {
           waitUntil: "networkidle2",
-          timeout: 30000,
+          timeout: 60000,
         });
 
         // Random delay to appear more human

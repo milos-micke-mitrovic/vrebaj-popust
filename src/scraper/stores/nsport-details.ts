@@ -114,7 +114,7 @@ async function scrapeNSportDetails(): Promise<void> {
       try {
         await page.goto(deal.url, {
           waitUntil: "networkidle2",
-          timeout: 30000,
+          timeout: 60000,
         });
 
         await sleep(1000 + Math.random() * 1000);
