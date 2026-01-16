@@ -138,4 +138,9 @@ async function scrapeBuzzDetails(): Promise<void> {
   await disconnect();
 }
 
+// Run if executed directly
+if (process.argv[1]?.includes('buzz-details.ts')) {
+  scrapeBuzzDetails().catch(console.error);
+}
+
 export { scrapeBuzzDetails };

@@ -317,4 +317,9 @@ async function scrapeOfficeShoes(): Promise<void> {
   await disconnect();
 }
 
+// Run if executed directly
+if (process.argv[1]?.includes('officeshoes.ts') && !process.argv[1]?.includes('details')) {
+  scrapeOfficeShoes().catch(console.error);
+}
+
 export { scrapeOfficeShoes };

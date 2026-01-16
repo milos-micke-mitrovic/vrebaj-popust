@@ -146,4 +146,9 @@ async function scrapeDjakSportDetails(): Promise<void> {
   await disconnect();
 }
 
+// Run if executed directly
+if (process.argv[1]?.includes('djaksport-details.ts')) {
+  scrapeDjakSportDetails().catch(console.error);
+}
+
 export { scrapeDjakSportDetails };

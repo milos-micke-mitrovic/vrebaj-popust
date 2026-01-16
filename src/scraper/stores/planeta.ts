@@ -269,4 +269,9 @@ async function scrapePlaneta(): Promise<void> {
   await disconnect();
 }
 
+// Run if executed directly
+if (process.argv[1]?.includes('planeta.ts')) {
+  scrapePlaneta().catch(console.error);
+}
+
 export { scrapePlaneta };

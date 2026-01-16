@@ -350,4 +350,9 @@ async function scrapeBuzz(): Promise<void> {
   await disconnect();
 }
 
+// Run if executed directly
+if (process.argv[1]?.includes('buzz.ts') && !process.argv[1]?.includes('details')) {
+  scrapeBuzz().catch(console.error);
+}
+
 export { scrapeBuzz };

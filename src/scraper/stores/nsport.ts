@@ -281,4 +281,9 @@ async function scrapeNSport(): Promise<void> {
   await disconnect();
 }
 
+// Run if executed directly
+if (process.argv[1]?.includes('nsport.ts') && !process.argv[1]?.includes('details')) {
+  scrapeNSport().catch(console.error);
+}
+
 export { scrapeNSport };

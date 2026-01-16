@@ -283,4 +283,9 @@ async function scrapeSportVision(): Promise<void> {
   await disconnect();
 }
 
+// Run if executed directly
+if (process.argv[1]?.includes('sportvision.ts') && !process.argv[1]?.includes('details')) {
+  scrapeSportVision().catch(console.error);
+}
+
 export { scrapeSportVision };

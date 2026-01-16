@@ -232,4 +232,9 @@ async function scrapeOfficeShoeDetails(): Promise<void> {
   await disconnect();
 }
 
+// Run if executed directly
+if (process.argv[1]?.includes('officeshoes-details.ts')) {
+  scrapeOfficeShoeDetails().catch(console.error);
+}
+
 export { scrapeOfficeShoeDetails };
