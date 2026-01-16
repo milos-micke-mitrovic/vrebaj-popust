@@ -7,6 +7,9 @@ import { HeroBanner } from "@/components/hero-banner";
 import { getAllDealsAsync, STORE_INFO } from "@/lib/deals";
 import { Store } from "@/types/deal";
 
+// Revalidate every 5 minutes
+export const revalidate = 300;
+
 export const metadata: Metadata = {
   title: "VrebajPopust | Najveći sportski popusti preko 50% u Srbiji",
   description:

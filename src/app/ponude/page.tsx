@@ -6,6 +6,9 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Store, Category } from "@/types/deal";
 
+// Revalidate every 5 minutes - pages auto-refresh with new data
+export const revalidate = 300;
+
 export const metadata: Metadata = {
   title: "Sve ponude | VrebajPopust - Popusti preko 50%",
   description:

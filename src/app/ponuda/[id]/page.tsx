@@ -1,6 +1,9 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { getDealByIdAsync, getAllDealsAsync, STORE_INFO } from "@/lib/deals";
+
+// Revalidate every 5 minutes
+export const revalidate = 300;
 import { formatPrice } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { StoreLogo } from "@/components/store-logo";
