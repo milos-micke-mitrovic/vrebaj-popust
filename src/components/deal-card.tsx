@@ -43,22 +43,16 @@ export function DealCard({ deal }: DealCardProps) {
     <Link href={`/ponuda/${deal.id}`} onClick={handleClick}>
       <Card className="group h-full overflow-hidden transition-shadow hover:shadow-lg dark:bg-gray-800 dark:border-gray-700">
         <div className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-700">
-          {deal.imageUrl && !imgError ? (
-            <Image
-              src={deal.imageUrl}
-              alt={deal.name}
-              fill
-              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-              className={`object-cover transition-all duration-300 group-hover:scale-105 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
-              onLoad={() => setImgLoaded(true)}
-              onError={() => setImgError(true)}
-              unoptimized
-            />
-          ) : (
-            <div className="flex h-full items-center justify-center text-gray-400 dark:text-gray-500 text-xs text-center p-2">
-              {deal.brand || "Nema slike"}
-            </div>
-          )}
+          <Image
+            src={deal.imageUrl && !imgError ? deal.imageUrl : "/images/placeholder.png"}
+            alt={deal.name}
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+            className={`object-cover transition-all duration-300 group-hover:scale-105 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
+            onLoad={() => setImgLoaded(true)}
+            onError={() => setImgError(true)}
+            unoptimized
+          />
           {/* Discount badge */}
           <Badge className="absolute left-2 top-2 bg-red-500 text-white hover:bg-red-600">
             -{deal.discountPercent}%
