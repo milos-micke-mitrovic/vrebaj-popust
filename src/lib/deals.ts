@@ -63,22 +63,56 @@ function extractGender(name: string): Gender {
   return "unisex";
 }
 
-// Extract category from product name
-function extractCategory(name: string): Category {
-  const nameLower = name.toLowerCase();
+// Map CategoryPath (e.g., "obuca/patike") to legacy Category type
+function mapCategoryPathToCategory(categoryPath: string): Category {
+  const path = categoryPath.toLowerCase();
 
-  if (nameLower.includes("patike") || nameLower.includes("sneaker")) return "patike";
-  if (nameLower.includes("cipele") || nameLower.includes("shoes")) return "cipele";
-  if (nameLower.includes("čizme") || nameLower.includes("cizme") || nameLower.includes("boot")) return "cizme";
-  if (nameLower.includes("jakna") || nameLower.includes("jacket")) return "jakna";
-  if (nameLower.includes("majica") || nameLower.includes("t-shirt") || nameLower.includes("tee")) return "majica";
-  if (nameLower.includes("duks") || nameLower.includes("hoodie") || nameLower.includes("sweat")) return "duks";
-  if (nameLower.includes("trenerka") || nameLower.includes("tracksuit")) return "trenerka";
-  if (nameLower.includes("šorc") || nameLower.includes("sorc") || nameLower.includes("short")) return "sorc";
-  if (nameLower.includes("helanke") || nameLower.includes("legging") || nameLower.includes("tight")) return "helanke";
-  if (nameLower.includes("ranac") || nameLower.includes("backpack") || nameLower.includes("torba")) return "ranac";
+  // Obuca mappings
+  if (path.includes("obuca/patike") || path.includes("kopacke")) return "patike";
+  if (path.includes("obuca/cipele")) return "cipele";
+  if (path.includes("obuca/cizme")) return "cizme";
+  if (path.includes("obuca/sandale") || path.includes("obuca/japanke") || path.includes("obuca/papuce")) return "patike"; // Group with patike for now
+
+  // Odeca mappings
+  if (path.includes("odeca/jakne") || path.includes("odeca/prsluci")) return "jakna";
+  if (path.includes("odeca/majice") || path.includes("odeca/dres")) return "majica";
+  if (path.includes("odeca/duksevi") || path.includes("odeca/dukserice")) return "duks";
+  if (path.includes("odeca/trenerke") || path.includes("odeca/pantalone")) return "trenerka";
+  if (path.includes("odeca/sorcevi") || path.includes("odeca/bermude")) return "sorc";
+  if (path.includes("odeca/helanke")) return "helanke";
+
+  // Oprema mappings
+  if (path.includes("oprema/torbe") || path.includes("oprema/rancevi")) return "ranac";
 
   return "ostalo";
+}
+
+// Extract category from product name (fallback if no categories in DB)
+function extractCategoryFromName(name: string): Category {
+  const nameLower = name.toLowerCase();
+
+  if (nameLower.includes("patike") || nameLower.includes("sneaker") || nameLower.includes("kopacke")) return "patike";
+  if (nameLower.includes("cipele") || nameLower.includes("shoes")) return "cipele";
+  if (nameLower.includes("čizme") || nameLower.includes("cizme") || nameLower.includes("boot")) return "cizme";
+  if (nameLower.includes("jakna") || nameLower.includes("jacket") || nameLower.includes("prslu")) return "jakna";
+  if (nameLower.includes("majica") || nameLower.includes("t-shirt") || nameLower.includes("tee") || nameLower.includes("dres")) return "majica";
+  if (nameLower.includes("duks") || nameLower.includes("hoodie") || nameLower.includes("sweat")) return "duks";
+  if (nameLower.includes("trenerka") || nameLower.includes("tracksuit") || nameLower.includes("pantalon")) return "trenerka";
+  if (nameLower.includes("šorc") || nameLower.includes("sorc") || nameLower.includes("short") || nameLower.includes("bermude")) return "sorc";
+  if (nameLower.includes("helanke") || nameLower.includes("legging") || nameLower.includes("tight")) return "helanke";
+  if (nameLower.includes("ranac") || nameLower.includes("backpack") || nameLower.includes("torba") || nameLower.includes("ruksak")) return "ranac";
+
+  return "ostalo";
+}
+
+// Get category - prefer DB categories, fallback to name extraction
+function getCategory(categories: string[], name: string): Category {
+  // If we have categories from DB, use the first one
+  if (categories && categories.length > 0) {
+    return mapCategoryPathToCategory(categories[0]);
+  }
+  // Fallback to extracting from name
+  return extractCategoryFromName(name);
 }
 
 // Normalize brand name to consistent format (uppercase)
@@ -135,12 +169,13 @@ function convertDeal(prismaDeal: PrismaDeal): Deal {
     url: prismaDeal.url,
     imageUrl: prismaDeal.imageUrl,
     gender: (prismaDeal.gender as Gender) || extractGender(prismaDeal.name),
-    category: extractCategory(prismaDeal.name),
+    category: getCategory(prismaDeal.categories, prismaDeal.name),
     scrapedAt: prismaDeal.scrapedAt,
     sizes: prismaDeal.sizes,
     description: prismaDeal.description,
     detailImageUrl: prismaDeal.detailImageUrl,
     detailsScrapedAt: prismaDeal.detailsScrapedAt || undefined,
+    categories: prismaDeal.categories,
   };
 }
 

@@ -54,6 +54,7 @@ export interface RawDeal {
 export interface Deal extends Omit<RawDeal, "category"> {
   category: Category;
   gender: Gender;
+  categories?: CategoryPath[];
 }
 
 export type Store = "djaksport" | "planeta" | "sportvision" | "nsport" | "buzz" | "officeshoes";
