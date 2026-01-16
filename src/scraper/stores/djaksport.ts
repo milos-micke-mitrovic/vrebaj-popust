@@ -117,14 +117,24 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
       categories.push("obuca/patike");
     } else if (nameLower.includes("cipele")) {
       categories.push("obuca/cipele");
-    } else if (nameLower.includes("jakna") || nameLower.includes("duks")) {
+    } else if (nameLower.includes("cizme") || nameLower.includes("čizme")) {
+      categories.push("obuca/cizme");
+    } else if (nameLower.includes("sandale") || nameLower.includes("japanke") || nameLower.includes("papuce") || nameLower.includes("papuče")) {
+      categories.push("obuca/sandale");
+    } else if (nameLower.includes("jakna") || nameLower.includes("duks") || nameLower.includes("prslu")) {
       categories.push("odeca/jakne");
-    } else if (nameLower.includes("majica") || nameLower.includes("dres")) {
+    } else if (nameLower.includes("majica") || nameLower.includes("dres") || nameLower.includes("top ")) {
       categories.push("odeca/majice");
-    } else if (nameLower.includes("trenerka") || nameLower.includes("donji deo")) {
+    } else if (nameLower.includes("trenerka") || nameLower.includes("donji deo") || nameLower.includes("pantalon")) {
       categories.push("odeca/trenerke");
-    } else if (nameLower.includes("šorc") || nameLower.includes("sorc")) {
+    } else if (nameLower.includes("šorc") || nameLower.includes("sorc") || nameLower.includes("bermude")) {
       categories.push("odeca/sorcevi");
+    } else if (nameLower.includes("ranac") || nameLower.includes("torba") || nameLower.includes("ruksak")) {
+      categories.push("oprema/torbe");
+    } else if (nameLower.includes("kapa") || nameLower.includes("šal") || nameLower.includes("rukavic")) {
+      categories.push("oprema/aksesori");
+    } else if (nameLower.includes("lopta")) {
+      categories.push("oprema/lopte");
     }
   }
 
