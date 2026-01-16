@@ -1,30 +1,40 @@
 import { scrapeDjakSport } from "./stores/djaksport";
-import { ScrapeResult } from "@/types/deal";
+import { scrapePlaneta } from "./stores/planeta";
+import { scrapeNSport } from "./stores/nsport";
+import { scrapeSportVision } from "./stores/sportvision";
+import { scrapeBuzz } from "./stores/buzz";
+import { scrapeOfficeShoes } from "./stores/officeshoes";
 
-async function runAllScrapers(): Promise<ScrapeResult[]> {
+async function runAllScrapers(): Promise<void> {
   console.log("=== Starting All Scrapers ===\n");
 
-  const results: ScrapeResult[] = [];
+  const scrapers = [
+    { name: "DjakSport", fn: scrapeDjakSport },
+    { name: "Planeta Sport", fn: scrapePlaneta },
+    { name: "N-Sport", fn: scrapeNSport },
+    { name: "SportVision", fn: scrapeSportVision },
+    { name: "Buzz Sneakers", fn: scrapeBuzz },
+    { name: "Office Shoes", fn: scrapeOfficeShoes },
+  ];
 
-  // DjakSport
-  try {
-    const djak = await scrapeDjakSport();
-    results.push(djak);
-  } catch (err) {
-    console.error("DjakSport scraper failed:", err);
+  let succeeded = 0;
+  let failed = 0;
+
+  for (const scraper of scrapers) {
+    console.log(`\n=== Running ${scraper.name} ===\n`);
+    try {
+      await scraper.fn();
+      succeeded++;
+      console.log(`\n${scraper.name} completed successfully`);
+    } catch (err) {
+      failed++;
+      console.error(`${scraper.name} scraper failed:`, err);
+    }
   }
 
-  // Add more scrapers here:
-  // const planeta = await scrapePlaneta({ headless: true });
-  // results.push(planeta);
-
   console.log("\n=== All Scrapers Complete ===");
-  console.log(`Total stores scraped: ${results.length}`);
-  console.log(
-    `Total deals found: ${results.reduce((sum, r) => sum + r.filteredCount, 0)}`
-  );
-
-  return results;
+  console.log(`Succeeded: ${succeeded}`);
+  console.log(`Failed: ${failed}`);
 }
 
 // Run if called directly

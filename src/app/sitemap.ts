@@ -1,8 +1,8 @@
 import { MetadataRoute } from "next";
-import { getAllDeals } from "@/lib/deals";
+import { getAllDealsAsync } from "@/lib/deals";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const deals = getAllDeals();
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const deals = await getAllDealsAsync();
   const baseUrl = "https://vrebajpopust.rs";
   const now = new Date();
 

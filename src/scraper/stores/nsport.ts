@@ -1,34 +1,20 @@
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
-import type { RawDeal, ScrapeResult } from "../../types/deal";
+import { upsertDeal, logScrapeRun, disconnect, Store } from "../db-writer";
 import * as fs from "fs";
 import * as path from "path";
-import * as https from "https";
 
 puppeteer.use(StealthPlugin());
 
-const STORE = "nsport" as const;
+const STORE: Store = "nsport";
 const BASE_URL = "https://www.n-sport.net";
 
-// Gender-specific promo pages (40-70% discount promo filtered by gender)
-const SALE_PAGES = [
-  {
-    url: `${BASE_URL}/index.php?mod=catalog&op=browse&view=promo&filters%5Bpromo%5D%5B%5D=Popusti+od+40%25+do+70%25+Sport&filters%5BPol%5D%5B%5D=Mu%C5%A1karci`,
-    gender: "men",
-  },
-  {
-    url: `${BASE_URL}/index.php?mod=catalog&op=browse&view=promo&filters%5Bpromo%5D%5B%5D=Popusti+od+40%25+do+70%25+Sport&filters%5BPol%5D%5B%5D=%C5%BDene`,
-    gender: "women",
-  },
-  {
-    url: `${BASE_URL}/index.php?mod=catalog&op=browse&view=promo&filters%5Bpromo%5D%5B%5D=Popusti+od+40%25+do+70%25+Sport&filters%5BPol%5D%5B%5D=Deca`,
-    gender: "kids",
-  },
-];
+// Outlet page - contains all discounted products (~3227 products)
+// URL format: filters[promo][0]=outlet&pg=N
+const OUTLET_BASE = `${BASE_URL}/index.php?mod=catalog&op=browse&view=promo&filters%5Bpromo%5D%5B0%5D=outlet`;
 
 const MIN_DISCOUNT = 50;
-const IMAGE_DIR = path.join(process.cwd(), "public", "images", "nsport");
 
 interface RawProduct {
   name: string;
@@ -68,89 +54,6 @@ function generateId(url: string): string {
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-// Ensure image directory exists
-if (!fs.existsSync(IMAGE_DIR)) {
-  fs.mkdirSync(IMAGE_DIR, { recursive: true });
-}
-
-async function downloadImage(
-  url: string,
-  filename: string,
-  page?: Page
-): Promise<string | null> {
-  const normalizedFilename = filename.toLowerCase().replace(/\.webp$/, ".jpg");
-  const filePath = path.join(IMAGE_DIR, normalizedFilename);
-
-  if (fs.existsSync(filePath)) {
-    return `/images/nsport/${normalizedFilename}`;
-  }
-
-  // Ensure URL is absolute
-  let fullUrl = url;
-  if (url.startsWith("//")) {
-    fullUrl = "https:" + url;
-  } else if (url.startsWith("/")) {
-    fullUrl = BASE_URL + url;
-  }
-
-  if (page) {
-    try {
-      const base64 = await page.evaluate(async (imgUrl: string) => {
-        const response = await fetch(imgUrl);
-        if (!response.ok) return null;
-        const blob = await response.blob();
-        return new Promise<string | null>((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result as string);
-          reader.onerror = () => resolve(null);
-          reader.readAsDataURL(blob);
-        });
-      }, fullUrl);
-
-      if (base64 && typeof base64 === "string") {
-        const data = base64.replace(/^data:image\/\w+;base64,/, "");
-        fs.writeFileSync(filePath, Buffer.from(data, "base64"));
-        return `/images/nsport/${normalizedFilename}`;
-      }
-    } catch {
-      // Fall through to https download
-    }
-  }
-
-  return new Promise((resolve) => {
-    const file = fs.createWriteStream(filePath);
-    https
-      .get(
-        fullUrl,
-        {
-          headers: {
-            "User-Agent":
-              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
-            Referer: "https://www.n-sport.net/",
-          },
-        },
-        (response) => {
-          if (response.statusCode !== 200) {
-            file.close();
-            if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-            resolve(null);
-            return;
-          }
-          response.pipe(file);
-          file.on("finish", () => {
-            file.close();
-            resolve(`/images/nsport/${normalizedFilename}`);
-          });
-        }
-      )
-      .on("error", () => {
-        file.close();
-        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-        resolve(null);
-      });
-  });
 }
 
 async function launchBrowser(): Promise<Browser> {
@@ -252,14 +155,14 @@ async function autoScroll(page: Page): Promise<void> {
   `);
 }
 
-async function scrapeNSport(): Promise<ScrapeResult> {
+async function scrapeNSport(): Promise<void> {
   const errors: string[] = [];
-  const allDeals: RawDeal[] = [];
   const seenUrls = new Set<string>();
   let totalScraped = 0;
+  let totalDeals = 0;
 
   console.log("Starting N-Sport scraper with stealth mode...");
-  console.log(`Scraping ${SALE_PAGES.length} gender sections`);
+  console.log(`Scraping outlet: ${OUTLET_BASE}`);
   console.log(`Min discount: ${MIN_DISCOUNT}%`);
 
   const browser = await launchBrowser();
@@ -268,179 +171,120 @@ async function scrapeNSport(): Promise<ScrapeResult> {
     const page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
 
-    for (const salePage of SALE_PAGES) {
-      console.log(`\n=== Scraping: ${salePage.gender} ===`);
+    let currentPage = 1;
+    const maxPages = 100; // ~3227 products / 36 per page ≈ 90 pages
 
-      let currentPage = 1;
-      const maxPages = 10;
+    while (currentPage <= maxPages) {
+      const pageUrl = `${OUTLET_BASE}&pg=${currentPage}`;
+      console.log(`\nScraping page ${currentPage}: ${pageUrl}`);
 
-      while (currentPage <= maxPages) {
-        const pageUrl = currentPage === 1
-          ? salePage.url
-          : `${salePage.url}&pg=${currentPage}`;
-        console.log(`\nScraping page ${currentPage}: ${pageUrl}`);
+      try {
+        await page.goto(pageUrl, {
+          waitUntil: "networkidle2",
+          timeout: 60000,
+        });
 
+        // Wait for products to load
         try {
-          await page.goto(pageUrl, {
-            waitUntil: "networkidle2",
-            timeout: 60000,
+          await page.waitForSelector('.product, .product-item', { timeout: 15000 });
+          console.log("Product grid loaded");
+        } catch {
+          console.log("Waiting for product grid timed out, continuing...");
+        }
+
+        await sleep(2000 + Math.random() * 2000);
+        await autoScroll(page);
+        await sleep(2000);
+
+        // Save debug screenshot for first page only
+        if (currentPage === 1) {
+          await page.screenshot({
+            path: path.join(process.cwd(), "data", "nsport-page-1.png"),
           });
-
-          // Wait for products to load
-          try {
-            await page.waitForSelector('.product, .product-item', { timeout: 15000 });
-            console.log("Product grid loaded");
-          } catch {
-            console.log("Waiting for product grid timed out, continuing...");
-          }
-
-          await sleep(2000 + Math.random() * 2000);
-          await autoScroll(page);
-          await sleep(2000);
-
-          // Save debug screenshot for first page of first section only
-          if (currentPage === 1 && salePage === SALE_PAGES[0]) {
-            await page.screenshot({
-              path: path.join(process.cwd(), "data", "nsport-page-1.png"),
-            });
-            const html = await page.content();
-            fs.writeFileSync(
-              path.join(process.cwd(), "data", "nsport-page-1.html"),
-              html
-            );
-            console.log("Saved debug screenshot and HTML");
-          }
-
-          const products = await extractProducts(page);
-          console.log(`Found ${products.length} product elements`);
-
-          if (products.length === 0) {
-            console.log("No products found, ending pagination");
-            break;
-          }
-
-          if (products.length > 0 && currentPage === 1 && salePage === SALE_PAGES[0]) {
-            console.log("Sample product:", JSON.stringify(products[0], null, 2));
-          }
-
-          // Gender marker for extractGender() to detect
-          const genderMarker = salePage.gender === "men" ? " men"
-            : salePage.gender === "women" ? " women"
-            : " kids";
-
-          for (const product of products) {
-            // Skip duplicates
-            if (seenUrls.has(product.url)) continue;
-            seenUrls.add(product.url);
-
-            const originalPrice = parsePrice(product.originalPrice);
-            const salePrice = parsePrice(product.salePrice);
-
-            if (originalPrice <= 0 || salePrice <= 0) continue;
-            if (salePrice >= originalPrice) continue;
-
-            const discountPercent =
-              product.discountFromSite || calcDiscount(originalPrice, salePrice);
-
-            if (discountPercent >= MIN_DISCOUNT) {
-              let localImageUrl: string | null = null;
-              if (product.imageUrl) {
-                const imgFilename =
-                  product.imageUrl.split("/").pop()?.split("?")[0] || `${idCounter}.jpg`;
-                localImageUrl = await downloadImage(
-                  product.imageUrl,
-                  imgFilename,
-                  page
-                );
-              }
-
-              // Append gender marker to name for extractGender() to detect
-              const nameWithGender = product.name + genderMarker;
-
-              allDeals.push({
-                id: generateId(product.url),
-                store: STORE,
-                name: nameWithGender,
-                brand: product.brand,
-                originalPrice,
-                salePrice,
-                discountPercent,
-                url: product.url,
-                imageUrl: localImageUrl || product.imageUrl,
-                category: null,
-                scrapedAt: new Date(),
-              });
-            }
-          }
-
-          totalScraped += products.length;
-          console.log(
-            `Deals with ${MIN_DISCOUNT}%+ discount: ${allDeals.length} (total scraped: ${totalScraped})`
+          const html = await page.content();
+          fs.writeFileSync(
+            path.join(process.cwd(), "data", "nsport-page-1.html"),
+            html
           );
+          console.log("Saved debug screenshot and HTML");
+        }
 
-          // Check if there's a next page - N-Sport uses .paginationTG with >> for next
-          const hasNextPage = await page.evaluate(`
-            (function() {
-              var paginationLinks = document.querySelectorAll('.paginationTG a');
-              for (var i = 0; i < paginationLinks.length; i++) {
-                if (paginationLinks[i].textContent.trim() === '>>' ||
-                    paginationLinks[i].textContent.trim() === '»') {
-                  return true;
-                }
-              }
-              return false;
-            })()
-          `) as boolean;
+        const products = await extractProducts(page);
+        console.log(`Found ${products.length} product elements`);
 
-          if (!hasNextPage) {
-            console.log("No more pages");
-            break;
-          }
-
-          currentPage++;
-          await sleep(3000 + Math.random() * 2000);
-
-        } catch (err) {
-          const message = err instanceof Error ? err.message : String(err);
-          errors.push(`${salePage.gender} page ${currentPage}: ${message}`);
-          console.error(`Error on page ${currentPage}:`, message);
+        if (products.length === 0) {
+          console.log("No products found, ending pagination");
           break;
         }
+
+        if (products.length > 0 && currentPage === 1) {
+          console.log("Sample product:", JSON.stringify(products[0], null, 2));
+        }
+
+        for (const product of products) {
+          // Skip duplicates
+          if (seenUrls.has(product.url)) continue;
+          seenUrls.add(product.url);
+
+          const originalPrice = parsePrice(product.originalPrice);
+          const salePrice = parsePrice(product.salePrice);
+
+          if (originalPrice <= 0 || salePrice <= 0) continue;
+          if (salePrice >= originalPrice) continue;
+
+          const discountPercent =
+            product.discountFromSite || calcDiscount(originalPrice, salePrice);
+
+          if (discountPercent >= MIN_DISCOUNT) {
+            await upsertDeal({
+              id: generateId(product.url),
+              store: STORE,
+              name: product.name,
+              brand: product.brand,
+              originalPrice,
+              salePrice,
+              discountPercent,
+              url: product.url,
+              imageUrl: product.imageUrl,
+              gender: "unisex",
+            });
+            totalDeals++;
+          }
+        }
+
+        totalScraped += products.length;
+        console.log(
+          `Deals with ${MIN_DISCOUNT}%+ discount: ${totalDeals} (total scraped: ${totalScraped})`
+        );
+
+        currentPage++;
+        await sleep(2000 + Math.random() * 1000);
+
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        errors.push(`page ${currentPage}: ${message}`);
+        console.error(`Error on page ${currentPage}:`, message);
+        break;
       }
     }
   } finally {
     await browser.close();
   }
 
-  const result: ScrapeResult = {
-    store: STORE,
-    deals: allDeals,
-    totalScraped,
-    filteredCount: allDeals.length,
-    scrapedAt: new Date(),
-    errors,
-  };
+  // Log scrape run
+  await logScrapeRun(STORE, totalScraped, totalDeals, errors);
 
-  const outputPath = path.join(process.cwd(), "data", `${STORE}-deals.json`);
-  fs.writeFileSync(outputPath, JSON.stringify(result, null, 2));
-  console.log(`\nResults saved to: ${outputPath}`);
-  console.log(`Total products scraped: ${totalScraped}`);
-  console.log(`Deals with ${MIN_DISCOUNT}%+ discount: ${allDeals.length}`);
+  console.log("\n=== Scraping Complete ===");
+  console.log(`Total scraped: ${totalScraped}`);
+  console.log(`Deals with ${MIN_DISCOUNT}%+ discount: ${totalDeals}`);
+  if (errors.length > 0) {
+    console.log(`Errors: ${errors.length}`);
+  }
 
-  return result;
+  await disconnect();
 }
 
 // Run
-scrapeNSport()
-  .then((result) => {
-    console.log("\n=== Scraping Complete ===");
-    console.log(`Store: ${result.store}`);
-    console.log(`Total products scraped: ${result.totalScraped}`);
-    console.log(`Deals with 50%+ discount: ${result.filteredCount}`);
-    if (result.errors.length > 0) {
-      console.log(`Errors: ${result.errors.length}`);
-    }
-  })
-  .catch(console.error);
+scrapeNSport().catch(console.error);
 
 export { scrapeNSport };

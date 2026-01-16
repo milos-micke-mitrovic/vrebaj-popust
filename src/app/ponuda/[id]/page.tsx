@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { getDealById, getAllDealIds, getRelatedDeals, getTopDeals, STORE_INFO } from "@/lib/deals";
+import { getDealByIdAsync, getAllDealsAsync, STORE_INFO } from "@/lib/deals";
 import { formatPrice } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { StoreLogo } from "@/components/store-logo";
@@ -11,6 +11,7 @@ import { ShareButton } from "@/components/share-button";
 import { ProductWishlistButton } from "@/components/product-wishlist-button";
 import { ProductImage } from "@/components/product-image";
 import { DealsBackLink } from "@/components/deals-back-link";
+import { Deal } from "@/types/deal";
 
 // Calculate price valid date at build time (7 days from build)
 const priceValidUntilDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
@@ -49,16 +50,52 @@ const GENDER_TEXT: Record<string, string> = {
   unisex: "",
 };
 
+// Helper function to get related deals
+async function getRelatedDeals(deal: Deal, limit: number = 8): Promise<Deal[]> {
+  const allDeals = await getAllDealsAsync();
+  const related: Deal[] = [];
+  const seen = new Set<string>([deal.id]);
+
+  const genderMatch = (d: Deal) =>
+    d.gender === deal.gender || d.gender === "unisex" || deal.gender === "unisex";
+
+  for (const d of allDeals) {
+    if (seen.has(d.id)) continue;
+    if (d.brand && d.brand === deal.brand && d.category === deal.category && genderMatch(d)) {
+      related.push(d);
+      seen.add(d.id);
+      if (related.length >= limit) return related;
+    }
+  }
+
+  for (const d of allDeals) {
+    if (seen.has(d.id)) continue;
+    if (d.category === deal.category && genderMatch(d)) {
+      related.push(d);
+      seen.add(d.id);
+      if (related.length >= limit) return related;
+    }
+  }
+
+  return related;
+}
+
+// Helper function to get top deals
+async function getTopDeals(limit: number = 8): Promise<Deal[]> {
+  const allDeals = await getAllDealsAsync();
+  return allDeals.slice(0, limit);
+}
+
 // Generate static paths for all deals
 export async function generateStaticParams() {
-  const ids = getAllDealIds();
-  return ids.map((id) => ({ id }));
+  const deals = await getAllDealsAsync();
+  return deals.map((deal) => ({ id: deal.id }));
 }
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
-  const deal = getDealById(id);
+  const deal = await getDealByIdAsync(id);
 
   if (!deal) {
     return {
@@ -136,11 +173,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function DealPage({ params }: Props) {
   const { id } = await params;
-  const deal = getDealById(id);
+  const deal = await getDealByIdAsync(id);
 
   // Product not available - show friendly page with alternatives
   if (!deal) {
-    const topDeals = getTopDeals(8);
+    const topDeals = await getTopDeals(8);
 
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -204,7 +241,7 @@ export default async function DealPage({ params }: Props) {
   const categoryText = CATEGORY_NAMES[deal.category] || "Proizvod";
   const genderText = GENDER_TEXT[deal.gender] || "";
   const genderTag = GENDER_TAGS[deal.gender] || "";
-  const relatedDeals = getRelatedDeals(deal, 8);
+  const relatedDeals = await getRelatedDeals(deal, 8);
 
   // Add UTM tracking to external URLs
   const addUtmParams = (url: string) => {

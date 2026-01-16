@@ -1,0 +1,64 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Store {
+  djaksport
+  planeta
+  sportvision
+  nsport
+  buzz
+  officeshoes
+}
+
+enum Gender {
+  muski
+  zenski
+  deciji
+  unisex
+}
+
+model Deal {
+  id              String   @id
+  store           Store
+  name            String
+  brand           String?
+  originalPrice   Int
+  salePrice       Int
+  discountPercent Int
+  url             String   @unique
+  imageUrl        String?
+
+  // Detail scraper fields
+  sizes           String[] @default([])
+  description     String?
+  detailImageUrl  String?
+  categories      String[] @default([])
+  gender          Gender   @default(unisex)
+
+  // Timestamps
+  scrapedAt       DateTime @default(now())
+  detailsScrapedAt DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([store])
+  @@index([gender])
+  @@index([discountPercent])
+  @@index([brand])
+}
+
+model ScrapeRun {
+  id            String   @id @default(cuid())
+  store         Store
+  totalScraped  Int
+  filteredCount Int
+  errors        String[] @default([])
+  startedAt     DateTime @default(now())
+  completedAt   DateTime?
+}

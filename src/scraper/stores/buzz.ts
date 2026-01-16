@@ -1,22 +1,20 @@
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
-import type { RawDeal, ScrapeResult } from "../../types/deal";
+import { upsertDeal, logScrapeRun, disconnect, Store, Gender } from "../db-writer";
 import * as fs from "fs";
 import * as path from "path";
-import * as https from "https";
 
 puppeteer.use(StealthPlugin());
 
-const STORE = "buzz" as const;
+const STORE: Store = "buzz";
 const BASE_URL = "https://www.buzzsneakers.rs";
 const SALE_PAGES = [
-  { url: `${BASE_URL}/proizvodi/buzz-sale-men`, gender: "men" },
-  { url: `${BASE_URL}/proizvodi/buzz-sale-women`, gender: "women" },
-  { url: `${BASE_URL}/proizvodi/buzz-sale-kids`, gender: "kids" },
+  { url: `${BASE_URL}/proizvodi/buzz-sale-men`, gender: "muski" as Gender },
+  { url: `${BASE_URL}/proizvodi/buzz-sale-women`, gender: "zenski" as Gender },
+  { url: `${BASE_URL}/proizvodi/buzz-sale-kids`, gender: "deciji" as Gender },
 ];
 const MIN_DISCOUNT = 50;
-const IMAGE_DIR = path.join(process.cwd(), "public", "images", "buzz");
 
 interface RawProduct {
   name: string;
@@ -56,88 +54,6 @@ function generateId(url: string): string {
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-// Ensure image directory exists
-if (!fs.existsSync(IMAGE_DIR)) {
-  fs.mkdirSync(IMAGE_DIR, { recursive: true });
-}
-
-async function downloadImage(
-  url: string,
-  filename: string,
-  page?: Page
-): Promise<string | null> {
-  const normalizedFilename = filename.toLowerCase().replace(/\.webp$/, ".jpg");
-  const filePath = path.join(IMAGE_DIR, normalizedFilename);
-
-  if (fs.existsSync(filePath)) {
-    return `/images/buzz/${normalizedFilename}`;
-  }
-
-  let fullUrl = url;
-  if (url.startsWith("//")) {
-    fullUrl = "https:" + url;
-  } else if (url.startsWith("/")) {
-    fullUrl = BASE_URL + url;
-  }
-
-  if (page) {
-    try {
-      const base64 = await page.evaluate(async (imgUrl: string) => {
-        const response = await fetch(imgUrl);
-        if (!response.ok) return null;
-        const blob = await response.blob();
-        return new Promise<string | null>((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result as string);
-          reader.onerror = () => resolve(null);
-          reader.readAsDataURL(blob);
-        });
-      }, fullUrl);
-
-      if (base64 && typeof base64 === "string") {
-        const data = base64.replace(/^data:image\/\w+;base64,/, "");
-        fs.writeFileSync(filePath, Buffer.from(data, "base64"));
-        return `/images/buzz/${normalizedFilename}`;
-      }
-    } catch {
-      // Fall through to https download
-    }
-  }
-
-  return new Promise((resolve) => {
-    const file = fs.createWriteStream(filePath);
-    https
-      .get(
-        fullUrl,
-        {
-          headers: {
-            "User-Agent":
-              "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
-            Referer: BASE_URL,
-          },
-        },
-        (response) => {
-          if (response.statusCode !== 200) {
-            file.close();
-            if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-            resolve(null);
-            return;
-          }
-          response.pipe(file);
-          file.on("finish", () => {
-            file.close();
-            resolve(`/images/buzz/${normalizedFilename}`);
-          });
-        }
-      )
-      .on("error", () => {
-        file.close();
-        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-        resolve(null);
-      });
-  });
 }
 
 async function launchBrowser(): Promise<Browser> {
@@ -294,11 +210,11 @@ async function clickLoadMoreUntilDone(page: Page): Promise<void> {
   console.log(`Total 'Load More' clicks: ${clicks}`);
 }
 
-async function scrapeBuzz(): Promise<ScrapeResult> {
+async function scrapeBuzz(): Promise<void> {
   const errors: string[] = [];
-  const allDeals: RawDeal[] = [];
   const seenUrls = new Set<string>();
   let totalScraped = 0;
+  let totalDeals = 0;
 
   console.log("Starting Buzz Sneakers scraper with stealth mode...");
   console.log(`Scraping ${SALE_PAGES.length} sale sections`);
@@ -359,11 +275,6 @@ async function scrapeBuzz(): Promise<ScrapeResult> {
           console.log("Sample product:", JSON.stringify(products[0], null, 2));
         }
 
-        // Gender marker for extractGender() to detect
-        const genderMarker = salePage.gender === "men" ? " men"
-          : salePage.gender === "women" ? " women"
-          : " kids";
-
         let sectionDeals = 0;
         for (const product of products) {
           // Skip duplicates
@@ -380,34 +291,20 @@ async function scrapeBuzz(): Promise<ScrapeResult> {
             product.discountPercent || calcDiscount(originalPrice, salePrice);
 
           if (discountPercent >= MIN_DISCOUNT) {
-            let localImageUrl: string | null = null;
-            if (product.imageUrl) {
-              const imgFilename =
-                product.imageUrl.split("/").pop()?.split("?")[0] || `${idCounter}.jpg`;
-              localImageUrl = await downloadImage(
-                product.imageUrl,
-                imgFilename,
-                page
-              );
-            }
-
-            // Append gender marker to name for extractGender() to detect
-            const nameWithGender = product.name + genderMarker;
-
-            allDeals.push({
+            await upsertDeal({
               id: generateId(product.url),
               store: STORE,
-              name: nameWithGender,
+              name: product.name,
               brand: product.brand,
               originalPrice,
               salePrice,
               discountPercent,
               url: product.url,
-              imageUrl: localImageUrl || product.imageUrl,
-              category: null,
-              scrapedAt: new Date(),
+              imageUrl: product.imageUrl,
+              gender: salePage.gender,
             });
             sectionDeals++;
+            totalDeals++;
           }
         }
 
@@ -415,7 +312,7 @@ async function scrapeBuzz(): Promise<ScrapeResult> {
         console.log(
           `Section ${salePage.gender}: ${sectionDeals} deals with ${MIN_DISCOUNT}%+ (total products: ${products.length})`
         );
-        console.log(`Running total: ${allDeals.length} deals (${totalScraped} scraped)`);
+        console.log(`Running total: ${totalDeals} deals (${totalScraped} scraped)`);
 
         // Delay between sections
         await sleep(3000 + Math.random() * 2000);
@@ -430,35 +327,20 @@ async function scrapeBuzz(): Promise<ScrapeResult> {
     await browser.close();
   }
 
-  const result: ScrapeResult = {
-    store: STORE,
-    deals: allDeals,
-    totalScraped,
-    filteredCount: allDeals.length,
-    scrapedAt: new Date(),
-    errors,
-  };
+  // Log scrape run
+  await logScrapeRun(STORE, totalScraped, totalDeals, errors);
 
-  const outputPath = path.join(process.cwd(), "data", `${STORE}-deals.json`);
-  fs.writeFileSync(outputPath, JSON.stringify(result, null, 2));
-  console.log(`\nResults saved to: ${outputPath}`);
-  console.log(`Total products scraped: ${totalScraped}`);
-  console.log(`Deals with ${MIN_DISCOUNT}%+ discount: ${allDeals.length}`);
+  console.log("\n=== Scraping Complete ===");
+  console.log(`Total scraped: ${totalScraped}`);
+  console.log(`Deals with ${MIN_DISCOUNT}%+ discount: ${totalDeals}`);
+  if (errors.length > 0) {
+    console.log(`Errors: ${errors.length}`);
+  }
 
-  return result;
+  await disconnect();
 }
 
 // Run
-scrapeBuzz()
-  .then((result) => {
-    console.log("\n=== Scraping Complete ===");
-    console.log(`Store: ${result.store}`);
-    console.log(`Total products scraped: ${result.totalScraped}`);
-    console.log(`Deals with 50%+ discount: ${result.filteredCount}`);
-    if (result.errors.length > 0) {
-      console.log(`Errors: ${result.errors.length}`);
-    }
-  })
-  .catch(console.error);
+scrapeBuzz().catch(console.error);
 
 export { scrapeBuzz };

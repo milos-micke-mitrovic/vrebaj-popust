@@ -4,7 +4,8 @@ import Image from "next/image";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { HeroBanner } from "@/components/hero-banner";
-import { getAllDeals, getUniqueStores, STORE_INFO } from "@/lib/deals";
+import { getAllDealsAsync, STORE_INFO } from "@/lib/deals";
+import { Store } from "@/types/deal";
 
 export const metadata: Metadata = {
   title: "VrebajPopust | Najveći sportski popusti preko 50% u Srbiji",
@@ -31,9 +32,9 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
-  const deals = getAllDeals();
-  const stores = getUniqueStores();
+export default async function Home() {
+  const deals = await getAllDealsAsync();
+  const stores = [...new Set(deals.map((d) => d.store))] as Store[];
   const totalDeals = deals.length;
   const avgDiscount = Math.round(
     deals.reduce((sum, d) => sum + d.discountPercent, 0) / deals.length

@@ -1,15 +1,10 @@
 import { Metadata } from "next";
 import { Suspense } from "react";
-import {
-  getAllDeals,
-  getUniqueBrands,
-  getUniqueStores,
-  getUniqueCategories,
-  getPriceRange,
-} from "@/lib/deals";
+import { getAllDealsAsync } from "@/lib/deals";
 import { DealsGrid } from "@/components/deals-grid";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { Store, Category } from "@/types/deal";
 
 export const metadata: Metadata = {
   title: "Sve ponude | VrebajPopust - Popusti preko 50%",
@@ -40,12 +35,17 @@ const priceValidUntilDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   .toISOString()
   .split("T")[0];
 
-export default function PonudePage() {
-  const deals = getAllDeals();
-  const brands = getUniqueBrands();
-  const stores = getUniqueStores();
-  const categories = getUniqueCategories();
-  const priceRange = getPriceRange();
+export default async function PonudePage() {
+  const deals = await getAllDealsAsync();
+
+  // Derive brands, stores, categories, and price range from deals
+  const brands = [...new Set(deals.filter(d => d.brand).map(d => d.brand!))].sort();
+  const stores = [...new Set(deals.map(d => d.store))] as Store[];
+  const categories = [...new Set(deals.map(d => d.category))] as Category[];
+  const prices = deals.map(d => d.salePrice);
+  const priceRange = prices.length > 0
+    ? { min: Math.min(...prices), max: Math.max(...prices) }
+    : { min: 0, max: 100000 };
 
   // ItemList for product listings (top 10 for SEO)
   const itemListSchema = {

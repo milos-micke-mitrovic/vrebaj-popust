@@ -1,17 +1,14 @@
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
-import type { RawDeal, ScrapeResult } from "../../types/deal";
+import { upsertDeal, logScrapeRun, disconnect, Store } from "../db-writer";
 import * as fs from "fs";
 import * as path from "path";
-import * as https from "https";
 
 // Add stealth plugin to avoid detection
 puppeteer.use(StealthPlugin());
 
-const IMAGE_DIR = path.join(process.cwd(), "public", "images", "djaksport");
-
-const STORE = "djaksport" as const;
+const STORE: Store = "djaksport";
 const BASE_URL = "https://www.djaksport.com";
 const AKCIJA_URL = `${BASE_URL}/akcija`;
 const MIN_DISCOUNT = 50;
@@ -55,68 +52,6 @@ function generateId(url: string): string {
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-async function downloadImage(url: string, filename: string, page?: Page): Promise<string | null> {
-  const normalizedFilename = filename.toLowerCase();
-  const filePath = path.join(IMAGE_DIR, normalizedFilename);
-
-  // Skip if already downloaded
-  if (fs.existsSync(filePath)) {
-    return `/images/djaksport/${normalizedFilename}`;
-  }
-
-  // Try fetching via page context (has cookies/session)
-  if (page) {
-    try {
-      const base64 = await page.evaluate(async (imgUrl: string) => {
-        const response = await fetch(imgUrl);
-        if (!response.ok) return null;
-        const blob = await response.blob();
-        return new Promise<string | null>((resolve) => {
-          const reader = new FileReader();
-          reader.onloadend = () => resolve(reader.result as string);
-          reader.onerror = () => resolve(null);
-          reader.readAsDataURL(blob);
-        });
-      }, url);
-
-      if (base64 && typeof base64 === "string") {
-        const data = base64.replace(/^data:image\/\w+;base64,/, "");
-        fs.writeFileSync(filePath, Buffer.from(data, "base64"));
-        return `/images/djaksport/${normalizedFilename}`;
-      }
-    } catch {
-      // Fall through to https method
-    }
-  }
-
-  // Fallback to direct https download
-  return new Promise((resolve) => {
-    const file = fs.createWriteStream(filePath);
-    https.get(url, {
-      headers: {
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36",
-        "Referer": "https://www.djaksport.com/",
-      }
-    }, (response) => {
-      if (response.statusCode !== 200) {
-        file.close();
-        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-        resolve(null);
-        return;
-      }
-      response.pipe(file);
-      file.on("finish", () => {
-        file.close();
-        resolve(`/images/djaksport/${normalizedFilename}`);
-      });
-    }).on("error", () => {
-      file.close();
-      if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-      resolve(null);
-    });
-  });
 }
 
 async function launchBrowser(): Promise<Browser> {
@@ -219,10 +154,11 @@ async function getNextPageUrl(page: Page): Promise<string | null> {
   `) as Promise<string | null>;
 }
 
-async function scrapeDjakSport(): Promise<ScrapeResult> {
+async function scrapeDjakSport(): Promise<void> {
   const errors: string[] = [];
-  const allDeals: RawDeal[] = [];
+  const seenUrls = new Set<string>();
   let totalScraped = 0;
+  let totalDeals = 0;
 
   console.log("Starting DjakSport scraper with stealth mode...");
   console.log(`Target: ${AKCIJA_URL}`);
@@ -286,6 +222,10 @@ async function scrapeDjakSport(): Promise<ScrapeResult> {
         }
 
         for (const product of products) {
+          // Skip duplicates
+          if (seenUrls.has(product.url)) continue;
+          seenUrls.add(product.url);
+
           const originalPrice = parsePrice(product.originalPrice);
           const salePrice = parsePrice(product.salePrice);
 
@@ -296,14 +236,7 @@ async function scrapeDjakSport(): Promise<ScrapeResult> {
             product.discountFromSite || calcDiscount(originalPrice, salePrice);
 
           if (discountPercent >= MIN_DISCOUNT) {
-            // Download image locally (pass page for browser context)
-            let localImageUrl: string | null = null;
-            if (product.imageUrl) {
-              const imgFilename = product.imageUrl.split("/").pop() || `${idCounter}.jpg`;
-              localImageUrl = await downloadImage(product.imageUrl, imgFilename, page);
-            }
-
-            allDeals.push({
+            await upsertDeal({
               id: generateId(product.url),
               store: STORE,
               name: product.name,
@@ -312,16 +245,16 @@ async function scrapeDjakSport(): Promise<ScrapeResult> {
               salePrice,
               discountPercent,
               url: product.url,
-              imageUrl: localImageUrl || product.imageUrl,
-              category: null,
-              scrapedAt: new Date(),
+              imageUrl: product.imageUrl,
+              gender: "unisex",
             });
+            totalDeals++;
           }
         }
 
         totalScraped += products.length;
         console.log(
-          `Deals with ${MIN_DISCOUNT}%+ discount: ${allDeals.length} (total scraped: ${totalScraped})`
+          `Deals with ${MIN_DISCOUNT}%+ discount: ${totalDeals} (total scraped: ${totalScraped})`
         );
 
         // Get next page
@@ -348,35 +281,20 @@ async function scrapeDjakSport(): Promise<ScrapeResult> {
     await browser.close();
   }
 
-  const result: ScrapeResult = {
-    store: STORE,
-    deals: allDeals,
-    totalScraped,
-    filteredCount: allDeals.length,
-    scrapedAt: new Date(),
-    errors,
-  };
+  // Log scrape run
+  await logScrapeRun(STORE, totalScraped, totalDeals, errors);
 
-  const outputPath = path.join(process.cwd(), "data", `${STORE}-deals.json`);
-  fs.writeFileSync(outputPath, JSON.stringify(result, null, 2));
-  console.log(`\nResults saved to: ${outputPath}`);
-  console.log(`Total products scraped: ${totalScraped}`);
-  console.log(`Deals with ${MIN_DISCOUNT}%+ discount: ${allDeals.length}`);
+  console.log("\n=== Scraping Complete ===");
+  console.log(`Total scraped: ${totalScraped}`);
+  console.log(`Deals with ${MIN_DISCOUNT}%+ discount: ${totalDeals}`);
+  if (errors.length > 0) {
+    console.log(`Errors: ${errors.length}`);
+  }
 
-  return result;
+  await disconnect();
 }
 
 // Run
-scrapeDjakSport()
-  .then((result) => {
-    console.log("\n=== Scraping Complete ===");
-    console.log(`Store: ${result.store}`);
-    console.log(`Total products scraped: ${result.totalScraped}`);
-    console.log(`Deals with 50%+ discount: ${result.filteredCount}`);
-    if (result.errors.length > 0) {
-      console.log(`Errors: ${result.errors.length}`);
-    }
-  })
-  .catch(console.error);
+scrapeDjakSport().catch(console.error);
 
 export { scrapeDjakSport };

@@ -1,8 +1,6 @@
-import * as fs from "fs";
-import * as path from "path";
-import { Deal, ScrapeResult, Store, Gender, Category } from "@/types/deal";
-
-const DATA_DIR = path.join(process.cwd(), "data");
+import { prisma } from "./db";
+import type { Deal as PrismaDeal, Store as PrismaStore, Gender as PrismaGender } from "@prisma/client";
+import { Deal, Store, Gender, Category } from "@/types/deal";
 
 // Normalize Serbian characters to ASCII equivalents
 function normalizeSerbianChars(text: string): string {
@@ -15,12 +13,11 @@ function normalizeSerbianChars(text: string): string {
     .replace(/đ/g, "dj");
 }
 
-// Extract gender from product name
+// Extract gender from product name (fallback if not in DB)
 function extractGender(name: string): Gender {
   const normalized = normalizeSerbianChars(name);
 
   // Kids patterns - check first as it's most specific
-  // dečiji/deciji, deca, devojčice/devojcice, dečak/dečaci, kid, junior
   if (
     normalized.includes("decij") ||
     normalized.includes("deca") ||
@@ -36,7 +33,6 @@ function extractGender(name: string): Gender {
   }
 
   // Women patterns
-  // ženski/zenski, žene/zene, za žene, women, wmns
   if (
     normalized.includes("zenski") ||
     normalized.includes("zensk") ||
@@ -52,7 +48,6 @@ function extractGender(name: string): Gender {
   }
 
   // Men patterns
-  // muški/muski, muškarci/muskarci, za muškarce, men
   if (
     normalized.includes("muski") ||
     normalized.includes("musk") ||
@@ -86,14 +81,10 @@ function extractCategory(name: string): Category {
   return "ostalo";
 }
 
-const STORE_FILES: Record<Store, string> = {
-  djaksport: "djaksport-deals.json",
-  planeta: "planeta-deals.json",
-  sportvision: "sportvision-deals.json",
-  nsport: "nsport-deals.json",
-  buzz: "buzz-deals.json",
-  officeshoes: "officeshoes-deals.json",
-};
+// Normalize brand name to consistent format (uppercase)
+function normalizeBrand(brand: string): string {
+  return brand.toUpperCase().trim();
+}
 
 export const STORE_INFO: Record<
   Store,
@@ -131,40 +122,69 @@ export const STORE_INFO: Record<
   },
 };
 
-export function getAllDeals(): Deal[] {
-  const allDeals: Deal[] = [];
-  const seenUrls = new Set<string>();
+// Convert Prisma deal to app Deal type
+function convertDeal(prismaDeal: PrismaDeal): Deal {
+  return {
+    id: prismaDeal.id,
+    store: prismaDeal.store as Store,
+    name: prismaDeal.name,
+    brand: prismaDeal.brand ? normalizeBrand(prismaDeal.brand) : null,
+    originalPrice: prismaDeal.originalPrice,
+    salePrice: prismaDeal.salePrice,
+    discountPercent: prismaDeal.discountPercent,
+    url: prismaDeal.url,
+    imageUrl: prismaDeal.imageUrl,
+    gender: (prismaDeal.gender as Gender) || extractGender(prismaDeal.name),
+    category: extractCategory(prismaDeal.name),
+    scrapedAt: prismaDeal.scrapedAt,
+    sizes: prismaDeal.sizes,
+    description: prismaDeal.description,
+    detailImageUrl: prismaDeal.detailImageUrl,
+    detailsScrapedAt: prismaDeal.detailsScrapedAt || undefined,
+  };
+}
 
-  for (const [store, filename] of Object.entries(STORE_FILES)) {
-    const filePath = path.join(DATA_DIR, filename);
-    try {
-      if (fs.existsSync(filePath)) {
-        const data = JSON.parse(
-          fs.readFileSync(filePath, "utf-8")
-        ) as ScrapeResult;
-        // Enrich deals with gender and category, filter duplicates by URL
-        for (const deal of data.deals) {
-          if (seenUrls.has(deal.url)) continue;
-          seenUrls.add(deal.url);
+// In-memory cache for deals (refreshed every request in dev, cached in prod)
+let dealsCache: Deal[] | null = null;
+let lastFetch = 0;
+const CACHE_TTL = process.env.NODE_ENV === "production" ? 60000 : 0; // 1 min in prod, no cache in dev
 
-          const enrichedDeal: Deal = {
-            ...deal,
-            // Normalize brand for consistent filtering
-            brand: deal.brand ? normalizeBrand(deal.brand) : null,
-            // Use scraped gender if available, otherwise extract from name
-            gender: deal.gender || extractGender(deal.name),
-            category: extractCategory(deal.name),
-          };
-          allDeals.push(enrichedDeal);
-        }
-      }
-    } catch {
-      console.error(`Error loading ${store} deals`);
-    }
+async function fetchDeals(): Promise<Deal[]> {
+  const now = Date.now();
+  if (dealsCache && now - lastFetch < CACHE_TTL) {
+    return dealsCache;
   }
 
-  // Sort by discount (highest first)
-  return allDeals.sort((a, b) => b.discountPercent - a.discountPercent);
+  const prismaDeals = await prisma.deal.findMany({
+    orderBy: { discountPercent: "desc" },
+  });
+
+  dealsCache = prismaDeals.map(convertDeal);
+  lastFetch = now;
+  return dealsCache;
+}
+
+export function getAllDeals(): Deal[] {
+  // For SSR/SSG, we use a synchronous approach with cache
+  // This is safe because Next.js will call this during build/request time
+  if (dealsCache) {
+    return dealsCache;
+  }
+
+  // Fallback: return empty array if cache not populated
+  // In production, this should be populated by getStaticProps or similar
+  console.warn("Deals cache not populated, returning empty array");
+  return [];
+}
+
+// Async version for use in API routes or server actions
+export async function getAllDealsAsync(): Promise<Deal[]> {
+  return fetchDeals();
+}
+
+// Initialize cache (call this in layout or page)
+export async function initDealsCache(): Promise<void> {
+  await fetchDeals();
 }
 
 export function getDealById(id: string): Deal | null {
@@ -172,21 +192,23 @@ export function getDealById(id: string): Deal | null {
   return allDeals.find((deal) => deal.id === id) || null;
 }
 
+export async function getDealByIdAsync(id: string): Promise<Deal | null> {
+  const prismaDeal = await prisma.deal.findUnique({
+    where: { id },
+  });
+  return prismaDeal ? convertDeal(prismaDeal) : null;
+}
+
 export function getDealsByStore(store: Store): Deal[] {
   const allDeals = getAllDeals();
   return allDeals.filter((deal) => deal.store === store);
-}
-
-// Normalize brand name to consistent format (uppercase)
-function normalizeBrand(brand: string): string {
-  return brand.toUpperCase().trim();
 }
 
 export function getUniqueBrands(): string[] {
   const allDeals = getAllDeals();
   const brands = new Set<string>();
   allDeals.forEach((deal) => {
-    if (deal.brand) brands.add(normalizeBrand(deal.brand));
+    if (deal.brand) brands.add(deal.brand);
   });
   return Array.from(brands).sort();
 }
@@ -215,6 +237,9 @@ export function getUniqueCategories(): Category[] {
 
 export function getPriceRange(): { min: number; max: number } {
   const allDeals = getAllDeals();
+  if (allDeals.length === 0) {
+    return { min: 0, max: 100000 };
+  }
   const prices = allDeals.map((d) => d.salePrice);
   return {
     min: Math.min(...prices),

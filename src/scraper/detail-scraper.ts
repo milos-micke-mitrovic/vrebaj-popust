@@ -302,7 +302,7 @@ async function extractPlanetaDetails(page: Page): Promise<ProductDetails> {
   return { ...rawData, categories: [], gender: null };
 }
 
-async function extractSportVisionDetails(page: Page): Promise<ProductDetails> {
+async function extractSportVisionDetails(page: Page, dealName: string = ""): Promise<ProductDetails> {
   // Wait for size selector to load
   await page.waitForSelector("ul.product-attributes li", { timeout: 8000 }).catch(() => {});
 
@@ -337,15 +337,57 @@ async function extractSportVisionDetails(page: Page): Promise<ProductDetails> {
       detailImageUrl = (imgEl as HTMLImageElement).src || null;
     }
 
-    return { sizes, description, detailImageUrl };
+    // Extract from Specifikacija table (same structure as Buzz)
+    let kategorijaValue = "";
+    let polValue = "";
+    let uzrastValue = "";
+
+    const specRows = document.querySelectorAll(".product-attrbite-table tbody tr");
+    specRows.forEach((row) => {
+      const cells = row.querySelectorAll("td");
+      if (cells.length >= 2) {
+        const label = cells[0].textContent?.trim() || "";
+        const value = cells[1].textContent?.trim() || "";
+
+        if (label === "Kategorija") {
+          kategorijaValue = value;
+        }
+        if (label === "Pol") {
+          polValue = value;
+        }
+        if (label === "Uzrast") {
+          uzrastValue = value;
+        }
+      }
+    });
+
+    return { sizes, description, detailImageUrl, kategorijaValue, polValue, uzrastValue };
   });
 
-  return { ...rawData, categories: [], gender: null };
+  // Map the extracted values to our category/gender system
+  const categories = mapToCategories(rawData.kategorijaValue, dealName);
+
+  // Determine gender - check uzrast first for kids detection
+  let gender: Gender | null = null;
+  const uzrastNorm = normalizeSerbianText(rawData.uzrastValue);
+  if (uzrastNorm.includes("beb") || uzrastNorm.includes("mal") || uzrastNorm.includes("dec") || uzrastNorm.includes("tinejdzer")) {
+    gender = "deciji";
+  } else if (rawData.polValue) {
+    gender = mapToGender(rawData.polValue);
+  }
+
+  return {
+    sizes: rawData.sizes,
+    description: rawData.description,
+    detailImageUrl: rawData.detailImageUrl,
+    categories,
+    gender,
+  };
 }
 
-async function extractNSportDetails(page: Page): Promise<ProductDetails> {
+async function extractNSportDetails(page: Page, dealName: string = ""): Promise<ProductDetails> {
   // Wait for size selector to load
-  await page.waitForSelector("ul.size-list li", { timeout: 8000 }).catch(() => {});
+  await page.waitForSelector("ul.size-list li, .size-list", { timeout: 8000 }).catch(() => {});
 
   const rawData = await page.evaluate(() => {
     const sizes: string[] = [];
@@ -360,7 +402,7 @@ async function extractNSportDetails(page: Page): Promise<ProductDetails> {
     });
 
     let description: string | null = null;
-    const descEl = document.querySelector(".product-description, .description");
+    const descEl = document.querySelector("#fnc-product-description #product-description-wrapper, .product-description");
     if (descEl) {
       description = descEl.textContent?.trim() || null;
     }
@@ -371,10 +413,38 @@ async function extractNSportDetails(page: Page): Promise<ProductDetails> {
       detailImageUrl = (imgEl as HTMLImageElement).src || null;
     }
 
-    return { sizes, description, detailImageUrl };
+    // Extract "Naziv proizvoda" from Deklaracija tab
+    // Format: "Naziv proizvoda: Muške japanke <br> Brend: Puma <br> ..."
+    let nazivProizvoda = "";
+    const declarationEl = document.querySelector("#product-declaration");
+    if (declarationEl) {
+      const text = declarationEl.textContent || "";
+      // Parse "Naziv proizvoda: value" pattern
+      const match = text.match(/Naziv proizvoda:\s*([^B\n]+?)(?:\s*Brend:|$)/i);
+      if (match) {
+        nazivProizvoda = match[1].trim();
+      }
+    }
+
+    return { sizes, description, detailImageUrl, nazivProizvoda };
   });
 
-  return { ...rawData, categories: [], gender: null };
+  // Map category from "Naziv proizvoda" (e.g., "Muške japanke", "Ženska jakna", "Dečiji šorc")
+  const categories = mapToCategories(rawData.nazivProizvoda, dealName);
+
+  // Determine gender from "Naziv proizvoda"
+  let gender: Gender | null = null;
+  if (rawData.nazivProizvoda) {
+    gender = mapToGender(rawData.nazivProizvoda);
+  }
+
+  return {
+    sizes: rawData.sizes,
+    description: rawData.description,
+    detailImageUrl: rawData.detailImageUrl,
+    categories,
+    gender,
+  };
 }
 
 async function extractBuzzDetails(page: Page, dealName: string = ""): Promise<ProductDetails> {
@@ -591,9 +661,9 @@ async function extractDetails(page: Page, store: Store, dealName: string = ""): 
     case "planeta":
       return extractPlanetaDetails(page);
     case "sportvision":
-      return extractSportVisionDetails(page);
+      return extractSportVisionDetails(page, dealName);
     case "nsport":
-      return extractNSportDetails(page);
+      return extractNSportDetails(page, dealName);
     case "buzz":
       return extractBuzzDetails(page, dealName);
     case "officeshoes":
