@@ -175,7 +175,7 @@ function convertDeal(prismaDeal: PrismaDeal): Deal {
     description: prismaDeal.description,
     detailImageUrl: prismaDeal.detailImageUrl,
     detailsScrapedAt: prismaDeal.detailsScrapedAt || undefined,
-    categories: prismaDeal.categories,
+    categories: prismaDeal.categories as import("@/types/deal").CategoryPath[],
   };
 }
 
