@@ -2,16 +2,14 @@ import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
 import { upsertDeal, logScrapeRun, disconnect, cleanupStaleProducts, Store } from "../db-writer";
-import * as fs from "fs";
-import * as path from "path";
 
 puppeteer.use(StealthPlugin());
 
 const STORE: Store = "officeshoes";
 const BASE_URL = "https://www.officeshoes.rs";
-// Single sale page sorted by discount descending
-const SALE_URL = `${BASE_URL}/sale/0/48/discount_desc/`;
+const SALE_PATH = "/sale/0/48/discount_desc/";
 const MIN_DISCOUNT = 50;
+const MAX_PAGES = 15; // Safety limit
 
 interface RawProduct {
   name: string;
@@ -142,9 +140,8 @@ async function scrapeOfficeShoes(): Promise<void> {
   const scrapeStartTime = new Date();
 
   console.log("Starting Office Shoes scraper with stealth mode...");
-  console.log(`Sale URL: ${SALE_URL}`);
   console.log(`Min discount: ${MIN_DISCOUNT}%`);
-  console.log("Products are sorted by discount (highest first)");
+  console.log("Using pagination to load all products");
 
   const browser = await launchBrowser();
 
@@ -152,177 +149,89 @@ async function scrapeOfficeShoes(): Promise<void> {
     const page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
 
-    console.log(`\n=== Scraping: ${SALE_URL} ===`);
+    let currentPage = 0;
     let foundBelowMinDiscount = false;
 
-    await page.goto(SALE_URL, {
-      waitUntil: "networkidle2",
-      timeout: 60000,
-    });
+    while (currentPage < MAX_PAGES && !foundBelowMinDiscount) {
+      const pageNum = currentPage + 1;
+      const pageUrl = `${BASE_URL}${SALE_PATH}?page=${pageNum}`;
 
-    // Wait for products to load
-    try {
-      await page.waitForSelector('.product-article_wrapper, article[data-product_id]', { timeout: 15000 });
-      console.log("Product grid loaded");
-    } catch {
-      console.log("Waiting for product grid timed out, continuing...");
-    }
+      console.log(`\n=== Page ${pageNum}: ${pageUrl} ===`);
 
-    await sleep(2000);
+      await page.goto(pageUrl, {
+        waitUntil: "networkidle2",
+        timeout: 60000,
+      });
 
-    // Use infinite scroll to load all products until we hit < 50% discount
-    let scrollAttempts = 0;
-    const maxScrollAttempts = 50; // Safety limit
-
-    while (scrollAttempts < maxScrollAttempts && !foundBelowMinDiscount) {
-      const productCountBefore = await page.evaluate(() =>
-        document.querySelectorAll('.product-article_wrapper, article[data-product_id]').length
-      );
-
-      // Scroll to the infinity loader element to trigger loading
-      const scrolled = await page.evaluate(`
-        (function() {
-          var loader = document.querySelector('#infinityLoader');
-          if (loader) {
-            loader.scrollIntoView({ behavior: 'smooth', block: 'center' });
-            return true;
-          }
-          // Fallback: scroll to bottom
-          window.scrollTo(0, document.body.scrollHeight);
-          return true;
-        })()
-      `);
-
-      scrollAttempts++;
-      console.log(`Scroll attempt ${scrollAttempts}, waiting for products...`);
-
-      // Wait for loading animation to disappear
+      // Wait for products to load
       try {
-        await page.waitForFunction(
-          () => {
-            const loader = document.querySelector('#loadingAnimationWrapper');
-            return !loader || window.getComputedStyle(loader).display === 'none';
-          },
-          { timeout: 10000 }
-        );
+        await page.waitForSelector('.product-article_wrapper, article[data-product_id]', { timeout: 15000 });
       } catch {
-        // Ignore timeout
-      }
-
-      // Additional wait for DOM to update
-      await sleep(2000);
-
-      const productCountAfter = await page.evaluate(() =>
-        document.querySelectorAll('.product-article_wrapper, article[data-product_id]').length
-      );
-
-      if (productCountAfter === productCountBefore) {
-        // Try clicking load more button as fallback
-        const clicked = await page.evaluate(`
-          (function() {
-            var btn = document.querySelector('#loadMoreButton');
-            if (btn && btn.offsetParent !== null) {
-              btn.click();
-              return true;
-            }
-            return false;
-          })()
-        `);
-
-        if (clicked) {
-          console.log("Clicked 'Load more' button as fallback");
-          await sleep(3000);
-
-          const productCountAfterClick = await page.evaluate(() =>
-            document.querySelectorAll('.product-article_wrapper, article[data-product_id]').length
-          );
-
-          if (productCountAfterClick === productCountBefore) {
-            console.log("No new products loaded after click, stopping");
-            break;
-          }
-          console.log(`Products after click: ${productCountBefore} -> ${productCountAfterClick}`);
-        } else {
-          console.log("No new products loaded, stopping");
-          break;
-        }
-      } else {
-        console.log(`Products: ${productCountBefore} -> ${productCountAfter}`);
-      }
-
-      // Check if latest products are below min discount
-      const latestProducts = await page.evaluate(`
-        (function() {
-          var items = document.querySelectorAll('.product-article_wrapper, article[data-product_id]');
-          var lastItems = Array.from(items).slice(-10);
-          var discounts = [];
-          lastItems.forEach(function(el) {
-            var discountImg = el.querySelector('img[src*="ssrs"]');
-            if (discountImg) {
-              var match = discountImg.src.match(/ssrs(\\d+)/);
-              if (match) discounts.push(parseInt(match[1], 10));
-            }
-          });
-          return discounts;
-        })()
-      `) as number[];
-
-      if (latestProducts.length > 0) {
-        const minInBatch = Math.min(...latestProducts);
-        console.log(`Latest batch discounts: ${latestProducts.join(', ')}% (min: ${minInBatch}%)`);
-        if (minInBatch < MIN_DISCOUNT) {
-          console.log(`Found products below ${MIN_DISCOUNT}%, stopping load more`);
-          foundBelowMinDiscount = true;
-        }
-      }
-    }
-
-    // Now extract all products
-    const products = await extractProducts(page);
-    console.log(`Found ${products.length} total product elements`);
-
-    if (products.length > 0) {
-      console.log("Sample product:", JSON.stringify(products[0], null, 2));
-    }
-
-    for (const product of products) {
-      // Skip duplicates
-      if (seenUrls.has(product.url)) continue;
-      seenUrls.add(product.url);
-
-      totalScraped++;
-
-      const originalPrice = parsePrice(product.originalPrice);
-      const salePrice = parsePrice(product.salePrice);
-
-      if (originalPrice <= 0 || salePrice <= 0) continue;
-      if (salePrice >= originalPrice) continue;
-
-      const discountPercent =
-        product.discountPercent || calcDiscount(originalPrice, salePrice);
-
-      // Since sorted by discount desc, stop when we hit < MIN_DISCOUNT
-      if (discountPercent < MIN_DISCOUNT) {
-        console.log(`Reached product with ${discountPercent}% discount, stopping`);
+        console.log("No products found on this page, stopping");
         break;
       }
 
-      await upsertDeal({
-        id: generateId(product.url),
-        store: STORE,
-        name: product.name,
-        brand: product.brand,
-        originalPrice,
-        salePrice,
-        discountPercent,
-        url: product.url,
-        imageUrl: product.imageUrl,
-        gender: "unisex", // Will be updated by detail scraper
-      });
-      totalDeals++;
-    }
+      await sleep(1000);
 
-    console.log(`Deals with ${MIN_DISCOUNT}%+ discount: ${totalDeals} (total scraped: ${totalScraped})`);
+      const products = await extractProducts(page);
+      console.log(`Found ${products.length} products on page ${pageNum}`);
+
+      if (products.length === 0) {
+        console.log("No products on page, stopping");
+        break;
+      }
+
+      if (currentPage === 0 && products.length > 0) {
+        console.log("Sample product:", JSON.stringify(products[0], null, 2));
+      }
+
+      for (const product of products) {
+        // Skip duplicates
+        if (seenUrls.has(product.url)) continue;
+        seenUrls.add(product.url);
+
+        totalScraped++;
+
+        const originalPrice = parsePrice(product.originalPrice);
+        const salePrice = parsePrice(product.salePrice);
+
+        if (originalPrice <= 0 || salePrice <= 0) continue;
+        if (salePrice >= originalPrice) continue;
+
+        const discountPercent =
+          product.discountPercent || calcDiscount(originalPrice, salePrice);
+
+        // Since sorted by discount desc, stop when we hit < MIN_DISCOUNT
+        if (discountPercent < MIN_DISCOUNT) {
+          console.log(`Reached product with ${discountPercent}% discount, stopping`);
+          foundBelowMinDiscount = true;
+          break;
+        }
+
+        await upsertDeal({
+          id: generateId(product.url),
+          store: STORE,
+          name: product.name,
+          brand: product.brand,
+          originalPrice,
+          salePrice,
+          discountPercent,
+          url: product.url,
+          imageUrl: product.imageUrl,
+          gender: "unisex",
+        });
+        totalDeals++;
+      }
+
+      console.log(`Running total: ${totalDeals} deals (${totalScraped} scraped)`);
+
+      currentPage++;
+
+      // Small delay between pages
+      if (!foundBelowMinDiscount && currentPage < MAX_PAGES) {
+        await sleep(1500 + Math.random() * 1000);
+      }
+    }
 
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
@@ -335,7 +244,7 @@ async function scrapeOfficeShoes(): Promise<void> {
   // Log scrape run
   await logScrapeRun(STORE, totalScraped, totalDeals, errors);
 
-  // Clean up stale products (only if we found enough products)
+  // Clean up stale products
   await cleanupStaleProducts(STORE, scrapeStartTime, totalDeals);
 
   console.log("\n=== Scraping Complete ===");
