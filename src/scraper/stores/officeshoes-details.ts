@@ -94,20 +94,28 @@ async function extractProductDetails(page: Page): Promise<ProductDetails> {
       });
 
       // Extract available sizes from size selector
-      var sizeElements = document.querySelectorAll('.size-list .size-item:not(.unavailable), .sizes-wrapper .size:not(.unavailable)');
+      // OfficeShoes uses ul.sizes with li elements that have data-product-size attribute
+      var sizeElements = document.querySelectorAll('ul.sizes li[data-product-size]');
       sizeElements.forEach(function(el) {
-        var size = el.textContent.trim();
-        if (size && !el.classList.contains('unavailable')) {
+        // Skip unavailable sizes (they have 'unavailable' or 'disabled' class)
+        if (el.classList.contains('unavailable') || el.classList.contains('disabled') || el.classList.contains('out-of-stock')) {
+          return;
+        }
+        var size = el.getAttribute('data-product-size') || el.textContent.trim();
+        if (size && !result.sizes.includes(size)) {
           result.sizes.push(size);
         }
       });
 
-      // Alternative: sizes from data attributes
+      // Fallback: try rel attribute or text content
       if (result.sizes.length === 0) {
-        var sizeDataElements = document.querySelectorAll('[data-size]:not(.unavailable)');
-        sizeDataElements.forEach(function(el) {
-          var size = el.getAttribute('data-size') || el.textContent.trim();
-          if (size) {
+        var fallbackElements = document.querySelectorAll('ul.sizes li');
+        fallbackElements.forEach(function(el) {
+          if (el.classList.contains('unavailable') || el.classList.contains('disabled')) {
+            return;
+          }
+          var size = el.getAttribute('rel') || el.textContent.trim();
+          if (size && !result.sizes.includes(size)) {
             result.sizes.push(size);
           }
         });
