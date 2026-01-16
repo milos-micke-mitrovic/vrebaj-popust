@@ -175,74 +175,90 @@ async function scrapeOfficeShoes(): Promise<void> {
     const maxClicks = 50; // Safety limit
 
     while (loadMoreClicks < maxClicks && !foundBelowMinDiscount) {
-      const loadMoreBtn = await page.$('#loadMoreButton');
-
-      if (!loadMoreBtn) {
-        console.log("No more 'Load more' button found");
-        break;
-      }
-
-      const isVisible = await page.evaluate((btn) => {
-        const style = window.getComputedStyle(btn as Element);
-        return style.display !== 'none' && style.visibility !== 'hidden';
-      }, loadMoreBtn);
-
-      if (!isVisible) {
-        console.log("'Load more' button is hidden, all products loaded");
-        break;
-      }
-
       const productCountBefore = await page.evaluate(() =>
         document.querySelectorAll('.product-article_wrapper, article[data-product_id]').length
       );
 
-      try {
-        await loadMoreBtn.click();
-        loadMoreClicks++;
-        console.log(`Clicked 'Load more' (${loadMoreClicks}), waiting for products...`);
-        await sleep(2000 + Math.random() * 1000);
+      // Try to find and click load more button using JavaScript
+      const clicked = await page.evaluate(`
+        (function() {
+          var btn = document.querySelector('#loadMoreButton, .load-more-btn, button[data-action="load-more"], a.load-more');
+          if (btn) {
+            var style = window.getComputedStyle(btn);
+            if (style.display !== 'none' && style.visibility !== 'hidden') {
+              btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              btn.click();
+              return true;
+            }
+          }
+          return false;
+        })()
+      `);
 
-        const productCountAfter = await page.evaluate(() =>
+      if (!clicked) {
+        console.log("No more 'Load more' button found or button hidden");
+        break;
+      }
+
+      loadMoreClicks++;
+      console.log(`Clicked 'Load more' (${loadMoreClicks}), waiting for products...`);
+
+      // Wait longer for AJAX to complete
+      await sleep(3000 + Math.random() * 2000);
+
+      // Also try waiting for network to settle
+      try {
+        await page.waitForNetworkIdle({ timeout: 5000 });
+      } catch {
+        // Ignore timeout
+      }
+
+      const productCountAfter = await page.evaluate(() =>
+        document.querySelectorAll('.product-article_wrapper, article[data-product_id]').length
+      );
+
+      if (productCountAfter === productCountBefore) {
+        // Try scrolling down to trigger lazy load
+        await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+        await sleep(2000);
+
+        const productCountAfterScroll = await page.evaluate(() =>
           document.querySelectorAll('.product-article_wrapper, article[data-product_id]').length
         );
 
-        if (productCountAfter === productCountBefore) {
+        if (productCountAfterScroll === productCountBefore) {
           console.log("No new products loaded, stopping");
           break;
         }
-
+        console.log(`Products after scroll: ${productCountBefore} -> ${productCountAfterScroll}`);
+      } else {
         console.log(`Products: ${productCountBefore} -> ${productCountAfter}`);
+      }
 
-        // Check if latest products are below min discount
-        const latestProducts = await page.evaluate(`
-          (function() {
-            var items = document.querySelectorAll('.product-article_wrapper, article[data-product_id]');
-            var lastItems = Array.from(items).slice(-10);
-            var discounts = [];
-            lastItems.forEach(function(el) {
-              var discountImg = el.querySelector('img[src*="ssrs"]');
-              if (discountImg) {
-                var match = discountImg.src.match(/ssrs(\\d+)/);
-                if (match) discounts.push(parseInt(match[1], 10));
-              }
-            });
-            return discounts;
-          })()
-        `) as number[];
+      // Check if latest products are below min discount
+      const latestProducts = await page.evaluate(`
+        (function() {
+          var items = document.querySelectorAll('.product-article_wrapper, article[data-product_id]');
+          var lastItems = Array.from(items).slice(-10);
+          var discounts = [];
+          lastItems.forEach(function(el) {
+            var discountImg = el.querySelector('img[src*="ssrs"]');
+            if (discountImg) {
+              var match = discountImg.src.match(/ssrs(\\d+)/);
+              if (match) discounts.push(parseInt(match[1], 10));
+            }
+          });
+          return discounts;
+        })()
+      `) as number[];
 
-        if (latestProducts.length > 0) {
-          const minInBatch = Math.min(...latestProducts);
-          console.log(`Latest batch discounts: ${latestProducts.join(', ')}% (min: ${minInBatch}%)`);
-          if (minInBatch < MIN_DISCOUNT) {
-            console.log(`Found products below ${MIN_DISCOUNT}%, stopping load more`);
-            foundBelowMinDiscount = true;
-          }
+      if (latestProducts.length > 0) {
+        const minInBatch = Math.min(...latestProducts);
+        console.log(`Latest batch discounts: ${latestProducts.join(', ')}% (min: ${minInBatch}%)`);
+        if (minInBatch < MIN_DISCOUNT) {
+          console.log(`Found products below ${MIN_DISCOUNT}%, stopping load more`);
+          foundBelowMinDiscount = true;
         }
-
-      } catch (err) {
-        const message = err instanceof Error ? err.message : String(err);
-        console.log(`Error clicking load more: ${message}`);
-        break;
       }
     }
 

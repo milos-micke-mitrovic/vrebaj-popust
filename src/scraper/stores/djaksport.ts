@@ -175,7 +175,7 @@ async function scrapeDjakSport(): Promise<void> {
 
     let currentUrl: string | null = AKCIJA_URL;
     let pageNum = 1;
-    const maxPages = 10; // Try more pages with stealth
+    const maxPages = 25; // Increased to catch more deals
 
     while (currentUrl && pageNum <= maxPages) {
       console.log(`\nScraping page ${pageNum}: ${currentUrl}`);
