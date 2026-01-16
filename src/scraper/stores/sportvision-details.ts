@@ -162,7 +162,4 @@ async function scrapeSportVisionDetails(): Promise<void> {
   await disconnect();
 }
 
-// Run
-scrapeSportVisionDetails().catch(console.error);
-
 export { scrapeSportVisionDetails };

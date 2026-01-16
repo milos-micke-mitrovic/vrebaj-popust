@@ -138,7 +138,4 @@ async function scrapeBuzzDetails(): Promise<void> {
   await disconnect();
 }
 
-// Run
-scrapeBuzzDetails().catch(console.error);
-
 export { scrapeBuzzDetails };

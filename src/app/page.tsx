@@ -78,7 +78,7 @@ export default async function Home() {
               <br />
               <span className="text-red-400">preko 50%</span>
             </h1>
-            <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-300 sm:text-xl">
+            <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-200 sm:text-xl">
               Svakodnevno pretražujemo najveće sportske prodavnice u Srbiji i
               pronalazimo najveće popuste za tebe. Uštedi vreme i novac.
             </p>

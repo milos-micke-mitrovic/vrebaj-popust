@@ -146,7 +146,4 @@ async function scrapeDjakSportDetails(): Promise<void> {
   await disconnect();
 }
 
-// Run
-scrapeDjakSportDetails().catch(console.error);
-
 export { scrapeDjakSportDetails };

@@ -152,7 +152,4 @@ async function scrapeNSportDetails(): Promise<void> {
   await disconnect();
 }
 
-// Run
-scrapeNSportDetails().catch(console.error);
-
 export { scrapeNSportDetails };

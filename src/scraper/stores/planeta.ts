@@ -283,7 +283,4 @@ async function scrapePlaneta(): Promise<void> {
   await disconnect();
 }
 
-// Run
-scrapePlaneta().catch(console.error);
-
 export { scrapePlaneta };

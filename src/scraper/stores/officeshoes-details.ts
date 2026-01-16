@@ -232,7 +232,4 @@ async function scrapeOfficeShoeDetails(): Promise<void> {
   await disconnect();
 }
 
-// Run
-scrapeOfficeShoeDetails().catch(console.error);
-
 export { scrapeOfficeShoeDetails };

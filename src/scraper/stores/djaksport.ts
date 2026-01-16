@@ -298,7 +298,4 @@ async function scrapeDjakSport(): Promise<void> {
   await disconnect();
 }
 
-// Run
-scrapeDjakSport().catch(console.error);
-
 export { scrapeDjakSport };

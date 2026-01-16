@@ -294,7 +294,4 @@ async function scrapeSportVision(): Promise<void> {
   await disconnect();
 }
 
-// Run
-scrapeSportVision().catch(console.error);
-
 export { scrapeSportVision };

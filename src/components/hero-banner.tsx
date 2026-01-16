@@ -25,7 +25,7 @@ export function HeroBanner({ children }: HeroBannerProps) {
         />
       </div>
       {/* Overlay */}
-      <div className="absolute inset-0 bg-black/60" />
+      <div className="absolute inset-0 bg-black/75" />
       {/* Content */}
       <div className="relative mx-auto max-w-7xl px-4 py-16 sm:py-24">
         {children}
