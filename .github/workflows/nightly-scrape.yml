@@ -122,11 +122,11 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 30
 
-  # Detail scrapers run after list scrapers complete
-  scrape-details:
+  # Detail scrapers run in parallel, each waits only for its list scraper
+  scrape-planeta-details:
     runs-on: ubuntu-latest
-    needs: [scrape-planeta, scrape-buzz, scrape-officeshoes, scrape-djaksport, scrape-nsport, scrape-sportvision]
-    if: always() # Run even if some scrapers failed
+    needs: scrape-planeta
+    if: always()
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -143,34 +143,108 @@ jobs:
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 45
-        continue-on-error: true
+
+  scrape-buzz-details:
+    runs-on: ubuntu-latest
+    needs: scrape-buzz
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+      - run: pnpm install
+      - run: pnpm prisma generate
+      - run: npx puppeteer browsers install chrome
       - name: Run Buzz Details
         run: pnpm tsx src/scraper/stores/buzz-details.ts
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 45
-        continue-on-error: true
+
+  scrape-officeshoes-details:
+    runs-on: ubuntu-latest
+    needs: scrape-officeshoes
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+      - run: pnpm install
+      - run: pnpm prisma generate
+      - run: npx puppeteer browsers install chrome
       - name: Run OfficeShoes Details
         run: pnpm tsx src/scraper/stores/officeshoes-details.ts
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 45
-        continue-on-error: true
+
+  scrape-djaksport-details:
+    runs-on: ubuntu-latest
+    needs: scrape-djaksport
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+      - run: pnpm install
+      - run: pnpm prisma generate
+      - run: npx puppeteer browsers install chrome
       - name: Run DjakSport Details
         run: pnpm tsx src/scraper/stores/djaksport-details.ts
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 45
-        continue-on-error: true
+
+  scrape-nsport-details:
+    runs-on: ubuntu-latest
+    needs: scrape-nsport
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+      - run: pnpm install
+      - run: pnpm prisma generate
+      - run: npx puppeteer browsers install chrome
       - name: Run N-Sport Details
         run: pnpm tsx src/scraper/stores/nsport-details.ts
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 45
-        continue-on-error: true
+
+  scrape-sportvision-details:
+    runs-on: ubuntu-latest
+    needs: scrape-sportvision
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+      - run: pnpm install
+      - run: pnpm prisma generate
+      - run: npx puppeteer browsers install chrome
       - name: Run SportVision Details
         run: pnpm tsx src/scraper/stores/sportvision-details.ts
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 45
-        continue-on-error: true
