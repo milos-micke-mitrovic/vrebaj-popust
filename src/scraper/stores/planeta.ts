@@ -77,41 +77,35 @@ async function extractProducts(page: Page): Promise<RawProduct[]> {
       var items = document.querySelectorAll('.product-item-info');
 
       items.forEach(function(el) {
-        var linkEl = el.querySelector('a.product-img') || el.querySelector('.product-item-name a');
+        var linkEl = el.querySelector('a.product-item-photo') || el.querySelector('.product-item-name a');
         var url = linkEl ? linkEl.href : '';
 
         var nameEl = el.querySelector('.product-item-name a');
         var name = nameEl ? nameEl.textContent.trim() : '';
 
-        var imgEl = el.querySelector('img.product-image-photo');
+        var imgEl = el.querySelector('img.product-main-image');
         var imageUrl = imgEl ? (imgEl.src || imgEl.dataset.src || '') : '';
 
-        var oldPriceEl = el.querySelector('.normal-price.old-price .price');
-        var regularPriceEl = el.querySelector('.normal-price.regular-price .price');
-        var originalPrice = '';
+        // Get prices from price-wrapp - use old-price and special-price (final price after all discounts)
+        var oldPriceEl = el.querySelector('.price-wrapp .old-price');
+        var specialPriceEl = el.querySelector('.price-wrapp .special-price');
 
-        var specialPriceEl = el.querySelector('.normal-price.special-price .price, .zsdev-special-price .price');
-        if (specialPriceEl) {
-          originalPrice = oldPriceEl ? oldPriceEl.textContent.trim() :
-                         (regularPriceEl ? regularPriceEl.textContent.trim() : '');
-        }
-
+        var originalPrice = oldPriceEl ? oldPriceEl.textContent.trim() : '';
         var salePrice = specialPriceEl ? specialPriceEl.textContent.trim() : '';
 
-        var discountEl = el.querySelector('.action-box.action-box-1');
+        // Don't use discount from site - calculate from prices instead for accuracy
         var discountFromSite = null;
-        if (discountEl) {
-          var match = discountEl.textContent.match(/(\\d+)/);
-          if (match) discountFromSite = parseInt(match[1], 10);
-        }
 
         var brand = null;
-        var brandEl = el.querySelector('.product-brand a');
-        if (brandEl) {
-          brand = brandEl.textContent.trim();
+        // Extract brand from product name (usually first word in caps)
+        if (name) {
+          var nameParts = name.split(' ');
+          if (nameParts.length > 0 && nameParts[0] === nameParts[0].toUpperCase()) {
+            brand = nameParts[0];
+          }
         }
 
-        if (name && url && url.includes('.html')) {
+        if (name && url && url.includes('.html') && originalPrice && salePrice) {
           results.push({
             name: name,
             originalPrice: originalPrice,

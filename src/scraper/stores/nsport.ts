@@ -10,9 +10,11 @@ puppeteer.use(StealthPlugin());
 const STORE: Store = "nsport";
 const BASE_URL = "https://www.n-sport.net";
 
-// Outlet page - contains all discounted products (~3227 products)
-// URL format: filters[promo][0]=outlet&pg=N
-const OUTLET_BASE = `${BASE_URL}/index.php?mod=catalog&op=browse&view=promo&filters%5Bpromo%5D%5B0%5D=outlet`;
+// Promo pages with discounts
+const PROMO_PAGES = [
+  `${BASE_URL}/promos/popusti-od-40-do-70-sport.html`,
+  `${BASE_URL}/promos/popusti-do--60.html`,
+];
 
 const MIN_DISCOUNT = 50;
 
@@ -101,7 +103,7 @@ async function extractProducts(page: Page): Promise<RawProduct[]> {
         var salePrice = newPriceEl ? newPriceEl.textContent.trim() : '';
 
         // Get discount badge
-        var discountEl = el.querySelector('.discount-label, .promo-badge, [class*="discount"]');
+        var discountEl = el.querySelector('.percent_flake');
         var discountFromSite = null;
         if (discountEl) {
           var match = discountEl.textContent.match(/(\\d+)/);
@@ -163,7 +165,7 @@ async function scrapeNSport(): Promise<void> {
   const scrapeStartTime = new Date();
 
   console.log("Starting N-Sport scraper with stealth mode...");
-  console.log(`Scraping outlet: ${OUTLET_BASE}`);
+  console.log(`Scraping ${PROMO_PAGES.length} promo pages`);
   console.log(`Min discount: ${MIN_DISCOUNT}%`);
 
   const browser = await launchBrowser();
@@ -172,12 +174,15 @@ async function scrapeNSport(): Promise<void> {
     const page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
 
-    let currentPage = 1;
-    const maxPages = 100; // ~3227 products / 36 per page ≈ 90 pages
+    for (const promoPage of PROMO_PAGES) {
+      console.log(`\n=== Scraping: ${promoPage} ===`);
 
-    while (currentPage <= maxPages) {
-      const pageUrl = `${OUTLET_BASE}&pg=${currentPage}`;
-      console.log(`\nScraping page ${currentPage}: ${pageUrl}`);
+      let currentPage = 1;
+      const maxPages = 50;
+
+      while (currentPage <= maxPages) {
+        const pageUrl = currentPage === 1 ? promoPage : `${promoPage}?pg=${currentPage}`;
+        console.log(`\nPage ${currentPage}: ${pageUrl}`);
 
       try {
         await page.goto(pageUrl, {
@@ -255,6 +260,7 @@ async function scrapeNSport(): Promise<void> {
         break;
       }
     }
+    } // end for promoPage
   } finally {
     await browser.close();
   }
