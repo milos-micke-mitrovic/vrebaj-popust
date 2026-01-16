@@ -16,97 +16,60 @@ interface ScraperDef {
   fn: () => Promise<void>;
 }
 
-// Run a batch of scrapers in parallel using Promise.allSettled
-// If one fails, others continue running
-async function runBatch(scrapers: ScraperDef[]): Promise<{ succeeded: string[]; failed: string[] }> {
-  const results = await Promise.allSettled(
-    scrapers.map(async (scraper) => {
-      console.log(`[START] ${scraper.name}`);
-      await scraper.fn();
-      return scraper.name;
-    })
-  );
-
+// Run scrapers one by one sequentially
+async function runSequential(scrapers: ScraperDef[]): Promise<{ succeeded: string[]; failed: string[] }> {
   const succeeded: string[] = [];
   const failed: string[] = [];
 
-  results.forEach((result, index) => {
-    const name = scrapers[index].name;
-    if (result.status === "fulfilled") {
-      succeeded.push(name);
-      console.log(`[DONE] ${name} completed successfully`);
-    } else {
-      failed.push(name);
-      console.error(`[FAIL] ${name} failed:`, result.reason);
+  for (const scraper of scrapers) {
+    console.log(`\n[START] ${scraper.name}`);
+    try {
+      await scraper.fn();
+      succeeded.push(scraper.name);
+      console.log(`[DONE] ${scraper.name} completed successfully`);
+    } catch (err) {
+      failed.push(scraper.name);
+      console.error(`[FAIL] ${scraper.name} failed:`, err);
     }
-  });
+  }
 
   return { succeeded, failed };
 }
 
 async function runAllScrapers(): Promise<void> {
-  console.log("=== Starting All Scrapers (Parallel Batches) ===\n");
+  console.log("=== Starting All Scrapers (Sequential) ===\n");
   console.log(`Started at: ${new Date().toISOString()}\n`);
   const startTime = Date.now();
 
   // === LIST SCRAPERS (find products) ===
-
-  // Batch 1: DjakSport, Planeta, NSport
-  const listBatch1: ScraperDef[] = [
+  const listScrapers: ScraperDef[] = [
     { name: "DjakSport", fn: scrapeDjakSport },
     { name: "Planeta Sport", fn: scrapePlaneta },
     { name: "N-Sport", fn: scrapeNSport },
-  ];
-
-  // Batch 2: SportVision, Buzz, OfficeShoes
-  const listBatch2: ScraperDef[] = [
     { name: "SportVision", fn: scrapeSportVision },
     { name: "Buzz Sneakers", fn: scrapeBuzz },
     { name: "Office Shoes", fn: scrapeOfficeShoes },
   ];
 
-  console.log("=== List Scrapers Batch 1: DjakSport, Planeta, NSport ===\n");
-  const listResult1 = await runBatch(listBatch1);
-
-  console.log("\n=== List Scrapers Batch 2: SportVision, Buzz, OfficeShoes ===\n");
-  const listResult2 = await runBatch(listBatch2);
+  console.log("=== List Scrapers (one by one) ===");
+  const listResult = await runSequential(listScrapers);
 
   // === DETAIL SCRAPERS (enrich products with sizes, categories, gender) ===
-
-  // Batch 3: DjakSport, Planeta, NSport details
-  const detailBatch1: ScraperDef[] = [
+  const detailScrapers: ScraperDef[] = [
     { name: "DjakSport Details", fn: scrapeDjakSportDetails },
     { name: "Planeta Details", fn: scrapePlanetaDetails },
     { name: "N-Sport Details", fn: scrapeNSportDetails },
-  ];
-
-  // Batch 4: SportVision, Buzz, OfficeShoes details
-  const detailBatch2: ScraperDef[] = [
     { name: "SportVision Details", fn: scrapeSportVisionDetails },
     { name: "Buzz Details", fn: scrapeBuzzDetails },
     { name: "OfficeShoes Details", fn: scrapeOfficeShoeDetails },
   ];
 
-  console.log("\n=== Detail Scrapers Batch 1: DjakSport, Planeta, NSport ===\n");
-  const detailResult1 = await runBatch(detailBatch1);
-
-  console.log("\n=== Detail Scrapers Batch 2: SportVision, Buzz, OfficeShoes ===\n");
-  const detailResult2 = await runBatch(detailBatch2);
+  console.log("\n=== Detail Scrapers (one by one) ===");
+  const detailResult = await runSequential(detailScrapers);
 
   // === SUMMARY ===
-
-  const allSucceeded = [
-    ...listResult1.succeeded,
-    ...listResult2.succeeded,
-    ...detailResult1.succeeded,
-    ...detailResult2.succeeded,
-  ];
-  const allFailed = [
-    ...listResult1.failed,
-    ...listResult2.failed,
-    ...detailResult1.failed,
-    ...detailResult2.failed,
-  ];
+  const allSucceeded = [...listResult.succeeded, ...detailResult.succeeded];
+  const allFailed = [...listResult.failed, ...detailResult.failed];
   const elapsed = Math.round((Date.now() - startTime) / 1000);
   const minutes = Math.floor(elapsed / 60);
   const seconds = elapsed % 60;
