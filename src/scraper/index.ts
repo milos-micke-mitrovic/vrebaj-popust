@@ -4,7 +4,6 @@ import { scrapeNSport } from "./stores/nsport";
 import { scrapeSportVision } from "./stores/sportvision";
 import { scrapeBuzz } from "./stores/buzz";
 import { scrapeOfficeShoes } from "./stores/officeshoes";
-import { scrapeDjakSportDetails } from "./stores/djaksport-details";
 import { scrapePlanetaDetails } from "./stores/planeta-details";
 import { scrapeNSportDetails } from "./stores/nsport-details";
 import { scrapeSportVisionDetails } from "./stores/sportvision-details";
@@ -56,13 +55,13 @@ async function runAllScrapers(): Promise<void> {
   const listResult = await runSequential(listScrapers);
 
   // === DETAIL SCRAPERS (enrich products with sizes, categories, gender) ===
+  // Note: DjakSport doesn't need detail scraper - gets all data from list API
   const detailScrapers: ScraperDef[] = [
     { name: "Planeta Details", fn: scrapePlanetaDetails },
     { name: "N-Sport Details", fn: scrapeNSportDetails },
     { name: "SportVision Details", fn: scrapeSportVisionDetails },
     { name: "Buzz Details", fn: scrapeBuzzDetails },
     { name: "OfficeShoes Details", fn: scrapeOfficeShoeDetails },
-    { name: "DjakSport Details", fn: scrapeDjakSportDetails },
   ];
 
   console.log("\n=== Detail Scrapers (one by one) ===");
