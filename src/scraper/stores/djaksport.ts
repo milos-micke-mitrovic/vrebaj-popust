@@ -42,26 +42,93 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-function detectGender(url: string, name: string): Gender {
+interface UrlInfo {
+  gender: Gender;
+  categories: string[];
+}
+
+function parseUrlInfo(url: string, name: string): UrlInfo {
   const urlLower = url.toLowerCase();
   const nameLower = name.toLowerCase();
 
-  if (urlLower.includes("za-muskarce") || nameLower.includes("za muškarce") || nameLower.includes("za muskarce")) {
-    return "muski";
+  let gender: Gender = "unisex";
+  const categories: string[] = [];
+
+  // Try to extract from URL path structure: /muskarci/obuca/cipele/product-name
+  const pathMatch = urlLower.match(/djaksport\.com\/(muskarci|zene|deca)\/([^\/]+)(?:\/([^\/]+))?/);
+
+  if (pathMatch) {
+    // Gender from URL path
+    if (pathMatch[1] === "muskarci") gender = "muski";
+    else if (pathMatch[1] === "zene") gender = "zenski";
+    else if (pathMatch[1] === "deca") gender = "deciji";
+
+    // Category from URL path (e.g., obuca, odeca, oprema)
+    const mainCat = pathMatch[2];
+    const subCat = pathMatch[3];
+
+    if (mainCat && subCat) {
+      // Map subcategories to our category format
+      if (mainCat === "obuca") {
+        if (subCat.includes("patike") || subCat.includes("kopacke")) {
+          categories.push("obuca/patike");
+        } else if (subCat.includes("cipele")) {
+          categories.push("obuca/cipele");
+        } else if (subCat.includes("cizme")) {
+          categories.push("obuca/cizme");
+        } else if (subCat.includes("sandale") || subCat.includes("japanke") || subCat.includes("papuce")) {
+          categories.push("obuca/sandale");
+        } else {
+          categories.push("obuca/" + subCat.replace("decije-", "").replace("muske-", "").replace("zenske-", ""));
+        }
+      } else if (mainCat === "odeca") {
+        if (subCat.includes("jakne") || subCat.includes("dukserice") || subCat.includes("prsluci")) {
+          categories.push("odeca/jakne");
+        } else if (subCat.includes("trenerke") || subCat.includes("donji-delovi")) {
+          categories.push("odeca/trenerke");
+        } else if (subCat.includes("majice") || subCat.includes("dres")) {
+          categories.push("odeca/majice");
+        } else if (subCat.includes("sorc")) {
+          categories.push("odeca/sorcevi");
+        } else {
+          categories.push("odeca/" + subCat.replace("decija-", "").replace("muska-", "").replace("zenska-", ""));
+        }
+      } else if (mainCat === "oprema") {
+        categories.push("oprema/" + subCat);
+      } else {
+        categories.push(mainCat + "/" + subCat);
+      }
+    } else if (mainCat) {
+      categories.push(mainCat);
+    }
+  } else {
+    // Fallback: detect gender from product name
+    if (urlLower.includes("za-muskarce") || nameLower.includes("za muškarce") || nameLower.includes("za muskarce")) {
+      gender = "muski";
+    } else if (urlLower.includes("za-zene") || nameLower.includes("za žene") || nameLower.includes("za zene")) {
+      gender = "zenski";
+    } else if (urlLower.includes("za-decake") || urlLower.includes("za-devojcice") || urlLower.includes("za-decu") ||
+               nameLower.includes("za dečake") || nameLower.includes("za devojčice") || nameLower.includes("za decu")) {
+      gender = "deciji";
+    }
+
+    // Try to detect category from product name
+    if (nameLower.includes("patike") || nameLower.includes("kopacke")) {
+      categories.push("obuca/patike");
+    } else if (nameLower.includes("cipele")) {
+      categories.push("obuca/cipele");
+    } else if (nameLower.includes("jakna") || nameLower.includes("duks")) {
+      categories.push("odeca/jakne");
+    } else if (nameLower.includes("majica") || nameLower.includes("dres")) {
+      categories.push("odeca/majice");
+    } else if (nameLower.includes("trenerka") || nameLower.includes("donji deo")) {
+      categories.push("odeca/trenerke");
+    } else if (nameLower.includes("šorc") || nameLower.includes("sorc")) {
+      categories.push("odeca/sorcevi");
+    }
   }
-  if (urlLower.includes("za-zene") || nameLower.includes("za žene") || nameLower.includes("za zene")) {
-    return "zenski";
-  }
-  if (urlLower.includes("za-decake") || nameLower.includes("za dečake") || nameLower.includes("za decake")) {
-    return "deciji";
-  }
-  if (urlLower.includes("za-devojcice") || nameLower.includes("za devojčice") || nameLower.includes("za devojcice")) {
-    return "deciji";
-  }
-  if (urlLower.includes("za-decu") || nameLower.includes("za decu")) {
-    return "deciji";
-  }
-  return "unisex";
+
+  return { gender, categories };
 }
 
 async function launchBrowser(): Promise<Browser> {
@@ -258,7 +325,7 @@ async function scrapeDjakSport(): Promise<void> {
         if (product.salePrice >= product.originalPrice) continue;
 
         if (product.discountPercent >= MIN_DISCOUNT) {
-          const gender = detectGender(product.url, product.name);
+          const { gender, categories } = parseUrlInfo(product.url, product.name);
 
           await upsertDeal({
             id: generateId(product.url),
@@ -271,6 +338,7 @@ async function scrapeDjakSport(): Promise<void> {
             url: product.url,
             imageUrl: product.imageUrl,
             sizes: product.sizes,
+            categories: categories,
             gender: gender,
           });
           totalDeals++;
