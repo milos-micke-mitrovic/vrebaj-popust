@@ -327,6 +327,11 @@ async function scrapeDjakSport(): Promise<void> {
         if (product.discountPercent >= MIN_DISCOUNT) {
           const { gender, categories } = parseUrlInfo(product.url, product.name);
 
+          // Log first few products with categories for debugging
+          if (totalDeals < 5) {
+            console.log(`Saving: ${product.name.substring(0, 40)}... | gender=${gender} | categories=${JSON.stringify(categories)}`);
+          }
+
           await upsertDeal({
             id: generateId(product.url),
             store: STORE,
@@ -370,6 +375,7 @@ async function scrapeDjakSport(): Promise<void> {
   console.log("\n=== Scraping Complete ===");
   console.log(`Total scraped: ${totalScraped}`);
   console.log(`Deals with ${MIN_DISCOUNT}%+ discount: ${totalDeals}`);
+  console.log(`Categories should be saved for products with extractable URL paths or name keywords`);
   if (errors.length > 0) {
     console.log(`Errors: ${errors.length}`);
   }
