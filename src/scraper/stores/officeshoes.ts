@@ -170,67 +170,82 @@ async function scrapeOfficeShoes(): Promise<void> {
 
     await sleep(2000);
 
-    // Click "Load more" button until we hit products < 50% discount
-    let loadMoreClicks = 0;
-    const maxClicks = 50; // Safety limit
+    // Use infinite scroll to load all products until we hit < 50% discount
+    let scrollAttempts = 0;
+    const maxScrollAttempts = 50; // Safety limit
 
-    while (loadMoreClicks < maxClicks && !foundBelowMinDiscount) {
+    while (scrollAttempts < maxScrollAttempts && !foundBelowMinDiscount) {
       const productCountBefore = await page.evaluate(() =>
         document.querySelectorAll('.product-article_wrapper, article[data-product_id]').length
       );
 
-      // Try to find and click load more button using JavaScript
-      const clicked = await page.evaluate(`
+      // Scroll to the infinity loader element to trigger loading
+      const scrolled = await page.evaluate(`
         (function() {
-          var btn = document.querySelector('#loadMoreButton, .load-more-btn, button[data-action="load-more"], a.load-more');
-          if (btn) {
-            var style = window.getComputedStyle(btn);
-            if (style.display !== 'none' && style.visibility !== 'hidden') {
-              btn.scrollIntoView({ behavior: 'smooth', block: 'center' });
-              btn.click();
-              return true;
-            }
+          var loader = document.querySelector('#infinityLoader');
+          if (loader) {
+            loader.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return true;
           }
-          return false;
+          // Fallback: scroll to bottom
+          window.scrollTo(0, document.body.scrollHeight);
+          return true;
         })()
       `);
 
-      if (!clicked) {
-        console.log("No more 'Load more' button found or button hidden");
-        break;
-      }
+      scrollAttempts++;
+      console.log(`Scroll attempt ${scrollAttempts}, waiting for products...`);
 
-      loadMoreClicks++;
-      console.log(`Clicked 'Load more' (${loadMoreClicks}), waiting for products...`);
-
-      // Wait longer for AJAX to complete
-      await sleep(3000 + Math.random() * 2000);
-
-      // Also try waiting for network to settle
+      // Wait for loading animation to disappear
       try {
-        await page.waitForNetworkIdle({ timeout: 5000 });
+        await page.waitForFunction(
+          () => {
+            const loader = document.querySelector('#loadingAnimationWrapper');
+            return !loader || window.getComputedStyle(loader).display === 'none';
+          },
+          { timeout: 10000 }
+        );
       } catch {
         // Ignore timeout
       }
+
+      // Additional wait for DOM to update
+      await sleep(2000);
 
       const productCountAfter = await page.evaluate(() =>
         document.querySelectorAll('.product-article_wrapper, article[data-product_id]').length
       );
 
       if (productCountAfter === productCountBefore) {
-        // Try scrolling down to trigger lazy load
-        await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
-        await sleep(2000);
+        // Try clicking load more button as fallback
+        const clicked = await page.evaluate(`
+          (function() {
+            var btn = document.querySelector('#loadMoreButton');
+            if (btn && btn.offsetParent !== null) {
+              btn.click();
+              return true;
+            }
+            return false;
+          })()
+        `);
 
-        const productCountAfterScroll = await page.evaluate(() =>
-          document.querySelectorAll('.product-article_wrapper, article[data-product_id]').length
-        );
+        if (clicked) {
+          console.log("Clicked 'Load more' button as fallback");
+          await sleep(3000);
 
-        if (productCountAfterScroll === productCountBefore) {
+          const productCountAfterClick = await page.evaluate(() =>
+            document.querySelectorAll('.product-article_wrapper, article[data-product_id]').length
+          );
+
+          if (productCountAfterClick === productCountBefore) {
+            console.log("No new products loaded after click, stopping");
+            break;
+          }
+          console.log(`Products after click: ${productCountBefore} -> ${productCountAfterClick}`);
+        } else {
           console.log("No new products loaded, stopping");
           break;
         }
-        console.log(`Products after scroll: ${productCountBefore} -> ${productCountAfterScroll}`);
       } else {
         console.log(`Products: ${productCountBefore} -> ${productCountAfter}`);
       }
