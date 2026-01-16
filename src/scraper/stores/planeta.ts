@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
-import { upsertDeal, logScrapeRun, disconnect, Store, Gender } from "../db-writer";
+import { upsertDeal, logScrapeRun, disconnect, cleanupStaleProducts, Store, Gender } from "../db-writer";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -159,6 +159,7 @@ async function scrapePlaneta(): Promise<void> {
   const seenUrls = new Set<string>();
   let totalScraped = 0;
   let totalDeals = 0;
+  const scrapeStartTime = new Date();
 
   console.log("Starting Planeta Sport scraper...");
   console.log(`Scraping ${SALE_PAGES.length} sections`);
@@ -268,6 +269,9 @@ async function scrapePlaneta(): Promise<void> {
 
   // Log scrape run
   await logScrapeRun(STORE, totalScraped, totalDeals, errors);
+
+  // Clean up stale products (only if we found enough products)
+  await cleanupStaleProducts(STORE, scrapeStartTime, totalDeals);
 
   console.log("\n=== Scraping Complete ===");
   console.log(`Total scraped: ${totalScraped}`);

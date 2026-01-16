@@ -130,6 +130,60 @@ export async function getAllDeals(store?: Store) {
   });
 }
 
+// Minimum products required to consider a scrape successful
+// If fewer products found, assume scraper failed and don't delete old products
+const MIN_PRODUCTS_THRESHOLD: Record<Store, number> = {
+  djaksport: 10,
+  planeta: 10,
+  nsport: 5,
+  sportvision: 10,
+  buzz: 10,
+  officeshoes: 10,
+};
+
+/**
+ * Clean up stale products for a store after a successful scrape.
+ * Only deletes products if:
+ * 1. The scrape found more than the minimum threshold
+ * 2. The products weren't updated in the current scrape run
+ */
+export async function cleanupStaleProducts(
+  store: Store,
+  scrapeStartTime: Date,
+  productsFound: number
+): Promise<number> {
+  const threshold = MIN_PRODUCTS_THRESHOLD[store];
+
+  // If scraper found too few products, assume it failed - don't delete anything
+  if (productsFound < threshold) {
+    console.log(`[${store}] Only found ${productsFound} products (threshold: ${threshold}). Skipping cleanup to avoid data loss.`);
+    return 0;
+  }
+
+  // Delete products that weren't updated in this scrape run
+  const result = await prisma.deal.deleteMany({
+    where: {
+      store,
+      scrapedAt: {
+        lt: scrapeStartTime,
+      },
+    },
+  });
+
+  if (result.count > 0) {
+    console.log(`[${store}] Cleaned up ${result.count} stale products`);
+  }
+
+  return result.count;
+}
+
+/**
+ * Get count of existing products for a store
+ */
+export async function getStoreProductCount(store: Store): Promise<number> {
+  return prisma.deal.count({ where: { store } });
+}
+
 export async function disconnect(): Promise<void> {
   await prisma.$disconnect();
 }

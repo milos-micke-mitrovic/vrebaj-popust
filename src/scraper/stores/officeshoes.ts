@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
-import { upsertDeal, logScrapeRun, disconnect, Store } from "../db-writer";
+import { upsertDeal, logScrapeRun, disconnect, cleanupStaleProducts, Store } from "../db-writer";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -139,6 +139,7 @@ async function scrapeOfficeShoes(): Promise<void> {
   const seenUrls = new Set<string>();
   let totalScraped = 0;
   let totalDeals = 0;
+  const scrapeStartTime = new Date();
 
   console.log("Starting Office Shoes scraper with stealth mode...");
   console.log(`Sale URL: ${SALE_URL}`);
@@ -308,6 +309,9 @@ async function scrapeOfficeShoes(): Promise<void> {
 
   // Log scrape run
   await logScrapeRun(STORE, totalScraped, totalDeals, errors);
+
+  // Clean up stale products (only if we found enough products)
+  await cleanupStaleProducts(STORE, scrapeStartTime, totalDeals);
 
   console.log("\n=== Scraping Complete ===");
   console.log(`Total scraped: ${totalScraped}`);
