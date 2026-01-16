@@ -2,72 +2,175 @@ name: Nightly Scrape
 
 on:
   schedule:
-    # Run at midnight Serbian time (23:00 UTC, since Serbia is UTC+1)
-    - cron: '0 23 * * *'
+    # Run at 3 AM Serbian time (2:00 UTC in winter, 1:00 UTC in summer)
+    - cron: '0 2 * * *'
   workflow_dispatch: # Allow manual trigger
 
-permissions:
-  contents: write
-
 jobs:
-  scrape:
+  # List scrapers run in parallel
+  scrape-planeta:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Install Puppeteer browser dependencies
-        run: npx puppeteer browsers install chrome
-
-      - name: Run DjakSport scraper
-        run: npx tsx src/scraper/stores/djaksport.ts
-        continue-on-error: true
-
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+      - run: pnpm install
+      - run: pnpm prisma generate
+      - run: npx puppeteer browsers install chrome
       - name: Run Planeta Sport scraper
-        run: npx tsx src/scraper/stores/planeta.ts
-        continue-on-error: true
-
-      - name: Run N-Sport scraper
-        run: npx tsx src/scraper/stores/nsport.ts
-        continue-on-error: true
-
-      - name: Run SportVision scraper
-        run: npx tsx src/scraper/stores/sportvision.ts
-        continue-on-error: true
-
-      - name: Run Buzz scraper
-        run: npx tsx src/scraper/stores/buzz.ts
-        continue-on-error: true
-
-      - name: Run Office Shoes scraper
-        run: npx tsx src/scraper/stores/officeshoes.ts
-        continue-on-error: true
-
-      - name: Run detail scraper for all stores
-        run: npx tsx src/scraper/detail-scraper.ts
-        continue-on-error: true
+        run: pnpm tsx src/scraper/stores/planeta.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 30
 
-      - name: Cleanup orphaned images
-        run: npx tsx src/scraper/cleanup-images.ts
+  scrape-buzz:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+      - run: pnpm install
+      - run: pnpm prisma generate
+      - run: npx puppeteer browsers install chrome
+      - name: Run Buzz scraper
+        run: pnpm tsx src/scraper/stores/buzz.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        timeout-minutes: 30
 
-      - name: Commit and push changes
-        run: |
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config --local user.name "github-actions[bot]"
-          git add data/*.json
-          git add -A public/images/
-          git diff --staged --quiet || git commit -m "chore: Update deals data [$(date +'%Y-%m-%d')]"
-          git push
+  scrape-officeshoes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+      - run: pnpm install
+      - run: pnpm prisma generate
+      - run: npx puppeteer browsers install chrome
+      - name: Run Office Shoes scraper
+        run: pnpm tsx src/scraper/stores/officeshoes.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        timeout-minutes: 30
+
+  scrape-djaksport:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+      - run: pnpm install
+      - run: pnpm prisma generate
+      - run: npx puppeteer browsers install chrome
+      - name: Run DjakSport scraper
+        run: pnpm tsx src/scraper/stores/djaksport.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        timeout-minutes: 30
+
+  scrape-nsport:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+      - run: pnpm install
+      - run: pnpm prisma generate
+      - run: npx puppeteer browsers install chrome
+      - name: Run N-Sport scraper
+        run: pnpm tsx src/scraper/stores/nsport.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        timeout-minutes: 30
+
+  scrape-sportvision:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+      - run: pnpm install
+      - run: pnpm prisma generate
+      - run: npx puppeteer browsers install chrome
+      - name: Run SportVision scraper
+        run: pnpm tsx src/scraper/stores/sportvision.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        timeout-minutes: 30
+
+  # Detail scrapers run after list scrapers complete
+  scrape-details:
+    runs-on: ubuntu-latest
+    needs: [scrape-planeta, scrape-buzz, scrape-officeshoes, scrape-djaksport, scrape-nsport, scrape-sportvision]
+    if: always() # Run even if some scrapers failed
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+      - run: pnpm install
+      - run: pnpm prisma generate
+      - run: npx puppeteer browsers install chrome
+      - name: Run Planeta Details
+        run: pnpm tsx src/scraper/stores/planeta-details.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        timeout-minutes: 45
+        continue-on-error: true
+      - name: Run Buzz Details
+        run: pnpm tsx src/scraper/stores/buzz-details.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        timeout-minutes: 45
+        continue-on-error: true
+      - name: Run OfficeShoes Details
+        run: pnpm tsx src/scraper/stores/officeshoes-details.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        timeout-minutes: 45
+        continue-on-error: true
+      - name: Run DjakSport Details
+        run: pnpm tsx src/scraper/stores/djaksport-details.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        timeout-minutes: 45
+        continue-on-error: true
+      - name: Run N-Sport Details
+        run: pnpm tsx src/scraper/stores/nsport-details.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        timeout-minutes: 45
+        continue-on-error: true
+      - name: Run SportVision Details
+        run: pnpm tsx src/scraper/stores/sportvision-details.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        timeout-minutes: 45
+        continue-on-error: true

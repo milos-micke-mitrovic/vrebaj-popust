@@ -42,13 +42,14 @@ async function runAllScrapers(): Promise<void> {
   const startTime = Date.now();
 
   // === LIST SCRAPERS (find products) ===
+  // Planeta first (most reliable), DjakSport last (has timeout issues)
   const listScrapers: ScraperDef[] = [
-    { name: "DjakSport", fn: scrapeDjakSport },
     { name: "Planeta Sport", fn: scrapePlaneta },
     { name: "N-Sport", fn: scrapeNSport },
     { name: "SportVision", fn: scrapeSportVision },
     { name: "Buzz Sneakers", fn: scrapeBuzz },
     { name: "Office Shoes", fn: scrapeOfficeShoes },
+    { name: "DjakSport", fn: scrapeDjakSport },
   ];
 
   console.log("=== List Scrapers (one by one) ===");
@@ -56,12 +57,12 @@ async function runAllScrapers(): Promise<void> {
 
   // === DETAIL SCRAPERS (enrich products with sizes, categories, gender) ===
   const detailScrapers: ScraperDef[] = [
-    { name: "DjakSport Details", fn: scrapeDjakSportDetails },
     { name: "Planeta Details", fn: scrapePlanetaDetails },
     { name: "N-Sport Details", fn: scrapeNSportDetails },
     { name: "SportVision Details", fn: scrapeSportVisionDetails },
     { name: "Buzz Details", fn: scrapeBuzzDetails },
     { name: "OfficeShoes Details", fn: scrapeOfficeShoeDetails },
+    { name: "DjakSport Details", fn: scrapeDjakSportDetails },
   ];
 
   console.log("\n=== Detail Scrapers (one by one) ===");
