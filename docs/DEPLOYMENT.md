@@ -13,8 +13,8 @@
 - **Port**: 5432 (must be open in firewall)
 - **Database name**: vrebaj_popust
 - **User**: vrebaj
-- **Password**: vrebaj2024secure
-- **Connection string**: `postgresql://vrebaj:vrebaj2024secure@46.101.100.210:5432/vrebaj_popust`
+- **Password**: (see Google Drive)
+- **Connection string**: (see Google Drive)
 
 ## Application
 
@@ -100,8 +100,9 @@ ssh -L 5413:localhost:5432 root@46.101.100.210
 
 Then use in `.env`:
 ```
-DATABASE_URL="postgresql://vrebaj:vrebaj2024secure@localhost:5413/vrebaj_popust"
+DATABASE_URL="postgresql://vrebaj:<PASSWORD>@localhost:5413/vrebaj_popust"
 ```
+(See Google Drive for password)
 
 ### Run single scraper locally
 ```bash
