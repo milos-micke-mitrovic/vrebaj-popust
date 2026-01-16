@@ -1,43 +1,30 @@
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
-import { upsertDeal, logScrapeRun, disconnect, cleanupStaleProducts, Store } from "../db-writer";
-import * as fs from "fs";
-import * as path from "path";
+import { upsertDeal, logScrapeRun, disconnect, cleanupStaleProducts, Store, Gender } from "../db-writer";
 
-// Add stealth plugin to avoid detection
 puppeteer.use(StealthPlugin());
 
 const STORE: Store = "djaksport";
 const BASE_URL = "https://www.djaksport.com";
-const AKCIJA_URL = `${BASE_URL}/akcija`;
+const SALE_URL = `${BASE_URL}/najveci-popusti`;
 const MIN_DISCOUNT = 50;
+const MAX_PAGES = 150;
 
 interface RawProduct {
   name: string;
-  originalPrice: string;
-  salePrice: string;
+  originalPrice: number;
+  salePrice: number;
   url: string;
   imageUrl: string;
   brand: string | null;
-  discountFromSite: number | null;
+  discountPercent: number;
+  productId: string;
 }
 
-// Price parsing - handles Serbian format "12.990,00 RSD"
-function parsePrice(priceStr: string): number {
-  if (!priceStr) return 0;
-  const cleaned = priceStr
-    .replace(/RSD|din|€|\s|&nbsp;/gi, "")
-    .trim()
-    .replace(/\./g, "")
-    .replace(",", ".");
-  const price = parseFloat(cleaned);
-  return isNaN(price) ? 0 : Math.round(price);
-}
-
-function calcDiscount(original: number, sale: number): number {
-  if (original <= 0 || sale <= 0) return 0;
-  return Math.round(((original - sale) / original) * 100);
+interface FetchResult {
+  products: RawProduct[];
+  hasMore: boolean;
 }
 
 let idCounter = 0;
@@ -54,6 +41,28 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+function detectGender(url: string, name: string): Gender {
+  const urlLower = url.toLowerCase();
+  const nameLower = name.toLowerCase();
+
+  if (urlLower.includes("za-muskarce") || nameLower.includes("za muškarce") || nameLower.includes("za muskarce")) {
+    return "muski";
+  }
+  if (urlLower.includes("za-zene") || nameLower.includes("za žene") || nameLower.includes("za zene")) {
+    return "zenski";
+  }
+  if (urlLower.includes("za-decake") || nameLower.includes("za dečake") || nameLower.includes("za decake")) {
+    return "deciji";
+  }
+  if (urlLower.includes("za-devojcice") || nameLower.includes("za devojčice") || nameLower.includes("za devojcice")) {
+    return "deciji";
+  }
+  if (urlLower.includes("za-decu") || nameLower.includes("za decu")) {
+    return "deciji";
+  }
+  return "unisex";
+}
+
 async function launchBrowser(): Promise<Browser> {
   return puppeteer.launch({
     headless: true,
@@ -66,92 +75,105 @@ async function launchBrowser(): Promise<Browser> {
   }) as Promise<Browser>;
 }
 
-async function extractProducts(page: Page): Promise<RawProduct[]> {
+async function fetchPageProducts(page: Page, pageNum: number): Promise<FetchResult> {
+  const url = `${SALE_URL}?shopbyAjax=1&p=${pageNum}`;
+
   return page.evaluate(`
-    (function() {
-      var results = [];
-      var items = document.querySelectorAll('.item.product.product-item');
-
-      items.forEach(function(el) {
-        var linkEl = el.querySelector('.product-item-link');
-        var name = linkEl ? linkEl.textContent.trim() : '';
-        var url = linkEl ? linkEl.href : '';
-
-        var imgEl = el.querySelector('.product-image-photo');
-        var imageUrl = imgEl ? (imgEl.src || imgEl.dataset.src || '') : '';
-
-        var oldPriceEl = el.querySelector('.old-price .price');
-        var originalPrice = oldPriceEl ? oldPriceEl.textContent.trim() : '';
-
-        var newPriceEl = el.querySelector('.normal-price .price');
-        var salePrice = newPriceEl ? newPriceEl.textContent.trim() : '';
-
-        var discountEl = el.querySelector('.discount-badge span, .discount-percentage');
-        var discountFromSite = null;
-        if (discountEl) {
-          var match = discountEl.textContent.match(/(\\d+)/);
-          if (match) discountFromSite = parseInt(match[1], 10);
-        }
-
-        var brand = null;
-        var nameParts = name.split(' ');
-        if (nameParts.length > 0 && nameParts[0] === nameParts[0].toUpperCase()) {
-          brand = nameParts[0];
-        }
-
-        if (name && url) {
-          results.push({
-            name: name,
-            originalPrice: originalPrice,
-            salePrice: salePrice,
-            url: url,
-            imageUrl: imageUrl,
-            brand: brand,
-            discountFromSite: discountFromSite
-          });
-        }
-      });
-
-      return results;
-    })()
-  `) as Promise<RawProduct[]>;
-}
-
-async function autoScroll(page: Page): Promise<void> {
-  await page.evaluate(`
-    (function() {
-      return new Promise(function(resolve) {
-        var totalHeight = 0;
-        var distance = 500;
-        var maxScrolls = 20;
-        var scrollCount = 0;
-
-        var timer = setInterval(function() {
-          var scrollHeight = document.body.scrollHeight;
-          window.scrollBy(0, distance);
-          totalHeight += distance;
-          scrollCount++;
-
-          if (totalHeight >= scrollHeight || scrollCount >= maxScrolls) {
-            clearInterval(timer);
-            resolve();
+    (async function() {
+      try {
+        const response = await fetch('${url}', {
+          method: 'GET',
+          credentials: 'include',
+          headers: {
+            'Accept': 'application/json, text/html, */*',
+            'X-Requested-With': 'XMLHttpRequest'
           }
-        }, 200);
-      });
-    })()
-  `);
-}
+        });
 
-async function getNextPageUrl(page: Page): Promise<string | null> {
-  return page.evaluate(`
-    (function() {
-      var nextLink = document.querySelector('a.action.next, link[rel="next"]');
-      if (nextLink && nextLink.href) {
-        return nextLink.href;
+        if (!response.ok) {
+          return { products: [], hasMore: false };
+        }
+
+        var text = await response.text();
+
+        // Parse JSON response to get HTML
+        var html = text;
+        try {
+          var jsonData = JSON.parse(text);
+          html = jsonData.categoryProducts || text;
+        } catch (e) {
+          // Not JSON, use as HTML
+        }
+
+        // Parse the HTML
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        var results = [];
+        var items = doc.querySelectorAll('.item.product.product-item');
+
+        items.forEach(function(el) {
+          // Get product ID
+          var productInfo = el.querySelector('[id^="product-item-info_"]');
+          var productId = productInfo ? productInfo.id.replace('product-item-info_', '') : '';
+
+          // Get product URL and name
+          var linkEl = el.querySelector('.product-item-link');
+          var name = linkEl ? linkEl.textContent.trim() : '';
+          var url = linkEl ? linkEl.getAttribute('href') : '';
+          if (url && !url.startsWith('http')) {
+            url = 'https://www.djaksport.com' + url;
+          }
+
+          // Get image
+          var imgEl = el.querySelector('.product-image-photo');
+          var imageUrl = imgEl ? (imgEl.getAttribute('src') || '') : '';
+
+          // Get prices from data attributes
+          var salePriceEl = el.querySelector('[data-price-type="finalPrice"]');
+          var originalPriceEl = el.querySelector('[data-price-type="oldPrice"]');
+
+          var salePrice = salePriceEl ? parseInt(salePriceEl.getAttribute('data-price-amount') || '0', 10) : 0;
+          var originalPrice = originalPriceEl ? parseInt(originalPriceEl.getAttribute('data-price-amount') || '0', 10) : 0;
+
+          // Get discount from badge
+          var discountEl = el.querySelector('.discount-badge span, .discount-percentage');
+          var discountPercent = 0;
+          if (discountEl) {
+            var match = discountEl.textContent.match(/(\\d+)/);
+            if (match) discountPercent = parseInt(match[1], 10);
+          }
+          if (!discountPercent && originalPrice > 0 && salePrice > 0) {
+            discountPercent = Math.round(((originalPrice - salePrice) / originalPrice) * 100);
+          }
+
+          // Get brand from first word if uppercase
+          var brand = null;
+          var nameParts = name.split(' ');
+          if (nameParts.length > 0 && nameParts[0] === nameParts[0].toUpperCase() && nameParts[0].length > 1) {
+            brand = nameParts[0];
+          }
+
+          if (name && url && originalPrice > 0 && salePrice > 0) {
+            results.push({
+              name: name,
+              originalPrice: originalPrice,
+              salePrice: salePrice,
+              url: url,
+              imageUrl: imageUrl,
+              brand: brand,
+              discountPercent: discountPercent,
+              productId: productId
+            });
+          }
+        });
+
+        return { products: results, hasMore: items.length > 0 };
+      } catch (err) {
+        return { products: [], hasMore: false };
       }
-      return null;
     })()
-  `) as Promise<string | null>;
+  `) as Promise<FetchResult>;
 }
 
 async function scrapeDjakSport(): Promise<void> {
@@ -161,128 +183,96 @@ async function scrapeDjakSport(): Promise<void> {
   let totalDeals = 0;
   const scrapeStartTime = new Date();
 
-  console.log("Starting DjakSport scraper with stealth mode...");
-  console.log(`Target: ${AKCIJA_URL}`);
+  console.log("Starting DjakSport scraper with AJAX pagination...");
+  console.log(`Target: ${SALE_URL}`);
   console.log(`Min discount: ${MIN_DISCOUNT}%`);
 
   const browser = await launchBrowser();
 
   try {
     const page = await browser.newPage();
-
-    // Set realistic viewport and user agent
     await page.setViewport({ width: 1920, height: 1080 });
 
-    let currentUrl: string | null = AKCIJA_URL;
-    let pageNum = 1;
-    const maxPages = 25; // Increased to catch more deals
+    // Navigate to page to establish cookies
+    console.log("Loading main page to establish session...");
+    await page.goto(SALE_URL, {
+      waitUntil: "networkidle2",
+      timeout: 60000,
+    });
 
-    while (currentUrl && pageNum <= maxPages) {
-      console.log(`\nScraping page ${pageNum}: ${currentUrl}`);
+    await sleep(2000);
 
-      try {
-        await page.goto(currentUrl, {
-          waitUntil: "networkidle2",
-          timeout: 60000,
-        });
+    // Paginate through all pages
+    let currentPage = 1;
+    let consecutiveEmpty = 0;
 
-        // Random delay to appear more human
-        await sleep(2000 + Math.random() * 2000);
+    while (currentPage <= MAX_PAGES && consecutiveEmpty < 2) {
+      console.log(`\n=== Page ${currentPage} ===`);
 
-        // Wait for products
-        await page.waitForSelector(".item.product.product-item", {
-          timeout: 15000,
-        }).catch(() => {
-          console.log("Timeout waiting for products, trying anyway...");
-        });
+      const { products, hasMore } = await fetchPageProducts(page, currentPage);
+      console.log(`Found ${products.length} products`);
 
-        // Scroll like a human
-        await autoScroll(page);
-        await sleep(1000);
-
-        // Check if we got blocked
-        const isBlocked = await page.evaluate(`
-          document.body.innerText.includes('blocked') ||
-          document.body.innerText.includes('Cloudflare') ||
-          document.title.includes('Just a moment')
-        `);
-
-        if (isBlocked) {
-          console.log("Detected Cloudflare block");
+      if (products.length === 0) {
+        consecutiveEmpty++;
+        if (consecutiveEmpty >= 2) {
+          console.log("No more products, stopping");
           break;
         }
-
-        const products = await extractProducts(page);
-        console.log(`Found ${products.length} product elements`);
-
-        if (products.length > 0 && pageNum === 1) {
-          console.log("Sample product:", JSON.stringify(products[0], null, 2));
-        }
-
-        for (const product of products) {
-          // Skip duplicates
-          if (seenUrls.has(product.url)) continue;
-          seenUrls.add(product.url);
-
-          const originalPrice = parsePrice(product.originalPrice);
-          const salePrice = parsePrice(product.salePrice);
-
-          if (originalPrice <= 0 || salePrice <= 0) continue;
-          if (salePrice >= originalPrice) continue;
-
-          const discountPercent =
-            product.discountFromSite || calcDiscount(originalPrice, salePrice);
-
-          if (discountPercent >= MIN_DISCOUNT) {
-            await upsertDeal({
-              id: generateId(product.url),
-              store: STORE,
-              name: product.name,
-              brand: product.brand,
-              originalPrice,
-              salePrice,
-              discountPercent,
-              url: product.url,
-              imageUrl: product.imageUrl,
-              gender: "unisex",
-            });
-            totalDeals++;
-          }
-        }
-
-        totalScraped += products.length;
-        console.log(
-          `Deals with ${MIN_DISCOUNT}%+ discount: ${totalDeals} (total scraped: ${totalScraped})`
-        );
-
-        // Get next page
-        currentUrl = await getNextPageUrl(page);
-        if (!currentUrl && pageNum < maxPages) {
-          currentUrl = `${AKCIJA_URL}?p=${pageNum + 1}`;
-        }
-        pageNum++;
-
-        if (currentUrl && pageNum <= maxPages) {
-          // Random delay between pages
-          await sleep(3000 + Math.random() * 2000);
-        }
-      } catch (err) {
-        const message = err instanceof Error ? err.message : String(err);
-        errors.push(`Page ${pageNum}: ${message}`);
-        console.error(`Error on page ${pageNum}:`, message);
-        currentUrl = `${AKCIJA_URL}?p=${pageNum + 1}`;
-        pageNum++;
-        await sleep(3000);
+      } else {
+        consecutiveEmpty = 0;
       }
+
+      if (currentPage === 1 && products.length > 0) {
+        console.log("Sample product:", JSON.stringify(products[0], null, 2));
+      }
+
+      for (const product of products) {
+        if (seenUrls.has(product.url)) continue;
+        seenUrls.add(product.url);
+
+        totalScraped++;
+
+        if (product.salePrice >= product.originalPrice) continue;
+
+        if (product.discountPercent >= MIN_DISCOUNT) {
+          const gender = detectGender(product.url, product.name);
+
+          await upsertDeal({
+            id: generateId(product.url),
+            store: STORE,
+            name: product.name,
+            brand: product.brand,
+            originalPrice: product.originalPrice,
+            salePrice: product.salePrice,
+            discountPercent: product.discountPercent,
+            url: product.url,
+            imageUrl: product.imageUrl,
+            gender: gender,
+          });
+          totalDeals++;
+        }
+      }
+
+      console.log(`Running total: ${totalDeals} deals (${totalScraped} scraped)`);
+
+      if (!hasMore) {
+        console.log("No more pages indicated");
+        break;
+      }
+
+      currentPage++;
+      await sleep(500 + Math.random() * 500);
     }
+
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    errors.push(message);
+    console.error("Error:", message);
   } finally {
     await browser.close();
   }
 
-  // Log scrape run
   await logScrapeRun(STORE, totalScraped, totalDeals, errors);
-
-  // Clean up stale products (only if we found enough products)
   await cleanupStaleProducts(STORE, scrapeStartTime, totalDeals);
 
   console.log("\n=== Scraping Complete ===");
@@ -295,7 +285,6 @@ async function scrapeDjakSport(): Promise<void> {
   await disconnect();
 }
 
-// Run if executed directly
 if (process.argv[1]?.includes('djaksport.ts')) {
   scrapeDjakSport().catch(console.error);
 }
