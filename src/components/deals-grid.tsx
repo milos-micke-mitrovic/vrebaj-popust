@@ -389,7 +389,19 @@ export function DealsGrid({
 
     if (selectedSizes.length > 0) {
       result = result.filter(
-        (deal) => deal.sizes && deal.sizes.some((size) => selectedSizes.includes(size))
+        (deal) => deal.sizes && deal.sizes.some((dealSize) => {
+          // Check each selected size
+          return selectedSizes.some((selectedSize) => {
+            // Exact match
+            if (dealSize === selectedSize) return true;
+            // Range match: "36-37" matches if user selected "36" or "37"
+            if (dealSize.includes("-")) {
+              const parts = dealSize.split("-");
+              return parts.includes(selectedSize);
+            }
+            return false;
+          });
+        })
       );
     }
 

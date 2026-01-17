@@ -1,9 +1,4 @@
-import puppeteer from "puppeteer-extra";
-import StealthPlugin from "puppeteer-extra-plugin-stealth";
-import type { Browser, Page } from "puppeteer";
-import { getDealsWithoutDetails, updateDealDetails, disconnect, Gender } from "../db-writer";
-
-puppeteer.use(StealthPlugin());
+import { getDealsWithoutDetails, updateDealDetails, disconnect } from "../db-writer";
 
 const STORE = "nsport" as const;
 
@@ -11,84 +6,65 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function launchBrowser(): Promise<Browser> {
-  return puppeteer.launch({
-    headless: true,
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-blink-features=AutomationControlled",
-    ],
-  }) as Promise<Browser>;
-}
-
 interface ProductDetails {
   sizes: string[];
-  categories: string[];
-  gender: Gender | null;
 }
 
-async function extractProductDetails(page: Page): Promise<ProductDetails> {
-  return page.evaluate(`
-    (function() {
-      var result = {
-        sizes: [],
-        categories: [],
-        gender: null
-      };
+async function fetchProductDetails(url: string): Promise<ProductDetails> {
+  const result: ProductDetails = { sizes: [] };
 
-      // Extract sizes from size selector
-      var sizeElements = document.querySelectorAll('.size-select option:not([disabled]), .product-size:not(.out-of-stock), .available-size');
-      sizeElements.forEach(function(el) {
-        var size = el.textContent.trim() || el.value || '';
-        // Filter out placeholder options
-        if (size && size !== 'Izaberi veličinu' && size !== '-' && !result.sizes.includes(size)) {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        "Accept-Language": "sr-RS,sr;q=0.9,en;q=0.8",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP ${response.status}`);
+    }
+
+    const html = await response.text();
+
+    // Extract sizes from data-size attributes on input elements
+    // Pattern: <input ... class="fnc-product-cart-size" ... data-size="36-37">
+    const sizeRegex = /<input[^>]+class="fnc-product-cart-size[^"]*"[^>]+data-size="([^"]+)"/g;
+    let match;
+    const seenSizes = new Set<string>();
+
+    while ((match = sizeRegex.exec(html)) !== null) {
+      const size = match[1].trim();
+      // Filter: must be alphanumeric with optional dash/slash (e.g., "42", "36-37", "XL", "S/M")
+      if (size && !seenSizes.has(size) && /^[\dA-Za-z][\dA-Za-z\-\/]*$/.test(size)) {
+        seenSizes.add(size);
+        result.sizes.push(size);
+      }
+    }
+
+    // Alternative pattern: data-size before class
+    if (result.sizes.length === 0) {
+      const altSizeRegex = /<input[^>]+data-size="([^"]+)"[^>]+class="fnc-product-cart-size/g;
+      while ((match = altSizeRegex.exec(html)) !== null) {
+        const size = match[1].trim();
+        if (size && !seenSizes.has(size) && /^[\dA-Za-z][\dA-Za-z\-\/]*$/.test(size)) {
+          seenSizes.add(size);
           result.sizes.push(size);
         }
-      });
-
-      // Extract category and gender from breadcrumbs or product attributes
-      var breadcrumbs = document.querySelectorAll('.breadcrumb a, nav.breadcrumbs a');
-      breadcrumbs.forEach(function(el) {
-        var text = el.textContent.trim().toLowerCase();
-
-        // Categories
-        if (text.includes('patike')) result.categories.push('obuca/patike');
-        else if (text.includes('cipele')) result.categories.push('obuca/cipele');
-        else if (text.includes('čizme') || text.includes('cizme')) result.categories.push('obuca/cizme');
-        else if (text.includes('sandale')) result.categories.push('obuca/sandale');
-        else if (text.includes('majic')) result.categories.push('odeca/majice');
-        else if (text.includes('duks')) result.categories.push('odeca/duksevi');
-        else if (text.includes('jakn')) result.categories.push('odeca/jakne');
-        else if (text.includes('šorc') || text.includes('sorc')) result.categories.push('odeca/sortevi');
-        else if (text.includes('trenerka') || text.includes('trenerke')) result.categories.push('odeca/trenerke');
-
-        // Gender
-        if (text.includes('muš') || text.includes('mus') || text === 'muškarci') result.gender = 'muski';
-        else if (text.includes('žen') || text.includes('zen') || text === 'žene') result.gender = 'zenski';
-        else if (text.includes('deč') || text.includes('dec') || text.includes('deca')) result.gender = 'deciji';
-      });
-
-      // Check product title for gender
-      var title = document.querySelector('h1, .product-title, .product-name');
-      if (title && !result.gender) {
-        var titleText = title.textContent.toLowerCase();
-        if (titleText.includes('muš') || titleText.includes('muske')) result.gender = 'muski';
-        else if (titleText.includes('žen') || titleText.includes('zenske')) result.gender = 'zenski';
-        else if (titleText.includes('deč') || titleText.includes('decije')) result.gender = 'deciji';
       }
+    }
 
-      // Remove duplicates
-      result.categories = [...new Set(result.categories)];
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    throw new Error(`Failed to fetch: ${message}`);
+  }
 
-      return result;
-    })()
-  `) as Promise<ProductDetails>;
+  return result;
 }
 
 async function scrapeNSportDetails(): Promise<void> {
-  console.log("Starting N-Sport detail scraper...");
+  console.log("Starting N-Sport detail scraper (fast HTTP mode)...");
 
   const deals = await getDealsWithoutDetails(STORE);
   console.log(`Found ${deals.length} deals without details`);
@@ -99,55 +75,58 @@ async function scrapeNSportDetails(): Promise<void> {
     return;
   }
 
-  const browser = await launchBrowser();
   let processed = 0;
+  let updated = 0;
   let errors = 0;
+  const startTime = Date.now();
 
-  try {
-    const page = await browser.newPage();
-    await page.setViewport({ width: 1920, height: 1080 });
+  for (const deal of deals) {
+    const progress = `[${processed + 1}/${deals.length}]`;
 
-    for (const deal of deals) {
-      console.log(`\n[${processed + 1}/${deals.length}] ${deal.name}`);
-      console.log(`  URL: ${deal.url}`);
+    try {
+      const details = await fetchProductDetails(deal.url);
 
-      try {
-        await page.goto(deal.url, {
-          waitUntil: "networkidle2",
-          timeout: 60000,
-        });
-
-        await sleep(1000 + Math.random() * 1000);
-
-        const details = await extractProductDetails(page);
-        console.log(`  Sizes: ${details.sizes.length > 0 ? details.sizes.join(", ") : "none"}`);
-        console.log(`  Categories: ${details.categories.join(", ") || "none"}`);
-        console.log(`  Gender: ${details.gender || "not detected"}`);
-
+      if (details.sizes.length > 0) {
         await updateDealDetails(deal.url, {
           sizes: details.sizes,
-          categories: details.categories,
-          gender: details.gender || undefined,
         });
-
-        processed++;
-        console.log(`  ✓ Updated`);
-
-        await sleep(1500 + Math.random() * 1500);
-
-      } catch (err) {
-        errors++;
-        const message = err instanceof Error ? err.message : String(err);
-        console.error(`  ✗ Error: ${message}`);
+        updated++;
+        console.log(`${progress} ✓ ${deal.name.substring(0, 40)}... | sizes: ${details.sizes.join(", ")}`);
+      } else {
+        console.log(`${progress} - ${deal.name.substring(0, 40)}... | no sizes found`);
       }
+
+      processed++;
+
+      // Polite delay: 500-1000ms between requests
+      await sleep(500 + Math.random() * 500);
+
+    } catch (err) {
+      errors++;
+      const message = err instanceof Error ? err.message : String(err);
+      console.error(`${progress} ✗ ${deal.name.substring(0, 40)}... | ${message}`);
+
+      // Longer delay after error
+      await sleep(2000);
     }
-  } finally {
-    await browser.close();
+
+    // Progress report every 100 products
+    if (processed % 100 === 0) {
+      const elapsed = (Date.now() - startTime) / 1000;
+      const rate = processed / elapsed;
+      const remaining = (deals.length - processed) / rate;
+      console.log(`\n--- Progress: ${processed}/${deals.length} | Rate: ${rate.toFixed(1)}/sec | ETA: ${(remaining / 60).toFixed(1)} min ---\n`);
+    }
   }
+
+  const totalTime = (Date.now() - startTime) / 1000;
 
   console.log("\n=== Detail Scraping Complete ===");
   console.log(`Processed: ${processed}`);
+  console.log(`Updated with sizes: ${updated}`);
   console.log(`Errors: ${errors}`);
+  console.log(`Total time: ${(totalTime / 60).toFixed(1)} minutes`);
+  console.log(`Average rate: ${(processed / totalTime).toFixed(2)} products/second`);
 
   await disconnect();
 }

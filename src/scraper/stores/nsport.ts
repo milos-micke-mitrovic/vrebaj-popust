@@ -1,9 +1,7 @@
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
-import { upsertDeal, logScrapeRun, disconnect, cleanupStaleProducts, Store } from "../db-writer";
-import * as fs from "fs";
-import * as path from "path";
+import { upsertDeal, logScrapeRun, disconnect, cleanupStaleProducts, Store, Gender } from "../db-writer";
 
 puppeteer.use(StealthPlugin());
 
@@ -57,6 +55,103 @@ function generateId(url: string): string {
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+interface UrlInfo {
+  gender: Gender;
+  categories: string[];
+}
+
+function parseUrlInfo(url: string, name: string): UrlInfo {
+  const urlLower = url.toLowerCase();
+  const nameLower = name.toLowerCase();
+
+  let gender: Gender = "unisex";
+  const categories: string[] = [];
+
+  // Extract category from URL path: /category-name/product-slug.html
+  const pathMatch = urlLower.match(/n-sport\.net\/([^\/]+)\/([^\/]+)\.html/);
+
+  if (pathMatch) {
+    const category = pathMatch[1];
+    const productSlug = pathMatch[2];
+
+    // Extract gender from product slug
+    if (productSlug.startsWith("muske-") || productSlug.startsWith("muska-") || productSlug.startsWith("muski-")) {
+      gender = "muski";
+    } else if (productSlug.startsWith("zenske-") || productSlug.startsWith("zenska-") || productSlug.startsWith("zenski-")) {
+      gender = "zenski";
+    } else if (productSlug.startsWith("decije-") || productSlug.startsWith("decija-") || productSlug.startsWith("deciji-")) {
+      gender = "deciji";
+    } else if (productSlug.startsWith("unisex-")) {
+      gender = "unisex";
+    }
+
+    // Map URL category to our category format
+    if (category.includes("patike") || category === "patike-za-trening" || category === "lifestyle-patike") {
+      categories.push("obuca/patike");
+    } else if (category === "cipele") {
+      categories.push("obuca/cipele");
+    } else if (category === "cizme") {
+      categories.push("obuca/cizme");
+    } else if (category === "sandale" || category === "japanke" || category === "papuce") {
+      categories.push("obuca/sandale");
+    } else if (category === "trenerka" || category === "trenerke") {
+      categories.push("odeca/trenerke");
+    } else if (category === "helanke") {
+      categories.push("odeca/helanke");
+    } else if (category === "majice" || category === "majica") {
+      categories.push("odeca/majice");
+    } else if (category === "duksevi" || category === "duks") {
+      categories.push("odeca/duksevi");
+    } else if (category === "jakne" || category === "jakna") {
+      categories.push("odeca/jakne");
+    } else if (category === "sorcevi" || category === "sorc") {
+      categories.push("odeca/sorcevi");
+    } else if (category.includes("obuca")) {
+      categories.push("obuca");
+    } else if (category.includes("odeca")) {
+      categories.push("odeca");
+    }
+  }
+
+  // Fallback: detect from product name if no category found
+  if (categories.length === 0) {
+    if (nameLower.includes("patike") || nameLower.includes("kopacke")) {
+      categories.push("obuca/patike");
+    } else if (nameLower.includes("cipele")) {
+      categories.push("obuca/cipele");
+    } else if (nameLower.includes("cizme") || nameLower.includes("čizme")) {
+      categories.push("obuca/cizme");
+    } else if (nameLower.includes("sandale") || nameLower.includes("japanke") || nameLower.includes("papuce") || nameLower.includes("papuče")) {
+      categories.push("obuca/sandale");
+    } else if (nameLower.includes("trenerka") || nameLower.includes("trenerke") || nameLower.includes("donji deo")) {
+      categories.push("odeca/trenerke");
+    } else if (nameLower.includes("helanke") || nameLower.includes("tajice")) {
+      categories.push("odeca/helanke");
+    } else if (nameLower.includes("majica") || nameLower.includes("dres") || nameLower.includes("top ")) {
+      categories.push("odeca/majice");
+    } else if (nameLower.includes("duks")) {
+      categories.push("odeca/duksevi");
+    } else if (nameLower.includes("jakna") || nameLower.includes("prslu")) {
+      categories.push("odeca/jakne");
+    } else if (nameLower.includes("šorc") || nameLower.includes("sorc") || nameLower.includes("bermude")) {
+      categories.push("odeca/sorcevi");
+    }
+  }
+
+  // Fallback: detect gender from product name if not found
+  if (gender === "unisex") {
+    if (nameLower.includes("muske ") || nameLower.includes("muška ") || nameLower.includes("muski ")) {
+      gender = "muski";
+    } else if (nameLower.includes("zenske ") || nameLower.includes("ženska ") || nameLower.includes("zenski ")) {
+      gender = "zenski";
+    } else if (nameLower.includes("decije ") || nameLower.includes("dečija ") || nameLower.includes("deciji ") || nameLower.includes("za decu")) {
+      gender = "deciji";
+    }
+  }
+
+  return { gender, categories };
 }
 
 async function launchBrowser(): Promise<Browser> {
@@ -232,6 +327,13 @@ async function scrapeNSport(): Promise<void> {
             product.discountFromSite || calcDiscount(originalPrice, salePrice);
 
           if (discountPercent >= MIN_DISCOUNT) {
+            const { gender, categories } = parseUrlInfo(product.url, product.name);
+
+            // Log first few products with categories for debugging
+            if (totalDeals < 5) {
+              console.log(`Saving: ${product.name.substring(0, 40)}... | gender=${gender} | categories=${JSON.stringify(categories)}`);
+            }
+
             await upsertDeal({
               id: generateId(product.url),
               store: STORE,
@@ -242,7 +344,8 @@ async function scrapeNSport(): Promise<void> {
               discountPercent,
               url: product.url,
               imageUrl: product.imageUrl,
-              gender: "unisex",
+              gender,
+              categories,
             });
             totalDeals++;
           }
