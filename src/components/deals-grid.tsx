@@ -10,6 +10,37 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SearchX } from "lucide-react";
 
+// Brand normalization - must match ponude/page.tsx
+const BRAND_ALIASES: Record<string, string> = {
+  "CALVIN": "CALVIN KLEIN",
+  "CALVIN KLEIN BLACK LABEL": "CALVIN KLEIN",
+  "CALVIN KLEIN JEANS": "CALVIN KLEIN",
+  "CK": "CALVIN KLEIN",
+  "KARL": "KARL LAGERFELD",
+  "NEW BALANCE": "NEW BALANCE",
+  "TOMMY": "TOMMY HILFIGER",
+  "TOMMY JEANS": "TOMMY HILFIGER",
+};
+
+function normalizeBrandForFilter(brand: string): string {
+  let normalized = brand.replace(/_/g, " ").trim().toUpperCase();
+
+  if (BRAND_ALIASES[normalized]) {
+    return BRAND_ALIASES[normalized];
+  }
+
+  for (const [alias, canonical] of Object.entries(BRAND_ALIASES)) {
+    if (normalized.startsWith(alias + " ")) {
+      return canonical;
+    }
+  }
+
+  return normalized
+    .split(" ")
+    .map(word => word.charAt(0) + word.slice(1).toLowerCase())
+    .join(" ");
+}
+
 interface DealsGridProps {
   deals: Deal[];
   brands: string[];
@@ -355,7 +386,7 @@ export function DealsGrid({
 
     if (selectedBrands.length > 0) {
       result = result.filter(
-        (deal) => deal.brand && selectedBrands.includes(deal.brand)
+        (deal) => deal.brand && selectedBrands.includes(normalizeBrandForFilter(deal.brand))
       );
     }
 

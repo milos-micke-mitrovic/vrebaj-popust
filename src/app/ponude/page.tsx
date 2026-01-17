@@ -6,6 +6,54 @@ import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { Store, Category } from "@/types/deal";
 
+// Gender words that should not appear as brands
+const GENDER_WORDS = new Set([
+  "MUSKA", "MUSKI", "MUSKE", "MUSKARCI",
+  "ZENSKA", "ZENSKI", "ZENSKE", "ZENE",
+  "DECIJA", "DECIJI", "DECIJE", "DECA",
+  "UNISEX"
+]);
+
+// Brand normalization map - maps variants to canonical name
+const BRAND_ALIASES: Record<string, string> = {
+  "CALVIN": "CALVIN KLEIN",
+  "CALVIN KLEIN BLACK LABEL": "CALVIN KLEIN",
+  "CALVIN KLEIN JEANS": "CALVIN KLEIN",
+  "CK": "CALVIN KLEIN",
+  "KARL": "KARL LAGERFELD",
+  "NEW BALANCE": "NEW BALANCE",
+  "TOMMY": "TOMMY HILFIGER",
+  "TOMMY JEANS": "TOMMY HILFIGER",
+};
+
+function normalizeBrand(brand: string): string | null {
+  // Replace underscores with spaces and trim
+  let normalized = brand.replace(/_/g, " ").trim().toUpperCase();
+
+  // Filter out gender words
+  if (GENDER_WORDS.has(normalized)) {
+    return null;
+  }
+
+  // Check for known aliases
+  if (BRAND_ALIASES[normalized]) {
+    return BRAND_ALIASES[normalized];
+  }
+
+  // Check if brand starts with a known prefix (for variants like CALVIN KLEIN JEANS)
+  for (const [alias, canonical] of Object.entries(BRAND_ALIASES)) {
+    if (normalized.startsWith(alias + " ")) {
+      return canonical;
+    }
+  }
+
+  // Return with proper casing (Title Case)
+  return normalized
+    .split(" ")
+    .map(word => word.charAt(0) + word.slice(1).toLowerCase())
+    .join(" ");
+}
+
 // Revalidate every 5 minutes - pages auto-refresh with new data
 export const revalidate = 300;
 
@@ -42,7 +90,13 @@ export default async function PonudePage() {
   const deals = await getAllDealsAsync();
 
   // Derive brands, stores, categories, and price range from deals
-  const brands = [...new Set(deals.filter(d => d.brand).map(d => d.brand!))].sort();
+  // Normalize brands and filter out invalid ones
+  const brands = [...new Set(
+    deals
+      .filter(d => d.brand)
+      .map(d => normalizeBrand(d.brand!))
+      .filter((b): b is string => b !== null)
+  )].sort();
   const stores = [...new Set(deals.map(d => d.store))] as Store[];
   const categories = [...new Set(deals.map(d => d.category))] as Category[];
   const prices = deals.map(d => d.salePrice);
