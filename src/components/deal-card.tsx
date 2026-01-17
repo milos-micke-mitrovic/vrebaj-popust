@@ -31,12 +31,14 @@ export function DealCard({ deal }: DealCardProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Save current URL with filters when clicking a product
+  // Save current URL with filters and scroll position when clicking a product
   const handleClick = () => {
     const currentUrl = searchParams.toString()
       ? `${pathname}?${searchParams.toString()}`
       : pathname;
     sessionStorage.setItem("dealsReturnUrl", currentUrl);
+    sessionStorage.setItem("dealsScrollPosition", String(window.scrollY));
+    sessionStorage.setItem("dealsClickedProductId", deal.id);
   };
 
   return (

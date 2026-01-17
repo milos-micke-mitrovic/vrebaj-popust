@@ -36,8 +36,8 @@ export function Header() {
           {/* Desktop nav */}
           <nav className="hidden sm:flex items-center gap-1">
             {navLinks.map((link) => {
-              const isActive = pathname === link.href ||
-                (link.href === "/ponude" && pathname.startsWith("/ponuda/"));
+              // Don't highlight "Ponude" on product detail pages - breadcrumb handles that
+              const isActive = pathname === link.href;
               return (
                 <Link
                   key={link.href}
@@ -152,8 +152,8 @@ export function Header() {
           <nav className="absolute top-0 left-0 right-0 bg-white dark:bg-gray-900 border-b dark:border-gray-800 shadow-lg animate-[slideDown_0.2s_ease-out]">
             <div className="flex flex-col p-2">
               {navLinks.map((link) => {
-                const isActive = pathname === link.href ||
-                  (link.href === "/ponude" && pathname.startsWith("/ponuda/"));
+                // Don't highlight "Ponude" on product detail pages
+                const isActive = pathname === link.href;
                 return (
                   <Link
                     key={link.href}

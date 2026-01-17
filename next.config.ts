@@ -20,7 +20,39 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "*.fashionandfriends.com",
+        hostname: "*.planetasport.rs",
+      },
+      {
+        protocol: "https",
+        hostname: "*.sportvision.rs",
+      },
+      {
+        protocol: "https",
+        hostname: "www.sportvision.rs",
+      },
+      {
+        protocol: "https",
+        hostname: "*.n-sport.net",
+      },
+      {
+        protocol: "https",
+        hostname: "www.n-sport.net",
+      },
+      {
+        protocol: "https",
+        hostname: "*.buzzsneakers.rs",
+      },
+      {
+        protocol: "https",
+        hostname: "www.buzzsneakers.rs",
+      },
+      {
+        protocol: "https",
+        hostname: "*.officeshoes.rs",
+      },
+      {
+        protocol: "https",
+        hostname: "www.officeshoes.rs",
       },
     ],
   },

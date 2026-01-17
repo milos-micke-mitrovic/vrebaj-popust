@@ -2,25 +2,24 @@ import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
 import { upsertDeal, logScrapeRun, disconnect, cleanupStaleProducts, Store } from "../db-writer";
-import * as fs from "fs";
-import * as path from "path";
 
 puppeteer.use(StealthPlugin());
 
 const STORE: Store = "sportvision";
 const BASE_URL = "https://www.sportvision.rs";
-// Outlet page - contains all discounted products
+// Outlet page with pagination - /page-1, /page-2, etc.
 const OUTLET_URL = `${BASE_URL}/proizvodi/outlet-ponuda`;
 const MIN_DISCOUNT = 50;
+const MAX_PAGES = 200;
 
 interface RawProduct {
   name: string;
-  originalPrice: string;
-  salePrice: string;
+  originalPrice: number;
+  salePrice: number;
   url: string;
   imageUrl: string;
   brand: string | null;
-  discountFromSite: number | null;
+  discountPercent: number;
 }
 
 function parsePrice(priceStr: string): number {
@@ -65,48 +64,155 @@ async function launchBrowser(): Promise<Browser> {
   }) as Promise<Browser>;
 }
 
-async function extractProducts(page: Page): Promise<RawProduct[]> {
-  return page.evaluate(`
-    (function() {
-      var results = [];
-      var items = document.querySelectorAll('.product-item[data-productid]');
+async function fetchPageProducts(page: Page, pageNum: number): Promise<{ products: RawProduct[]; hasMore: boolean }> {
+  const url = `${OUTLET_URL}/page-${pageNum}`;
 
-      items.forEach(function(el) {
-        // Get data from attributes
-        var name = el.dataset.productname || '';
-        var salePrice = el.dataset.productprice || '';
-        var originalPrice = el.dataset.productprevprice || '';
-        var discountFromSite = el.dataset.productdiscount ? parseInt(el.dataset.productdiscount, 10) : null;
-        var brand = el.dataset.productbrand || null;
+  const result = await page.evaluate(`
+    (async function() {
+      try {
+        const response = await fetch('${url}', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Accept': 'text/html, */*',
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        });
 
-        // Get product link
-        var linkEl = el.querySelector('a.product-link') || el.querySelector('a[href*="sportvision.rs"]');
-        var url = linkEl ? linkEl.href : '';
-
-        // Get image
-        var imgEl = el.querySelector('img.img-responsive');
-        var imageUrl = imgEl ? (imgEl.src || imgEl.dataset.src || '') : '';
-        // Make sure it's absolute URL
-        if (imageUrl && imageUrl.startsWith('/')) {
-          imageUrl = 'https://www.sportvision.rs' + imageUrl;
+        if (!response.ok) {
+          return { products: [], hasMore: false };
         }
 
-        if (name && url && originalPrice && salePrice) {
-          results.push({
-            name: name.trim(),
-            originalPrice: originalPrice,
-            salePrice: salePrice,
-            url: url,
-            imageUrl: imageUrl,
-            brand: brand,
-            discountFromSite: discountFromSite
-          });
-        }
-      });
+        var html = await response.text();
 
-      return results;
+        // Parse the HTML
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(html, 'text/html');
+
+        var results = [];
+        // Look for product items - SportVision uses .product-item or similar
+        var items = doc.querySelectorAll('.product-item, .product-box, [class*="product"]');
+
+        // If no items with those classes, try to find product links
+        if (items.length === 0) {
+          items = doc.querySelectorAll('a[href*="/proizvod/"]');
+        }
+
+        items.forEach(function(el) {
+          // Try to get product container
+          var container = el.closest('.product-item') || el.closest('.product-box') || el;
+
+          // Get product link and name
+          var linkEl = container.querySelector('a[href*="/proizvod/"]') || container.querySelector('a.product-link');
+          if (!linkEl && el.tagName === 'A' && el.href && el.href.includes('/proizvod/')) {
+            linkEl = el;
+          }
+          var url = linkEl ? linkEl.href : '';
+          var name = '';
+
+          // Try different name selectors
+          var nameEl = container.querySelector('.product-name, .product-title, h3, h4');
+          if (nameEl) {
+            name = nameEl.textContent.trim();
+          } else if (linkEl) {
+            name = linkEl.textContent.trim() || linkEl.getAttribute('title') || '';
+          }
+
+          // Get image
+          var imgEl = container.querySelector('img');
+          var imageUrl = imgEl ? (imgEl.src || imgEl.dataset.src || '') : '';
+          if (imageUrl && imageUrl.startsWith('/')) {
+            imageUrl = 'https://www.sportvision.rs' + imageUrl;
+          }
+
+          // Get prices from the new structure
+          // Old price: .prev-price.prev-old-price.prev-price-third (prethodna cena - original price)
+          // Current price: .current-price .value
+          var salePriceEl = container.querySelector('.current-price .value');
+          var salePrice = salePriceEl ? salePriceEl.textContent.trim() : '';
+
+          // Original price - look for prev-old-price first (prethodna cena), then prev-price
+          var originalPriceEl = container.querySelector('.prev-price.prev-old-price.prev-price-third') ||
+                                container.querySelector('.prev-price.prev-old-price') ||
+                                container.querySelector('.prev-price');
+          var originalPrice = '';
+          if (originalPriceEl) {
+            // Get text but exclude the RSD span content duplication
+            var priceText = originalPriceEl.childNodes[0];
+            originalPrice = priceText ? priceText.textContent.trim() : originalPriceEl.textContent.replace('RSD', '').trim();
+          }
+
+          // Get discount from badge
+          var discountEl = container.querySelector('.product-discount, [class*="discount-"]');
+          var discountPercent = 0;
+          if (discountEl) {
+            var match = discountEl.textContent.match(/(\\d+)/);
+            if (match) discountPercent = parseInt(match[1], 10);
+          }
+
+          // Get brand from data attribute or meta
+          var brand = container.dataset ? container.dataset.productbrand : null;
+          if (!brand) {
+            var brandEl = container.querySelector('.brand, .product-brand');
+            brand = brandEl ? brandEl.textContent.trim() : null;
+          }
+
+          // Also try data attributes if available
+          if (!name && container.dataset && container.dataset.productname) {
+            name = container.dataset.productname;
+          }
+          if (!salePrice && container.dataset && container.dataset.productprice) {
+            salePrice = container.dataset.productprice;
+          }
+          if (!originalPrice && container.dataset && container.dataset.productprevprice) {
+            originalPrice = container.dataset.productprevprice;
+          }
+          if (!discountPercent && container.dataset && container.dataset.productdiscount) {
+            discountPercent = parseInt(container.dataset.productdiscount, 10) || 0;
+          }
+
+          if (name && url && (originalPrice || salePrice)) {
+            results.push({
+              name: name,
+              originalPrice: originalPrice,
+              salePrice: salePrice,
+              url: url,
+              imageUrl: imageUrl,
+              brand: brand,
+              discountPercent: discountPercent
+            });
+          }
+        });
+
+        // Check if there are more pages - look for next page link or load more
+        var hasMore = results.length > 0;
+
+        return { products: results, hasMore: hasMore };
+      } catch (err) {
+        console.error('Fetch error:', err);
+        return { products: [], hasMore: false };
+      }
     })()
-  `) as Promise<RawProduct[]>;
+  `) as { products: Array<{ name: string; originalPrice: string; salePrice: string; url: string; imageUrl: string; brand: string | null; discountPercent: number }>; hasMore: boolean };
+
+  // Parse prices and convert to RawProduct
+  const products: RawProduct[] = result.products.map(p => {
+    const original = parsePrice(p.originalPrice);
+    const sale = parsePrice(p.salePrice);
+    const discount = p.discountPercent || calcDiscount(original, sale);
+    return {
+      name: p.name,
+      originalPrice: original,
+      salePrice: sale,
+      url: p.url,
+      imageUrl: p.imageUrl,
+      brand: p.brand,
+      discountPercent: discount,
+    };
+  });
+
+  return { products, hasMore: result.hasMore };
 }
 
 async function scrapeSportVision(): Promise<void> {
@@ -116,8 +222,8 @@ async function scrapeSportVision(): Promise<void> {
   let totalDeals = 0;
   const scrapeStartTime = new Date();
 
-  console.log("Starting SportVision scraper with stealth mode...");
-  console.log(`Scraping outlet page: ${OUTLET_URL}`);
+  console.log("Starting SportVision scraper with POST pagination...");
+  console.log(`Scraping outlet: ${OUTLET_URL}/page-N`);
   console.log(`Min discount: ${MIN_DISCOUNT}%`);
 
   const browser = await launchBrowser();
@@ -126,151 +232,94 @@ async function scrapeSportVision(): Promise<void> {
     const page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
 
-    console.log(`\n=== Scraping: ${OUTLET_URL} ===`);
-
+    // First visit the main page to establish cookies/session
+    console.log("Loading main page to establish session...");
     try {
       await page.goto(OUTLET_URL, {
-        waitUntil: "networkidle2",
-        timeout: 60000,
+        waitUntil: "domcontentloaded",
+        timeout: 30000,
       });
+      await sleep(2000);
+    } catch (err) {
+      console.log("Initial page load timed out, trying pagination anyway...");
+    }
 
-      // Wait for products to load
+    // Paginate through all pages
+    let currentPage = 1;
+    let consecutiveEmpty = 0;
+
+    while (currentPage <= MAX_PAGES && consecutiveEmpty < 3) {
+      console.log(`\n=== Page ${currentPage} ===`);
+
       try {
-        await page.waitForSelector('.product-item', { timeout: 15000 });
-        console.log("Product grid loaded");
-      } catch {
-        console.log("Waiting for product grid timed out, continuing...");
-      }
+        const { products, hasMore } = await fetchPageProducts(page, currentPage);
+        console.log(`Found ${products.length} products`);
 
-      await sleep(2000 + Math.random() * 2000);
-
-      // Click "Load more" button until all products are loaded
-      let loadMoreClicks = 0;
-      const maxClicks = 200; // 160 pages on outlet
-
-      while (loadMoreClicks < maxClicks) {
-        // Look for load more button - SportVision uses .next-load-btn
-        const loadMoreBtn = await page.$('.next-load-btn, a.next-load-btn');
-
-        if (!loadMoreBtn) {
-          console.log("No 'Load more' button found");
-          break;
-        }
-
-        const isVisible = await page.evaluate((btn) => {
-          const style = window.getComputedStyle(btn as Element);
-          const rect = (btn as Element).getBoundingClientRect();
-          return style.display !== 'none' && style.visibility !== 'hidden' && rect.height > 0;
-        }, loadMoreBtn);
-
-        if (!isVisible) {
-          console.log("'Load more' button is hidden, all products loaded");
-          break;
-        }
-
-        const productCountBefore = await page.evaluate(() =>
-          document.querySelectorAll('.product-item[data-productid]').length
-        );
-
-        try {
-          // Scroll button into view first
-          await page.evaluate((btn) => {
-            (btn as Element).scrollIntoView({ behavior: 'instant', block: 'center' });
-          }, loadMoreBtn);
-          await sleep(500);
-
-          // Click using JavaScript to ensure it triggers
-          await page.evaluate((btn) => {
-            (btn as HTMLElement).click();
-          }, loadMoreBtn);
-
-          loadMoreClicks++;
-
-          // Wait for network activity to settle
-          await sleep(1500 + Math.random() * 500);
-
-          // Wait for product count to change
-          let retries = 0;
-          let productCountAfter = productCountBefore;
-          while (retries < 5 && productCountAfter === productCountBefore) {
-            await sleep(500);
-            productCountAfter = await page.evaluate(() =>
-              document.querySelectorAll('.product-item[data-productid]').length
-            );
-            retries++;
-          }
-
-          if (productCountAfter === productCountBefore) {
-            console.log("No new products loaded after retries, stopping");
+        if (products.length === 0) {
+          consecutiveEmpty++;
+          if (consecutiveEmpty >= 3) {
+            console.log("No more products after 3 empty pages, stopping");
             break;
           }
+        } else {
+          consecutiveEmpty = 0;
+        }
 
-          console.log(`Clicked 'Load more' (${loadMoreClicks}): ${productCountBefore} -> ${productCountAfter}`);
-        } catch (err) {
-          const message = err instanceof Error ? err.message : String(err);
-          console.log(`Error clicking load more: ${message}`);
+        if (currentPage === 1 && products.length > 0) {
+          console.log("Sample product:", JSON.stringify(products[0], null, 2));
+        }
+
+        for (const product of products) {
+          if (seenUrls.has(product.url)) continue;
+          seenUrls.add(product.url);
+
+          totalScraped++;
+
+          if (product.salePrice <= 0 || product.originalPrice <= 0) continue;
+          if (product.salePrice >= product.originalPrice) continue;
+
+          if (product.discountPercent >= MIN_DISCOUNT) {
+            await upsertDeal({
+              id: generateId(product.url),
+              store: STORE,
+              name: product.name,
+              brand: product.brand,
+              originalPrice: product.originalPrice,
+              salePrice: product.salePrice,
+              discountPercent: product.discountPercent,
+              url: product.url,
+              imageUrl: product.imageUrl,
+              gender: "unisex",
+            });
+            totalDeals++;
+          }
+        }
+
+        console.log(`Running total: ${totalDeals} deals (${totalScraped} scraped)`);
+
+        if (!hasMore) {
+          console.log("No more products indicated");
           break;
         }
+
+        currentPage++;
+        await sleep(500 + Math.random() * 500);
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err);
+        errors.push(`page ${currentPage}: ${message}`);
+        console.error(`Error on page ${currentPage}:`, message);
+        consecutiveEmpty++;
       }
-
-      // Now extract all products
-      const products = await extractProducts(page);
-      console.log(`Found ${products.length} total product elements`);
-
-      if (products.length > 0) {
-        console.log("Sample product:", JSON.stringify(products[0], null, 2));
-      }
-
-      for (const product of products) {
-        // Skip duplicates
-        if (seenUrls.has(product.url)) continue;
-        seenUrls.add(product.url);
-
-        totalScraped++;
-
-        const originalPrice = parsePrice(product.originalPrice);
-        const salePrice = parsePrice(product.salePrice);
-
-        if (originalPrice <= 0 || salePrice <= 0) continue;
-        if (salePrice >= originalPrice) continue;
-
-        const discountPercent =
-          product.discountFromSite || calcDiscount(originalPrice, salePrice);
-
-        if (discountPercent >= MIN_DISCOUNT) {
-          await upsertDeal({
-            id: generateId(product.url),
-            store: STORE,
-            name: product.name,
-            brand: product.brand,
-            originalPrice,
-            salePrice,
-            discountPercent,
-            url: product.url,
-            imageUrl: product.imageUrl,
-            gender: "unisex",
-          });
-          totalDeals++;
-        }
-      }
-
-      console.log(
-        `Deals with ${MIN_DISCOUNT}%+ discount: ${totalDeals} (total scraped: ${totalScraped})`
-      );
-
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      errors.push(`outlet: ${message}`);
-      console.error(`Error scraping outlet:`, message);
     }
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    errors.push(message);
+    console.error("Error:", message);
   } finally {
     await browser.close();
   }
 
-  // Log scrape run
   await logScrapeRun(STORE, totalScraped, totalDeals, errors);
-
-  // Clean up stale products (only if we found enough products)
   await cleanupStaleProducts(STORE, scrapeStartTime, totalDeals);
 
   console.log("\n=== Scraping Complete ===");

@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Outfit } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
-import { getAllDealIds } from "@/lib/deals";
+import { getAllDealsAsync } from "@/lib/deals";
 import { AppProviders } from "@/components/app-providers";
 import "./globals.css";
 
@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     "odeća",
     "djak sport",
     "planeta sport",
-    "fashion and friends",
+    "sport vision",
     "online kupovina",
     "jeftino",
     "outlet",
@@ -119,12 +119,13 @@ const organizationSchema = {
   ],
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const availableDealIds = getAllDealIds();
+  const deals = await getAllDealsAsync();
+  const availableDealIds = deals.map((deal) => deal.id);
 
   return (
     <html lang="sr" dir="ltr" suppressHydrationWarning>

@@ -35,10 +35,16 @@ export const metadata: Metadata = {
   },
 };
 
+// Round to nearest 1000 for cleaner display (e.g., 4315 → 4000)
+function roundToThousand(n: number): number {
+  return Math.floor(n / 1000) * 1000;
+}
+
 export default async function Home() {
   const deals = await getAllDealsAsync();
   const stores = [...new Set(deals.map((d) => d.store))] as Store[];
   const totalDeals = deals.length;
+  const displayCount = roundToThousand(totalDeals);
   const avgDiscount = Math.round(
     deals.reduce((sum, d) => sum + d.discountPercent, 0) / deals.length
   );
@@ -99,7 +105,7 @@ export default async function Home() {
             <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
               <div className="text-center">
                 <div className="text-3xl font-bold text-red-500 sm:text-4xl">
-                  {totalDeals}+
+                  {displayCount}+
                 </div>
                 <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">Aktivnih ponuda</div>
               </div>

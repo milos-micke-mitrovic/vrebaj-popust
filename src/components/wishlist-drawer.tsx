@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useWishlistContext } from "@/context/wishlist-context";
-import { formatPrice } from "@/lib/utils";
+import { formatPrice, getProxiedImageUrl } from "@/lib/utils";
 import { ConfirmDialog } from "@/components/confirm-dialog";
 
 function WishlistImage({ src, alt }: { src: string; alt: string }) {
@@ -95,7 +95,7 @@ export function WishlistDrawer({ availableDealIds }: WishlistDrawerProps) {
                     {/* Image */}
                     <div className="relative h-20 w-20 flex-shrink-0 overflow-hidden rounded-lg bg-gray-100 dark:bg-gray-800">
                       {deal.imageUrl ? (
-                        <WishlistImage src={deal.imageUrl} alt={deal.name} />
+                        <WishlistImage src={getProxiedImageUrl(deal.imageUrl)} alt={deal.name} />
                       ) : (
                         <div className="flex h-full items-center justify-center text-xs text-gray-400">
                           Nema slike

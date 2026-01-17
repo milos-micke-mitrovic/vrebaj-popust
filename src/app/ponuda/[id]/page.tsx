@@ -13,7 +13,7 @@ import { DealCard } from "@/components/deal-card";
 import { ShareButton } from "@/components/share-button";
 import { ProductWishlistButton } from "@/components/product-wishlist-button";
 import { ProductImage } from "@/components/product-image";
-import { DealsBackLink } from "@/components/deals-back-link";
+import { ProductBreadcrumb } from "@/components/product-breadcrumb";
 import { Deal } from "@/types/deal";
 
 // Calculate price valid date at build time (7 days from build)
@@ -385,29 +385,14 @@ export default async function DealPage({ params }: Props) {
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
         <Header />
 
-        {/* Breadcrumb */}
-        <nav
-          className="mx-auto max-w-7xl px-4 py-4"
-          aria-label="Breadcrumb"
-        >
-          <ol className="flex items-center text-sm text-gray-500 dark:text-gray-400">
-            <li>
-              <DealsBackLink />
-            </li>
-            <li className="mx-2">/</li>
-            <li>
-              <Link href={`/ponude?categories=${deal.category}`} className="hover:text-red-500">
-                {categoryText}
-              </Link>
-            </li>
-            <li className="mx-2">/</li>
-            <li className="flex items-center">
-              <span className="text-gray-900 dark:text-white font-medium truncate max-w-[200px]">
-                {deal.name}
-              </span>
-            </li>
-          </ol>
-        </nav>
+        {/* Breadcrumb Navigation */}
+        <ProductBreadcrumb
+          items={[
+            { label: "Ponude", href: "/ponude" },
+            { label: categoryText, href: `/ponude?categories=${deal.category}` },
+            { label: deal.name },
+          ]}
+        />
 
         {/* Product Details */}
         <main className="mx-auto max-w-7xl px-4 pb-12">

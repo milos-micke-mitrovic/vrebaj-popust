@@ -10,8 +10,9 @@ puppeteer.use(StealthPlugin());
 const STORE: Store = "nsport";
 const BASE_URL = "https://www.n-sport.net";
 
-// Promo pages with discounts
+// Promo pages with discounts - outlet has the most products with high discounts
 const PROMO_PAGES = [
+  `${BASE_URL}/index.php?mod=catalog&op=browse&view=promo&filters%5Bpromo%5D%5B0%5D=outlet`,
   `${BASE_URL}/promos/popusti-od-40-do-70-sport.html`,
   `${BASE_URL}/promos/popusti-do--60.html`,
 ];
@@ -178,10 +179,12 @@ async function scrapeNSport(): Promise<void> {
       console.log(`\n=== Scraping: ${promoPage} ===`);
 
       let currentPage = 1;
-      const maxPages = 50;
+      const maxPages = 100; // Outlet has ~90 pages
 
       while (currentPage <= maxPages) {
-        const pageUrl = currentPage === 1 ? promoPage : `${promoPage}?pg=${currentPage}`;
+        // Handle pagination - use & if URL already has query params, otherwise use ?
+        const separator = promoPage.includes('?') ? '&' : '?';
+        const pageUrl = currentPage === 1 ? promoPage : `${promoPage}${separator}pg=${currentPage}`;
         console.log(`\nPage ${currentPage}: ${pageUrl}`);
 
       try {

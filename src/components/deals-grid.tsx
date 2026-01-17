@@ -169,6 +169,36 @@ export function DealsGrid({
     };
   }, [showMobileFilters]);
 
+  // Restore scroll position when returning from product page
+  useEffect(() => {
+    const savedScrollPosition = sessionStorage.getItem("dealsScrollPosition");
+    const clickedProductId = sessionStorage.getItem("dealsClickedProductId");
+
+    if (savedScrollPosition) {
+      // Small delay to ensure DOM is ready after hydration
+      const timer = setTimeout(() => {
+        // Try to scroll to the specific product card first
+        if (clickedProductId) {
+          const productCard = document.querySelector(`[href="/ponuda/${clickedProductId}"]`);
+          if (productCard) {
+            productCard.scrollIntoView({ behavior: "instant", block: "center" });
+          } else {
+            // Fallback to saved scroll position if product not visible (e.g., different page)
+            window.scrollTo({ top: parseInt(savedScrollPosition, 10), behavior: "instant" });
+          }
+        } else {
+          window.scrollTo({ top: parseInt(savedScrollPosition, 10), behavior: "instant" });
+        }
+
+        // Clear saved position after restoration
+        sessionStorage.removeItem("dealsScrollPosition");
+        sessionStorage.removeItem("dealsClickedProductId");
+      }, 100);
+
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   // Save sort preference to localStorage
   useEffect(() => {
     localStorage.setItem("sortPreference", sortBy);
