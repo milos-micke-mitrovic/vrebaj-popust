@@ -168,7 +168,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       canonical: `https://vrebajpopust.rs/ponuda/${id}`,
     },
     robots: {
-      index: true,
+      index: false,  // Don't index individual product pages - they change too frequently
       follow: true,
     },
   };

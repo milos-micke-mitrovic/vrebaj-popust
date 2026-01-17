@@ -1,8 +1,34 @@
 import { MetadataRoute } from "next";
-import { getAllDealsAsync } from "@/lib/deals";
+
+// SEO filter pages - categories, brands, genders
+const FILTER_PAGES = [
+  // Categories
+  "patike",
+  "cipele",
+  "cizme",
+  "jakne",
+  "trenerke",
+  "majice",
+  "duksevi",
+  // Brands
+  "nike",
+  "adidas",
+  "puma",
+  "new-balance",
+  "under-armour",
+  "reebok",
+  "converse",
+  "fila",
+  "champion",
+  "vans",
+  "skechers",
+  // Genders
+  "muski",
+  "zenski",
+  "deciji",
+];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const deals = await getAllDealsAsync();
   const baseUrl = "https://vrebajpopust.rs";
   const now = new Date();
 
@@ -40,24 +66,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Product pages - sorted by discount for priority
-  const sortedDeals = [...deals].sort(
-    (a, b) => b.discountPercent - a.discountPercent
-  );
+  // Filter pages (categories, brands, genders) - permanent SEO pages
+  const filterPages: MetadataRoute.Sitemap = FILTER_PAGES.map((filter) => ({
+    url: `${baseUrl}/ponude/${filter}`,
+    lastModified: now,
+    changeFrequency: "daily" as const,
+    priority: 0.8,
+  }));
 
-  const dealPages: MetadataRoute.Sitemap = sortedDeals.map((deal, index) => {
-    // Higher discount = higher priority (0.9 for top deals, decreasing)
-    const basePriority = 0.9;
-    const priorityDecrease = Math.min(index * 0.001, 0.3);
-    const priority = Math.max(basePriority - priorityDecrease, 0.5);
+  // Note: Individual product pages (/ponuda/[id]) are not included
+  // because they are noindexed - they change too frequently
 
-    return {
-      url: `${baseUrl}/ponuda/${deal.id}`,
-      lastModified: new Date(deal.scrapedAt),
-      changeFrequency: "daily" as const,
-      priority: Number(priority.toFixed(2)),
-    };
-  });
-
-  return [...mainPages, ...dealPages];
+  return [...mainPages, ...filterPages];
 }
