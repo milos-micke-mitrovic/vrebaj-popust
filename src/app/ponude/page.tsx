@@ -1,58 +1,9 @@
 import { Metadata } from "next";
 import { Suspense } from "react";
-import { getAllDealsAsync } from "@/lib/deals";
+import { prisma } from "@/lib/db";
 import { DealsGrid } from "@/components/deals-grid";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import { Store, Category } from "@/types/deal";
-
-// Gender words that should not appear as brands
-const GENDER_WORDS = new Set([
-  "MUSKA", "MUSKI", "MUSKE", "MUSKARCI",
-  "ZENSKA", "ZENSKI", "ZENSKE", "ZENE",
-  "DECIJA", "DECIJI", "DECIJE", "DECA",
-  "UNISEX"
-]);
-
-// Brand normalization map - maps variants to canonical name
-const BRAND_ALIASES: Record<string, string> = {
-  "CALVIN": "CALVIN KLEIN",
-  "CALVIN KLEIN BLACK LABEL": "CALVIN KLEIN",
-  "CALVIN KLEIN JEANS": "CALVIN KLEIN",
-  "CK": "CALVIN KLEIN",
-  "KARL": "KARL LAGERFELD",
-  "NEW BALANCE": "NEW BALANCE",
-  "TOMMY": "TOMMY HILFIGER",
-  "TOMMY JEANS": "TOMMY HILFIGER",
-};
-
-function normalizeBrand(brand: string): string | null {
-  // Replace underscores with spaces and trim
-  let normalized = brand.replace(/_/g, " ").trim().toUpperCase();
-
-  // Filter out gender words
-  if (GENDER_WORDS.has(normalized)) {
-    return null;
-  }
-
-  // Check for known aliases
-  if (BRAND_ALIASES[normalized]) {
-    return BRAND_ALIASES[normalized];
-  }
-
-  // Check if brand starts with a known prefix (for variants like CALVIN KLEIN JEANS)
-  for (const [alias, canonical] of Object.entries(BRAND_ALIASES)) {
-    if (normalized.startsWith(alias + " ")) {
-      return canonical;
-    }
-  }
-
-  // Return with proper casing (Title Case)
-  return normalized
-    .split(" ")
-    .map(word => word.charAt(0) + word.slice(1).toLowerCase())
-    .join(" ");
-}
 
 // Revalidate every 5 minutes - pages auto-refresh with new data
 export const revalidate = 300;
@@ -87,22 +38,22 @@ const priceValidUntilDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   .split("T")[0];
 
 export default async function PonudePage() {
-  const deals = await getAllDealsAsync();
-
-  // Derive brands, stores, categories, and price range from deals
-  // Normalize brands and filter out invalid ones
-  const brands = [...new Set(
-    deals
-      .filter(d => d.brand)
-      .map(d => normalizeBrand(d.brand!))
-      .filter((b): b is string => b !== null)
-  )].sort();
-  const stores = [...new Set(deals.map(d => d.store))] as Store[];
-  const categories = [...new Set(deals.map(d => d.category))] as Category[];
-  const prices = deals.map(d => d.salePrice);
-  const priceRange = prices.length > 0
-    ? { min: Math.min(...prices), max: Math.max(...prices) }
-    : { min: 0, max: 100000 };
+  // Get just the count and top deals for SEO schema (much lighter than loading all deals)
+  const [totalCount, topDeals] = await Promise.all([
+    prisma.deal.count({ where: { discountPercent: { gte: 50 } } }),
+    prisma.deal.findMany({
+      where: { discountPercent: { gte: 50 } },
+      orderBy: { discountPercent: "desc" },
+      take: 10,
+      select: {
+        id: true,
+        name: true,
+        brand: true,
+        salePrice: true,
+        imageUrl: true,
+      },
+    }),
+  ]);
 
   // ItemList for product listings (top 10 for SEO)
   const itemListSchema = {
@@ -110,8 +61,8 @@ export default async function PonudePage() {
     "@type": "ItemList",
     name: "Najveći popusti",
     description: "Proizvodi sa najvećim popustima preko 50%",
-    numberOfItems: deals.length,
-    itemListElement: deals.slice(0, 10).map((deal, index) => ({
+    numberOfItems: totalCount,
+    itemListElement: topDeals.map((deal, index) => ({
       "@type": "ListItem",
       position: index + 1,
       item: {
@@ -138,11 +89,11 @@ export default async function PonudePage() {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     name: "VrebajPopust - Sve ponude",
-    description: `${deals.length} proizvoda sa popustima preko 50%`,
+    description: `${totalCount} proizvoda sa popustima preko 50%`,
     url: "https://vrebajpopust.rs/ponude",
     mainEntity: {
       "@type": "ItemList",
-      numberOfItems: deals.length,
+      numberOfItems: totalCount,
     },
   };
 
@@ -167,13 +118,7 @@ export default async function PonudePage() {
               <div className="py-12 text-center text-gray-500 dark:text-gray-400">Učitavanje...</div>
             }
           >
-            <DealsGrid
-              deals={deals}
-              brands={brands}
-              stores={stores}
-              categories={categories}
-              priceRange={priceRange}
-            />
+            <DealsGrid />
           </Suspense>
         </main>
 

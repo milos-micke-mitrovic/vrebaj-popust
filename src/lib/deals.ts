@@ -1,5 +1,5 @@
 import { prisma } from "./db";
-import type { Deal as PrismaDeal, Store as PrismaStore, Gender as PrismaGender } from "@prisma/client";
+import type { Deal as PrismaDeal } from "@prisma/client";
 import { Deal, Store, Gender, Category } from "@/types/deal";
 
 // Normalize Serbian characters to ASCII equivalents

@@ -23,6 +23,35 @@ const STORE_INFO: Record<Store, { name: string; logo: string; fallbackColor: str
   officeshoes: { name: "Office Shoes", logo: "/logos/officeshoes.png", fallbackColor: "bg-purple-600" },
 };
 
+export function DealCardSkeleton() {
+  return (
+    <Card className="h-full overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+      <div className="relative aspect-square overflow-hidden bg-gray-200 dark:bg-gray-700 animate-pulse">
+        {/* Discount badge skeleton */}
+        <div className="absolute left-2 top-2 h-5 w-12 rounded-full bg-gray-300 dark:bg-gray-600" />
+        {/* Store logo skeleton */}
+        <div className="absolute right-2 top-2 h-5 w-14 rounded bg-gray-300 dark:bg-gray-600" />
+      </div>
+      <CardContent className="p-3 space-y-2">
+        {/* Brand skeleton */}
+        <div className="h-3 w-16 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+        {/* Name skeleton - 2 lines */}
+        <div className="space-y-1">
+          <div className="h-4 w-full rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+          <div className="h-4 w-3/4 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+        </div>
+        {/* Price skeleton */}
+        <div className="flex items-baseline gap-2 pt-1">
+          <div className="h-5 w-20 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+          <div className="h-4 w-16 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+        </div>
+        {/* Savings skeleton */}
+        <div className="h-3 w-24 rounded bg-gray-200 dark:bg-gray-700 animate-pulse" />
+      </CardContent>
+    </Card>
+  );
+}
+
 export function DealCard({ deal }: DealCardProps) {
   const [imgError, setImgError] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);

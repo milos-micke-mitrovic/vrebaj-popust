@@ -2,51 +2,23 @@
 
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { Deal, Store, Gender, Category, CategoryPath, MainCategory, Subcategory } from "@/types/deal";
-import { DealCard } from "./deal-card";
+import { Store, Gender, Category, CategoryPath, MainCategory, Subcategory } from "@/types/deal";
+import { DealCard, DealCardSkeleton } from "./deal-card";
 import { ScrollFade } from "./scroll-fade";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { SearchX } from "lucide-react";
-
-// Brand normalization - must match ponude/page.tsx
-const BRAND_ALIASES: Record<string, string> = {
-  "CALVIN": "CALVIN KLEIN",
-  "CALVIN KLEIN BLACK LABEL": "CALVIN KLEIN",
-  "CALVIN KLEIN JEANS": "CALVIN KLEIN",
-  "CK": "CALVIN KLEIN",
-  "KARL": "KARL LAGERFELD",
-  "NEW BALANCE": "NEW BALANCE",
-  "TOMMY": "TOMMY HILFIGER",
-  "TOMMY JEANS": "TOMMY HILFIGER",
-};
-
-function normalizeBrandForFilter(brand: string): string {
-  let normalized = brand.replace(/_/g, " ").trim().toUpperCase();
-
-  if (BRAND_ALIASES[normalized]) {
-    return BRAND_ALIASES[normalized];
-  }
-
-  for (const [alias, canonical] of Object.entries(BRAND_ALIASES)) {
-    if (normalized.startsWith(alias + " ")) {
-      return canonical;
-    }
-  }
-
-  return normalized
-    .split(" ")
-    .map(word => word.charAt(0) + word.slice(1).toLowerCase())
-    .join(" ");
-}
+import { useDealsApi } from "@/hooks/use-deals-api";
 
 interface DealsGridProps {
-  deals: Deal[];
-  brands: string[];
-  stores: Store[];
-  categories: Category[];
-  priceRange: { min: number; max: number };
+  // Initial filter from URL path (e.g., /ponude/patike sets initialCategoryPath)
+  initialSearch?: string;
+  initialStores?: Store[];
+  initialBrands?: string[];
+  initialGenders?: Gender[];
+  initialCategories?: Category[];
+  initialCategoryPaths?: CategoryPath[];
 }
 
 type SortOption = "discount" | "price-low" | "price-high" | "newest";
@@ -130,32 +102,33 @@ const CATEGORY_HIERARCHY: Record<MainCategory, Subcategory[]> = {
 };
 
 export function DealsGrid({
-  deals,
-  brands,
-  stores,
-  categories: _categories,
-  priceRange: _priceRange,
+  initialSearch = "",
+  initialStores = [],
+  initialBrands = [],
+  initialGenders = [],
+  initialCategories = [],
+  initialCategoryPaths = [],
 }: DealsGridProps) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Initialize state from URL params
-  const [search, setSearch] = useState(searchParams.get("q") || "");
+  // Initialize state from URL params (with initial values as fallback)
+  const [search, setSearch] = useState(searchParams.get("q") || initialSearch);
   const [selectedStores, setSelectedStores] = useState<Store[]>(
-    (searchParams.get("stores")?.split(",").filter(Boolean) as Store[]) || []
+    (searchParams.get("stores")?.split(",").filter(Boolean) as Store[]) || initialStores
   );
   const [selectedBrands, setSelectedBrands] = useState<string[]>(
-    searchParams.get("brands")?.split(",").filter(Boolean) || []
+    searchParams.get("brands")?.split(",").filter(Boolean) || initialBrands
   );
   const [selectedGenders, setSelectedGenders] = useState<Gender[]>(
-    (searchParams.get("genders")?.split(",").filter(Boolean) as Gender[]) || []
+    (searchParams.get("genders")?.split(",").filter(Boolean) as Gender[]) || initialGenders
   );
   const [selectedCategories, setSelectedCategories] = useState<Category[]>(
-    (searchParams.get("categories")?.split(",").filter(Boolean) as Category[]) || []
+    (searchParams.get("categories")?.split(",").filter(Boolean) as Category[]) || initialCategories
   );
   const [selectedCategoryPaths, setSelectedCategoryPaths] = useState<CategoryPath[]>(
-    (searchParams.get("catPaths")?.split(",").filter(Boolean) as CategoryPath[]) || []
+    (searchParams.get("catPaths")?.split(",").filter(Boolean) as CategoryPath[]) || initialCategoryPaths
   );
   const [expandedCategories, setExpandedCategories] = useState<MainCategory[]>([]);
   const [minDiscount, setMinDiscount] = useState(
@@ -187,6 +160,31 @@ export function DealsGrid({
     Number(searchParams.get("page")) || 1
   );
   const [showMobileFilters, setShowMobileFilters] = useState(false);
+
+  // Fetch deals from API
+  const {
+    deals,
+    total,
+    totalPages,
+    isLoading,
+    isInitialLoad,
+    error,
+    availableBrands: apiBrands,
+    availableStores: stores,
+  } = useDealsApi({
+    search,
+    stores: selectedStores,
+    brands: selectedBrands,
+    genders: selectedGenders,
+    categories: selectedCategories,
+    categoryPaths: selectedCategoryPaths,
+    sizes: selectedSizes,
+    minDiscount,
+    minPrice,
+    maxPrice,
+    sortBy,
+    page: currentPage,
+  });
 
   // Lock body scroll when mobile filters are open
   useEffect(() => {
@@ -315,11 +313,11 @@ export function DealsGrid({
   }, [search, selectedStores, selectedBrands, selectedGenders, selectedCategories, selectedCategoryPaths, selectedSizes, minDiscount, minPrice, maxPrice, sortBy, currentPage, pathname, router]);
 
   const filteredBrands = useMemo(() => {
-    if (!brandSearch) return brands;
-    return brands.filter((b) =>
+    if (!brandSearch) return apiBrands;
+    return apiBrands.filter((b) =>
       b.toLowerCase().includes(brandSearch.toLowerCase())
     );
-  }, [brands, brandSearch]);
+  }, [apiBrands, brandSearch]);
 
   // Valid clothing sizes (in display order)
   const CLOTHING_SIZES = ["XS", "S", "M", "L", "XL", "XXL", "2XL", "3XL", "4XL", "5XL"];
@@ -368,111 +366,8 @@ export function DealsGrid({
     return { shoeSizes: sortedShoes, clothingSizes: sortedClothes };
   }, [deals]);
 
-  const filteredDeals = useMemo(() => {
-    let result = [...deals];
-
-    if (search) {
-      const searchLower = search.toLowerCase();
-      result = result.filter(
-        (deal) =>
-          deal.name.toLowerCase().includes(searchLower) ||
-          (deal.brand && deal.brand.toLowerCase().includes(searchLower))
-      );
-    }
-
-    if (selectedStores.length > 0) {
-      result = result.filter((deal) => selectedStores.includes(deal.store));
-    }
-
-    if (selectedBrands.length > 0) {
-      result = result.filter(
-        (deal) => deal.brand && selectedBrands.includes(normalizeBrandForFilter(deal.brand))
-      );
-    }
-
-    if (selectedGenders.length > 0) {
-      result = result.filter((deal) => selectedGenders.includes(deal.gender));
-    }
-
-    if (selectedCategories.length > 0) {
-      result = result.filter((deal) =>
-        selectedCategories.includes(deal.category)
-      );
-    }
-
-    // Filter by new category paths (from detail scraper)
-    if (selectedCategoryPaths.length > 0) {
-      result = result.filter((deal) => {
-        if (!deal.categories || deal.categories.length === 0) return false;
-        return selectedCategoryPaths.some((path) => deal.categories?.includes(path));
-      });
-    }
-
-    result = result.filter((deal) => deal.discountPercent >= minDiscount);
-
-    if (minPrice !== null) {
-      result = result.filter((deal) => deal.salePrice >= minPrice);
-    }
-
-    if (maxPrice !== null) {
-      result = result.filter((deal) => deal.salePrice <= maxPrice);
-    }
-
-    if (selectedSizes.length > 0) {
-      result = result.filter(
-        (deal) => deal.sizes && deal.sizes.some((dealSize) => {
-          // Check each selected size
-          return selectedSizes.some((selectedSize) => {
-            // Exact match
-            if (dealSize === selectedSize) return true;
-            // Range match: "36-37" matches if user selected "36" or "37"
-            if (dealSize.includes("-")) {
-              const parts = dealSize.split("-");
-              return parts.includes(selectedSize);
-            }
-            return false;
-          });
-        })
-      );
-    }
-
-    switch (sortBy) {
-      case "discount":
-        result.sort((a, b) => b.discountPercent - a.discountPercent);
-        break;
-      case "price-low":
-        result.sort((a, b) => a.salePrice - b.salePrice);
-        break;
-      case "price-high":
-        result.sort((a, b) => b.salePrice - a.salePrice);
-        break;
-      case "newest":
-        // Reverse order - newest items are at the end of the data array
-        result.reverse();
-        break;
-    }
-
-    return result;
-  }, [
-    deals,
-    search,
-    selectedStores,
-    selectedBrands,
-    selectedGenders,
-    selectedCategories,
-    selectedCategoryPaths,
-    selectedSizes,
-    minDiscount,
-    minPrice,
-    maxPrice,
-    sortBy,
-  ]);
-
-  const totalPages = Math.ceil(filteredDeals.length / ITEMS_PER_PAGE);
-  const paginatedDeals = filteredDeals.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE
-  );
+  // Filtering and pagination now happen on the server via useDealsApi
+  // deals, total, and totalPages come from the API response
 
   const resetFilters = () => {
     setSelectedStores([]);
@@ -1137,7 +1032,7 @@ export function DealsGrid({
               {/* Sort and count - right side, full width when no filters */}
               <div className={`flex items-center justify-end gap-4 ${hasActiveFilters ? "sm:flex-shrink-0" : "w-full"}`}>
                 <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {filteredDeals.length} {filteredDeals.length === 1 ? "proizvod" : "proizvoda"}
+                  {isLoading || isInitialLoad ? "..." : `${total} ${total === 1 ? "proizvod" : "proizvoda"}`}
                 </p>
                 <select
                   value={sortBy}
@@ -1274,7 +1169,27 @@ export function DealsGrid({
           </div>
 
           {/* Deals Grid */}
-          {paginatedDeals.length === 0 ? (
+          {isLoading || isInitialLoad ? (
+            <div className="flex flex-wrap gap-3">
+              {Array.from({ length: 16 }).map((_, i) => (
+                <div key={i} className="w-[calc(50%-6px)] sm:w-[calc(25%-9px)]">
+                  <DealCardSkeleton />
+                </div>
+              ))}
+            </div>
+          ) : error ? (
+            <div className="min-h-[400px] flex flex-col items-center justify-center text-center px-4">
+              <div className="w-20 h-20 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mb-4">
+                <SearchX className="w-10 h-10 text-red-500" />
+              </div>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                Greška
+              </h3>
+              <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-sm">
+                {error}
+              </p>
+            </div>
+          ) : deals.length === 0 ? (
             <div className="min-h-[400px] flex flex-col items-center justify-center text-center px-4">
               <div className="w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
                 <SearchX className="w-10 h-10 text-gray-400 dark:text-gray-500" />
@@ -1297,7 +1212,7 @@ export function DealsGrid({
             </div>
           ) : (
             <div className="flex flex-wrap gap-3">
-              {paginatedDeals.map((deal) => (
+              {deals.map((deal) => (
                 <div key={deal.id} className="w-[calc(50%-6px)] sm:w-[calc(25%-9px)]">
                   <DealCard deal={deal} />
                 </div>
@@ -1306,7 +1221,7 @@ export function DealsGrid({
           )}
 
           {/* Pagination */}
-          {totalPages > 1 && (
+          {!isLoading && totalPages > 1 && (
             <div className="mt-8 flex flex-col items-center gap-4">
               <div className="flex items-center gap-1">
                 <Button
@@ -1372,7 +1287,7 @@ export function DealsGrid({
                 </Button>
               </div>
               <p className="text-sm text-gray-500 dark:text-gray-400">
-                Prikazano {(currentPage - 1) * ITEMS_PER_PAGE + 1}-{Math.min(currentPage * ITEMS_PER_PAGE, filteredDeals.length)} od {filteredDeals.length} proizvoda
+                Prikazano {(currentPage - 1) * ITEMS_PER_PAGE + 1}-{Math.min(currentPage * ITEMS_PER_PAGE, total)} od {total} proizvoda
               </p>
             </div>
           )}
