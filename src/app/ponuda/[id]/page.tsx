@@ -89,11 +89,9 @@ async function getTopDeals(limit: number = 8): Promise<Deal[]> {
   return allDeals.slice(0, limit);
 }
 
-// Generate static paths for all deals
-export async function generateStaticParams() {
-  const deals = await getAllDealsAsync();
-  return deals.map((deal) => ({ id: deal.id }));
-}
+// No generateStaticParams - pages render on-demand (not pre-built)
+// This speeds up builds significantly since we have 6000+ products
+// Product pages are noindexed anyway, so no SEO benefit from pre-rendering
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
