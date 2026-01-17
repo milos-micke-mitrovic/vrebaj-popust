@@ -20,25 +20,33 @@ function extractGender(name: string, url?: string): Gender {
   // Kids patterns - check first as it's most specific
   if (
     text.includes("decij") ||
-    text.includes("decak") ||
-    text.includes("decac") ||
-    text.includes("devojc") ||
+    text.includes("decak") ||    // dečak, dečake (boys) - normalized
+    text.includes("decac") ||    // dečaci (boys) - normalized
+    text.includes("devojc") ||   // devojčica (girls) - normalized
+    text.includes("devoj") ||    // devojke, devojka (girls)
+    text.includes("deca") ||     // deca (children) - also catches "dečak" after normalization
     text.includes("/deca/") ||
     text.includes("-deca-") ||
     text.includes(" kid") ||
     text.includes(" kids") ||
     text.includes("-kid-") ||
-    text.includes(" bp") ||    // Boys preschool
-    text.includes(" bg") ||    // Boys grade school
-    text.includes(" ps") ||    // Preschool
-    text.includes(" gs") ||    // Grade school
-    text.includes(" td") ||    // Toddler
+    text.includes(" bp") ||      // Boys preschool
+    text.includes(" bg") ||      // Boys grade school
+    text.includes(" ps") ||      // Preschool
+    text.includes(" gs") ||      // Grade school
+    text.includes(" td") ||      // Toddler
     text.includes(" junior") ||
     text.includes(" jr") ||
     text.includes("-jr-") ||
     text.includes(" youth") ||
     text.includes("/decije-") ||
-    text.includes("/decija-")
+    text.includes("/decija-") ||
+    text.includes("beba") ||     // beba (baby)
+    text.includes("bebe") ||     // bebe (babies)
+    text.includes("infant") ||
+    text.includes("toddler") ||
+    text.includes("child") ||
+    text.includes("children")
   ) {
     return "deciji";
   }
@@ -49,7 +57,9 @@ function extractGender(name: string, url?: string): Gender {
     text.includes("zensk") ||
     text.includes("za zene") ||
     text.includes(" zene") ||
+    text.includes(" zena") ||
     text.includes("/zene/") ||
+    text.includes("/zena/") ||
     text.includes("/zenske-") ||
     text.includes("/zenska-") ||
     text.includes("-zenske-") ||
@@ -62,7 +72,10 @@ function extractGender(name: string, url?: string): Gender {
     text.includes("/women/") ||
     text.includes("-women-") ||
     text.includes(" lady") ||
-    text.includes(" ladies")
+    text.includes(" ladies") ||
+    text.includes("female") ||
+    text.includes(" girl") ||
+    text.includes("/girl/")
   ) {
     return "zenski";
   }
@@ -74,6 +87,7 @@ function extractGender(name: string, url?: string): Gender {
     text.includes("muskarc") ||
     text.includes("za muskarce") ||
     text.includes("/muskarci/") ||
+    text.includes("/muskarac/") ||
     text.includes("/muske-") ||
     text.includes("/muska-") ||
     text.includes("-muske-") ||
@@ -83,7 +97,9 @@ function extractGender(name: string, url?: string): Gender {
     text.includes(" men ") ||
     text.includes(" men's") ||
     text.includes("/men/") ||
-    text.includes("-men-")
+    text.includes("-men-") ||
+    text.includes("male") ||
+    text.includes(" guy")
   ) {
     return "muski";
   }
