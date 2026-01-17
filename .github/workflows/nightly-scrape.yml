@@ -142,7 +142,7 @@ jobs:
         run: pnpm tsx src/scraper/stores/planeta-details.ts
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        timeout-minutes: 45
+        timeout-minutes: 180
 
   scrape-buzz-details:
     runs-on: ubuntu-latest
@@ -163,7 +163,7 @@ jobs:
         run: pnpm tsx src/scraper/stores/buzz-details.ts
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        timeout-minutes: 45
+        timeout-minutes: 180
 
   scrape-officeshoes-details:
     runs-on: ubuntu-latest
@@ -184,7 +184,7 @@ jobs:
         run: pnpm tsx src/scraper/stores/officeshoes-details.ts
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        timeout-minutes: 45
+        timeout-minutes: 180
 
   scrape-nsport-details:
     runs-on: ubuntu-latest
@@ -205,7 +205,7 @@ jobs:
         run: pnpm tsx src/scraper/stores/nsport-details.ts
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        timeout-minutes: 45
+        timeout-minutes: 180
 
   scrape-sportvision-details:
     runs-on: ubuntu-latest
@@ -226,4 +226,4 @@ jobs:
         run: pnpm tsx src/scraper/stores/sportvision-details.ts
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        timeout-minutes: 45
+        timeout-minutes: 180
