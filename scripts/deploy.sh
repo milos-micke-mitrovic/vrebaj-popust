@@ -17,10 +17,13 @@ pnpm install
 echo "3. Generating Prisma client..."
 pnpm prisma generate
 
-echo "4. Building app..."
+echo "4. Cleaning build cache..."
+rm -rf .next
+
+echo "5. Building app..."
 pnpm build
 
-echo "5. Restarting PM2..."
+echo "6. Restarting PM2..."
 pm2 restart vrebaj-popust
 
 echo "=== Deploy complete ==="
