@@ -275,6 +275,8 @@ async function scrapeNSport(): Promise<void> {
 
       let currentPage = 1;
       const maxPages = 100; // Outlet has ~90 pages
+      let consecutivePagesWithNoNewDeals = 0;
+      const maxConsecutiveEmpty = 5; // Stop if 5 consecutive pages have no new deals
 
       while (currentPage <= maxPages) {
         // Handle pagination - use & if URL already has query params, otherwise use ?
@@ -311,6 +313,8 @@ async function scrapeNSport(): Promise<void> {
         if (products.length > 0 && currentPage === 1) {
           console.log("Sample product:", JSON.stringify(products[0], null, 2));
         }
+
+        const dealsBeforePage = totalDeals;
 
         for (const product of products) {
           // Skip duplicates
@@ -351,10 +355,22 @@ async function scrapeNSport(): Promise<void> {
           }
         }
 
+        const newDealsThisPage = totalDeals - dealsBeforePage;
         totalScraped += products.length;
         console.log(
-          `Deals with ${MIN_DISCOUNT}%+ discount: ${totalDeals} (total scraped: ${totalScraped})`
+          `Deals with ${MIN_DISCOUNT}%+ discount: ${totalDeals} (+${newDealsThisPage} new) (total scraped: ${totalScraped})`
         );
+
+        // Track consecutive pages with no new deals
+        if (newDealsThisPage === 0) {
+          consecutivePagesWithNoNewDeals++;
+          if (consecutivePagesWithNoNewDeals >= maxConsecutiveEmpty) {
+            console.log(`No new deals for ${maxConsecutiveEmpty} consecutive pages, moving to next promo page`);
+            break;
+          }
+        } else {
+          consecutivePagesWithNoNewDeals = 0;
+        }
 
         currentPage++;
         await sleep(2000 + Math.random() * 1000);
