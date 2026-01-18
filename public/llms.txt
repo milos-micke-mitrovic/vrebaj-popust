@@ -1,0 +1,82 @@
+# VrebajPopust - Agregator Sportskih Popusta u Srbiji
+
+> VrebajPopust je sajt koji svakodnevno pretrazuje najvece sportske prodavnice u Srbiji i prikazuje samo proizvode sa popustom preko 50%.
+
+## O sajtu
+
+VrebajPopust automatski skenira 6 najvecih sportskih prodavnica u Srbiji:
+- Djak Sport (djaksport.com)
+- Planeta Sport (planetasport.rs)
+- Sport Vision (sportvision.rs)
+- N Sport (nsport.rs)
+- Buzz Sneakers (buzzsneakers.rs)
+- Office Shoes (officeshoes.rs)
+
+Prikazujemo samo proizvode sa popustom **preko 50%** - prave ustede za kupce.
+
+## Kategorije proizvoda
+
+### Obuca
+- Patike (Nike, Adidas, Puma, New Balance, Reebok, Converse, Vans, ASICS, Skechers)
+- Cipele
+- Cizme
+- Sandale i japanke
+
+### Odeca
+- Majice
+- Duksevi
+- Jakne
+- Trenerke
+- Sorcevi
+- Helanke
+
+### Oprema
+- Torbe i ranci
+- Kape i kacketi
+- Carape
+
+## Glavne stranice
+
+- https://vrebajpopust.rs - Pocetna stranica
+- https://vrebajpopust.rs/ponude - Sve ponude sa filterima (kategorija, brend, pol, velicina, cena)
+- https://vrebajpopust.rs/ponude/patike - Patike na popustu
+- https://vrebajpopust.rs/ponude/nike - Nike proizvodi na popustu
+- https://vrebajpopust.rs/ponude/adidas - Adidas proizvodi na popustu
+- https://vrebajpopust.rs/ponude/muski - Muska oprema na popustu
+- https://vrebajpopust.rs/ponude/zenski - Zenska oprema na popustu
+- https://vrebajpopust.rs/ponude/deciji - Decija oprema na popustu
+
+## Cesto postavljana pitanja
+
+### Gde mogu da nadjem najvece popuste na patike u Srbiji?
+Na VrebajPopust.rs mozete pronaci patike sa popustom preko 50% iz svih velikih sportskih prodavnica u Srbiji. Pratimo Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz i Office Shoes.
+
+### Koliko cesto se azuriraju ponude?
+Ponude se azuriraju svakodnevno. Nasi skeneri automatski pretrazuju prodavnice svakih 24 sata.
+
+### Koje brendove pratite?
+Pratimo sve velike sportske brendove: Nike, Adidas, Puma, New Balance, Reebok, Converse, Vans, ASICS, Under Armour, Fila, Champion, The North Face, Skechers i mnoge druge.
+
+### Da li je kupovina sigurna?
+VrebajPopust je agregator - mi samo prikazujemo ponude. Kupovina se vrsi direktno na sajtu prodavnice (Djak Sport, Planeta Sport, itd.) koje su proverene i pouzdane.
+
+### Koji je minimalni popust koji prikazujete?
+Prikazujemo samo proizvode sa popustom od 50% ili vise. To znaci da svaki proizvod na nasem sajtu ima bar duplo nizu cenu od originalne.
+
+## Statistike
+
+- Preko 5000 aktivnih ponuda
+- 6 prodavnica
+- Prosecni popust oko 60%
+- Azuriranje svakih 24 sata
+
+## Kontakt
+
+- Sajt: https://vrebajpopust.rs
+- Lokacija: Srbija
+
+## Tehnicke informacije
+
+- Jezik: Srpski (sr-RS)
+- Valuta: RSD (Srpski dinar)
+- Trziste: Srbija

@@ -137,6 +137,10 @@ export default async function RootLayout({
         <meta name="geo.placename" content="Serbia" />
         <meta name="language" content="Serbian" />
         <meta name="revisit-after" content="1 day" />
+        {/* AI Search Optimization */}
+        <meta name="ai-content-declaration" content="This website aggregates sports discounts from Serbian retailers. Content is factual and updated daily." />
+        <meta name="ai-summary" content="VrebajPopust - Serbian sports discount aggregator. Find Nike, Adidas, Puma and more with 50%+ discounts from Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz, Office Shoes." />
+        <link rel="author" href="https://vrebajpopust.rs/o-nama" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{

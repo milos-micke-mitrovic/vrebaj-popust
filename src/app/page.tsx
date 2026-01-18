@@ -66,11 +66,71 @@ export default async function Home() {
     },
   };
 
+  // FAQ structured data for AI search optimization
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "Gde mogu da pronađem najveće popuste na patike u Srbiji?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Na VrebajPopust.rs možete pronaći patike sa popustom preko 50% iz svih velikih sportskih prodavnica u Srbiji. Pratimo Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz Sneakers i Office Shoes. Sve ponude se ažuriraju svakodnevno.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Koje sportske prodavnice VrebajPopust prati?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "VrebajPopust prati 6 najvećih sportskih prodavnica u Srbiji: Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz Sneakers i Office Shoes. Skeniramo njihove sajtove svakodnevno i prikazujemo samo proizvode sa popustom preko 50%.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Koje brendove mogu da pronađem na VrebajPopust?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Na VrebajPopust možete pronaći sve velike sportske brendove: Nike, Adidas, Puma, New Balance, Reebok, Converse, Vans, ASICS, Under Armour, Fila, Champion, The North Face, Skechers, Jordan i mnoge druge. Svi proizvodi imaju popust od minimum 50%.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Koliko često se ažuriraju ponude na VrebajPopust?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Ponude na VrebajPopust se ažuriraju svakodnevno. Naši automatski skeneri pretražuju sve prodavnice svakih 24 sata kako bismo vam prikazali najnovije popuste preko 50%.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Da li je kupovina preko VrebajPopust sigurna?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "VrebajPopust je agregator ponuda - mi samo prikazujemo proizvode na popustu. Kupovina se vrši direktno na sajtu prodavnice (Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz ili Office Shoes) koje su proverene i pouzdane kompanije sa dugogodišnjim iskustvom na srpskom tržištu.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Koji je minimalni popust na VrebajPopust?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Prikazujemo isključivo proizvode sa popustom od 50% ili više. To znači da svaki proizvod na našem sajtu ima bar duplo nižu cenu od originalne. Prosečan popust je oko 60%.",
+        },
+      },
+    ],
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
 
       <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-950">
