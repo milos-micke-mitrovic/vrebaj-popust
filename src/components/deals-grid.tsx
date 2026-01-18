@@ -257,7 +257,6 @@ export function DealsGrid({
     // Only sync if URL differs from current state (external navigation)
     if (currentParams.toString() !== searchParams.toString()) {
       isUpdatingFromUrl.current = true;
-      /* eslint-disable react-hooks/set-state-in-effect */
       setSearch(searchParams.get("q") || "");
       setSelectedStores((searchParams.get("stores")?.split(",").filter(Boolean) as Store[]) || []);
       setSelectedBrands(searchParams.get("brands")?.split(",").filter(Boolean) || []);
@@ -270,11 +269,11 @@ export function DealsGrid({
       setMaxPrice(searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : null);
       setSortBy((searchParams.get("sort") as SortOption) || "discount");
       setCurrentPage(Number(searchParams.get("page")) || 1);
-      /* eslint-enable react-hooks/set-state-in-effect */
       // Reset flag after a short delay
       setTimeout(() => { isUpdatingFromUrl.current = false; }, 50);
     }
-  }, [searchParams]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]); // Intentionally only depend on searchParams - we compare internal state to URL
 
   // Debounced URL update to prevent re-renders while typing/dragging
   useEffect(() => {
@@ -363,7 +362,8 @@ export function DealsGrid({
     });
 
     return { shoeSizes: sortedShoes, clothingSizes: sortedClothes };
-  }, [deals]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [deals]); // CLOTHING_SIZES is a constant, no need to include in deps
 
   // Filtering and pagination now happen on the server via useDealsApi
   // deals, total, and totalPages come from the API response
