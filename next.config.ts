@@ -4,6 +4,24 @@ import withPWA from "next-pwa";
 const nextConfig: NextConfig = {
   // Force webpack for PWA support
   turbopack: {},
+  // Redirects for old URLs (SEO - preserve link juice)
+  async redirects() {
+    return [
+      // Old /deal/ URLs redirect to /ponuda/
+      {
+        source: "/deal/:id",
+        destination: "/ponuda/:id",
+        permanent: true, // 301 redirect - tells Google to update index
+      },
+      // Ensure www and non-www consistency (redirect non-www to www)
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "vrebajpopust.rs" }],
+        destination: "https://www.vrebajpopust.rs/:path*",
+        permanent: true,
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {
