@@ -133,6 +133,15 @@ export default async function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
+        {/* Preconnect to image domains for faster loading */}
+        <link rel="preconnect" href="https://www.djaksport.com" />
+        <link rel="preconnect" href="https://www.sportvision.rs" />
+        <link rel="preconnect" href="https://planetasport.rs" />
+        <link rel="preconnect" href="https://www.buzzsneakers.rs" />
+        <link rel="preconnect" href="https://www.officeshoes.rs" />
+        <link rel="preconnect" href="https://www.n-sport.net" />
+        <link rel="dns-prefetch" href="https://www.djaksport.com" />
+        <link rel="dns-prefetch" href="https://www.sportvision.rs" />
         <meta name="geo.region" content="RS" />
         <meta name="geo.placename" content="Serbia" />
         <meta name="language" content="Serbian" />
