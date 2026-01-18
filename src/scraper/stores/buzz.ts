@@ -2,8 +2,6 @@ import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
 import { upsertDeal, logScrapeRun, disconnect, cleanupStaleProducts, Store, Gender } from "../db-writer";
-import * as fs from "fs";
-import * as path from "path";
 
 puppeteer.use(StealthPlugin());
 
@@ -54,6 +52,82 @@ function generateId(url: string): string {
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// Extract categories from Buzz URL and product name
+function extractCategories(url: string, name: string): string[] {
+  const urlLower = url.toLowerCase();
+  const nameLower = name.toLowerCase();
+  const categories: string[] = [];
+
+  // Check URL patterns first (more reliable)
+  // Buzz URLs: /patike/, /odeca/, /polo-majica/, /majica/, /duks/, etc.
+
+  // Obuća
+  if (urlLower.includes("/patike/") || urlLower.includes("/sneakers/")) {
+    categories.push("obuca/patike");
+  } else if (urlLower.includes("/cipele/")) {
+    categories.push("obuca/cipele");
+  } else if (urlLower.includes("/cizme/") || urlLower.includes("/boots/")) {
+    categories.push("obuca/cizme");
+  } else if (urlLower.includes("/sandale/")) {
+    categories.push("obuca/sandale");
+  } else if (urlLower.includes("/japanke/") || urlLower.includes("/papuce/")) {
+    categories.push("obuca/sandale");
+  }
+
+  // Odeća
+  if (urlLower.includes("/majica/") || urlLower.includes("/polo-majica/") || urlLower.includes("/t-shirt/")) {
+    categories.push("odeca/majice");
+  } else if (urlLower.includes("/duks/") || urlLower.includes("/hoodie/") || urlLower.includes("/dukserica/")) {
+    categories.push("odeca/duksevi");
+  } else if (urlLower.includes("/jakna/") || urlLower.includes("/jacket/")) {
+    categories.push("odeca/jakne");
+  } else if (urlLower.includes("/trenerka/") || urlLower.includes("/pants/") || urlLower.includes("/pantalone/")) {
+    categories.push("odeca/trenerke");
+  } else if (urlLower.includes("/sorc/") || urlLower.includes("/shorts/")) {
+    categories.push("odeca/sorcevi");
+  } else if (urlLower.includes("/helanke/") || urlLower.includes("/leggings/")) {
+    categories.push("odeca/helanke");
+  }
+
+  // Oprema
+  if (urlLower.includes("/ranac/") || urlLower.includes("/backpack/") || urlLower.includes("/torba/")) {
+    categories.push("oprema/torbe");
+  } else if (urlLower.includes("/kapa/") || urlLower.includes("/kacket/")) {
+    categories.push("oprema/kape");
+  }
+
+  // Fallback: extract from product name if no URL match
+  if (categories.length === 0) {
+    if (nameLower.includes("patike") || nameLower.includes("sneaker")) {
+      categories.push("obuca/patike");
+    } else if (nameLower.includes("cipele")) {
+      categories.push("obuca/cipele");
+    } else if (nameLower.includes("čizme") || nameLower.includes("cizme") || nameLower.includes("boot")) {
+      categories.push("obuca/cizme");
+    } else if (nameLower.includes("sandale") || nameLower.includes("japanke") || nameLower.includes("papuče") || nameLower.includes("papuce")) {
+      categories.push("obuca/sandale");
+    } else if (nameLower.includes("majica") || nameLower.includes("t-shirt") || nameLower.includes("polo")) {
+      categories.push("odeca/majice");
+    } else if (nameLower.includes("duks") || nameLower.includes("hoodie") || nameLower.includes("dukserica")) {
+      categories.push("odeca/duksevi");
+    } else if (nameLower.includes("jakna") || nameLower.includes("jacket")) {
+      categories.push("odeca/jakne");
+    } else if (nameLower.includes("trenerka") || nameLower.includes("pants") || nameLower.includes("pantalone") || nameLower.includes("jogger")) {
+      categories.push("odeca/trenerke");
+    } else if (nameLower.includes("šorc") || nameLower.includes("sorc") || nameLower.includes("shorts")) {
+      categories.push("odeca/sorcevi");
+    } else if (nameLower.includes("helanke") || nameLower.includes("leggings") || nameLower.includes("tajice")) {
+      categories.push("odeca/helanke");
+    } else if (nameLower.includes("ranac") || nameLower.includes("backpack") || nameLower.includes("torba") || nameLower.includes("bag")) {
+      categories.push("oprema/torbe");
+    } else if (nameLower.includes("kapa") || nameLower.includes("kačket") || nameLower.includes("kacket") || nameLower.includes("cap")) {
+      categories.push("oprema/kape");
+    }
+  }
+
+  return categories;
 }
 
 async function launchBrowser(): Promise<Browser> {
@@ -298,6 +372,8 @@ async function scrapeBuzz(): Promise<void> {
             product.discountPercent || calcDiscount(originalPrice, salePrice);
 
           if (discountPercent >= MIN_DISCOUNT) {
+            const categories = extractCategories(product.url, product.name);
+
             await upsertDeal({
               id: generateId(product.url),
               store: STORE,
@@ -309,6 +385,7 @@ async function scrapeBuzz(): Promise<void> {
               url: product.url,
               imageUrl: product.imageUrl,
               gender: salePage.gender,
+              categories,
             });
             sectionDeals++;
             totalDeals++;

@@ -170,7 +170,6 @@ export function DealsGrid({
     isInitialLoad,
     error,
     availableBrands: apiBrands,
-    availableStores: stores,
   } = useDealsApi({
     search,
     stores: selectedStores,
@@ -630,7 +629,7 @@ export function DealsGrid({
       <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
         <h3 className="mb-3 text-sm font-semibold text-gray-900 dark:text-white">Prodavnica</h3>
         <div className="space-y-1">
-          {stores.map((store) => (
+          {(Object.keys(STORE_NAMES) as Store[]).map((store) => (
             <button
               key={store}
               type="button"

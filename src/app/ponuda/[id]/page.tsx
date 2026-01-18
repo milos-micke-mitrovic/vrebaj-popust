@@ -393,7 +393,7 @@ export default async function DealPage({ params }: Props) {
         />
 
         {/* Product Details */}
-        <main className="mx-auto max-w-7xl px-4 pb-12">
+        <main className="mx-auto max-w-7xl px-4 py-6">
           <article itemScope itemType="https://schema.org/Product">
             <div className="grid gap-8 md:grid-cols-2">
               {/* Image */}
@@ -576,12 +576,12 @@ export default async function DealPage({ params }: Props) {
                   </a>
                 </div>
 
-                <p className="mt-4 text-center text-sm text-gray-500 dark:text-gray-400">
+                <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
                   Bićete preusmereni na sajt prodavca
                 </p>
 
                 {/* Share and wishlist buttons */}
-                <div className="mt-4 flex justify-center gap-2">
+                <div className="mt-4 flex gap-2">
                   <ProductWishlistButton deal={deal} />
                   <ShareButton
                     title={`${deal.name} - ${deal.discountPercent}% popust`}

@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Deal, Store } from "@/types/deal";
 import { formatPrice, getProxiedImageUrl } from "@/lib/utils";
 import { WishlistButton } from "@/components/wishlist-button";
@@ -25,7 +24,7 @@ const STORE_INFO: Record<Store, { name: string; logo: string; fallbackColor: str
 
 export function DealCardSkeleton() {
   return (
-    <Card className="h-full overflow-hidden dark:bg-gray-800 dark:border-gray-700">
+    <Card className="h-full overflow-hidden dark:bg-gray-800 dark:border-gray-700 !p-0">
       <div className="relative aspect-square overflow-hidden bg-gray-200 dark:bg-gray-700 animate-pulse">
         {/* Discount badge skeleton */}
         <div className="absolute left-2 top-2 h-5 w-12 rounded-full bg-gray-300 dark:bg-gray-600" />
@@ -72,7 +71,7 @@ export function DealCard({ deal }: DealCardProps) {
 
   return (
     <Link href={`/ponuda/${deal.id}`} onClick={handleClick}>
-      <Card className="group h-full overflow-hidden transition-shadow hover:shadow-lg dark:bg-gray-800 dark:border-gray-700">
+      <Card className="group h-full overflow-hidden transition-shadow hover:shadow-lg dark:bg-gray-800 dark:border-gray-700 !p-0">
         <div className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-700">
           <Image
             src={!imgError ? getProxiedImageUrl(deal.imageUrl) : "/images/placeholder.png"}
@@ -84,10 +83,10 @@ export function DealCard({ deal }: DealCardProps) {
             onError={() => setImgError(true)}
             unoptimized
           />
-          {/* Discount badge */}
-          <Badge className="absolute left-2 top-2 bg-red-500 text-white hover:bg-red-600">
+          {/* Discount ribbon */}
+          <div className="absolute -left-8 top-3 rotate-[-45deg] bg-red-500 px-8 py-0.5 text-xs font-bold text-white shadow-md">
             -{deal.discountPercent}%
-          </Badge>
+          </div>
           {/* Store logo */}
           <div className="absolute right-2 top-2">
             {!logoError ? (
