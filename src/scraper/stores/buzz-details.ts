@@ -38,10 +38,12 @@ async function extractProductDetails(page: Page): Promise<ProductDetails> {
         gender: null
       };
 
-      // Extract sizes from size selector
-      var sizeElements = document.querySelectorAll('.size-btn:not(.out-of-stock), .size-item:not(.unavailable), [data-size]:not(.out-of-stock)');
+      // Extract sizes from Buzz size selector
+      // Buzz uses: <li data-productsize-name="36.5" class="ease">36.5</li>
+      // Out of stock sizes have class "disabled"
+      var sizeElements = document.querySelectorAll('li[data-productsize-name]:not(.disabled)');
       sizeElements.forEach(function(el) {
-        var size = el.textContent.trim() || el.getAttribute('data-size') || '';
+        var size = el.getAttribute('data-productsize-name') || el.textContent.trim() || '';
         if (size && !result.sizes.includes(size)) {
           result.sizes.push(size);
         }

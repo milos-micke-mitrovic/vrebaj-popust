@@ -2,8 +2,6 @@ import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
 import { upsertDeal, logScrapeRun, disconnect, cleanupStaleProducts, Store, Gender } from "../db-writer";
-import * as fs from "fs";
-import * as path from "path";
 
 puppeteer.use(StealthPlugin());
 

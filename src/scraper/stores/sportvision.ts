@@ -240,7 +240,7 @@ async function scrapeSportVision(): Promise<void> {
         timeout: 30000,
       });
       await sleep(2000);
-    } catch (err) {
+    } catch {
       console.log("Initial page load timed out, trying pagination anyway...");
     }
 

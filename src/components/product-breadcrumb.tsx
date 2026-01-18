@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
 
 interface BreadcrumbItem {
   label: string;
@@ -15,16 +14,10 @@ interface ProductBreadcrumbProps {
 
 export function ProductBreadcrumb({ items }: ProductBreadcrumbProps) {
   const router = useRouter();
-  const [returnUrl, setReturnUrl] = useState<string | null>(null);
-
-  // Get return URL from sessionStorage on mount
-  useEffect(() => {
-    const savedUrl = sessionStorage.getItem("dealsReturnUrl");
-    setReturnUrl(savedUrl);
-  }, []);
 
   // Get return URL from sessionStorage for back navigation
   const handleBack = () => {
+    const returnUrl = sessionStorage.getItem("dealsReturnUrl");
     if (returnUrl) {
       router.push(returnUrl);
     } else {

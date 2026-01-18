@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { getDealByIdAsync, getAllDealsAsync, STORE_INFO } from "@/lib/deals";
+import { getBrandInfo } from "@/lib/brand-descriptions";
 
 // Revalidate every 5 minutes
 export const revalidate = 300;
@@ -592,38 +593,65 @@ export default async function DealPage({ params }: Props) {
             </div>
 
             {/* SEO Content Section */}
-            <div className="mt-12 rounded-lg bg-white dark:bg-gray-800 p-6 shadow">
-              <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
-                O proizvodu
-              </h2>
-              <p className="text-gray-600 dark:text-gray-300 leading-relaxed" itemProp="description">
-                {deal.brand && <strong>{deal.brand}</strong>} {deal.name} {genderText} je trenutno na akciji u prodavnici {storeInfo.name} sa popustom od <strong>{deal.discountPercent}%</strong>.
-                Originalna cena ovog proizvoda je {formatPrice(deal.originalPrice)}, a akcijska cena je samo <strong>{formatPrice(deal.salePrice)}</strong>.
-                Kupovinom ovog proizvoda uštedećete {formatPrice(savings)}.
-              </p>
-              <p className="text-gray-600 dark:text-gray-300 mt-3 leading-relaxed">
-                VrebajPopust svakodnevno pretražuje najveće sportske prodavnice u Srbiji kako bi pronašao najveće popuste preko 50%.
-                Svi prikazani proizvodi su dostupni za kupovinu online.
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2">
-                <span className="text-xs bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">
-                  {categoryText}
-                </span>
-                {genderTag && (
-                  <span className="text-xs bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">
-                    {genderTag}
-                  </span>
-                )}
-                {deal.brand && (
-                  <span className="text-xs bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">
-                    {deal.brand}
-                  </span>
-                )}
-                <span className="text-xs bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 px-2 py-1 rounded">
-                  {deal.discountPercent}% popust
-                </span>
-              </div>
-            </div>
+            {(() => {
+              const brandInfo = getBrandInfo(deal.brand);
+              return (
+                <div className="mt-12 rounded-lg bg-white dark:bg-gray-800 p-6 shadow">
+                  {brandInfo ? (
+                    <>
+                      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                        O brendu {deal.brand}
+                      </h2>
+                      <p className="text-gray-600 dark:text-gray-300 leading-relaxed" itemProp="description">
+                        {brandInfo.description}
+                      </p>
+                      {brandInfo.founded && (
+                        <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                          Osnovan: {brandInfo.founded}. {brandInfo.country && `Zemlja porekla: ${brandInfo.country}.`}
+                        </p>
+                      )}
+                      <p className="text-gray-600 dark:text-gray-300 mt-4 leading-relaxed">
+                        Ovaj <strong>{deal.brand}</strong> {deal.name.toLowerCase()} {genderText} je trenutno na akciji u prodavnici {storeInfo.name} sa popustom od <strong>{deal.discountPercent}%</strong>.
+                        Originalna cena je {formatPrice(deal.originalPrice)}, a akcijska cena je samo <strong>{formatPrice(deal.salePrice)}</strong> - ušteda od {formatPrice(savings)}!
+                      </p>
+                    </>
+                  ) : (
+                    <>
+                      <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
+                        O proizvodu
+                      </h2>
+                      <p className="text-gray-600 dark:text-gray-300 leading-relaxed" itemProp="description">
+                        {deal.brand && <strong>{deal.brand}</strong>} {deal.name} {genderText} je trenutno na akciji u prodavnici {storeInfo.name} sa popustom od <strong>{deal.discountPercent}%</strong>.
+                        Originalna cena ovog proizvoda je {formatPrice(deal.originalPrice)}, a akcijska cena je samo <strong>{formatPrice(deal.salePrice)}</strong>.
+                        Kupovinom ovog proizvoda uštedećete {formatPrice(savings)}.
+                      </p>
+                      <p className="text-gray-600 dark:text-gray-300 mt-3 leading-relaxed">
+                        VrebajPopust svakodnevno pretražuje najveće sportske prodavnice u Srbiji kako bi pronašao najveće popuste preko 50%.
+                        Svi prikazani proizvodi su dostupni za kupovinu online.
+                      </p>
+                    </>
+                  )}
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <span className="text-xs bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">
+                      {categoryText}
+                    </span>
+                    {genderTag && (
+                      <span className="text-xs bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">
+                        {genderTag}
+                      </span>
+                    )}
+                    {deal.brand && (
+                      <span className="text-xs bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300 px-2 py-1 rounded">
+                        {deal.brand}
+                      </span>
+                    )}
+                    <span className="text-xs bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 px-2 py-1 rounded">
+                      {deal.discountPercent}% popust
+                    </span>
+                  </div>
+                </div>
+              );
+            })()}
           </article>
         </main>
 

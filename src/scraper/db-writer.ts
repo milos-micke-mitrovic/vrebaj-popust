@@ -184,6 +184,21 @@ export async function getStoreProductCount(store: Store): Promise<number> {
   return prisma.deal.count({ where: { store } });
 }
 
+/**
+ * Reset details for a store to force re-scraping
+ */
+export async function resetStoreDetails(store: Store): Promise<number> {
+  const result = await prisma.deal.updateMany({
+    where: { store },
+    data: {
+      sizes: [],
+      detailsScrapedAt: null,
+    },
+  });
+  console.log(`[${store}] Reset details for ${result.count} products`);
+  return result.count;
+}
+
 export async function disconnect(): Promise<void> {
   await prisma.$disconnect();
 }

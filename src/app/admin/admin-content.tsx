@@ -11,9 +11,9 @@ export function AdminContent({ children }: AdminContentProps) {
   const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
   useEffect(() => {
-    // Check for auth cookie
-    const hasAuth = document.cookie.includes("admin_auth=1");
-    setIsAuthenticated(hasAuth);
+    // Check for auth cookie - this is a valid mount-time check
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setIsAuthenticated(document.cookie.includes("admin_auth=1"));
   }, []);
 
   // Loading state
