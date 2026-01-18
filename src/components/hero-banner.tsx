@@ -10,7 +10,7 @@ export function HeroBanner({ children }: HeroBannerProps) {
       {/* Background image - LCP element, load immediately */}
       <div className="absolute inset-0 bg-gray-900">
         <Image
-          src="/images/hero.jpg"
+          src="/images/hero.webp"
           alt=""
           fill
           priority
