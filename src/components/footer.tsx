@@ -111,7 +111,7 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-10 border-t dark:border-gray-800 pt-6">
-          <p className="text-xs text-gray-400 dark:text-gray-500 text-center">
+          <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
             Cene se ažuriraju automatski. VrebajPopust nije odgovoran za tačnost cena na sajtovima prodavaca.
           </p>
         </div>

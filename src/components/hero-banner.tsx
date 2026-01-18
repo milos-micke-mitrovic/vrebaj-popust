@@ -1,6 +1,3 @@
-"use client";
-
-import { useState } from "react";
 import Image from "next/image";
 
 interface HeroBannerProps {
@@ -8,20 +5,18 @@ interface HeroBannerProps {
 }
 
 export function HeroBanner({ children }: HeroBannerProps) {
-  const [imgLoaded, setImgLoaded] = useState(false);
-
   return (
     <section className="relative overflow-hidden">
-      {/* Background image with fade-in */}
+      {/* Background image - LCP element, load immediately */}
       <div className="absolute inset-0 bg-gray-900">
         <Image
           src="/images/hero.jpg"
           alt=""
           fill
           priority
+          fetchPriority="high"
           sizes="100vw"
-          className={`object-cover transition-opacity duration-500 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
-          onLoad={() => setImgLoaded(true)}
+          className="object-cover"
         />
       </div>
       {/* Overlay */}
