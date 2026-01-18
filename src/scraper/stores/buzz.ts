@@ -170,10 +170,10 @@ async function extractProducts(page: Page): Promise<RawProduct[]> {
         // We'll calculate the real discount from prices
         var discountPercent = null;
 
-        // Get product link
-        var linkEl = el.querySelector('a[href*="/patike/"], a[href*="/odeca/"], a[href*="/obu"]');
+        // Get product link - check for all product types
+        var linkEl = el.querySelector('.img-wrapper a[href]');
         if (!linkEl) {
-          linkEl = el.querySelector('.img-wrapper a[href]');
+          linkEl = el.querySelector('a[href*="buzzsneakers.rs/"]');
         }
         var url = linkEl ? linkEl.href : '';
 
