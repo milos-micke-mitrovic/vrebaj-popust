@@ -1,6 +1,43 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 
+// Known bot/scraper user agents to block (but allow search engines)
+const BLOCKED_USER_AGENTS = [
+  "python-requests",
+  "python-urllib",
+  "scrapy",
+  "curl",
+  "wget",
+  "httpie",
+  "postman",
+  "insomnia",
+  "axios",
+  "node-fetch",
+  "go-http-client",
+  "java",
+  "httpclient",
+  "libwww",
+  "lwp-trivial",
+  "php",
+  "ruby",
+  "perl",
+];
+
+// Check if user agent looks like a bot/scraper
+function isBot(userAgent: string | null): boolean {
+  if (!userAgent) return true; // No user agent = suspicious
+
+  const ua = userAgent.toLowerCase();
+
+  // Allow search engines
+  if (ua.includes("googlebot") || ua.includes("bingbot") || ua.includes("yandex")) {
+    return false;
+  }
+
+  // Block known scrapers
+  return BLOCKED_USER_AGENTS.some(bot => ua.includes(bot));
+}
+
 // Simple in-memory rate limiting (for single-server deployment)
 // For multi-server, use Redis instead
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
@@ -40,10 +77,23 @@ function isRateLimited(key: string): boolean {
 }
 
 export function proxy(request: NextRequest) {
-  // Only rate limit API routes
+  // Only apply to API routes
   if (request.nextUrl.pathname.startsWith("/api/")) {
-    const key = getRateLimitKey(request);
+    const userAgent = request.headers.get("user-agent");
 
+    // Block known bots/scrapers (except image-proxy which needs to work)
+    if (!request.nextUrl.pathname.startsWith("/api/image-proxy") && isBot(userAgent)) {
+      return new NextResponse(
+        JSON.stringify({ error: "Forbidden" }),
+        {
+          status: 403,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Rate limiting
+    const key = getRateLimitKey(request);
     if (isRateLimited(key)) {
       return new NextResponse(
         JSON.stringify({ error: "Too many requests" }),
