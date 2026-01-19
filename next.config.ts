@@ -4,6 +4,41 @@ import withPWA from "next-pwa";
 const nextConfig: NextConfig = {
   // Force webpack for PWA support
   turbopack: {},
+
+  // Security headers
+  async headers() {
+    return [
+      {
+        source: "/:path*",
+        headers: [
+          // Prevent clickjacking
+          { key: "X-Frame-Options", value: "DENY" },
+          // Prevent MIME type sniffing
+          { key: "X-Content-Type-Options", value: "nosniff" },
+          // XSS protection (legacy browsers)
+          { key: "X-XSS-Protection", value: "1; mode=block" },
+          // Referrer policy
+          { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+          // Permissions policy (disable unused features)
+          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+        ],
+      },
+      {
+        // Cache static assets for 1 year
+        source: "/logos/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+      {
+        source: "/images/:path*",
+        headers: [
+          { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+        ],
+      },
+    ];
+  },
+
   // Redirects for old URLs (SEO - preserve link juice)
   async redirects() {
     return [
@@ -22,6 +57,12 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+
+  // Compress responses
+  compress: true,
+
+  // Optimize production builds
+  productionBrowserSourceMaps: false,
   images: {
     remotePatterns: [
       {
