@@ -62,6 +62,7 @@ export function useDealsApi(params: UseDealsApiParams): UseDealsApiResult {
   const [priceRange, setPriceRange] = useState({ min: 0, max: 100000 });
 
   const abortControllerRef = useRef<AbortController | null>(null);
+  const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   const fetchDeals = useCallback(async () => {
     // Cancel previous request
@@ -132,11 +133,22 @@ export function useDealsApi(params: UseDealsApiParams): UseDealsApiResult {
     params.sortBy,
   ]);
 
-  // Fetch on mount and when params change
+  // Fetch on mount and when params change (with debounce)
   useEffect(() => {
-    fetchDeals();
+    // Clear previous debounce timer
+    if (debounceTimerRef.current) {
+      clearTimeout(debounceTimerRef.current);
+    }
+
+    // Debounce API calls by 300ms
+    debounceTimerRef.current = setTimeout(() => {
+      fetchDeals();
+    }, 300);
 
     return () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
       if (abortControllerRef.current) {
         abortControllerRef.current.abort();
       }
