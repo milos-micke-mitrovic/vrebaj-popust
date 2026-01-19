@@ -1,9 +1,36 @@
 import type { NextConfig } from "next";
 import withPWA from "next-pwa";
 
+// Content Security Policy
+const cspDirectives = [
+  "default-src 'self'",
+  // Scripts: self, inline (Next.js needs it), Google Analytics
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com",
+  // Styles: self, inline (Tailwind)
+  "style-src 'self' 'unsafe-inline'",
+  // Images: self, data URIs, blob, and all store domains
+  "img-src 'self' data: blob: https://www.djaksport.com https://djaksport.com https://*.planeta.rs https://*.planetasport.rs https://*.sportvision.rs https://www.sportvision.rs https://*.n-sport.net https://www.n-sport.net https://*.buzzsneakers.rs https://www.buzzsneakers.rs https://*.officeshoes.rs https://www.officeshoes.rs https://www.google-analytics.com",
+  // Fonts: self and Google Fonts
+  "font-src 'self' https://fonts.gstatic.com",
+  // Connections: self, Google Analytics
+  "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com",
+  // Frames: none (prevent embedding)
+  "frame-ancestors 'none'",
+  // Base URI and form actions restricted to self
+  "base-uri 'self'",
+  "form-action 'self'",
+  // Workers for PWA service worker
+  "worker-src 'self'",
+  // Manifest for PWA
+  "manifest-src 'self'",
+].join("; ");
+
 const nextConfig: NextConfig = {
   // Force webpack for PWA support
   turbopack: {},
+
+  // Hide X-Powered-By header (don't reveal it's Next.js)
+  poweredByHeader: false,
 
   // Security headers
   async headers() {
@@ -11,6 +38,10 @@ const nextConfig: NextConfig = {
       {
         source: "/:path*",
         headers: [
+          // Content Security Policy
+          { key: "Content-Security-Policy", value: cspDirectives },
+          // HSTS - Force HTTPS for 1 year, include subdomains
+          { key: "Strict-Transport-Security", value: "max-age=31536000; includeSubDomains" },
           // Prevent clickjacking
           { key: "X-Frame-Options", value: "DENY" },
           // Prevent MIME type sniffing

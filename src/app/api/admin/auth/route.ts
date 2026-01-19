@@ -15,6 +15,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Limit password length to prevent DoS
+    if (password.length > 128) {
+      return NextResponse.json(
+        { error: "Password too long" },
+        { status: 400 }
+      );
+    }
+
     if (password !== ADMIN_PASSWORD) {
       // Add delay to prevent brute force
       await new Promise((resolve) => setTimeout(resolve, 1000));

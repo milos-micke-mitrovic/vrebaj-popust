@@ -53,6 +53,11 @@ export async function GET(request: NextRequest) {
     }
 
     const contentType = response.headers.get("content-type") || "image/jpeg";
+
+    // Security: Only allow image content types
+    if (!contentType.startsWith("image/")) {
+      return new NextResponse("Invalid content type", { status: 400 });
+    }
     const buffer = await response.arrayBuffer();
 
     return new NextResponse(buffer, {

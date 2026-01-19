@@ -5,8 +5,8 @@ import type { NextRequest } from "next/server";
 // For multi-server, use Redis instead
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 
-const RATE_LIMIT = 50; // requests per window (allows page load with ~20-30 images)
-const RATE_LIMIT_WINDOW = 2 * 1000; // 2 seconds - burst protection
+const RATE_LIMIT = 100; // requests per window (allows quick page navigation)
+const RATE_LIMIT_WINDOW = 3 * 1000; // 3 seconds - burst protection
 
 function getRateLimitKey(request: NextRequest): string {
   // Use IP address for rate limiting
@@ -51,7 +51,7 @@ export function proxy(request: NextRequest) {
           status: 429,
           headers: {
             "Content-Type": "application/json",
-            "Retry-After": "2",
+            "Retry-After": "3",
           },
         }
       );
