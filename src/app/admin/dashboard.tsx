@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 interface ScrapeRun {
   id: string;
   store: string;
@@ -38,8 +40,14 @@ function timeAgo(date: Date | null): string {
   return `${days}d ago`;
 }
 
+const ITEMS_PER_PAGE = 20;
+
 export function Dashboard({ scrapeRuns, productCounts }: DashboardProps) {
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
   const totalProducts = Object.values(productCounts).reduce((a, b) => a + b, 0);
+
+  const visibleRuns = scrapeRuns.slice(0, visibleCount);
+  const hasMore = visibleCount < scrapeRuns.length;
 
   // Group runs by store for latest status
   const latestByStore: Record<string, ScrapeRun> = {};
@@ -99,7 +107,19 @@ export function Dashboard({ scrapeRuns, productCounts }: DashboardProps) {
 
         {/* Recent scrape runs with errors */}
         <div className="bg-gray-800 rounded-lg p-4">
-          <h2 className="text-xl font-semibold mb-3">Recent Scrape Runs</h2>
+          <div className="flex justify-between items-center mb-3">
+            <h2 className="text-xl font-semibold">
+              Recent Scrape Runs ({visibleCount} of {scrapeRuns.length})
+            </h2>
+            {visibleCount > ITEMS_PER_PAGE && (
+              <button
+                onClick={() => setVisibleCount(ITEMS_PER_PAGE)}
+                className="text-sm text-gray-400 hover:text-white transition-colors"
+              >
+                Reset to {ITEMS_PER_PAGE}
+              </button>
+            )}
+          </div>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -112,7 +132,7 @@ export function Dashboard({ scrapeRuns, productCounts }: DashboardProps) {
                 </tr>
               </thead>
               <tbody>
-                {scrapeRuns.map((run) => (
+                {visibleRuns.map((run) => (
                   <tr
                     key={run.id}
                     className={`border-b border-gray-700/50 ${
@@ -144,6 +164,16 @@ export function Dashboard({ scrapeRuns, productCounts }: DashboardProps) {
               </tbody>
             </table>
           </div>
+          {hasMore && (
+            <div className="mt-4 text-center">
+              <button
+                onClick={() => setVisibleCount((prev) => prev + ITEMS_PER_PAGE)}
+                className="px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded text-sm transition-colors"
+              >
+                Load more ({scrapeRuns.length - visibleCount} remaining)
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="mt-6 text-sm text-gray-500">

@@ -59,7 +59,7 @@ const CATEGORY_NAMES: Record<Category, string> = {
 const MAIN_CATEGORY_NAMES: Record<MainCategory, string> = {
   obuca: "Obuća",
   odeca: "Odeća",
-  oprema: "Oprema",
+  oprema: "Ostalo",
 };
 
 const SUBCATEGORY_NAMES: Record<Subcategory, string> = {
@@ -311,8 +311,10 @@ export function DealsGrid({
   }, [search, selectedStores, selectedBrands, selectedGenders, selectedCategories, selectedCategoryPaths, selectedSizes, minDiscount, minPrice, maxPrice, sortBy, currentPage, pathname, router]);
 
   const filteredBrands = useMemo(() => {
-    if (!brandSearch) return apiBrands;
-    return apiBrands.filter((b) =>
+    // Sort alphabetically and filter by search
+    const sorted = [...apiBrands].sort((a, b) => a.localeCompare(b, "sr"));
+    if (!brandSearch) return sorted;
+    return sorted.filter((b) =>
       b.toLowerCase().includes(brandSearch.toLowerCase())
     );
   }, [apiBrands, brandSearch]);
