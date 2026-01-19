@@ -3,6 +3,7 @@ import { Outfit } from "next/font/google";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { getAllDealsAsync } from "@/lib/deals";
 import { AppProviders } from "@/components/app-providers";
+import { DisableScrollRestoration } from "@/components/scroll-to-top";
 import "./globals.css";
 
 // Replace with your GA4 Measurement ID
@@ -169,6 +170,7 @@ export default async function RootLayout({
       <body
         className={`${outfit.variable} font-sans antialiased`}
       >
+        <DisableScrollRestoration />
         <AppProviders availableDealIds={availableDealIds}>
           {children}
         </AppProviders>

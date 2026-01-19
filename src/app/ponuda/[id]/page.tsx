@@ -14,6 +14,7 @@ import { ShareButton } from "@/components/share-button";
 import { ProductWishlistButton } from "@/components/product-wishlist-button";
 import { ProductImage } from "@/components/product-image";
 import { ProductBreadcrumb } from "@/components/product-breadcrumb";
+import { ScrollToTop } from "@/components/scroll-to-top";
 import { Deal } from "@/types/deal";
 
 // Calculate price valid date at build time (7 days from build)
@@ -181,8 +182,10 @@ export default async function DealPage({ params }: Props) {
     const topDeals = await getTopDeals(8);
 
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-        <Header />
+      <>
+        <ScrollToTop />
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+          <Header />
 
         <main className="mx-auto max-w-7xl px-4 py-12">
           {/* Unavailable Message */}
@@ -233,7 +236,8 @@ export default async function DealPage({ params }: Props) {
         </main>
 
         <Footer />
-      </div>
+        </div>
+      </>
     );
   }
 
@@ -379,6 +383,7 @@ export default async function DealPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
+      <ScrollToTop />
 
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
         <Header />
@@ -408,8 +413,8 @@ export default async function DealPage({ params }: Props) {
                     Nema slike
                   </div>
                 )}
-                {/* Discount ribbon - matching card style */}
-                <div className="absolute -left-10 top-6 rotate-[-45deg] bg-red-500 px-10 py-1 text-lg font-bold text-white shadow-md">
+                {/* Discount ribbon */}
+                <div className="absolute -left-12 top-7 rotate-[-45deg] bg-red-500 px-20 py-2 text-lg font-bold text-white shadow-md">
                   -{deal.discountPercent}%
                 </div>
               </div>

@@ -8,8 +8,8 @@ const cspDirectives = [
   "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com",
   // Styles: self, inline (Tailwind)
   "style-src 'self' 'unsafe-inline'",
-  // Images: self, data URIs, blob, and all store domains
-  "img-src 'self' data: blob: https://www.djaksport.com https://djaksport.com https://planeta.rs https://*.planeta.rs https://planetasport.rs https://*.planetasport.rs https://sportvision.rs https://*.sportvision.rs https://www.sportvision.rs https://n-sport.net https://*.n-sport.net https://www.n-sport.net https://buzzsneakers.rs https://*.buzzsneakers.rs https://www.buzzsneakers.rs https://officeshoes.rs https://*.officeshoes.rs https://www.officeshoes.rs https://www.google-analytics.com",
+  // Images: allow all https sources (stores use various CDNs that change)
+  "img-src 'self' data: blob: https: http:",
   // Fonts: self and Google Fonts
   "font-src 'self' https://fonts.gstatic.com",
   // Connections: self, Google Analytics

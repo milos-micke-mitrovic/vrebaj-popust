@@ -60,17 +60,20 @@ export function DealCard({ deal }: DealCardProps) {
   const searchParams = useSearchParams();
 
   // Save current URL with filters and scroll position when clicking a product
+  // Only save when on /ponude pages, not on product detail pages
   const handleClick = () => {
-    const currentUrl = searchParams.toString()
-      ? `${pathname}?${searchParams.toString()}`
-      : pathname;
-    sessionStorage.setItem("dealsReturnUrl", currentUrl);
-    sessionStorage.setItem("dealsScrollPosition", String(window.scrollY));
-    sessionStorage.setItem("dealsClickedProductId", deal.id);
+    if (pathname.startsWith("/ponude")) {
+      const currentUrl = searchParams.toString()
+        ? `${pathname}?${searchParams.toString()}`
+        : pathname;
+      sessionStorage.setItem("dealsReturnUrl", currentUrl);
+      sessionStorage.setItem("dealsScrollPosition", String(window.scrollY));
+      sessionStorage.setItem("dealsClickedProductId", deal.id);
+    }
   };
 
   return (
-    <Link href={`/ponuda/${deal.id}`} onClick={handleClick}>
+    <Link href={`/ponuda/${deal.id}`} onClick={handleClick} scroll={true}>
       <Card className="group h-full overflow-hidden transition-shadow hover:shadow-lg dark:bg-gray-800 dark:border-gray-700 !p-0">
         <div className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-700">
           <Image
