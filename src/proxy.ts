@@ -39,7 +39,7 @@ function isRateLimited(key: string): boolean {
   return false;
 }
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   // Only rate limit API routes
   if (request.nextUrl.pathname.startsWith("/api/")) {
     const key = getRateLimitKey(request);
