@@ -202,18 +202,11 @@ export function DealsGrid({
 
   // Restore scroll position when returning from product page - wait for data to load
   useEffect(() => {
-    console.log("[ScrollRestore] Effect running:", { scrollRestored: scrollRestored.current, isLoading, isInitialLoad, dealsCount: deals.length });
-
     // Only run once, after data is loaded
-    if (scrollRestored.current || isLoading || isInitialLoad) {
-      console.log("[ScrollRestore] Skipping - already restored or still loading");
-      return;
-    }
+    if (scrollRestored.current || isLoading || isInitialLoad) return;
 
     const savedScrollPosition = sessionStorage.getItem("dealsScrollPosition");
     const clickedProductId = sessionStorage.getItem("dealsClickedProductId");
-
-    console.log("[ScrollRestore] SessionStorage values:", { savedScrollPosition, clickedProductId });
 
     // Clear sessionStorage immediately to prevent issues on other pages
     sessionStorage.removeItem("dealsScrollPosition");
@@ -221,45 +214,28 @@ export function DealsGrid({
 
     if (savedScrollPosition || clickedProductId) {
       scrollRestored.current = true;
-      console.log("[ScrollRestore] Will attempt scroll restoration");
 
       // Small delay to ensure DOM is rendered after data loads
       const timer = setTimeout(() => {
-        // Try to scroll to the specific product card first
         if (clickedProductId) {
           const productCard = document.querySelector(`[href="/ponuda/${clickedProductId}"]`);
-          console.log("[ScrollRestore] Looking for card:", `[href="/ponuda/${clickedProductId}"]`, "Found:", !!productCard);
-
           if (productCard) {
-            // Center the card vertically
             productCard.scrollIntoView({ behavior: "instant", block: "center" });
-            console.log("[ScrollRestore] Scrolled to card");
-
-            // Add highlight glow animation - querySelector finds child elements
+            // Add highlight glow animation
             const cardElement = productCard.querySelector('.group');
-            console.log("[ScrollRestore] Card .group element:", !!cardElement);
             if (cardElement) {
               cardElement.classList.add('highlight-glow');
-              console.log("[ScrollRestore] Added highlight-glow class");
-              // Remove the class after animation completes
-              setTimeout(() => {
-                cardElement.classList.remove('highlight-glow');
-              }, 2000);
+              setTimeout(() => cardElement.classList.remove('highlight-glow'), 2000);
             }
           } else {
-            // Fallback to saved scroll position if product not visible (e.g., different page)
-            console.log("[ScrollRestore] Card not found, using fallback scroll position");
             window.scrollTo({ top: parseInt(savedScrollPosition || "0", 10), behavior: "instant" });
           }
         } else {
-          console.log("[ScrollRestore] No clickedProductId, using scroll position");
           window.scrollTo({ top: parseInt(savedScrollPosition || "0", 10), behavior: "instant" });
         }
       }, 50);
 
       return () => clearTimeout(timer);
-    } else {
-      console.log("[ScrollRestore] No saved values to restore");
     }
   }, [isLoading, isInitialLoad, deals.length]);
 
