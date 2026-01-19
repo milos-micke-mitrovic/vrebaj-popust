@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
-import { getDealsWithoutDetails, updateDealDetails, disconnect, Gender } from "../db-writer";
+import { getDealsWithoutDetails, updateDealDetails, disconnect } from "../db-writer";
 
 puppeteer.use(StealthPlugin());
 
@@ -25,17 +25,97 @@ async function launchBrowser(): Promise<Browser> {
 
 interface ProductDetails {
   sizes: string[];
-  categories: string[];
-  gender: Gender | null;
+}
+
+// Extract categories from Buzz URL and product name (same logic as buzz.ts)
+function extractCategoriesFromUrl(url: string, name: string): string[] {
+  const urlLower = url.toLowerCase();
+  const nameLower = name.toLowerCase();
+  const categories: string[] = [];
+
+  // Check URL patterns first (more reliable)
+  // Obuća
+  if (urlLower.includes("/patike/") || urlLower.includes("/sneakers/")) {
+    categories.push("obuca/patike");
+  } else if (urlLower.includes("/cipele/")) {
+    categories.push("obuca/cipele");
+  } else if (urlLower.includes("/cizme/") || urlLower.includes("/boots/")) {
+    categories.push("obuca/cizme");
+  } else if (urlLower.includes("/sandale/")) {
+    categories.push("obuca/sandale");
+  } else if (urlLower.includes("/japanke/") || urlLower.includes("/papuce/")) {
+    categories.push("obuca/sandale");
+  }
+
+  // Odeća - Buzz uses various URL patterns
+  if (urlLower.includes("/majica/") || urlLower.includes("/polo-majica/") || urlLower.includes("/t-shirt/")) {
+    categories.push("odeca/majice");
+  } else if (urlLower.includes("/duks/") || urlLower.includes("/hoodie/") || urlLower.includes("/dukserica/")) {
+    categories.push("odeca/duksevi");
+  } else if (urlLower.includes("/jakna/") || urlLower.includes("/jacket/") || urlLower.includes("/prsluci/") || urlLower.includes("/vest/")) {
+    categories.push("odeca/jakne");
+  } else if (urlLower.includes("/trenerka/") || urlLower.includes("/pants/") || urlLower.includes("/pantalone/") || urlLower.includes("/donji-deo-trenerke/") || urlLower.includes("/gornji-deo-trenerke/")) {
+    categories.push("odeca/trenerke");
+  } else if (urlLower.includes("/sorc/") || urlLower.includes("/shorts/")) {
+    categories.push("odeca/sorcevi");
+  } else if (urlLower.includes("/helanke/") || urlLower.includes("/leggings/") || urlLower.includes("/tajice/")) {
+    categories.push("odeca/helanke");
+  } else if (urlLower.includes("/haljina/") || urlLower.includes("/dress/") || urlLower.includes("/suknja/")) {
+    categories.push("odeca/majice");
+  }
+
+  // Oprema/Accessories
+  if (urlLower.includes("/ranac/") || urlLower.includes("/backpack/") || urlLower.includes("/torba/") || urlLower.includes("/bag/")) {
+    categories.push("oprema/torbe");
+  } else if (urlLower.includes("/kapa/") || urlLower.includes("/kacket/") || urlLower.includes("/sesir/") || urlLower.includes("/hat/")) {
+    categories.push("oprema/kape");
+  } else if (urlLower.includes("/carape/") || urlLower.includes("/socks/")) {
+    categories.push("oprema/carape");
+  } else if (urlLower.includes("/rukavice/") || urlLower.includes("/gloves/")) {
+    categories.push("oprema/rukavice");
+  }
+
+  // Fallback: extract from product name if no URL match
+  if (categories.length === 0) {
+    if (nameLower.includes("patike") || nameLower.includes("sneaker") || nameLower.includes("tenisice")) {
+      categories.push("obuca/patike");
+    } else if (nameLower.includes("cipele") || nameLower.includes("shoes")) {
+      categories.push("obuca/cipele");
+    } else if (nameLower.includes("čizme") || nameLower.includes("cizme") || nameLower.includes("boot")) {
+      categories.push("obuca/cizme");
+    } else if (nameLower.includes("sandale") || nameLower.includes("japanke") || nameLower.includes("papuče") || nameLower.includes("papuce")) {
+      categories.push("obuca/sandale");
+    } else if (nameLower.includes("polo") || nameLower.includes("majica")) {
+      categories.push("odeca/majice");
+    } else if (nameLower.includes("t-shirt") || nameLower.includes("tshirt") || nameLower.includes("tank top")) {
+      categories.push("odeca/majice");
+    } else if (nameLower.includes("duks") || nameLower.includes("hoodie") || nameLower.includes("dukserica") || nameLower.includes("sweatshirt")) {
+      categories.push("odeca/duksevi");
+    } else if (nameLower.includes("jakna") || nameLower.includes("jacket") || nameLower.includes("prslu") || nameLower.includes("vest") || nameLower.includes("windbreaker")) {
+      categories.push("odeca/jakne");
+    } else if (nameLower.includes("trenerka") || nameLower.includes("pants") || nameLower.includes("pantalone") || nameLower.includes("jogger") || nameLower.includes("donji deo") || nameLower.includes("gornji deo")) {
+      categories.push("odeca/trenerke");
+    } else if (nameLower.includes("šorc") || nameLower.includes("sorc") || nameLower.includes("shorts") || nameLower.includes("bermude")) {
+      categories.push("odeca/sorcevi");
+    } else if (nameLower.includes("helanke") || nameLower.includes("leggings") || nameLower.includes("tajice") || nameLower.includes("tight")) {
+      categories.push("odeca/helanke");
+    } else if (nameLower.includes("ranac") || nameLower.includes("backpack") || nameLower.includes("torba") || nameLower.includes("bag") || nameLower.includes("torbica")) {
+      categories.push("oprema/torbe");
+    } else if (nameLower.includes("kapa") || nameLower.includes("kačket") || nameLower.includes("kacket") || nameLower.includes("cap") || nameLower.includes("šešir") || nameLower.includes("sesir") || nameLower.includes("beanie")) {
+      categories.push("oprema/kape");
+    } else if (nameLower.includes("čarape") || nameLower.includes("carape") || nameLower.includes("socks")) {
+      categories.push("oprema/carape");
+    }
+  }
+
+  return categories;
 }
 
 async function extractProductDetails(page: Page): Promise<ProductDetails> {
   return page.evaluate(`
     (function() {
       var result = {
-        sizes: [],
-        categories: [],
-        gender: null
+        sizes: []
       };
 
       // Extract sizes from Buzz size selector
@@ -48,27 +128,6 @@ async function extractProductDetails(page: Page): Promise<ProductDetails> {
           result.sizes.push(size);
         }
       });
-
-      // Extract category from breadcrumbs or product info
-      var breadcrumbs = document.querySelectorAll('.breadcrumb a, .breadcrumbs a');
-      breadcrumbs.forEach(function(el) {
-        var text = el.textContent.trim().toLowerCase();
-        if (text.includes('patike')) result.categories.push('obuca/patike');
-        else if (text.includes('odeca')) result.categories.push('odeca');
-        else if (text.includes('oprema')) result.categories.push('oprema');
-      });
-
-      // Try to get gender from URL or page content
-      var url = window.location.href.toLowerCase();
-      var pageText = document.body.innerText.toLowerCase();
-
-      if (url.includes('-men') || url.includes('/muski') || pageText.includes('muški') || pageText.includes('muske patike')) {
-        result.gender = 'muski';
-      } else if (url.includes('-women') || url.includes('/zenski') || pageText.includes('ženski') || pageText.includes('zenske patike')) {
-        result.gender = 'zenski';
-      } else if (url.includes('-kids') || url.includes('/deciji') || pageText.includes('dečiji') || pageText.includes('decije patike')) {
-        result.gender = 'deciji';
-      }
 
       return result;
     })()
@@ -108,14 +167,18 @@ async function scrapeBuzzDetails(): Promise<void> {
         await sleep(1000 + Math.random() * 1000);
 
         const details = await extractProductDetails(page);
-        console.log(`  Sizes: ${details.sizes.length > 0 ? details.sizes.join(", ") : "none"}`);
-        console.log(`  Categories: ${details.categories.join(", ") || "none"}`);
-        console.log(`  Gender: ${details.gender || "not detected"}`);
 
+        // Extract categories from URL (more reliable than page content)
+        const categories = extractCategoriesFromUrl(deal.url, deal.name);
+
+        console.log(`  Sizes: ${details.sizes.length > 0 ? details.sizes.join(", ") : "none"}`);
+        console.log(`  Categories: ${categories.join(", ") || "none (keeping existing)"}`);
+
+        // Only update sizes and categories (don't overwrite gender - it's set correctly by list scraper)
+        // Only update categories if we extracted some
         await updateDealDetails(deal.url, {
           sizes: details.sizes,
-          categories: details.categories,
-          gender: details.gender || undefined,
+          ...(categories.length > 0 && { categories }),
         });
 
         processed++;
