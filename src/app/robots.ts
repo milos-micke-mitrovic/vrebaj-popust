@@ -19,6 +19,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: "/",
       },
     ],
-    sitemap: "https://vrebajpopust.rs/sitemap.xml",
+    sitemap: "https://www.vrebajpopust.rs/sitemap.xml",
   };
 }

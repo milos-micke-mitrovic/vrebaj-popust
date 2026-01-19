@@ -14,15 +14,67 @@ export const metadata: Metadata = {
     type: "website",
     locale: "sr_RS",
   },
+  alternates: {
+    canonical: "https://www.vrebajpopust.rs/o-nama",
+  },
 };
 
 export default function AboutPage() {
   const deals = getAllDeals();
   const stores = getUniqueStores();
 
+  // AboutPage structured data
+  const aboutSchema = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    name: "O nama - VrebajPopust",
+    description: "VrebajPopust svakodnevno pretražuje najveće sportske prodavnice u Srbiji i pronalazi proizvode sa popustima preko 50%.",
+    url: "https://www.vrebajpopust.rs/o-nama",
+    mainEntity: {
+      "@type": "Organization",
+      name: "VrebajPopust",
+      url: "https://www.vrebajpopust.rs",
+      description: "Agregator sportskih popusta u Srbiji",
+      foundingDate: "2024",
+      areaServed: {
+        "@type": "Country",
+        name: "Serbia",
+      },
+    },
+  };
+
+  // Breadcrumb structured data
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Početna",
+        item: "https://www.vrebajpopust.rs",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "O nama",
+        item: "https://www.vrebajpopust.rs/o-nama",
+      },
+    ],
+  };
+
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-950">
-      <Header />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-950">
+        <Header />
 
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
         <article className="rounded-xl bg-white dark:bg-gray-900 p-8 shadow-sm border border-gray-100 dark:border-gray-800">
@@ -74,7 +126,8 @@ export default function AboutPage() {
         </article>
       </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </>
   );
 }

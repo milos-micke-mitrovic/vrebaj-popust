@@ -12,12 +12,43 @@ export const metadata: Metadata = {
     type: "website",
     locale: "sr_RS",
   },
+  robots: {
+    index: false, // Legal pages don't need to rank - saves crawl budget
+    follow: true,
+  },
+  alternates: {
+    canonical: "https://www.vrebajpopust.rs/privatnost",
+  },
 };
 
 export default function PrivacyPage() {
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Početna",
+        item: "https://www.vrebajpopust.rs",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Politika privatnosti",
+        item: "https://www.vrebajpopust.rs/privatnost",
+      },
+    ],
+  };
+
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-950">
-      <Header />
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-950">
+        <Header />
 
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
         <article className="rounded-xl bg-white dark:bg-gray-900 p-8 shadow-sm border border-gray-100 dark:border-gray-800">
@@ -125,7 +156,8 @@ export default function PrivacyPage() {
         </article>
       </main>
 
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+    </>
   );
 }

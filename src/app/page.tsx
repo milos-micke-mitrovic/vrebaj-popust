@@ -119,7 +119,47 @@ export default async function Home() {
           text: "Prikazujemo isključivo proizvode sa popustom od 50% ili više. To znači da svaki proizvod na našem sajtu ima bar duplo nižu cenu od originalne. Prosečan popust je oko 60%.",
         },
       },
+      {
+        "@type": "Question",
+        name: "Kako da pronađem patike na popustu?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Na VrebajPopust možete lako pronaći patike na popustu koristeći filtere. Idite na stranicu 'Sve ponude' i izaberite kategoriju 'Patike'. Možete dodatno filtrirati po brendu (Nike, Adidas, Puma...), polu i ceni.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Da li VrebajPopust ima mobilnu aplikaciju?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "VrebajPopust je progresivna web aplikacija (PWA) koju možete instalirati na telefon direktno iz pretraživača. Radi kao nativna aplikacija bez potrebe za preuzimanjem iz prodavnice aplikacija.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Kako da sačuvam omiljene ponude?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Kliknite na ikonu srca na bilo kom proizvodu da ga dodate u omiljene. Vaše omiljene ponude se čuvaju lokalno u pretraživaču i možete im pristupiti klikom na ikonu srca u gornjem desnom uglu.",
+        },
+      },
     ],
+  };
+
+  // OfferCatalog schema - shows we aggregate deals
+  const offerCatalogSchema = {
+    "@context": "https://schema.org",
+    "@type": "OfferCatalog",
+    name: "VrebajPopust - Katalog sportskih popusta",
+    description: `Preko ${displayCount} proizvoda sa popustima preko 50% iz ${stores.length} sportskih prodavnica u Srbiji`,
+    url: "https://www.vrebajpopust.rs/ponude",
+    numberOfItems: totalDeals,
+    itemListOrder: "https://schema.org/ItemListOrderDescending",
+    provider: {
+      "@type": "Organization",
+      name: "VrebajPopust",
+      url: "https://www.vrebajpopust.rs",
+    },
   };
 
   return (
@@ -131,6 +171,10 @@ export default async function Home() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(offerCatalogSchema) }}
       />
 
       <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-950">

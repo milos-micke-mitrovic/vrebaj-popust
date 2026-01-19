@@ -5,14 +5,14 @@ import { prisma } from "@/lib/db";
 import { DealsGrid } from "@/components/deals-grid";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
-import { Category, Gender } from "@/types/deal";
+import { Category, Gender, Store } from "@/types/deal";
 
 // Revalidate every 5 minutes
 export const revalidate = 300;
 
 // Filter configurations for SEO pages
 interface FilterConfig {
-  type: "category" | "brand" | "gender";
+  type: "category" | "brand" | "gender" | "store";
   title: string;
   description: string;
   keywords: string[];
@@ -20,6 +20,7 @@ interface FilterConfig {
   initialCategories?: Category[];
   initialBrands?: string[];
   initialGenders?: Gender[];
+  initialStores?: Store[];
 }
 
 // Popular categories for SEO
@@ -72,6 +73,20 @@ const CATEGORY_FILTERS: Record<string, FilterConfig> = {
     description: "Duksevi na sniženju preko 50%. Duksevi sa kapuljačom, zip duksevi i sportski duksevi poznatih brendova.",
     keywords: ["duksevi popust", "duksevi akcija", "duks sa kapuljačom", "sportski duksevi"],
     initialCategories: ["duks"],
+  },
+  sorcevi: {
+    type: "category",
+    title: "Šorcevi na popustu",
+    description: "Sportski šorcevi sa popustima preko 50%. Šorcevi za trening, trčanje i svakodnevno nošenje poznatih brendova.",
+    keywords: ["šorcevi popust", "sportski šorcevi", "šorcevi akcija", "šorcevi za trening"],
+    initialCategories: ["sorc"],
+  },
+  helanke: {
+    type: "category",
+    title: "Helanke na popustu",
+    description: "Sportske helanke sa popustima preko 50%. Helanke za trening, jogu i fitnes poznatih brendova po sniženim cenama.",
+    keywords: ["helanke popust", "sportske helanke", "helanke za trening", "helanke akcija"],
+    initialCategories: ["helanke"],
   },
 };
 
@@ -154,6 +169,132 @@ const BRAND_FILTERS: Record<string, FilterConfig> = {
     keywords: ["skechers popust", "skechers patike", "skechers srbija", "skechers akcija"],
     initialBrands: ["SKECHERS"],
   },
+  asics: {
+    type: "brand",
+    title: "ASICS popusti",
+    description: "ASICS patike na sniženju preko 50%. ASICS patike za trčanje i trening po akcijskim cenama u Srbiji.",
+    keywords: ["asics popust", "asics patike", "asics srbija", "asics za trčanje"],
+    initialBrands: ["ASICS"],
+  },
+  jordan: {
+    type: "brand",
+    title: "Jordan popusti",
+    description: "Air Jordan patike na akciji preko 50%. Jordan 1, Jordan 4 i druge popularne Jordan patike po sniženim cenama.",
+    keywords: ["jordan popust", "air jordan patike", "jordan srbija", "jordan 1 popust"],
+    initialBrands: ["JORDAN"],
+  },
+  "the-north-face": {
+    type: "brand",
+    title: "The North Face popusti",
+    description: "The North Face jakne i oprema na sniženju preko 50%. TNF jakne, duksevi i oprema za planinarenje.",
+    keywords: ["the north face popust", "tnf jakne", "north face srbija", "north face akcija"],
+    initialBrands: ["THE NORTH FACE"],
+  },
+  columbia: {
+    type: "brand",
+    title: "Columbia popusti",
+    description: "Columbia sportska oprema na akciji preko 50%. Columbia jakne, cipele i outdoor oprema po sniženim cenama.",
+    keywords: ["columbia popust", "columbia jakne", "columbia srbija", "columbia outdoor"],
+    initialBrands: ["COLUMBIA"],
+  },
+  hoka: {
+    type: "brand",
+    title: "HOKA popusti",
+    description: "HOKA patike na sniženju preko 50%. HOKA patike za trčanje i hodanje po akcijskim cenama.",
+    keywords: ["hoka popust", "hoka patike", "hoka srbija", "hoka za trčanje"],
+    initialBrands: ["HOKA"],
+  },
+  timberland: {
+    type: "brand",
+    title: "Timberland popusti",
+    description: "Timberland čizme i cipele na akciji preko 50%. Timberland boots i casual obuća po sniženim cenama.",
+    keywords: ["timberland popust", "timberland čizme", "timberland srbija", "timberland boots"],
+    initialBrands: ["TIMBERLAND"],
+  },
+  lacoste: {
+    type: "brand",
+    title: "Lacoste popusti",
+    description: "Lacoste proizvodi na sniženju preko 50%. Lacoste patike, polo majice i odeća po akcijskim cenama.",
+    keywords: ["lacoste popust", "lacoste patike", "lacoste srbija", "lacoste polo"],
+    initialBrands: ["LACOSTE"],
+  },
+  "tommy-hilfiger": {
+    type: "brand",
+    title: "Tommy Hilfiger popusti",
+    description: "Tommy Hilfiger proizvodi na akciji preko 50%. Tommy Hilfiger patike, odeća i oprema po sniženim cenama.",
+    keywords: ["tommy hilfiger popust", "tommy hilfiger srbija", "tommy hilfiger patike"],
+    initialBrands: ["TOMMY HILFIGER"],
+  },
+  "calvin-klein": {
+    type: "brand",
+    title: "Calvin Klein popusti",
+    description: "Calvin Klein proizvodi na sniženju preko 50%. CK patike, odeća i sportska oprema po akcijskim cenama.",
+    keywords: ["calvin klein popust", "ck srbija", "calvin klein patike", "calvin klein akcija"],
+    initialBrands: ["CALVIN KLEIN"],
+  },
+  levis: {
+    type: "brand",
+    title: "Levi's popusti",
+    description: "Levi's proizvodi na akciji preko 50%. Levi's farmerke, majice i odeća po sniženim cenama u Srbiji.",
+    keywords: ["levis popust", "levis farmerke", "levis srbija", "levi's akcija"],
+    initialBrands: ["LEVI'S", "LEVIS"],
+  },
+  hummel: {
+    type: "brand",
+    title: "Hummel popusti",
+    description: "Hummel sportska oprema na sniženju preko 50%. Hummel patike, trenerke i odeća po akcijskim cenama.",
+    keywords: ["hummel popust", "hummel patike", "hummel srbija", "hummel trenerke"],
+    initialBrands: ["HUMMEL"],
+  },
+  umbro: {
+    type: "brand",
+    title: "Umbro popusti",
+    description: "Umbro sportska oprema na akciji preko 50%. Umbro patike, dresovi i fudbalska oprema po sniženim cenama.",
+    keywords: ["umbro popust", "umbro patike", "umbro srbija", "umbro dresovi"],
+    initialBrands: ["UMBRO"],
+  },
+  kappa: {
+    type: "brand",
+    title: "Kappa popusti",
+    description: "Kappa sportska oprema na sniženju preko 50%. Kappa trenerke, patike i odeća po akcijskim cenama.",
+    keywords: ["kappa popust", "kappa trenerke", "kappa srbija", "kappa patike"],
+    initialBrands: ["KAPPA"],
+  },
+  ellesse: {
+    type: "brand",
+    title: "Ellesse popusti",
+    description: "Ellesse proizvodi na akciji preko 50%. Ellesse retro patike, duksevi i odeća po sniženim cenama.",
+    keywords: ["ellesse popust", "ellesse patike", "ellesse srbija", "ellesse duksevi"],
+    initialBrands: ["ELLESSE"],
+  },
+  diadora: {
+    type: "brand",
+    title: "Diadora popusti",
+    description: "Diadora patike i oprema na sniženju preko 50%. Diadora retro patike i sportska oprema po akcijskim cenama.",
+    keywords: ["diadora popust", "diadora patike", "diadora srbija", "diadora retro"],
+    initialBrands: ["DIADORA"],
+  },
+  mizuno: {
+    type: "brand",
+    title: "Mizuno popusti",
+    description: "Mizuno patike na akciji preko 50%. Mizuno patike za trčanje i odbojku po sniženim cenama.",
+    keywords: ["mizuno popust", "mizuno patike", "mizuno srbija", "mizuno za trčanje"],
+    initialBrands: ["MIZUNO"],
+  },
+  salomon: {
+    type: "brand",
+    title: "Salomon popusti",
+    description: "Salomon patike i oprema na sniženju preko 50%. Salomon trail patike i planinaraska oprema.",
+    keywords: ["salomon popust", "salomon patike", "salomon srbija", "salomon trail"],
+    initialBrands: ["SALOMON"],
+  },
+  crocs: {
+    type: "brand",
+    title: "Crocs popusti",
+    description: "Crocs papuče na akciji preko 50%. Crocs Classic i druge Crocs papuče po sniženim cenama u Srbiji.",
+    keywords: ["crocs popust", "crocs papuče", "crocs srbija", "crocs classic"],
+    initialBrands: ["CROCS"],
+  },
 };
 
 // Gender filters for SEO
@@ -181,11 +322,58 @@ const GENDER_FILTERS: Record<string, FilterConfig> = {
   },
 };
 
+// Store filters for SEO (capture "djaksport popusti", "planeta sport akcije" searches)
+const STORE_FILTERS: Record<string, FilterConfig> = {
+  djaksport: {
+    type: "store",
+    title: "DjakSport popusti",
+    description: "DjakSport popusti preko 50%. Najveće akcije i sniženja u DjakSport prodavnici - patike, odeća i sportska oprema.",
+    keywords: ["djaksport popust", "djak sport akcija", "djaksport sniženje", "djaksport patike", "djak sport srbija"],
+    initialStores: ["djaksport"],
+  },
+  "planeta-sport": {
+    type: "store",
+    title: "Planeta Sport popusti",
+    description: "Planeta Sport popusti preko 50%. Akcije i sniženja u Planeta Sport prodavnici - patike, trenerke, jakne i sportska oprema.",
+    keywords: ["planeta sport popust", "planeta sport akcija", "planeta sport sniženje", "planeta sport patike"],
+    initialStores: ["planeta"],
+  },
+  "sport-vision": {
+    type: "store",
+    title: "Sport Vision popusti",
+    description: "Sport Vision popusti preko 50%. Outlet akcije u Sport Vision prodavnici - Nike, Adidas, Puma i druge marke.",
+    keywords: ["sport vision popust", "sportvision akcija", "sport vision outlet", "sport vision patike"],
+    initialStores: ["sportvision"],
+  },
+  "n-sport": {
+    type: "store",
+    title: "N Sport popusti",
+    description: "N Sport popusti preko 50%. Akcije i sniženja u N Sport online prodavnici - patike, odeća i oprema.",
+    keywords: ["n sport popust", "nsport akcija", "n sport patike", "n sport srbija"],
+    initialStores: ["nsport"],
+  },
+  buzz: {
+    type: "store",
+    title: "Buzz Sneakers popusti",
+    description: "Buzz Sneakers popusti preko 50%. Akcije na patike i streetwear odeću u Buzz prodavnici.",
+    keywords: ["buzz popust", "buzz sneakers akcija", "buzz patike", "buzz srbija"],
+    initialStores: ["buzz"],
+  },
+  "office-shoes": {
+    type: "store",
+    title: "Office Shoes popusti",
+    description: "Office Shoes popusti preko 50%. Akcije na obuću - patike, cipele, čizme i sandale u Office Shoes prodavnici.",
+    keywords: ["office shoes popust", "officeshoes akcija", "office shoes patike", "office shoes srbija"],
+    initialStores: ["officeshoes"],
+  },
+};
+
 // Combine all filters
 const ALL_FILTERS: Record<string, FilterConfig> = {
   ...CATEGORY_FILTERS,
   ...BRAND_FILTERS,
   ...GENDER_FILTERS,
+  ...STORE_FILTERS,
 };
 
 // Generate static params for all filter pages
@@ -246,6 +434,9 @@ function buildWhereClause(config: FilterConfig) {
   if (config.initialGenders?.length) {
     where.gender = { in: config.initialGenders };
   }
+  if (config.initialStores?.length) {
+    where.store = { in: config.initialStores };
+  }
   // Category filtering is more complex since it's derived from name/url - skip for now
   // The API will handle category filtering client-side
 
@@ -284,7 +475,7 @@ export default async function FilterPage({ params }: Props) {
     "@type": "CollectionPage",
     name: config.title,
     description: config.description,
-    url: `https://vrebajpopust.rs/ponude/${filter}`,
+    url: `https://www.vrebajpopust.rs/ponude/${filter}`,
     mainEntity: {
       "@type": "ItemList",
       numberOfItems: totalCount,
@@ -294,7 +485,7 @@ export default async function FilterPage({ params }: Props) {
         item: {
           "@type": "Product",
           name: deal.name,
-          url: `https://vrebajpopust.rs/ponuda/${deal.id}`,
+          url: `https://www.vrebajpopust.rs/ponuda/${deal.id}`,
           image: deal.imageUrl,
           brand: deal.brand ? { "@type": "Brand", name: deal.brand } : undefined,
           offers: {
@@ -308,11 +499,35 @@ export default async function FilterPage({ params }: Props) {
     },
   };
 
+  // Breadcrumb structured data
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Ponude",
+        item: "https://www.vrebajpopust.rs/ponude",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: config.title,
+        item: `https://www.vrebajpopust.rs/ponude/${filter}`,
+      },
+    ],
+  };
+
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-950">

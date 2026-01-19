@@ -30,6 +30,9 @@ export const metadata: Metadata = {
     type: "website",
     locale: "sr_RS",
   },
+  alternates: {
+    canonical: "https://www.vrebajpopust.rs/ponude",
+  },
 };
 
 // Calculate price valid date at build time (7 days from build)
@@ -68,9 +71,9 @@ export default async function PonudePage() {
       item: {
         "@type": "Product",
         name: deal.name,
-        url: `https://vrebajpopust.rs/ponuda/${deal.id}`,
+        url: `https://www.vrebajpopust.rs/ponuda/${deal.id}`,
         image: deal.imageUrl?.startsWith("/")
-          ? `https://vrebajpopust.rs${deal.imageUrl}`
+          ? `https://www.vrebajpopust.rs${deal.imageUrl}`
           : deal.imageUrl,
         brand: deal.brand ? { "@type": "Brand", name: deal.brand } : undefined,
         offers: {
@@ -90,11 +93,31 @@ export default async function PonudePage() {
     "@type": "CollectionPage",
     name: "VrebajPopust - Sve ponude",
     description: `${totalCount} proizvoda sa popustima preko 50%`,
-    url: "https://vrebajpopust.rs/ponude",
+    url: "https://www.vrebajpopust.rs/ponude",
     mainEntity: {
       "@type": "ItemList",
       numberOfItems: totalCount,
     },
+  };
+
+  // Breadcrumb schema
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Početna",
+        item: "https://www.vrebajpopust.rs",
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Sve ponude",
+        item: "https://www.vrebajpopust.rs/ponude",
+      },
+    ],
   };
 
   return (
@@ -106,6 +129,10 @@ export default async function PonudePage() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
 
       <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-950">

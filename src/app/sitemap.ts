@@ -12,7 +12,6 @@ const FILTER_PAGES = [
   "duksevi",
   "sorcevi",
   "helanke",
-  "sandale",
   // Top Brands
   "nike",
   "adidas",
@@ -47,10 +46,17 @@ const FILTER_PAGES = [
   "muski",
   "zenski",
   "deciji",
+  // Stores
+  "djaksport",
+  "planeta-sport",
+  "sport-vision",
+  "n-sport",
+  "buzz",
+  "office-shoes",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = "https://vrebajpopust.rs";
+  const baseUrl = "https://www.vrebajpopust.rs";
   const now = new Date();
 
   // Main pages
