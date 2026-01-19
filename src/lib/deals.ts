@@ -133,7 +133,18 @@ function mapCategoryPathToCategory(categoryPath: string): Category {
 
 // Extract category from product name and URL (fallback if no categories in DB)
 function extractCategoryFromName(name: string, url?: string): Category {
-  const text = normalizeSerbianChars(`${name} ${url || ""}`);
+  // Extract path only from URL, excluding domain (to avoid matching "sneaker" from "buzzsneakers.rs")
+  let urlPath = "";
+  if (url) {
+    try {
+      const urlObj = new URL(url);
+      urlPath = urlObj.pathname;
+    } catch {
+      // If URL parsing fails, extract path manually
+      urlPath = url.replace(/https?:\/\/[^/]+/i, "");
+    }
+  }
+  const text = normalizeSerbianChars(`${name} ${urlPath}`);
 
   // Cizme - boots (check before cipele since "boot" shouldn't match cipele)
   if (

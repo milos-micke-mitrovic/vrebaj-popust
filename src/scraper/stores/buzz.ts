@@ -387,6 +387,13 @@ async function scrapeBuzz(): Promise<void> {
           if (discountPercent >= MIN_DISCOUNT) {
             const categories = extractCategories(product.url, product.name);
 
+            // Debug: log clothing items
+            if (categories.some(c => c.startsWith("odeca/")) || product.name.toLowerCase().includes("majic") || product.name.toLowerCase().includes("duks") || product.name.toLowerCase().includes("jakn")) {
+              console.log(`  [CLOTHING] ${product.name}`);
+              console.log(`    URL: ${product.url}`);
+              console.log(`    Categories: ${categories.join(", ") || "NONE"}`);
+            }
+
             await upsertDeal({
               id: generateId(product.url),
               store: STORE,
