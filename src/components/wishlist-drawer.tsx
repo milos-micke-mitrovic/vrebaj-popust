@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -27,11 +27,24 @@ interface WishlistDrawerProps {
   availableDealIds: Set<string>;
 }
 
+const ITEMS_PER_PAGE = 10;
+
 export function WishlistDrawer({ availableDealIds }: WishlistDrawerProps) {
   const router = useRouter();
   const { wishlist, isLoaded, isDrawerOpen, closeDrawer, removeFromWishlist, clearWishlist } =
     useWishlistContext();
   const [showClearConfirm, setShowClearConfirm] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
+
+  // Reset visible count when drawer opens
+  useEffect(() => {
+    if (isDrawerOpen) {
+      setVisibleCount(ITEMS_PER_PAGE);
+    }
+  }, [isDrawerOpen]);
+
+  const visibleItems = wishlist.slice(0, visibleCount);
+  const hasMore = wishlist.length > visibleCount;
 
   if (!isDrawerOpen) return null;
 
@@ -84,7 +97,7 @@ export function WishlistDrawer({ availableDealIds }: WishlistDrawerProps) {
             </div>
           ) : (
             <div className="divide-y dark:divide-gray-800">
-              {wishlist.map((deal) => {
+              {visibleItems.map((deal) => {
                 const isAvailable = availableDealIds.has(deal.id);
 
                 return (
@@ -160,6 +173,14 @@ export function WishlistDrawer({ availableDealIds }: WishlistDrawerProps) {
                   </div>
                 );
               })}
+              {hasMore && (
+                <button
+                  onClick={() => setVisibleCount((prev) => prev + ITEMS_PER_PAGE)}
+                  className="w-full py-3 text-sm text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition-colors cursor-pointer"
+                >
+                  Prikaži još ({wishlist.length - visibleCount} preostalo)
+                </button>
+              )}
             </div>
           )}
         </div>
