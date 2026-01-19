@@ -1,10 +1,43 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// Whitelist of allowed image domains (only our tracked stores)
+const ALLOWED_DOMAINS = [
+  "www.djaksport.com",
+  "djaksport.com",
+  "www.sportvision.rs",
+  "sportvision.rs",
+  "planetasport.rs",
+  "www.planetasport.rs",
+  "www.buzzsneakers.rs",
+  "buzzsneakers.rs",
+  "www.officeshoes.rs",
+  "officeshoes.rs",
+  "www.n-sport.net",
+  "n-sport.net",
+  // CDN domains commonly used by these stores
+  "cdn.shopify.com",
+  "images.sportsdirect.com",
+];
+
+function isAllowedUrl(urlString: string): boolean {
+  try {
+    const url = new URL(urlString);
+    return ALLOWED_DOMAINS.some(domain => url.hostname === domain || url.hostname.endsWith(`.${domain}`));
+  } catch {
+    return false;
+  }
+}
+
 export async function GET(request: NextRequest) {
   const url = request.nextUrl.searchParams.get("url");
 
   if (!url) {
     return new NextResponse("Missing url parameter", { status: 400 });
+  }
+
+  // Security: Only allow whitelisted domains
+  if (!isAllowedUrl(url)) {
+    return new NextResponse("Domain not allowed", { status: 403 });
   }
 
   try {

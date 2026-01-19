@@ -3,6 +3,8 @@ import { prisma } from "@/lib/db";
 import { Prisma, Store, Gender } from "@prisma/client";
 
 const ITEMS_PER_PAGE = 32;
+const MAX_ITEMS_PER_PAGE = 100; // Prevent DoS via huge limit
+const MAX_PAGE = 1000; // Prevent DoS via huge page numbers
 
 // Brand normalization (same as frontend)
 const BRAND_ALIASES: Record<string, string[]> = {
@@ -38,17 +40,26 @@ function getBrandVariants(normalizedBrand: string): string[] {
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
 
-  // Parse query parameters
-  const page = parseInt(searchParams.get("page") || "1", 10);
-  const limit = parseInt(searchParams.get("limit") || String(ITEMS_PER_PAGE), 10);
-  const search = searchParams.get("search") || "";
-  const stores = searchParams.get("stores")?.split(",").filter(Boolean) || [];
-  const brands = searchParams.get("brands")?.split(",").filter(Boolean) || [];
-  const genders = searchParams.get("genders")?.split(",").filter(Boolean) || [];
-  const categories = searchParams.get("categories")?.split(",").filter(Boolean) || [];
-  const categoryPaths = searchParams.get("categoryPaths")?.split(",").filter(Boolean) || [];
-  const sizes = searchParams.get("sizes")?.split(",").filter(Boolean) || [];
-  const minDiscount = parseInt(searchParams.get("minDiscount") || "50", 10);
+  // Parse and validate query parameters
+  let page = parseInt(searchParams.get("page") || "1", 10);
+  let limit = parseInt(searchParams.get("limit") || String(ITEMS_PER_PAGE), 10);
+
+  // Input validation to prevent DoS
+  if (isNaN(page) || page < 1) page = 1;
+  if (page > MAX_PAGE) page = MAX_PAGE;
+  if (isNaN(limit) || limit < 1) limit = ITEMS_PER_PAGE;
+  if (limit > MAX_ITEMS_PER_PAGE) limit = MAX_ITEMS_PER_PAGE;
+  // Sanitize search - limit length to prevent abuse
+  const search = (searchParams.get("search") || "").slice(0, 100);
+  const stores = searchParams.get("stores")?.split(",").filter(Boolean).slice(0, 10) || [];
+  const brands = searchParams.get("brands")?.split(",").filter(Boolean).slice(0, 50) || [];
+  const genders = searchParams.get("genders")?.split(",").filter(Boolean).slice(0, 5) || [];
+  const categories = searchParams.get("categories")?.split(",").filter(Boolean).slice(0, 20) || [];
+  const categoryPaths = searchParams.get("categoryPaths")?.split(",").filter(Boolean).slice(0, 50) || [];
+  const sizes = searchParams.get("sizes")?.split(",").filter(Boolean).slice(0, 30) || [];
+  let minDiscount = parseInt(searchParams.get("minDiscount") || "50", 10);
+  if (isNaN(minDiscount) || minDiscount < 0) minDiscount = 50;
+  if (minDiscount > 100) minDiscount = 100;
   const minPrice = searchParams.get("minPrice") ? parseInt(searchParams.get("minPrice")!, 10) : null;
   const maxPrice = searchParams.get("maxPrice") ? parseInt(searchParams.get("maxPrice")!, 10) : null;
   const sortBy = searchParams.get("sortBy") || "discount";
