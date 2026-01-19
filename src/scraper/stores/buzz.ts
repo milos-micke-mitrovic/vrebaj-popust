@@ -76,54 +76,67 @@ function extractCategories(url: string, name: string): string[] {
     categories.push("obuca/sandale");
   }
 
-  // Odeća
+  // Odeća - Buzz uses various URL patterns
   if (urlLower.includes("/majica/") || urlLower.includes("/polo-majica/") || urlLower.includes("/t-shirt/")) {
     categories.push("odeca/majice");
   } else if (urlLower.includes("/duks/") || urlLower.includes("/hoodie/") || urlLower.includes("/dukserica/")) {
     categories.push("odeca/duksevi");
-  } else if (urlLower.includes("/jakna/") || urlLower.includes("/jacket/")) {
+  } else if (urlLower.includes("/jakna/") || urlLower.includes("/jacket/") || urlLower.includes("/prsluci/") || urlLower.includes("/vest/")) {
     categories.push("odeca/jakne");
-  } else if (urlLower.includes("/trenerka/") || urlLower.includes("/pants/") || urlLower.includes("/pantalone/")) {
+  } else if (urlLower.includes("/trenerka/") || urlLower.includes("/pants/") || urlLower.includes("/pantalone/") || urlLower.includes("/donji-deo-trenerke/") || urlLower.includes("/gornji-deo-trenerke/")) {
     categories.push("odeca/trenerke");
   } else if (urlLower.includes("/sorc/") || urlLower.includes("/shorts/")) {
     categories.push("odeca/sorcevi");
-  } else if (urlLower.includes("/helanke/") || urlLower.includes("/leggings/")) {
+  } else if (urlLower.includes("/helanke/") || urlLower.includes("/leggings/") || urlLower.includes("/tajice/")) {
     categories.push("odeca/helanke");
+  } else if (urlLower.includes("/haljina/") || urlLower.includes("/dress/") || urlLower.includes("/suknja/")) {
+    categories.push("odeca/majice"); // Group dresses with majice for now
   }
 
-  // Oprema
-  if (urlLower.includes("/ranac/") || urlLower.includes("/backpack/") || urlLower.includes("/torba/")) {
+  // Oprema/Accessories
+  if (urlLower.includes("/ranac/") || urlLower.includes("/backpack/") || urlLower.includes("/torba/") || urlLower.includes("/bag/")) {
     categories.push("oprema/torbe");
-  } else if (urlLower.includes("/kapa/") || urlLower.includes("/kacket/")) {
+  } else if (urlLower.includes("/kapa/") || urlLower.includes("/kacket/") || urlLower.includes("/sesir/") || urlLower.includes("/hat/")) {
     categories.push("oprema/kape");
+  } else if (urlLower.includes("/carape/") || urlLower.includes("/socks/")) {
+    categories.push("oprema/carape");
+  } else if (urlLower.includes("/rukavice/") || urlLower.includes("/gloves/")) {
+    categories.push("oprema/rukavice");
   }
 
   // Fallback: extract from product name if no URL match
   if (categories.length === 0) {
-    if (nameLower.includes("patike") || nameLower.includes("sneaker")) {
+    // Obuća - shoes first (most common)
+    if (nameLower.includes("patike") || nameLower.includes("sneaker") || nameLower.includes("tenisice")) {
       categories.push("obuca/patike");
-    } else if (nameLower.includes("cipele")) {
+    } else if (nameLower.includes("cipele") || nameLower.includes("shoes")) {
       categories.push("obuca/cipele");
-    } else if (nameLower.includes("čizme") || nameLower.includes("cizme") || nameLower.includes("boot")) {
+    } else if (nameLower.includes("čizme") || nameLower.includes("cizme") || nameLower.includes("boot") || nameLower.includes("gležnjač") || nameLower.includes("gleznjac")) {
       categories.push("obuca/cizme");
-    } else if (nameLower.includes("sandale") || nameLower.includes("japanke") || nameLower.includes("papuče") || nameLower.includes("papuce")) {
+    } else if (nameLower.includes("sandale") || nameLower.includes("japanke") || nameLower.includes("papuče") || nameLower.includes("papuce") || nameLower.includes("natikač") || nameLower.includes("natikac")) {
       categories.push("obuca/sandale");
-    } else if (nameLower.includes("majica") || nameLower.includes("t-shirt") || nameLower.includes("polo")) {
+    // Odeća - clothing
+    } else if (nameLower.includes("polo") || (nameLower.includes("majica") && !nameLower.includes("patike"))) {
       categories.push("odeca/majice");
-    } else if (nameLower.includes("duks") || nameLower.includes("hoodie") || nameLower.includes("dukserica")) {
+    } else if (nameLower.includes("t-shirt") || nameLower.includes("tshirt") || nameLower.includes("tank top")) {
+      categories.push("odeca/majice");
+    } else if (nameLower.includes("duks") || nameLower.includes("hoodie") || nameLower.includes("dukserica") || nameLower.includes("sweatshirt")) {
       categories.push("odeca/duksevi");
-    } else if (nameLower.includes("jakna") || nameLower.includes("jacket")) {
+    } else if (nameLower.includes("jakna") || nameLower.includes("jacket") || nameLower.includes("prslu") || nameLower.includes("vest") || nameLower.includes("windbreaker")) {
       categories.push("odeca/jakne");
-    } else if (nameLower.includes("trenerka") || nameLower.includes("pants") || nameLower.includes("pantalone") || nameLower.includes("jogger")) {
+    } else if (nameLower.includes("trenerka") || nameLower.includes("pants") || nameLower.includes("pantalone") || nameLower.includes("jogger") || nameLower.includes("donji deo") || nameLower.includes("gornji deo")) {
       categories.push("odeca/trenerke");
-    } else if (nameLower.includes("šorc") || nameLower.includes("sorc") || nameLower.includes("shorts")) {
+    } else if (nameLower.includes("šorc") || nameLower.includes("sorc") || nameLower.includes("shorts") || nameLower.includes("bermude")) {
       categories.push("odeca/sorcevi");
-    } else if (nameLower.includes("helanke") || nameLower.includes("leggings") || nameLower.includes("tajice")) {
+    } else if (nameLower.includes("helanke") || nameLower.includes("leggings") || nameLower.includes("tajice") || nameLower.includes("tight")) {
       categories.push("odeca/helanke");
-    } else if (nameLower.includes("ranac") || nameLower.includes("backpack") || nameLower.includes("torba") || nameLower.includes("bag")) {
+    // Oprema - accessories
+    } else if (nameLower.includes("ranac") || nameLower.includes("backpack") || nameLower.includes("torba") || nameLower.includes("bag") || nameLower.includes("torbica")) {
       categories.push("oprema/torbe");
-    } else if (nameLower.includes("kapa") || nameLower.includes("kačket") || nameLower.includes("kacket") || nameLower.includes("cap")) {
+    } else if (nameLower.includes("kapa") || nameLower.includes("kačket") || nameLower.includes("kacket") || nameLower.includes("cap") || nameLower.includes("šešir") || nameLower.includes("sesir") || nameLower.includes("beanie")) {
       categories.push("oprema/kape");
+    } else if (nameLower.includes("čarape") || nameLower.includes("carape") || nameLower.includes("socks")) {
+      categories.push("oprema/carape");
     }
   }
 
