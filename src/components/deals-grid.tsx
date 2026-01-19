@@ -368,6 +368,11 @@ export function DealsGrid({
   // Filtering and pagination now happen on the server via useDealsApi
   // deals, total, and totalPages come from the API response
 
+  // Scroll to top of results when filters change
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const resetFilters = () => {
     setSelectedStores([]);
     setSelectedBrands([]);
@@ -381,6 +386,7 @@ export function DealsGrid({
     setSearch("");
     setBrandSearch("");
     setCurrentPage(1);
+    scrollToTop();
   };
 
   const toggleStore = (store: Store) => {
@@ -388,6 +394,7 @@ export function DealsGrid({
       prev.includes(store) ? prev.filter((s) => s !== store) : [...prev, store]
     );
     setCurrentPage(1);
+    scrollToTop();
   };
 
   const toggleGender = (gender: Gender) => {
@@ -397,6 +404,7 @@ export function DealsGrid({
         : [...prev, gender]
     );
     setCurrentPage(1);
+    scrollToTop();
   };
 
   const toggleCategory = (category: Category) => {
@@ -406,6 +414,7 @@ export function DealsGrid({
         : [...prev, category]
     );
     setCurrentPage(1);
+    scrollToTop();
   };
 
   const toggleBrand = (brand: string) => {
@@ -413,6 +422,7 @@ export function DealsGrid({
       prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
     );
     setCurrentPage(1);
+    scrollToTop();
   };
 
   const toggleSize = (size: string) => {
@@ -420,6 +430,7 @@ export function DealsGrid({
       prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
     );
     setCurrentPage(1);
+    scrollToTop();
   };
 
   const toggleCategoryPath = (path: CategoryPath) => {
@@ -427,6 +438,7 @@ export function DealsGrid({
       prev.includes(path) ? prev.filter((p) => p !== path) : [...prev, path]
     );
     setCurrentPage(1);
+    scrollToTop();
   };
 
   const toggleExpandedCategory = (cat: MainCategory) => {

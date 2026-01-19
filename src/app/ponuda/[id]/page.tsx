@@ -6,7 +6,6 @@ import { getBrandInfo } from "@/lib/brand-descriptions";
 // Revalidate every 5 minutes
 export const revalidate = 300;
 import { formatPrice, getProxiedImageUrl } from "@/lib/utils";
-import { Badge } from "@/components/ui/badge";
 import { StoreLogo } from "@/components/store-logo";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -409,9 +408,10 @@ export default async function DealPage({ params }: Props) {
                     Nema slike
                   </div>
                 )}
-                <Badge className="absolute left-6 top-6 bg-red-500 px-3 py-1 text-lg text-white shadow-md">
+                {/* Discount ribbon - matching card style */}
+                <div className="absolute -left-10 top-6 rotate-[-45deg] bg-red-500 px-10 py-1 text-lg font-bold text-white shadow-md">
                   -{deal.discountPercent}%
-                </Badge>
+                </div>
               </div>
 
               {/* Info */}
@@ -546,7 +546,7 @@ export default async function DealPage({ params }: Props) {
                       {formatPrice(deal.originalPrice)}
                     </span>
                   </div>
-                  <p className="mt-2 text-green-600 dark:text-green-500 font-medium">
+                  <p className="mt-2 text-gray-500 dark:text-gray-400">
                     Ušteda: {formatPrice(savings)} ({deal.discountPercent}%)
                   </p>
                 </div>
@@ -575,14 +575,13 @@ export default async function DealPage({ params }: Props) {
                       />
                     </svg>
                   </a>
+                  <p className="mt-2 text-center text-sm text-gray-500 dark:text-gray-400">
+                    Bićete preusmereni na sajt prodavca
+                  </p>
                 </div>
 
-                <p className="mt-4 text-sm text-gray-500 dark:text-gray-400">
-                  Bićete preusmereni na sajt prodavca
-                </p>
-
                 {/* Share and wishlist buttons */}
-                <div className="mt-4 flex gap-2">
+                <div className="mt-6 flex gap-2">
                   <ProductWishlistButton deal={deal} />
                   <ShareButton
                     title={`${deal.name} - ${deal.discountPercent}% popust`}

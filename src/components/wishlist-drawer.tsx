@@ -101,6 +101,12 @@ export function WishlistDrawer({ availableDealIds }: WishlistDrawerProps) {
                           Nema slike
                         </div>
                       )}
+                      {/* Discount badge */}
+                      {isAvailable && (
+                        <div className="absolute left-0 top-1 bg-red-500 px-1.5 py-0.5 text-[10px] font-bold text-white rounded-r">
+                          -{deal.discountPercent}%
+                        </div>
+                      )}
                       {!isAvailable && (
                         <div className="absolute inset-0 flex items-center justify-center bg-black/40">
                           <span className="rounded bg-gray-800 px-1.5 py-0.5 text-[10px] font-medium text-white">

@@ -252,9 +252,54 @@ function getCategory(categories: string[], name: string, url?: string): Category
   return extractCategoryFromName(name, url);
 }
 
-// Normalize brand name to consistent format (uppercase)
-function normalizeBrand(brand: string): string {
-  return brand.toUpperCase().trim();
+// Brand corrections for common scraping errors
+const BRAND_CORRECTIONS: Record<string, string | null> = {
+  // Wrong extractions - map to correct brand or null to skip
+  "RANAC": null, // Product type, not a brand
+  "TORBA": null,
+  "AIR": "NIKE", // Air Max, Air Force, etc.
+  "AIR MAX": "NIKE",
+  "AIR FORCE": "NIKE",
+  "AIR JORDAN": "JORDAN",
+  "LOVE": "LOVE MOSCHINO",
+  "MOSCHINO": "LOVE MOSCHINO",
+  // Normalize variations
+  "TOMMY_HILFIGER": "TOMMY HILFIGER",
+  "TOMMY HILFINGER": "TOMMY HILFIGER",
+  "CALVIN_KLEIN": "CALVIN KLEIN",
+  "CALVIN_KLEIN_JEANS": "CALVIN KLEIN",
+  "CALVIN_KLEIN_BLACK_LABEL": "CALVIN KLEIN",
+  "STEVE_MADDEN": "STEVE MADDEN",
+  "THE_NORTH_FACE": "THE NORTH FACE",
+  "NORTH_FACE": "THE NORTH FACE",
+  "UNDER_ARMOUR": "UNDER ARMOUR",
+  "NEW_BALANCE": "NEW BALANCE",
+  "POLO_RALPH_LAUREN": "POLO RALPH LAUREN",
+  "RALPH_LAUREN": "POLO RALPH LAUREN",
+  // Common typos
+  "ADDIDAS": "ADIDAS",
+  "SKETCHERS": "SKECHERS",
+  "SKEECHERS": "SKECHERS",
+  "REBOK": "REEBOK",
+  "REBOCK": "REEBOK",
+};
+
+// Normalize brand name to consistent format
+function normalizeBrand(brand: string): string | null {
+  // Clean up: uppercase, trim, replace underscores with spaces
+  let normalized = brand.toUpperCase().trim().replace(/_/g, " ");
+
+  // Check for corrections
+  if (normalized in BRAND_CORRECTIONS) {
+    const corrected = BRAND_CORRECTIONS[normalized];
+    if (corrected === null) return null; // Skip this brand
+    normalized = corrected;
+  }
+
+  // Final cleanup - remove multiple spaces
+  normalized = normalized.replace(/\s+/g, " ").trim();
+
+  return normalized || null;
 }
 
 export const STORE_INFO: Record<
