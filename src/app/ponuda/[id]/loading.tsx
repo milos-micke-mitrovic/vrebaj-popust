@@ -1,5 +1,6 @@
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { ScrollToTop } from "@/components/scroll-to-top";
 
 function Skeleton({ className }: { className?: string }) {
   return (
@@ -9,8 +10,10 @@ function Skeleton({ className }: { className?: string }) {
 
 export default function ProductLoading() {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      <Header />
+    <>
+      <ScrollToTop />
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+        <Header />
 
       {/* Breadcrumb skeleton */}
       <div className="border-b bg-white dark:bg-gray-900 dark:border-gray-800">
@@ -118,6 +121,7 @@ export default function ProductLoading() {
       </main>
 
       <Footer />
-    </div>
+      </div>
+    </>
   );
 }
