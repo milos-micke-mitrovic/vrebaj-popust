@@ -462,6 +462,7 @@ export function DealsGrid({
       setSelectedCategoryPaths((prev) => [...new Set([...prev, ...paths])]);
     }
     setCurrentPage(1);
+    scrollToTop();
   };
 
   // Handle page change with scroll to top
@@ -557,6 +558,7 @@ export function DealsGrid({
               onClick={() => {
                 setMinDiscount(minDiscount === level.value ? 50 : level.value);
                 setCurrentPage(1);
+                scrollToTop();
               }}
               className={`cursor-pointer px-3 py-1.5 text-sm rounded-full transition-colors ${
                 minDiscount === level.value
@@ -583,6 +585,7 @@ export function DealsGrid({
                   onClick={() => {
                     setMinPrice(option.value);
                     setCurrentPage(1);
+                    scrollToTop();
                   }}
                   className={`cursor-pointer px-2.5 py-1 text-xs rounded-full transition-colors ${
                     minPrice === option.value
@@ -604,6 +607,7 @@ export function DealsGrid({
                   onClick={() => {
                     setMaxPrice(option.value);
                     setCurrentPage(1);
+                    scrollToTop();
                   }}
                   className={`cursor-pointer px-2.5 py-1 text-xs rounded-full transition-colors ${
                     maxPrice === option.value
@@ -1052,6 +1056,7 @@ export function DealsGrid({
                   onChange={(e) => {
                     setSortBy(e.target.value as SortOption);
                     setCurrentPage(1);
+                    scrollToTop();
                   }}
                   className="appearance-none rounded border border-gray-200 bg-white pl-3 pr-8 py-1.5 text-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white cursor-pointer bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Cpath%20fill%3D%22%236b7280%22%20d%3D%22M6%208L1%203h10z%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[right_0.5rem_center]"
                 >
