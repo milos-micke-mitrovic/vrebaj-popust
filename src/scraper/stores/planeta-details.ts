@@ -216,11 +216,11 @@ async function scrapePlanetaDetails(): Promise<void> {
           mappedCategories.push(`sport/${details.sport.toLowerCase()}`);
         }
 
-        // Update deal in database
+        // Update deal in database (only update categories/gender if we found values)
         await updateDealDetails(deal.url, {
           sizes: details.sizes,
-          categories: mappedCategories,
-          gender: mappedGender || undefined,
+          ...(mappedCategories.length > 0 && { categories: mappedCategories }),
+          ...(mappedGender && { gender: mappedGender }),
         });
 
         processed++;

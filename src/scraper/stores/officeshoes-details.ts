@@ -210,11 +210,11 @@ async function scrapeOfficeShoeDetails(): Promise<void> {
           }
         }
 
-        // Update deal in database
+        // Update deal in database (only update categories/gender if we found values)
         await updateDealDetails(deal.url, {
           sizes: details.sizes,
-          categories,
-          gender: gender || undefined,
+          ...(categories.length > 0 && { categories }),
+          ...(gender && { gender }),
         });
 
         processed++;

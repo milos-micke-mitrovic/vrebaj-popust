@@ -134,10 +134,11 @@ async function scrapeSportVisionDetails(): Promise<void> {
         console.log(`  Categories: ${details.categories.join(", ") || "none"}`);
         console.log(`  Gender: ${details.gender || "not detected"}`);
 
+        // Only update categories/gender if we found values (don't overwrite existing)
         await updateDealDetails(deal.url, {
           sizes: details.sizes,
-          categories: details.categories,
-          gender: details.gender || undefined,
+          ...(details.categories.length > 0 && { categories: details.categories }),
+          ...(details.gender && { gender: details.gender }),
         });
 
         processed++;
