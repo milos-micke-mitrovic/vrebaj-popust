@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
@@ -36,15 +36,14 @@ export function WishlistDrawer({ availableDealIds }: WishlistDrawerProps) {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [visibleCount, setVisibleCount] = useState(ITEMS_PER_PAGE);
 
-  // Reset visible count when drawer opens
-  useEffect(() => {
-    if (isDrawerOpen) {
-      setVisibleCount(ITEMS_PER_PAGE);
-    }
-  }, [isDrawerOpen]);
-
   const visibleItems = wishlist.slice(0, visibleCount);
   const hasMore = wishlist.length > visibleCount;
+
+  // Reset pagination when drawer closes
+  const handleClose = () => {
+    closeDrawer();
+    setVisibleCount(ITEMS_PER_PAGE);
+  };
 
   if (!isDrawerOpen) return null;
 
@@ -53,7 +52,7 @@ export function WishlistDrawer({ availableDealIds }: WishlistDrawerProps) {
       {/* Backdrop */}
       <div
         className="absolute inset-0 bg-black/40 animate-[fadeIn_0.15s_ease-out]"
-        onClick={closeDrawer}
+        onClick={handleClose}
       />
 
       {/* Drawer */}
@@ -62,7 +61,7 @@ export function WishlistDrawer({ availableDealIds }: WishlistDrawerProps) {
         <div className="flex items-center justify-between border-b dark:border-gray-800 px-4 py-3">
           <h2 className="text-lg font-semibold dark:text-white">Omiljene ponude ({wishlist.length})</h2>
           <button
-            onClick={closeDrawer}
+            onClick={handleClose}
             className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-800 transition-colors cursor-pointer"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -163,7 +162,7 @@ export function WishlistDrawer({ availableDealIds }: WishlistDrawerProps) {
                       {isAvailable && (
                         <Link
                           href={`/ponuda/${deal.id}`}
-                          onClick={closeDrawer}
+                          onClick={handleClose}
                           className="text-xs text-red-500 hover:underline"
                         >
                           Pogledaj

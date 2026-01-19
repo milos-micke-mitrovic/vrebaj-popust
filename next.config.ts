@@ -9,7 +9,7 @@ const cspDirectives = [
   // Styles: self, inline (Tailwind)
   "style-src 'self' 'unsafe-inline'",
   // Images: self, data URIs, blob, and all store domains
-  "img-src 'self' data: blob: https://www.djaksport.com https://djaksport.com https://*.planeta.rs https://*.planetasport.rs https://*.sportvision.rs https://www.sportvision.rs https://*.n-sport.net https://www.n-sport.net https://*.buzzsneakers.rs https://www.buzzsneakers.rs https://*.officeshoes.rs https://www.officeshoes.rs https://www.google-analytics.com",
+  "img-src 'self' data: blob: https://www.djaksport.com https://djaksport.com https://planeta.rs https://*.planeta.rs https://planetasport.rs https://*.planetasport.rs https://sportvision.rs https://*.sportvision.rs https://www.sportvision.rs https://n-sport.net https://*.n-sport.net https://www.n-sport.net https://buzzsneakers.rs https://*.buzzsneakers.rs https://www.buzzsneakers.rs https://officeshoes.rs https://*.officeshoes.rs https://www.officeshoes.rs https://www.google-analytics.com",
   // Fonts: self and Google Fonts
   "font-src 'self' https://fonts.gstatic.com",
   // Connections: self, Google Analytics
