@@ -78,6 +78,12 @@ export async function GET(request: NextRequest) {
     ranac: ["oprema/torbe", "oprema/rancevi"],
   };
 
+  // Category path aliases - treat these as equivalent
+  const CATEGORY_PATH_ALIASES: Record<string, string[]> = {
+    "odeca/duksevi": ["odeca/dukserice"],
+    "odeca/dukserice": ["odeca/duksevi"],
+  };
+
   // Combine legacy categories with category paths
   const allCategoryPaths = [...categoryPaths];
   categories.forEach((cat) => {
@@ -87,9 +93,18 @@ export async function GET(request: NextRequest) {
     }
   });
 
+  // Expand category paths with aliases (e.g., duksevi also matches dukserice)
+  const expandedCategoryPaths = [...allCategoryPaths];
+  allCategoryPaths.forEach((path) => {
+    const aliases = CATEGORY_PATH_ALIASES[path];
+    if (aliases) {
+      expandedCategoryPaths.push(...aliases);
+    }
+  });
+
   // Category paths filter (e.g., "obuca/patike")
-  if (allCategoryPaths.length > 0) {
-    where.categories = { hasSome: allCategoryPaths };
+  if (expandedCategoryPaths.length > 0) {
+    where.categories = { hasSome: expandedCategoryPaths };
   }
 
   // Size filter - match exact or range (e.g., "36" matches "36" and "36-37")

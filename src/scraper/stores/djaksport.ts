@@ -83,8 +83,10 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
           categories.push("obuca/" + subCat.replace("decije-", "").replace("muske-", "").replace("zenske-", ""));
         }
       } else if (mainCat === "odeca") {
-        if (subCat.includes("jakne") || subCat.includes("dukserice") || subCat.includes("prsluci")) {
+        if (subCat.includes("jakne") || subCat.includes("prsluci")) {
           categories.push("odeca/jakne");
+        } else if (subCat.includes("dukserice") || subCat.includes("duksevi")) {
+          categories.push("odeca/duksevi");
         } else if (subCat.includes("trenerke") || subCat.includes("donji-delovi")) {
           categories.push("odeca/trenerke");
         } else if (subCat.includes("majice") || subCat.includes("dres")) {
@@ -122,8 +124,10 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
       categories.push("obuca/cizme");
     } else if (nameLower.includes("sandale") || nameLower.includes("japanke") || nameLower.includes("papuce") || nameLower.includes("papuče")) {
       categories.push("obuca/sandale");
-    } else if (nameLower.includes("jakna") || nameLower.includes("duks") || nameLower.includes("prslu")) {
+    } else if (nameLower.includes("jakna") || nameLower.includes("prslu")) {
       categories.push("odeca/jakne");
+    } else if (nameLower.includes("duks")) {
+      categories.push("odeca/duksevi");
     } else if (nameLower.includes("majica") || nameLower.includes("dres") || nameLower.includes("top ")) {
       categories.push("odeca/majice");
     } else if (nameLower.includes("trenerka") || nameLower.includes("donji deo") || nameLower.includes("pantalon")) {

@@ -117,17 +117,24 @@ const BRAND_DISPLAY_NAMES: Record<string, string> = {
 };
 
 // Category display names for expired page
-const CATEGORY_DISPLAY_EXPIRED: Record<string, { singular: string; plural: string; filterSlug: string }> = {
-  "patike": { singular: "patike", plural: "patike", filterSlug: "patike" },
-  "cipele": { singular: "cipele", plural: "cipele", filterSlug: "cipele" },
-  "cizme": { singular: "čizme", plural: "čizme", filterSlug: "cizme" },
-  "jakna": { singular: "jakna", plural: "jakne", filterSlug: "jakne" },
-  "majica": { singular: "majica", plural: "majice", filterSlug: "majice" },
-  "duks": { singular: "duks", plural: "duksevi", filterSlug: "duksevi" },
-  "trenerka": { singular: "trenerka", plural: "trenerke", filterSlug: "trenerke" },
-  "sorc": { singular: "šorc", plural: "šorcevi", filterSlug: "sorcevi" },
-  "helanke": { singular: "helanke", plural: "helanke", filterSlug: "helanke" },
-  "ranac": { singular: "ranac", plural: "ranci", filterSlug: "ranac" },
+// grammaticalGender: "m" = masculine (Drugi), "f" = feminine (Druge)
+const CATEGORY_DISPLAY_EXPIRED: Record<string, {
+  singular: string;
+  plural: string;
+  filterSlug: string;
+  catPath: string;
+  grammaticalGender: "m" | "f";
+}> = {
+  "patike": { singular: "patike", plural: "patike", filterSlug: "patike", catPath: "obuca/patike", grammaticalGender: "f" },
+  "cipele": { singular: "cipele", plural: "cipele", filterSlug: "cipele", catPath: "obuca/cipele", grammaticalGender: "f" },
+  "cizme": { singular: "čizme", plural: "čizme", filterSlug: "cizme", catPath: "obuca/cizme", grammaticalGender: "f" },
+  "jakna": { singular: "jakna", plural: "jakne", filterSlug: "jakne", catPath: "odeca/jakne", grammaticalGender: "f" },
+  "majica": { singular: "majica", plural: "majice", filterSlug: "majice", catPath: "odeca/majice", grammaticalGender: "f" },
+  "duks": { singular: "duks", plural: "duksevi", filterSlug: "duksevi", catPath: "odeca/duksevi", grammaticalGender: "m" },
+  "trenerka": { singular: "trenerka", plural: "trenerke", filterSlug: "trenerke", catPath: "odeca/trenerke", grammaticalGender: "f" },
+  "sorc": { singular: "šorc", plural: "šorcevi", filterSlug: "sorcevi", catPath: "odeca/sorcevi", grammaticalGender: "m" },
+  "helanke": { singular: "helanke", plural: "helanke", filterSlug: "helanke", catPath: "odeca/helanke", grammaticalGender: "f" },
+  "ranac": { singular: "ranac", plural: "ranci", filterSlug: "ranac", catPath: "oprema/torbe", grammaticalGender: "m" },
 };
 
 interface UrlExtractedInfo {
@@ -327,16 +334,21 @@ export default async function DealPage({ params }: Props) {
         ctaHref = `/ponude/${urlInfo.brandSlug}`;
       }
       ctaText = `Pogledaj druge ${urlInfo.brand} ${urlInfo.categoryDisplay}`;
-      sectionHeading = `Druge ${urlInfo.brand} ${urlInfo.categoryDisplay} na akciji`;
+      // Use grammatical gender: "Druge" (f) or "Drugi" (m)
+      const drugPrefix = categoryInfo.grammaticalGender === "m" ? "Drugi" : "Druge";
+      sectionHeading = `${drugPrefix} ${urlInfo.brand} ${urlInfo.categoryDisplay} na akciji`;
     } else if (urlInfo.brandSlug) {
       ctaHref = `/ponude/${urlInfo.brandSlug}`;
       ctaText = `Pogledaj druge ${urlInfo.brand} proizvode`;
       sectionHeading = `Drugi ${urlInfo.brand} proizvodi na akciji`;
     } else if (urlInfo.category) {
       const categoryInfo = CATEGORY_DISPLAY_EXPIRED[urlInfo.category];
-      ctaHref = `/ponude/${categoryInfo.filterSlug}`;
+      // Add catPath query param so sidebar shows category checked
+      ctaHref = `/ponude/${categoryInfo.filterSlug}?catPaths=${encodeURIComponent(categoryInfo.catPath)}`;
       ctaText = `Pogledaj druge ${urlInfo.categoryDisplay}`;
-      sectionHeading = `Druge ${urlInfo.categoryDisplay} na akciji`;
+      // Use grammatical gender: "Druge" (f) or "Drugi" (m)
+      const drugPrefix = categoryInfo.grammaticalGender === "m" ? "Drugi" : "Druge";
+      sectionHeading = `${drugPrefix} ${urlInfo.categoryDisplay} na akciji`;
     }
 
     return (
