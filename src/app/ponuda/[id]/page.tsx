@@ -333,19 +333,21 @@ export default async function DealPage({ params }: Props) {
       } else {
         ctaHref = `/ponude/${urlInfo.brandSlug}`;
       }
-      ctaText = `Pogledaj druge ${urlInfo.brand} ${urlInfo.categoryDisplay}`;
+      ctaText = `${urlInfo.brand} ${urlInfo.categoryDisplay} na popustu`;
       // Use grammatical gender: "Druge" (f) or "Drugi" (m)
       const drugPrefix = categoryInfo.grammaticalGender === "m" ? "Drugi" : "Druge";
       sectionHeading = `${drugPrefix} ${urlInfo.brand} ${urlInfo.categoryDisplay} na akciji`;
     } else if (urlInfo.brandSlug) {
       ctaHref = `/ponude/${urlInfo.brandSlug}`;
-      ctaText = `Pogledaj druge ${urlInfo.brand} proizvode`;
+      ctaText = `${urlInfo.brand} na popustu`;
       sectionHeading = `Drugi ${urlInfo.brand} proizvodi na akciji`;
     } else if (urlInfo.category) {
       const categoryInfo = CATEGORY_DISPLAY_EXPIRED[urlInfo.category];
       // Add catPath query param so sidebar shows category checked
       ctaHref = `/ponude/${categoryInfo.filterSlug}?catPaths=${encodeURIComponent(categoryInfo.catPath)}`;
-      ctaText = `Pogledaj druge ${urlInfo.categoryDisplay}`;
+      // Capitalize first letter for button text
+      const capitalizedCategory = urlInfo.categoryDisplay!.charAt(0).toUpperCase() + urlInfo.categoryDisplay!.slice(1);
+      ctaText = `${capitalizedCategory} na popustu`;
       // Use grammatical gender: "Druge" (f) or "Drugi" (m)
       const drugPrefix = categoryInfo.grammaticalGender === "m" ? "Drugi" : "Druge";
       sectionHeading = `${drugPrefix} ${urlInfo.categoryDisplay} na akciji`;
