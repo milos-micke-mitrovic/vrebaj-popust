@@ -711,16 +711,6 @@ export default async function FilterPage({ params }: Props) {
         <Header />
 
         <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6">
-          {/* SEO heading */}
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-              {config.title}
-            </h1>
-            <p className="text-gray-600 dark:text-gray-400">
-              Proizvodi sa popustima preko 50%
-            </p>
-          </div>
-
           <Suspense
             fallback={
               <div className="py-12 text-center text-gray-500 dark:text-gray-400">Učitavanje...</div>
