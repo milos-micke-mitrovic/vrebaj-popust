@@ -19,6 +19,11 @@ interface DealsGridProps {
   initialGenders?: Gender[];
   initialCategories?: Category[];
   initialCategoryPaths?: CategoryPath[];
+  // SEO heading for filter pages (only shown on clean landing, before user interaction)
+  seoTitle?: string;
+  seoSubtitle?: string;
+  // Filter page slug - when set, changing filters redirects to /ponude with query params
+  filterPageSlug?: string;
 }
 
 type SortOption = "discount" | "price-low" | "price-high" | "newest";
@@ -108,6 +113,9 @@ export function DealsGrid({
   initialGenders = [],
   initialCategories = [],
   initialCategoryPaths = [],
+  seoTitle,
+  seoSubtitle,
+  filterPageSlug,
 }: DealsGridProps) {
   const router = useRouter();
   const pathname = usePathname();
@@ -247,10 +255,19 @@ export function DealsGrid({
   // Track if we're updating from URL to prevent sync loops
   const isUpdatingFromUrl = useRef(false);
   const urlUpdateTimeout = useRef<NodeJS.Timeout | null>(null);
+  // Track initial mount to skip the first URL sync (preserve initial values from props)
+  const isFirstSyncMount = useRef(true);
+  // Track if URL update effect should skip (separate from sync to avoid race condition)
+  const skipFirstUrlUpdate = useRef(true);
 
   // Sync state from URL params when URL changes externally (e.g., clicking logo to go home)
-  // This is intentional - we need to sync external URL changes to local state
   useEffect(() => {
+    // Skip the first mount - we want to preserve initialCategories, initialBrands, etc.
+    if (isFirstSyncMount.current) {
+      isFirstSyncMount.current = false;
+      return;
+    }
+
     // Build current state as URL params to compare
     const currentParams = new URLSearchParams();
     if (search) currentParams.set("q", search);
@@ -281,16 +298,21 @@ export function DealsGrid({
       setMaxPrice(searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : null);
       setSortBy((searchParams.get("sort") as SortOption) || "discount");
       setCurrentPage(Number(searchParams.get("page")) || 1);
-      // Reset flag after a short delay
       setTimeout(() => { isUpdatingFromUrl.current = false; }, 50);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]); // Intentionally only depend on searchParams - we compare internal state to URL
+  }, [searchParams]);
 
-  // Debounced URL update to prevent re-renders while typing/dragging
+  // Debounced URL update
+  // On filter pages: redirect to /ponude with query params when ANY filter changes
+  // On /ponude: just update query params
   useEffect(() => {
-    // Skip if we're syncing from URL
     if (isUpdatingFromUrl.current) return;
+    // Skip the first URL update to preserve SEO URLs on initial mount
+    if (skipFirstUrlUpdate.current) {
+      skipFirstUrlUpdate.current = false;
+      return;
+    }
 
     if (urlUpdateTimeout.current) {
       clearTimeout(urlUpdateTimeout.current);
@@ -311,7 +333,9 @@ export function DealsGrid({
       if (sortBy !== "discount") params.set("sort", sortBy);
       if (currentPage > 1) params.set("page", String(currentPage));
 
-      const newUrl = params.toString() ? `${pathname}?${params}` : pathname;
+      // If on a filter page (SEO landing), always redirect to /ponude when filters change
+      const basePath = filterPageSlug ? "/ponude" : pathname;
+      const newUrl = params.toString() ? `${basePath}?${params}` : basePath;
       router.replace(newUrl, { scroll: false });
     }, 300);
 
@@ -320,7 +344,7 @@ export function DealsGrid({
         clearTimeout(urlUpdateTimeout.current);
       }
     };
-  }, [search, selectedStores, selectedBrands, selectedGenders, selectedCategories, selectedCategoryPaths, selectedSizes, minDiscount, minPrice, maxPrice, sortBy, currentPage, pathname, router]);
+  }, [search, selectedStores, selectedBrands, selectedGenders, selectedCategories, selectedCategoryPaths, selectedSizes, minDiscount, minPrice, maxPrice, sortBy, currentPage, pathname, router, filterPageSlug]);
 
   const filteredBrands = useMemo(() => {
     // Sort alphabetically and filter by search
@@ -542,7 +566,7 @@ export function DealsGrid({
           placeholder="Pretraži proizvode..."
           value={search}
           onChange={(e) => {
-            setSearch(e.target.value);
+                    setSearch(e.target.value);
             setCurrentPage(1);
           }}
           className="bg-gray-50 border-gray-200 focus:bg-white dark:bg-gray-800 dark:border-gray-700 dark:focus:bg-gray-700 dark:text-white dark:placeholder-gray-400"
@@ -568,7 +592,7 @@ export function DealsGrid({
             <button
               key={level.value}
               onClick={() => {
-                setMinDiscount(minDiscount === level.value ? 50 : level.value);
+                            setMinDiscount(minDiscount === level.value ? 50 : level.value);
                 setCurrentPage(1);
                 scrollToTop();
               }}
@@ -595,7 +619,7 @@ export function DealsGrid({
                 <button
                   key={`from-${option.label}`}
                   onClick={() => {
-                    setMinPrice(option.value);
+                                    setMinPrice(option.value);
                     setCurrentPage(1);
                     scrollToTop();
                   }}
@@ -617,7 +641,7 @@ export function DealsGrid({
                 <button
                   key={`to-${option.label}`}
                   onClick={() => {
-                    setMaxPrice(option.value);
+                                    setMaxPrice(option.value);
                     setCurrentPage(1);
                     scrollToTop();
                   }}
@@ -937,6 +961,20 @@ export function DealsGrid({
 
         {/* Main Content */}
         <div className="min-w-0">
+          {/* SEO Title - only shown on clean SEO landing (no query params) */}
+          {seoTitle && searchParams.toString() === "" && (
+            <div className="mb-4">
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+                {seoTitle}
+              </h1>
+              {seoSubtitle && (
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  {seoSubtitle}
+                </p>
+              )}
+            </div>
+          )}
+
           {/* Top Bar - Sort and Active Filters */}
           <div className="mb-4">
             {/* Desktop/Tablet: Single row */}
@@ -949,7 +987,7 @@ export function DealsGrid({
                       variant="secondary"
                       className="cursor-pointer px-3 py-1.5 text-sm"
                       onClick={() => {
-                        setSearch("");
+                                            setSearch("");
                         setCurrentPage(1);
                       }}
                     >
@@ -1024,7 +1062,7 @@ export function DealsGrid({
                       variant="secondary"
                       className="cursor-pointer px-3 py-1.5 text-sm"
                       onClick={() => {
-                        setMinDiscount(50);
+                                            setMinDiscount(50);
                         setCurrentPage(1);
                       }}
                     >
@@ -1036,7 +1074,7 @@ export function DealsGrid({
                       variant="secondary"
                       className="cursor-pointer px-3 py-1.5 text-sm"
                       onClick={() => {
-                        setMinPrice(null);
+                                            setMinPrice(null);
                         setCurrentPage(1);
                       }}
                     >
@@ -1048,7 +1086,7 @@ export function DealsGrid({
                       variant="secondary"
                       className="cursor-pointer px-3 py-1.5 text-sm"
                       onClick={() => {
-                        setMaxPrice(null);
+                                            setMaxPrice(null);
                         setCurrentPage(1);
                       }}
                     >
@@ -1066,7 +1104,7 @@ export function DealsGrid({
                 <select
                   value={sortBy}
                   onChange={(e) => {
-                    setSortBy(e.target.value as SortOption);
+                                    setSortBy(e.target.value as SortOption);
                     setCurrentPage(1);
                     scrollToTop();
                   }}
@@ -1088,7 +1126,7 @@ export function DealsGrid({
                     variant="secondary"
                     className="cursor-pointer px-3 py-1.5 text-sm"
                     onClick={() => {
-                      setSearch("");
+                                        setSearch("");
                       setCurrentPage(1);
                     }}
                   >
@@ -1163,7 +1201,7 @@ export function DealsGrid({
                     variant="secondary"
                     className="cursor-pointer px-3 py-1.5 text-sm"
                     onClick={() => {
-                      setMinDiscount(50);
+                                        setMinDiscount(50);
                       setCurrentPage(1);
                     }}
                   >
@@ -1175,7 +1213,7 @@ export function DealsGrid({
                     variant="secondary"
                     className="cursor-pointer px-3 py-1.5 text-sm"
                     onClick={() => {
-                      setMinPrice(null);
+                                        setMinPrice(null);
                       setCurrentPage(1);
                     }}
                   >
@@ -1187,7 +1225,7 @@ export function DealsGrid({
                     variant="secondary"
                     className="cursor-pointer px-3 py-1.5 text-sm"
                     onClick={() => {
-                      setMaxPrice(null);
+                                        setMaxPrice(null);
                       setCurrentPage(1);
                     }}
                   >

@@ -318,37 +318,29 @@ export default async function DealPage({ params }: Props) {
     }
 
     // Build smart CTA link and text
+    // Always use /ponude with query params (SEO pages are only for Google landing)
     let ctaHref = "/ponude";
     let ctaText = "Pregledaj sve ponude";
     let sectionHeading = "Aktuelne ponude sa popustima preko 50%";
 
     if (urlInfo.brandSlug && urlInfo.category) {
-      // Brand + category: link to combined filter if exists, otherwise brand filter
       const categoryInfo = CATEGORY_DISPLAY_EXPIRED[urlInfo.category];
-      const combinedSlug = `${urlInfo.brandSlug}-${categoryInfo.filterSlug}`;
-      // Check if combined filter exists (only for popular combinations)
-      const popularCombined = ["nike-patike", "adidas-patike", "puma-patike"];
-      if (popularCombined.includes(combinedSlug)) {
-        ctaHref = `/ponude/${combinedSlug}`;
-      } else {
-        ctaHref = `/ponude/${urlInfo.brandSlug}`;
-      }
+      // Use query params: /ponude?brands=HUMMEL&categories=duks
+      ctaHref = `/ponude?brands=${encodeURIComponent(urlInfo.brand!)}&categories=${urlInfo.category}`;
       ctaText = `${urlInfo.brand} ${urlInfo.categoryDisplay} na popustu`;
-      // Use grammatical gender: "Druge" (f) or "Drugi" (m)
       const drugPrefix = categoryInfo.grammaticalGender === "m" ? "Drugi" : "Druge";
       sectionHeading = `${drugPrefix} ${urlInfo.brand} ${urlInfo.categoryDisplay} na akciji`;
     } else if (urlInfo.brandSlug) {
-      ctaHref = `/ponude/${urlInfo.brandSlug}`;
+      // Use query params: /ponude?brands=HUMMEL
+      ctaHref = `/ponude?brands=${encodeURIComponent(urlInfo.brand!)}`;
       ctaText = `${urlInfo.brand} na popustu`;
       sectionHeading = `Drugi ${urlInfo.brand} proizvodi na akciji`;
     } else if (urlInfo.category) {
       const categoryInfo = CATEGORY_DISPLAY_EXPIRED[urlInfo.category];
-      // Add catPath query param so sidebar shows category checked
-      ctaHref = `/ponude/${categoryInfo.filterSlug}?catPaths=${encodeURIComponent(categoryInfo.catPath)}`;
-      // Capitalize first letter for button text
+      // Use query params: /ponude?categories=duks
+      ctaHref = `/ponude?categories=${urlInfo.category}`;
       const capitalizedCategory = urlInfo.categoryDisplay!.charAt(0).toUpperCase() + urlInfo.categoryDisplay!.slice(1);
       ctaText = `${capitalizedCategory} na popustu`;
-      // Use grammatical gender: "Druge" (f) or "Drugi" (m)
       const drugPrefix = categoryInfo.grammaticalGender === "m" ? "Drugi" : "Druge";
       sectionHeading = `${drugPrefix} ${urlInfo.categoryDisplay} na akciji`;
     }
