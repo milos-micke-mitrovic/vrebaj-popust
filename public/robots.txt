@@ -79,7 +79,7 @@ Disallow: /api/
 Disallow: /admin/
 
 # Sitemap
-Sitemap: https://vrebajpopust.rs/sitemap.xml
+Sitemap: https://www.vrebajpopust.rs/sitemap.xml
 
 # llms.txt for AI crawlers
-# https://vrebajpopust.rs/llms.txt
+# https://www.vrebajpopust.rs/llms.txt
