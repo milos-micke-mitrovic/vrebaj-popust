@@ -84,44 +84,102 @@ async function getRelatedDeals(deal: Deal, limit: number = 8): Promise<Deal[]> {
   return related;
 }
 
-// Helper function to get relevant deals based on URL keywords (for missing products)
-// Extracts brand/category hints from the product ID to show relevant alternatives
-async function getRelevantDealsFromUrl(productId: string, limit: number = 8): Promise<Deal[]> {
-  const allDeals = await getAllDealsAsync();
+// Brand display names (URL slug -> display name)
+const BRAND_DISPLAY_NAMES: Record<string, string> = {
+  "nike": "Nike",
+  "adidas": "Adidas",
+  "puma": "Puma",
+  "reebok": "Reebok",
+  "converse": "Converse",
+  "vans": "Vans",
+  "fila": "Fila",
+  "champion": "Champion",
+  "jordan": "Jordan",
+  "asics": "Asics",
+  "skechers": "Skechers",
+  "new-balance": "New Balance",
+  "under-armour": "Under Armour",
+  "the-north-face": "The North Face",
+  "columbia": "Columbia",
+  "hoka": "Hoka",
+  "timberland": "Timberland",
+  "lacoste": "Lacoste",
+  "tommy": "Tommy Hilfiger",
+  "calvin-klein": "Calvin Klein",
+  "hummel": "Hummel",
+  "umbro": "Umbro",
+  "kappa": "Kappa",
+  "ellesse": "Ellesse",
+  "diadora": "Diadora",
+  "mizuno": "Mizuno",
+  "salomon": "Salomon",
+  "crocs": "Crocs",
+};
+
+// Category display names for expired page
+const CATEGORY_DISPLAY_EXPIRED: Record<string, { singular: string; plural: string; filterSlug: string }> = {
+  "patike": { singular: "patike", plural: "patike", filterSlug: "patike" },
+  "cipele": { singular: "cipele", plural: "cipele", filterSlug: "cipele" },
+  "cizme": { singular: "čizme", plural: "čizme", filterSlug: "cizme" },
+  "jakna": { singular: "jakna", plural: "jakne", filterSlug: "jakne" },
+  "majica": { singular: "majica", plural: "majice", filterSlug: "majice" },
+  "duks": { singular: "duks", plural: "duksevi", filterSlug: "duksevi" },
+  "trenerka": { singular: "trenerka", plural: "trenerke", filterSlug: "trenerke" },
+  "sorc": { singular: "šorc", plural: "šorcevi", filterSlug: "sorcevi" },
+  "helanke": { singular: "helanke", plural: "helanke", filterSlug: "helanke" },
+  "ranac": { singular: "ranac", plural: "ranci", filterSlug: "ranac" },
+};
+
+interface UrlExtractedInfo {
+  brand: string | null;       // Display name (e.g., "Nike")
+  brandSlug: string | null;   // URL slug (e.g., "nike")
+  category: string | null;    // Category key (e.g., "patike")
+  categoryDisplay: string | null;  // Display name (e.g., "patike")
+  gender: string | null;      // Gender key (e.g., "muski")
+}
+
+// Extract product info from URL for display on expired pages
+function extractInfoFromUrl(productId: string): UrlExtractedInfo {
   const idLower = productId.toLowerCase();
 
   // Common brand names to look for in URL
-  const brands = ["nike", "adidas", "puma", "reebok", "converse", "vans", "fila",
-    "champion", "jordan", "asics", "skechers", "new-balance", "under-armour",
-    "the-north-face", "columbia", "hoka", "timberland", "lacoste", "tommy",
-    "calvin-klein", "hummel", "umbro", "kappa", "ellesse", "diadora", "mizuno", "salomon", "crocs"];
-
-  // Categories to look for
-  const categories = ["patike", "cipele", "cizme", "jakna", "majica", "duks",
-    "trenerka", "sorc", "helanke", "ranac"];
-
-  // Genders to look for
+  const brandSlugs = Object.keys(BRAND_DISPLAY_NAMES);
+  const categories = Object.keys(CATEGORY_DISPLAY_EXPIRED);
   const genders = ["muski", "muskarce", "zenski", "zene", "deciji", "deca", "devojcice", "decaci"];
 
   // Extract hints from URL
-  const foundBrand = brands.find(b => idLower.includes(b));
+  const foundBrandSlug = brandSlugs.find(b => idLower.includes(b));
   const foundCategory = categories.find(c => idLower.includes(c));
   const foundGender = genders.find(g => idLower.includes(g));
 
   // Map gender variations
-  let genderFilter: string | undefined;
+  let genderNormalized: string | null = null;
   if (foundGender) {
-    if (["muski", "muskarce"].includes(foundGender)) genderFilter = "muski";
-    else if (["zenski", "zene"].includes(foundGender)) genderFilter = "zenski";
-    else if (["deciji", "deca", "devojcice", "decaci"].includes(foundGender)) genderFilter = "deciji";
+    if (["muski", "muskarce"].includes(foundGender)) genderNormalized = "muski";
+    else if (["zenski", "zene"].includes(foundGender)) genderNormalized = "zenski";
+    else if (["deciji", "deca", "devojcice", "decaci"].includes(foundGender)) genderNormalized = "deciji";
   }
+
+  return {
+    brand: foundBrandSlug ? BRAND_DISPLAY_NAMES[foundBrandSlug] : null,
+    brandSlug: foundBrandSlug || null,
+    category: foundCategory || null,
+    categoryDisplay: foundCategory ? CATEGORY_DISPLAY_EXPIRED[foundCategory].plural : null,
+    gender: genderNormalized,
+  };
+}
+
+// Helper function to get relevant deals based on URL keywords (for missing products)
+async function getRelevantDealsFromUrl(productId: string, limit: number = 8): Promise<Deal[]> {
+  const allDeals = await getAllDealsAsync();
+  const info = extractInfoFromUrl(productId);
 
   // Score and filter deals based on matches
   const scored = allDeals.map(deal => {
     let score = 0;
-    if (foundBrand && deal.brand?.toLowerCase().includes(foundBrand)) score += 3;
-    if (foundCategory && deal.category === foundCategory) score += 2;
-    if (genderFilter && deal.gender === genderFilter) score += 1;
+    if (info.brandSlug && deal.brand?.toLowerCase().includes(info.brandSlug)) score += 3;
+    if (info.category && deal.category === info.category) score += 2;
+    if (info.gender && deal.gender === info.gender) score += 1;
     return { deal, score };
   });
 
@@ -238,8 +296,48 @@ export default async function DealPage({ params }: Props) {
 
   // Product not available - show friendly page with relevant alternatives
   if (!deal) {
-    // Try to find relevant products based on URL keywords (brand, category, gender)
+    // Extract brand/category/gender info from URL for personalized messaging
+    const urlInfo = extractInfoFromUrl(id);
     const relevantDeals = await getRelevantDealsFromUrl(id, 8);
+
+    // Build personalized message
+    let productDescription = "Ponuda";
+    if (urlInfo.brand && urlInfo.categoryDisplay) {
+      productDescription = `${urlInfo.brand} ${urlInfo.categoryDisplay}`;
+    } else if (urlInfo.brand) {
+      productDescription = `${urlInfo.brand} proizvod`;
+    } else if (urlInfo.categoryDisplay) {
+      productDescription = urlInfo.categoryDisplay.charAt(0).toUpperCase() + urlInfo.categoryDisplay.slice(1);
+    }
+
+    // Build smart CTA link and text
+    let ctaHref = "/ponude";
+    let ctaText = "Pregledaj sve ponude";
+    let sectionHeading = "Aktuelne ponude sa popustima preko 50%";
+
+    if (urlInfo.brandSlug && urlInfo.category) {
+      // Brand + category: link to combined filter if exists, otherwise brand filter
+      const categoryInfo = CATEGORY_DISPLAY_EXPIRED[urlInfo.category];
+      const combinedSlug = `${urlInfo.brandSlug}-${categoryInfo.filterSlug}`;
+      // Check if combined filter exists (only for popular combinations)
+      const popularCombined = ["nike-patike", "adidas-patike", "puma-patike"];
+      if (popularCombined.includes(combinedSlug)) {
+        ctaHref = `/ponude/${combinedSlug}`;
+      } else {
+        ctaHref = `/ponude/${urlInfo.brandSlug}`;
+      }
+      ctaText = `Pogledaj druge ${urlInfo.brand} ${urlInfo.categoryDisplay}`;
+      sectionHeading = `Druge ${urlInfo.brand} ${urlInfo.categoryDisplay} na akciji`;
+    } else if (urlInfo.brandSlug) {
+      ctaHref = `/ponude/${urlInfo.brandSlug}`;
+      ctaText = `Pogledaj druge ${urlInfo.brand} proizvode`;
+      sectionHeading = `Drugi ${urlInfo.brand} proizvodi na akciji`;
+    } else if (urlInfo.category) {
+      const categoryInfo = CATEGORY_DISPLAY_EXPIRED[urlInfo.category];
+      ctaHref = `/ponude/${categoryInfo.filterSlug}`;
+      ctaText = `Pogledaj druge ${urlInfo.categoryDisplay}`;
+      sectionHeading = `Druge ${urlInfo.categoryDisplay} na akciji`;
+    }
 
     return (
       <>
@@ -256,7 +354,7 @@ export default async function DealPage({ params }: Props) {
               </svg>
             </div>
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
-              Ova ponuda više nije dostupna
+              {productDescription} više nije na akciji
             </h1>
             <p className="mt-4 text-gray-600 dark:text-gray-400">
               Proizvod je možda rasprodat ili je popust istekao.
@@ -264,10 +362,10 @@ export default async function DealPage({ params }: Props) {
             </p>
             <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
               <Link
-                href="/ponude"
+                href={ctaHref}
                 className="rounded-lg bg-red-500 px-6 py-3 font-medium text-white hover:bg-red-600 transition-colors"
               >
-                Pregledaj sve ponude
+                {ctaText} →
               </Link>
               <Link
                 href="/"
@@ -282,7 +380,7 @@ export default async function DealPage({ params }: Props) {
           {relevantDeals.length > 0 && (
             <section>
               <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
-                Slične ponude koje bi vas mogle zanimati
+                {sectionHeading}
               </h2>
               <div className="flex flex-wrap gap-3">
                 {relevantDeals.map((relevantDeal) => (
