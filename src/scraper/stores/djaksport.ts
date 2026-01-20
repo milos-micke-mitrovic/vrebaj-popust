@@ -2,6 +2,7 @@ import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
 import { upsertDeal, logScrapeRun, disconnect, cleanupStaleProducts, Store, Gender } from "../db-writer";
+import { extractBrandFromName } from "../../lib/brand-utils";
 
 puppeteer.use(StealthPlugin());
 
@@ -337,16 +338,19 @@ async function scrapeDjakSport(): Promise<void> {
         if (product.discountPercent >= MIN_DISCOUNT) {
           const { gender, categories } = parseUrlInfo(product.url, product.name);
 
+          // Extract brand using server-side logic (handles multi-word brands, aliases, filters genders/categories)
+          const brand = extractBrandFromName(product.name);
+
           // Log first few products with categories for debugging
           if (totalDeals < 5) {
-            console.log(`Saving: ${product.name.substring(0, 40)}... | gender=${gender} | categories=${JSON.stringify(categories)}`);
+            console.log(`Saving: ${product.name.substring(0, 40)}... | brand=${brand} | gender=${gender} | categories=${JSON.stringify(categories)}`);
           }
 
           await upsertDeal({
             id: generateId(product.url),
             store: STORE,
             name: product.name,
-            brand: product.brand,
+            brand: brand,
             originalPrice: product.originalPrice,
             salePrice: product.salePrice,
             discountPercent: product.discountPercent,

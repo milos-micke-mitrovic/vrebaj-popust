@@ -1,41 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/db";
 import { Prisma, Store, Gender } from "@prisma/client";
+import { normalizeBrand, getBrandVariants } from "@/lib/brand-utils";
 
 const ITEMS_PER_PAGE = 32;
 const MAX_ITEMS_PER_PAGE = 100; // Prevent DoS via huge limit
 const MAX_PAGE = 1000; // Prevent DoS via huge page numbers
-
-// Brand normalization (same as frontend)
-const BRAND_ALIASES: Record<string, string[]> = {
-  "CALVIN KLEIN": ["CALVIN", "CALVIN KLEIN BLACK LABEL", "CALVIN KLEIN JEANS", "CK"],
-  "KARL LAGERFELD": ["KARL"],
-  "NEW BALANCE": ["NEW_BALANCE", "NB"],
-  "TOMMY HILFIGER": ["TOMMY", "TOMMY JEANS", "TOMMY_HILFIGER"],
-  "UNDER ARMOUR": ["UNDER_ARMOUR", "UA"],
-};
-
-// Get all brand variants for a normalized brand name
-function getBrandVariants(normalizedBrand: string): string[] {
-  const upper = normalizedBrand.toUpperCase().replace(/ /g, "_");
-  const variants = [normalizedBrand, upper, normalizedBrand.replace(/ /g, "_")];
-
-  // Add aliases if this is a canonical brand
-  const aliases = BRAND_ALIASES[normalizedBrand.toUpperCase()];
-  if (aliases) {
-    variants.push(...aliases);
-    variants.push(...aliases.map(a => a.replace(/_/g, " ")));
-  }
-
-  // Check if this matches any alias, add the canonical form
-  for (const [canonical, aliasList] of Object.entries(BRAND_ALIASES)) {
-    if (aliasList.includes(normalizedBrand.toUpperCase())) {
-      variants.push(canonical, canonical.replace(/ /g, "_"));
-    }
-  }
-
-  return [...new Set(variants)];
-}
 
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
@@ -204,6 +174,27 @@ export async function GET(request: NextRequest) {
       _max: { salePrice: true },
     });
 
+    // Normalize and deduplicate brands (merge "adidas", "Adidas", "ADIDAS" into one)
+    const brandMap = new Map<string, { name: string; count: number }>();
+    for (const b of brandsAgg) {
+      if (!b.brand) continue;
+      // Use normalizeBrand to:
+      // - Filter out gender words (MUSKA, ZENSKE, ZENSKI, etc.)
+      // - Filter out category words (RANAC, SANDALE, etc.)
+      // - Merge aliases (CALVIN -> CALVIN KLEIN, THE -> THE NORTH FACE, etc.)
+      // - Convert underscores to spaces (MOON_BOOT -> MOON BOOT)
+      const normalized = normalizeBrand(b.brand);
+      if (!normalized) continue; // Skip invalid brands (genders/categories)
+
+      const existing = brandMap.get(normalized);
+      if (existing) {
+        existing.count += b._count;
+      } else {
+        brandMap.set(normalized, { name: normalized, count: b._count });
+      }
+    }
+    const normalizedBrandsResult = Array.from(brandMap.values()).sort((a, b) => b.count - a.count);
+
     return NextResponse.json({
       deals,
       pagination: {
@@ -213,10 +204,7 @@ export async function GET(request: NextRequest) {
         totalPages: Math.ceil(total / limit),
       },
       filters: {
-        brands: brandsAgg
-          .filter(b => b.brand)
-          .map(b => ({ name: b.brand!, count: b._count }))
-          .sort((a, b) => b.count - a.count),
+        brands: normalizedBrandsResult,
         stores: storesAgg.map(s => ({ name: s.store, count: s._count })),
         genders: gendersAgg.map(g => ({ name: g.gender, count: g._count })),
         priceRange: {

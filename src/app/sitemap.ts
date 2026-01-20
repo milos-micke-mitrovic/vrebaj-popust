@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 import { getAllDealsAsync } from "@/lib/deals";
 
-// SEO filter pages - categories, brands, genders
+// SEO filter pages - categories, brands, genders, stores, and combined filters
 const FILTER_PAGES = [
   // Categories
   "patike",
@@ -54,6 +54,28 @@ const FILTER_PAGES = [
   "n-sport",
   "buzz",
   "office-shoes",
+  // Combined filters (brand + gender, brand + category, category + gender)
+  "nike-muski",
+  "nike-zenski",
+  "nike-patike",
+  "adidas-muski",
+  "adidas-zenski",
+  "adidas-patike",
+  "puma-muski",
+  "puma-zenski",
+  "puma-patike",
+  "patike-muski",
+  "patike-zenski",
+  "patike-deciji",
+  "trenerke-muski",
+  "trenerke-zenski",
+  "jakne-muski",
+  "jakne-zenski",
+  "duksevi-muski",
+  "duksevi-zenski",
+  "helanke-zenski",
+  "majice-muski",
+  "majice-zenski",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
