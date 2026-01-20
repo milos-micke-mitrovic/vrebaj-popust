@@ -84,15 +84,68 @@ async function getRelatedDeals(deal: Deal, limit: number = 8): Promise<Deal[]> {
   return related;
 }
 
-// Helper function to get top deals
-async function getTopDeals(limit: number = 8): Promise<Deal[]> {
+// Helper function to get relevant deals based on URL keywords (for missing products)
+// Extracts brand/category hints from the product ID to show relevant alternatives
+async function getRelevantDealsFromUrl(productId: string, limit: number = 8): Promise<Deal[]> {
   const allDeals = await getAllDealsAsync();
-  return allDeals.slice(0, limit);
+  const idLower = productId.toLowerCase();
+
+  // Common brand names to look for in URL
+  const brands = ["nike", "adidas", "puma", "reebok", "converse", "vans", "fila",
+    "champion", "jordan", "asics", "skechers", "new-balance", "under-armour",
+    "the-north-face", "columbia", "hoka", "timberland", "lacoste", "tommy",
+    "calvin-klein", "hummel", "umbro", "kappa", "ellesse", "diadora", "mizuno", "salomon", "crocs"];
+
+  // Categories to look for
+  const categories = ["patike", "cipele", "cizme", "jakna", "majica", "duks",
+    "trenerka", "sorc", "helanke", "ranac"];
+
+  // Genders to look for
+  const genders = ["muski", "muskarce", "zenski", "zene", "deciji", "deca", "devojcice", "decaci"];
+
+  // Extract hints from URL
+  const foundBrand = brands.find(b => idLower.includes(b));
+  const foundCategory = categories.find(c => idLower.includes(c));
+  const foundGender = genders.find(g => idLower.includes(g));
+
+  // Map gender variations
+  let genderFilter: string | undefined;
+  if (foundGender) {
+    if (["muski", "muskarce"].includes(foundGender)) genderFilter = "muski";
+    else if (["zenski", "zene"].includes(foundGender)) genderFilter = "zenski";
+    else if (["deciji", "deca", "devojcice", "decaci"].includes(foundGender)) genderFilter = "deciji";
+  }
+
+  // Score and filter deals based on matches
+  const scored = allDeals.map(deal => {
+    let score = 0;
+    if (foundBrand && deal.brand?.toLowerCase().includes(foundBrand)) score += 3;
+    if (foundCategory && deal.category === foundCategory) score += 2;
+    if (genderFilter && deal.gender === genderFilter) score += 1;
+    return { deal, score };
+  });
+
+  // Sort by score (highest first), then by discount
+  scored.sort((a, b) => {
+    if (b.score !== a.score) return b.score - a.score;
+    return b.deal.discountPercent - a.deal.discountPercent;
+  });
+
+  // Return top matches (only if they have some relevance)
+  const relevant = scored.filter(s => s.score > 0).slice(0, limit).map(s => s.deal);
+
+  // If no relevant matches, return top deals by discount
+  if (relevant.length < limit) {
+    const topDeals = allDeals.slice(0, limit - relevant.length);
+    return [...relevant, ...topDeals.filter(d => !relevant.includes(d))].slice(0, limit);
+  }
+
+  return relevant;
 }
 
 // No generateStaticParams - pages render on-demand (not pre-built)
-// This speeds up builds significantly since we have 6000+ products
-// Product pages are noindexed anyway, so no SEO benefit from pre-rendering
+// This speeds up builds significantly since we have 4000-10000 products
+// Pages are still indexed via sitemap, just rendered dynamically on first visit
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -100,12 +153,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const deal = await getDealByIdAsync(id);
 
   if (!deal) {
+    // Try to extract brand from URL for better SEO on unavailable pages
+    const idLower = id.toLowerCase();
+    const brands = ["nike", "adidas", "puma", "reebok", "converse", "jordan", "asics"];
+    const foundBrand = brands.find(b => idLower.includes(b));
+    const brandText = foundBrand ? `${foundBrand.charAt(0).toUpperCase() + foundBrand.slice(1)} ` : "";
+
     return {
-      title: "Ponuda više nije dostupna | VrebajPopust",
-      description: "Ova ponuda više nije dostupna. Pogledajte druge aktuelne popuste preko 50% na sportsku opremu u Srbiji.",
+      title: `${brandText}Ponuda više nije dostupna | VrebajPopust`,
+      description: `Ova ${brandText.toLowerCase()}ponuda više nije dostupna. Pogledajte druge aktuelne ${brandText.toLowerCase()}popuste preko 50% na sportsku opremu u Srbiji.`,
       robots: {
-        index: false,
-        follow: true,
+        index: false,  // Don't index unavailable products
+        follow: true,  // But follow links to alternatives
       },
     };
   }
@@ -167,7 +226,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       canonical: `https://vrebajpopust.rs/ponuda/${id}`,
     },
     robots: {
-      index: false,  // Don't index individual product pages - they change too frequently
+      index: true,  // Index product pages for long-tail SEO traffic
       follow: true,
     },
   };
@@ -177,9 +236,10 @@ export default async function DealPage({ params }: Props) {
   const { id } = await params;
   const deal = await getDealByIdAsync(id);
 
-  // Product not available - show friendly page with alternatives
+  // Product not available - show friendly page with relevant alternatives
   if (!deal) {
-    const topDeals = await getTopDeals(8);
+    // Try to find relevant products based on URL keywords (brand, category, gender)
+    const relevantDeals = await getRelevantDealsFromUrl(id, 8);
 
     return (
       <>
@@ -218,16 +278,16 @@ export default async function DealPage({ params }: Props) {
             </div>
           </div>
 
-          {/* Top Deals Section */}
-          {topDeals.length > 0 && (
+          {/* Relevant Deals Section - based on URL keywords */}
+          {relevantDeals.length > 0 && (
             <section>
               <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6">
-                Najpopularnije ponude
+                Slične ponude koje bi vas mogle zanimati
               </h2>
               <div className="flex flex-wrap gap-3">
-                {topDeals.map((topDeal) => (
-                  <div key={topDeal.id} className="w-[calc(50%-6px)] sm:w-[calc(25%-9px)]">
-                    <DealCard deal={topDeal} />
+                {relevantDeals.map((relevantDeal) => (
+                  <div key={relevantDeal.id} className="w-[calc(50%-6px)] sm:w-[calc(25%-9px)]">
+                    <DealCard deal={relevantDeal} />
                   </div>
                 ))}
               </div>

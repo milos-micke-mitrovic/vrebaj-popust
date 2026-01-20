@@ -5,12 +5,11 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: "/",
+        allow: ["/", "/ponuda/"], // Allow product pages for indexing
         disallow: [
           "/api/",
           "/_next/",
           "/admin/",
-          "/ponuda/", // Individual product pages (noindexed, use filter pages instead)
         ],
       },
       {

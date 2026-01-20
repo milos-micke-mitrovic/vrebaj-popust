@@ -1,4 +1,5 @@
 import { MetadataRoute } from "next";
+import { getAllDealsAsync } from "@/lib/deals";
 
 // SEO filter pages - categories, brands, genders
 const FILTER_PAGES = [
@@ -101,8 +102,15 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.8,
   }));
 
-  // Note: Individual product pages (/ponuda/[id]) are not included
-  // because they are noindexed - they change too frequently
+  // Product pages - all active deals for long-tail SEO
+  // These capture searches like "Nike Air Max 90 popust" etc.
+  const deals = await getAllDealsAsync();
+  const productPages: MetadataRoute.Sitemap = deals.map((deal) => ({
+    url: `${baseUrl}/ponuda/${deal.id}`,
+    lastModified: deal.scrapedAt ? new Date(deal.scrapedAt) : now,
+    changeFrequency: "daily" as const,
+    priority: 0.6,
+  }));
 
-  return [...mainPages, ...filterPages];
+  return [...mainPages, ...filterPages, ...productPages];
 }
