@@ -560,6 +560,7 @@ export async function generateStaticParams() {
 
 interface Props {
   params: Promise<{ filter: string }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }
 
 // Generate metadata for SEO
@@ -620,9 +621,13 @@ function buildWhereClause(config: FilterConfig) {
   return where;
 }
 
-export default async function FilterPage({ params }: Props) {
+export default async function FilterPage({ params, searchParams }: Props) {
   const { filter } = await params;
+  const resolvedSearchParams = await searchParams;
   const config = ALL_FILTERS[filter];
+
+  // Show SEO heading only on clean landing (no query params)
+  const hasQueryParams = Object.keys(resolvedSearchParams).length > 0;
 
   if (!config) {
     notFound();
@@ -711,6 +716,18 @@ export default async function FilterPage({ params }: Props) {
         <Header />
 
         <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6">
+          {/* SEO heading - only show on clean landing (no query params) */}
+          {!hasQueryParams && (
+            <div className="mb-4">
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white">
+                {config.title}
+              </h1>
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                Proizvodi sa popustima preko 50%
+              </p>
+            </div>
+          )}
+
           <Suspense
             fallback={
               <div className="py-12 text-center text-gray-500 dark:text-gray-400">Učitavanje...</div>
