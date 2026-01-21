@@ -137,24 +137,22 @@ function extractProductDetails(html: string): ProductDetails {
     }
   }
 
-  // Extract sizes from Magento JSON config embedded in script tags
-  // Planeta uses Magento which embeds jsonConfig with size options
-  // Pattern: "code":"size","options":[{"label":"35"},{"label":"36"},...
-
-  // Find the size attribute block and extract all labels
-  const sizeBlockMatch = html.match(/"code"\s*:\s*"size"[^}]*"options"\s*:\s*\[([\s\S]*?)\]/);
-  if (sizeBlockMatch) {
-    const optionsBlock = sizeBlockMatch[1];
-    const labelMatches = optionsBlock.matchAll(/"label"\s*:\s*"([^"]+)"/g);
-    for (const m of labelMatches) {
-      const size = m[1];
-      // Filter: only include valid sizes (numbers or letter sizes)
-      if (size && !result.sizes.includes(size)) {
-        // Check if it's a valid size format
-        const isNumeric = /^\d+(\.\d+)?$/.test(size);
-        const isLetterSize = /^[XSML]{1,3}$/.test(size.toUpperCase());
-        if (isNumeric || isLetterSize) {
-          result.sizes.push(size);
+  // Extract sizes from Magento JSON config
+  // Find "code":"size" then extract "label" values from the options array
+  const codeIdx = html.indexOf('"code":"size"');
+  if (codeIdx > 0) {
+    const chunk = html.substring(codeIdx, codeIdx + 5000);
+    const optionsMatch = chunk.match(/"options"\s*:\s*\[([^\]]+)\]/);
+    if (optionsMatch) {
+      const labelMatches = optionsMatch[1].matchAll(/"label"\s*:\s*"([^"]+)"/g);
+      for (const m of labelMatches) {
+        const size = m[1];
+        if (size && !result.sizes.includes(size)) {
+          const isNumeric = /^\d+(\.\d+)?$/.test(size);
+          const isLetterSize = /^[XSML]{1,3}$/.test(size.toUpperCase());
+          if (isNumeric || isLetterSize) {
+            result.sizes.push(size);
+          }
         }
       }
     }
