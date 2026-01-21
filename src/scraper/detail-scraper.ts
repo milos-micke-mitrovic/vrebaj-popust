@@ -54,7 +54,6 @@ const CATEGORY_MAPPINGS: CategoryMapping[] = [
   { keywords: ["donji deo trenerke", "trenerk", "tracksuit"], category: "odeca/trenerke" },
   { keywords: ["jakn", "jacket", "suskav"], category: "odeca/jakne" },
   { keywords: ["prsluk", "prsluci", "vest"], category: "odeca/prsluci" },
-  { keywords: ["aktivni ves", "aktivni_ves"], category: "odeca/aktivni_ves" },
   { keywords: ["duks", "hoodie", "sweatshirt", "dukseric"], category: "odeca/duksevi" },
   { keywords: ["majic", "t-shirt", "tshirt", "top "], category: "odeca/majice" },
   { keywords: ["pantalon", "pants", "trousers", "donji deo"], category: "odeca/pantalone" },
@@ -62,7 +61,6 @@ const CATEGORY_MAPPINGS: CategoryMapping[] = [
   { keywords: ["sortev", "sorc", "shorts"], category: "odeca/sortevi" },
   { keywords: ["kupac", "swim", "kupaon"], category: "odeca/kupaci" },
   { keywords: ["haljin", "dress"], category: "odeca/haljine" },
-  { keywords: ["vetrovk", "windbreaker"], category: "odeca/vetrovke" },
   { keywords: ["sukn", "skirt"], category: "odeca/haljine" },
 
   // Oprema (equipment/accessories)
