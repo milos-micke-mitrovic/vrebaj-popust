@@ -1,9 +1,5 @@
-import puppeteer from "puppeteer-extra";
-import StealthPlugin from "puppeteer-extra-plugin-stealth";
-import type { Browser, Page } from "puppeteer";
+import { JSDOM } from "jsdom";
 import { getDealsWithoutDetails, updateDealDetails, disconnect, Gender } from "../db-writer";
-
-puppeteer.use(StealthPlugin());
 
 const STORE = "planeta" as const;
 
@@ -21,149 +17,162 @@ const GENDER_MAP: Record<string, Gender> = {
   "UNISEX": "unisex",
 };
 
-// Map Planeta's Vrsta values to our category system
-const CATEGORY_MAP: Record<string, string> = {
-  // Footwear
-  "PATIKE": "obuca/patike",
-  "CIPELE": "obuca/cipele",
-  "ČIZME": "obuca/cizme",
-  "CIZME": "obuca/cizme",
-  "PAPUČE": "obuca/papuce",
-  "PAPUCE": "obuca/papuce",
-  "SANDALE": "obuca/sandale",
-  "JAPANKE": "obuca/japanke",
+function mapCategory(vrsta: string): string | null {
+  const upper = vrsta.toUpperCase().trim();
+
+  // Footwear - check for keywords
+  if (upper.includes("PATIKE") || upper.includes("PATIKA")) return "obuca/patike";
+  if (upper.includes("CIPELE") || upper.includes("CIPELA")) return "obuca/cipele";
+  if (upper.includes("ČIZME") || upper.includes("CIZME") || upper.includes("ČIZMA") || upper.includes("CIZMA")) return "obuca/cizme";
+  if (upper.includes("PAPUČE") || upper.includes("PAPUCE") || upper.includes("PAPUČA") || upper.includes("PAPUCA")) return "obuca/papuce";
+  if (upper.includes("SANDALE") || upper.includes("SANDALA")) return "obuca/sandale";
+  if (upper.includes("JAPANKE") || upper.includes("JAPANKA")) return "obuca/japanke";
+  if (upper.includes("KLOMPE") || upper.includes("KLOMPA")) return "obuca/klompe";
+  if (upper.includes("KOPAČKE") || upper.includes("KOPACKE")) return "obuca/kopacke";
 
   // Tops
-  "MAJICE KRATAK RUKAV": "odeca/majice",
-  "MAJICE DUGIH RUKAVA": "odeca/majice",
-  "MAJICE": "odeca/majice",
-  "DUKSEVI": "odeca/duksevi",
-  "DUKSERICE": "odeca/duksevi",
-  "JAKNE": "odeca/jakne",
-  "PRSLUCI": "odeca/prsluci",
-  "VETROVKE": "odeca/vetrovke",
+  if (upper.includes("MAJIC")) return "odeca/majice";
+  if (upper.includes("DUKS")) return "odeca/duksevi";
+  if (upper.includes("JAKN")) return "odeca/jakne";
+  if (upper.includes("PRSLUK") || upper.includes("PRSLUC")) return "odeca/prsluci";
+  if (upper.includes("VETROVK")) return "odeca/vetrovke";
 
   // Bottoms
-  "PANTALONE": "odeca/pantalone",
-  "TRENERKE": "odeca/trenerke",
-  "DONJI DELOVI TRENERKI": "odeca/trenerke",
-  "GORNJI DELOVI TRENERKI": "odeca/duksevi",
-  "HELANKE": "odeca/helanke",
-  "ŠORTEVI": "odeca/sortevi",
-  "SORTEVI": "odeca/sortevi",
-  "BERMUDE": "odeca/sortevi",
+  if (upper.includes("TRENERKA") || upper.includes("TRENERKE")) return "odeca/trenerke";
+  if (upper.includes("DONJI DEL")) return "odeca/trenerke";
+  if (upper.includes("GORNJI DEL")) return "odeca/duksevi";
+  if (upper.includes("PANTALON")) return "odeca/pantalone";
+  if (upper.includes("HELANKE") || upper.includes("HELANKI")) return "odeca/helanke";
+  if (upper.includes("ŠORC") || upper.includes("SORC") || upper.includes("BERMUD")) return "odeca/sorcevi";
 
   // Swimwear
-  "KUPAĆI KOSTIMI": "odeca/kupaci",
-  "KUPACI KOSTIMI": "odeca/kupaci",
+  if (upper.includes("KUPAĆI") || upper.includes("KUPACI")) return "odeca/kupaci";
 
   // Accessories
-  "KAPE": "oprema/kape",
-  "KAČKETI": "oprema/kacketi",
-  "KACKETI": "oprema/kacketi",
-  "ČARAPE": "oprema/carape",
-  "CARAPE": "oprema/carape",
-  "TORBE": "oprema/torbe",
-  "RANČEVI": "oprema/rancevi",
-  "RANCEVI": "oprema/rancevi",
-  "RUKAVICE": "oprema/rukavice",
-  "ŠALOVI": "oprema/salovi",
-  "SALOVI": "oprema/salovi",
-};
+  if (upper.includes("KAPA") || upper.includes("KAPE")) return "oprema/kape";
+  if (upper.includes("KAČKET") || upper.includes("KACKET")) return "oprema/kacketi";
+  if (upper.includes("ČARAP") || upper.includes("CARAP")) return "oprema/carape";
+  if (upper.includes("TORB")) return "oprema/torbe";
+  if (upper.includes("RANČ") || upper.includes("RANC")) return "oprema/rancevi";
+  if (upper.includes("RUKAVIC")) return "oprema/rukavice";
+  if (upper.includes("ŠAL") || upper.includes("SAL")) return "oprema/salovi";
+
+  return null;
+}
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-async function launchBrowser(): Promise<Browser> {
-  return puppeteer.launch({
-    headless: true,
-    args: [
-      "--no-sandbox",
-      "--disable-setuid-sandbox",
-      "--disable-dev-shm-usage",
-      "--disable-blink-features=AutomationControlled",
-    ],
-  }) as Promise<Browser>;
 }
 
 interface ProductDetails {
   brand: string | null;
   gender: Gender | null;
   categories: string[];
-  sport: string | null;
   sizes: string[];
 }
 
-async function extractProductDetails(page: Page): Promise<ProductDetails> {
-  return page.evaluate(`
-    (function() {
-      var result = {
-        brand: null,
-        gender: null,
-        categories: [],
-        sport: null,
-        sizes: []
-      };
+async function fetchProductPage(url: string): Promise<string | null> {
+  try {
+    const response = await fetch(url, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
+        "Accept-Language": "sr,en;q=0.9",
+      },
+    });
 
-      // Extract from Specifikacija table
-      var table = document.querySelector('#product-attribute-specs-table');
-      if (table) {
-        var rows = table.querySelectorAll('tr');
-        rows.forEach(function(row) {
-          var label = row.querySelector('th');
-          var value = row.querySelector('td');
-          if (label && value) {
-            var labelText = label.textContent.trim().toUpperCase();
-            var valueText = value.textContent.trim().toUpperCase();
+    if (!response.ok) {
+      console.log(`  HTTP ${response.status}`);
+      return null;
+    }
 
-            if (labelText === 'BREND') {
-              // Get brand from link if available, otherwise from text
-              var brandLink = value.querySelector('a');
-              result.brand = brandLink ? brandLink.textContent.trim() : value.textContent.trim();
-            } else if (labelText === 'POL') {
-              result.gender = valueText;
-            } else if (labelText === 'VRSTA') {
-              result.categories.push(valueText);
-            } else if (labelText === 'SPORT') {
-              result.sport = valueText;
-            }
+    return await response.text();
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.log(`  Fetch error: ${message}`);
+    return null;
+  }
+}
+
+function extractProductDetails(html: string): ProductDetails {
+  const dom = new JSDOM(html);
+  const doc = dom.window.document;
+
+  const result: ProductDetails = {
+    brand: null,
+    gender: null,
+    categories: [],
+    sizes: [],
+  };
+
+  // Extract from Specifikacija table
+  const table = doc.querySelector('#product-attribute-specs-table');
+  if (table) {
+    const rows = table.querySelectorAll('tr');
+    for (const row of rows) {
+      const label = row.querySelector('th');
+      const value = row.querySelector('td');
+      if (label && value) {
+        const labelText = label.textContent?.trim().toUpperCase() || "";
+        const valueText = value.textContent?.trim() || "";
+
+        if (labelText === 'BREND') {
+          const brandLink = value.querySelector('a');
+          result.brand = brandLink ? brandLink.textContent?.trim() || null : valueText || null;
+        } else if (labelText === 'POL') {
+          const genderKey = valueText.toUpperCase();
+          result.gender = GENDER_MAP[genderKey] || null;
+        } else if (labelText === 'VRSTA') {
+          const category = mapCategory(valueText);
+          if (category && !result.categories.includes(category)) {
+            result.categories.push(category);
           }
-        });
-      }
-
-      // Extract sizes from size selector
-      var sizeElements = document.querySelectorAll('.swatch-attribute.size .swatch-option, .size-option:not(.unavailable), [data-option-type="size"]');
-      sizeElements.forEach(function(el) {
-        var size = el.textContent.trim() || el.getAttribute('data-option-label') || '';
-        if (size && !el.classList.contains('unavailable') && !el.classList.contains('disabled')) {
-          result.sizes.push(size);
-        }
-      });
-
-      // Alternative size extraction - from dropdown
-      if (result.sizes.length === 0) {
-        var sizeSelect = document.querySelector('select[id*="size"], select[name*="size"]');
-        if (sizeSelect) {
-          var options = sizeSelect.querySelectorAll('option');
-          options.forEach(function(opt) {
-            var size = opt.textContent.trim();
-            if (size && opt.value && !opt.disabled) {
-              result.sizes.push(size);
-            }
-          });
         }
       }
+    }
+  }
 
-      return result;
-    })()
-  `) as Promise<ProductDetails>;
+  // Extract sizes from size selector swatches
+  const sizeElements = doc.querySelectorAll('.swatch-attribute.size .swatch-option');
+  for (const el of sizeElements) {
+    if (!el.classList.contains('unavailable') && !el.classList.contains('disabled')) {
+      const size = el.textContent?.trim() || el.getAttribute('data-option-label') || '';
+      if (size && !result.sizes.includes(size)) {
+        result.sizes.push(size);
+      }
+    }
+  }
+
+  // Alternative: check for size options in different format
+  if (result.sizes.length === 0) {
+    const altSizeElements = doc.querySelectorAll('[data-option-type="size"]:not(.unavailable)');
+    for (const el of altSizeElements) {
+      const size = el.textContent?.trim() || el.getAttribute('data-option-label') || '';
+      if (size && !result.sizes.includes(size)) {
+        result.sizes.push(size);
+      }
+    }
+  }
+
+  // Fallback: extract from URL if no category found (e.g., /patike-xyz.html)
+  if (result.categories.length === 0) {
+    const urlMatch = html.match(/og:url[^>]*content="([^"]+)"/i);
+    if (urlMatch) {
+      const url = urlMatch[1].toLowerCase();
+      if (url.includes('/patike-') || url.includes('/patike/')) result.categories.push('obuca/patike');
+      else if (url.includes('/cipele-') || url.includes('/cipele/')) result.categories.push('obuca/cipele');
+      else if (url.includes('/jakn')) result.categories.push('odeca/jakne');
+      else if (url.includes('/duks')) result.categories.push('odeca/duksevi');
+      else if (url.includes('/majic')) result.categories.push('odeca/majice');
+    }
+  }
+
+  return result;
 }
 
 async function scrapePlanetaDetails(): Promise<void> {
-  console.log("Starting Planeta Sport detail scraper...");
+  console.log("Starting Planeta Sport detail scraper (fetch mode)...");
 
-  // Get deals that need details
   const deals = await getDealsWithoutDetails(STORE);
   console.log(`Found ${deals.length} deals without details`);
 
@@ -173,75 +182,61 @@ async function scrapePlanetaDetails(): Promise<void> {
     return;
   }
 
-  const browser = await launchBrowser();
   let processed = 0;
   let errors = 0;
+  const startTime = Date.now();
 
-  try {
-    const page = await browser.newPage();
-    await page.setViewport({ width: 1920, height: 1080 });
+  for (const deal of deals) {
+    console.log(`\n[${processed + 1}/${deals.length}] ${deal.name}`);
+    console.log(`  URL: ${deal.url}`);
 
-    for (const deal of deals) {
-      console.log(`\n[${processed + 1}/${deals.length}] ${deal.name}`);
-      console.log(`  URL: ${deal.url}`);
+    try {
+      const html = await fetchProductPage(deal.url);
 
-      try {
-        await page.goto(deal.url, {
-          waitUntil: "networkidle2",
-          timeout: 60000,
-        });
-
-        await sleep(1000 + Math.random() * 1000);
-
-        const details = await extractProductDetails(page);
-        console.log(`  Brand: ${details.brand}`);
-        console.log(`  Gender: ${details.gender}`);
-        console.log(`  Categories: ${details.categories.join(", ") || "none"}`);
-        console.log(`  Sport: ${details.sport}`);
-        console.log(`  Sizes: ${details.sizes.length > 0 ? details.sizes.join(", ") : "none"}`);
-
-        // Map gender
-        const mappedGender = details.gender ? GENDER_MAP[details.gender] || null : null;
-
-        // Map categories
-        const mappedCategories: string[] = [];
-        for (const cat of details.categories) {
-          const mapped = CATEGORY_MAP[cat];
-          if (mapped) {
-            mappedCategories.push(mapped);
-          }
-        }
-        // Add sport as category if available
-        if (details.sport) {
-          mappedCategories.push(`sport/${details.sport.toLowerCase()}`);
-        }
-
-        // Update deal in database (only update categories/gender if we found values)
-        await updateDealDetails(deal.url, {
-          sizes: details.sizes,
-          ...(mappedCategories.length > 0 && { categories: mappedCategories }),
-          ...(mappedGender && { gender: mappedGender }),
-        });
-
-        processed++;
-        console.log(`  ✓ Updated`);
-
-        // Random delay between requests
-        await sleep(1500 + Math.random() * 1500);
-
-      } catch (err) {
+      if (!html) {
         errors++;
-        const message = err instanceof Error ? err.message : String(err);
-        console.error(`  ✗ Error: ${message}`);
+        continue;
       }
+
+      const details = extractProductDetails(html);
+      console.log(`  Gender: ${details.gender || "not detected"}`);
+      console.log(`  Categories: ${details.categories.join(", ") || "none"}`);
+      console.log(`  Sizes: ${details.sizes.length > 0 ? details.sizes.join(", ") : "none"}`);
+
+      // Update deal in database
+      await updateDealDetails(deal.url, {
+        sizes: details.sizes,
+        ...(details.categories.length > 0 && { categories: details.categories }),
+        ...(details.gender && { gender: details.gender }),
+      });
+
+      processed++;
+      console.log(`  ✓ Updated`);
+
+      // Small delay between requests
+      await sleep(200 + Math.random() * 300);
+
+    } catch (err) {
+      errors++;
+      const message = err instanceof Error ? err.message : String(err);
+      console.error(`  ✗ Error: ${message}`);
     }
-  } finally {
-    await browser.close();
+
+    // Progress report every 50 products
+    if (processed % 50 === 0 && processed > 0) {
+      const elapsed = (Date.now() - startTime) / 1000;
+      const rate = processed / elapsed;
+      const remaining = (deals.length - processed) / rate;
+      console.log(`\n--- Progress: ${processed}/${deals.length} | Rate: ${rate.toFixed(1)}/sec | ETA: ${(remaining / 60).toFixed(1)} min ---\n`);
+    }
   }
+
+  const totalTime = (Date.now() - startTime) / 1000;
 
   console.log("\n=== Detail Scraping Complete ===");
   console.log(`Processed: ${processed}`);
   console.log(`Errors: ${errors}`);
+  console.log(`Total time: ${(totalTime / 60).toFixed(1)} minutes`);
 
   await disconnect();
 }
