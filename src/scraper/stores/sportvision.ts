@@ -91,111 +91,43 @@ async function fetchPageProducts(page: Page, pageNum: number): Promise<{ product
         const doc = parser.parseFromString(html, 'text/html');
 
         var results = [];
-        // Look for product items - SportVision uses .product-item or similar
-        var items = doc.querySelectorAll('.product-item, .product-box, [class*="product"]');
+        // Only select real product items with data-productname attribute
+        var items = doc.querySelectorAll('.product-item[data-productname]');
 
-        // If no items with those classes, try to find product links
-        if (items.length === 0) {
-          items = doc.querySelectorAll('a[href*="/proizvod/"]');
-        }
+        items.forEach(function(container) {
+          // Use data attributes directly - most reliable source
+          var name = container.dataset.productname || '';
+          var brand = container.dataset.productbrand || null;
+          var salePrice = container.dataset.productprice || '';
+          var originalPrice = container.dataset.productprevprice || '';
+          var discountPercent = parseInt(container.dataset.productdiscount, 10) || 0;
 
-        items.forEach(function(el) {
-          // Try to get product container
-          var container = el.closest('.product-item') || el.closest('.product-box') || el;
-
-          // Get product link and name
-          var linkEl = container.querySelector('a[href*="/proizvod/"]') || container.querySelector('a.product-link');
-          if (!linkEl && el.tagName === 'A' && el.href && el.href.includes('/proizvod/')) {
-            linkEl = el;
-          }
+          // Get URL from product link
+          var linkEl = container.querySelector('.title a') || container.querySelector('a.product-link');
           var url = linkEl ? linkEl.href : '';
-          var name = '';
 
-          // Product name is in .title a element
-          var titleEl = container.querySelector('.title a');
-          if (titleEl) {
-            name = titleEl.textContent.trim() || titleEl.getAttribute('title') || '';
-          }
-          // Fallback to other selectors
-          if (!name) {
-            var nameEl = container.querySelector('.product-name, .product-title, h3, h4');
-            if (nameEl) {
-              name = nameEl.textContent.trim();
+          // Get image - look for actual product image, not status icons
+          var imgEl = container.querySelector('.img-wrapper img');
+          var imageUrl = '';
+          if (imgEl) {
+            imageUrl = imgEl.src || imgEl.dataset.src || '';
+            // Skip status/placeholder images
+            if (imageUrl.includes('status.svg') || imageUrl.includes('placeholder')) {
+              imageUrl = '';
             }
           }
-          // Last resort: use link title attribute (but not text which might be "Detaljnije")
-          if (!name && linkEl) {
-            name = linkEl.getAttribute('title') || '';
-          }
-          // Filter out invalid names (button text, etc.)
-          if (name === 'Detaljnije' || name === 'Dodaj u korpu' || name === 'Uporedi' || name.length < 3) {
-            name = '';
-          }
-
-          // Get image
-          var imgEl = container.querySelector('img');
-          var imageUrl = imgEl ? (imgEl.src || imgEl.dataset.src || '') : '';
           if (imageUrl && imageUrl.startsWith('/')) {
             imageUrl = 'https://www.sportvision.rs' + imageUrl;
           }
 
-          // Get prices from the new structure
-          // Old price: .prev-price.prev-old-price.prev-price-third (prethodna cena - original price)
-          // Current price: .current-price .value
-          var salePriceEl = container.querySelector('.current-price .value');
-          var salePrice = salePriceEl ? salePriceEl.textContent.trim() : '';
-
-          // Original price - look for prev-old-price first (prethodna cena), then prev-price
-          var originalPriceEl = container.querySelector('.prev-price.prev-old-price.prev-price-third') ||
-                                container.querySelector('.prev-price.prev-old-price') ||
-                                container.querySelector('.prev-price');
-          var originalPrice = '';
-          if (originalPriceEl) {
-            // Get text but exclude the RSD span content duplication
-            var priceText = originalPriceEl.childNodes[0];
-            originalPrice = priceText ? priceText.textContent.trim() : originalPriceEl.textContent.replace('RSD', '').trim();
+          // Filter out invalid names
+          if (name === 'Detaljnije' || name === 'Dodaj u korpu' || name === 'Uporedi' || name.length < 3) {
+            name = '';
           }
 
-          // Get discount from badge
-          var discountEl = container.querySelector('.product-discount, [class*="discount-"]');
-          var discountPercent = 0;
-          if (discountEl) {
-            var match = discountEl.textContent.match(/(\\d+)/);
-            if (match) discountPercent = parseInt(match[1], 10);
-          }
-
-          // Get brand from .brand a element
-          var brand = null;
-          var brandEl = container.querySelector('.brand a');
-          if (brandEl) {
-            brand = brandEl.textContent.trim() || brandEl.getAttribute('title');
-          }
-          if (!brand) {
-            brandEl = container.querySelector('.brand, .product-brand');
-            brand = brandEl ? brandEl.textContent.trim() : null;
-          }
-          // Fallback to data attribute
-          if (!brand && container.dataset && container.dataset.productbrand) {
-            brand = container.dataset.productbrand;
-          }
-
-          // Also try data attributes if available
-          if (!name && container.dataset && container.dataset.productname) {
-            name = container.dataset.productname;
-          }
-          if (!salePrice && container.dataset && container.dataset.productprice) {
-            salePrice = container.dataset.productprice;
-          }
-          if (!originalPrice && container.dataset && container.dataset.productprevprice) {
-            originalPrice = container.dataset.productprevprice;
-          }
-          if (!discountPercent && container.dataset && container.dataset.productdiscount) {
-            discountPercent = parseInt(container.dataset.productdiscount, 10) || 0;
-          }
-
-          if (name && url && (originalPrice || salePrice)) {
+          if (name && url) {
             results.push({
-              name: name,
+              name: name.trim(),
               originalPrice: originalPrice,
               salePrice: salePrice,
               url: url,
