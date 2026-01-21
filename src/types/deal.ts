@@ -4,8 +4,8 @@ export type Gender = "muski" | "zenski" | "deciji" | "unisex";
 export type MainCategory = "obuca" | "odeca" | "oprema";
 
 // Subcategories by main category
-export type ObucaSubcategory = "patike" | "cipele" | "cizme" | "papuce" | "sandale" | "japanke" | "patofne";
-export type OdecaSubcategory = "jakne" | "prsluci" | "aktivni_ves" | "duksevi" | "majice" | "pantalone" | "trenerke" | "helanke" | "sortevi" | "kupaci" | "haljine" | "vetrovke";
+export type ObucaSubcategory = "patike" | "cipele" | "cizme" | "papuce" | "sandale" | "japanke" | "patofne" | "kopacke";
+export type OdecaSubcategory = "jakne" | "prsluci" | "aktivni_ves" | "duksevi" | "majice" | "pantalone" | "trenerke" | "helanke" | "sortevi" | "kupaci" | "haljine" | "vetrovke" | "kosulje" | "kombinezoni";
 export type OpremaSubcategory = "torbe" | "rancevi" | "kacketi" | "carape" | "kape" | "salovi" | "rukavice" | "vrece";
 
 export type Subcategory = ObucaSubcategory | OdecaSubcategory | OpremaSubcategory;

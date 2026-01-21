@@ -44,10 +44,14 @@ function mapCategory(vrsta: string): string | null {
   if (upper.includes("PANTALON")) return "odeca/pantalone";
   if (upper.includes("HELANKE") || upper.includes("HELANKI")) return "odeca/helanke";
   if (upper.includes("HALJ")) return "odeca/haljine";
+  if (upper.includes("KOŠULJ") || upper.includes("KOSULJ")) return "odeca/kosulje";
   if (upper.includes("ŠORC") || upper.includes("SORC") || upper.includes("BERMUD")) return "odeca/sorcevi";
 
   // Swimwear
-  if (upper.includes("KUPAĆI") || upper.includes("KUPACI")) return "odeca/kupaci";
+  if (upper.includes("KUPAĆI") || upper.includes("KUPACI") || upper.includes("KUPAĆE") || upper.includes("KUPACE") || upper.includes("BIKINI")) return "odeca/kupaci";
+
+  // Jumpsuits
+  if (upper.includes("KOMBINEZON") || upper.includes("JUMPSUIT") || upper.includes("OVERALL")) return "odeca/kombinezoni";
 
   // Accessories
   if (upper.includes("KAPA") || upper.includes("KAPE")) return "oprema/kape";
@@ -165,6 +169,9 @@ function extractProductDetails(html: string): ProductDetails {
       else if (url.includes('/jakn')) result.categories.push('odeca/jakne');
       else if (url.includes('/duks')) result.categories.push('odeca/duksevi');
       else if (url.includes('/majic')) result.categories.push('odeca/majice');
+      else if (url.includes('/kosulj')) result.categories.push('odeca/kosulje');
+      else if (url.includes('/kupaci') || url.includes('/kupace') || url.includes('/swimwear') || url.includes('/swimming') || url.includes('/bikini')) result.categories.push('odeca/kupaci');
+      else if (url.includes('/kombinezon') || url.includes('/jumpsuit') || url.includes('/overall')) result.categories.push('odeca/kombinezoni');
     }
   }
 
