@@ -86,10 +86,15 @@ export async function GET(request: NextRequest) {
 
   // Combine legacy categories with category paths
   const allCategoryPaths = [...categoryPaths];
+  let filterOstalo = false;
   categories.forEach((cat) => {
-    const paths = CATEGORY_TO_PATH[cat];
-    if (paths) {
-      allCategoryPaths.push(...paths);
+    if (cat === "ostalo") {
+      filterOstalo = true;
+    } else {
+      const paths = CATEGORY_TO_PATH[cat];
+      if (paths) {
+        allCategoryPaths.push(...paths);
+      }
     }
   });
 
@@ -105,6 +110,9 @@ export async function GET(request: NextRequest) {
   // Category paths filter (e.g., "obuca/patike")
   if (expandedCategoryPaths.length > 0) {
     where.categories = { hasSome: expandedCategoryPaths };
+  } else if (filterOstalo) {
+    // "ostalo" means products with empty categories array
+    where.categories = { isEmpty: true };
   }
 
   // Size filter - match exact or range (e.g., "36" matches "36" and "36-37")

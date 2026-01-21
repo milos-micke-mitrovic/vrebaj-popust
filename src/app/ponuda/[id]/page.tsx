@@ -598,10 +598,16 @@ export default async function DealPage({ params }: Props) {
                   const filteredSizes = deal.sizes.filter((size) => {
                     // Skip obviously invalid sizes
                     if (invalidSizes.includes(size)) return false;
-                    // Skip range sizes
-                    if (size.includes("-") || size.includes("/")) return false;
                     // Skip decimal junk (1.0, 5.0, etc. but allow 36.5)
                     if (/^\d\.\d$/.test(size)) return false;
+                    // Allow kids age/height sizes like "2Y/92", "4Y/104"
+                    if (/^\d+Y\/\d+$/.test(size)) return true;
+                    // Allow shoe range sizes like "25-26", "28-29"
+                    if (/^\d{2}-\d{2}$/.test(size)) return true;
+                    // Allow clothing combo sizes like "S/M", "L/XL"
+                    if (/^[SMLX]{1,2}\/[SMLX]{1,2}$/.test(size.toUpperCase())) return true;
+                    // Skip other range sizes (like "36-37" for non-shoes or mixed formats)
+                    if (size.includes("-") || size.includes("/")) return false;
 
                     const num = parseFloat(size);
 
