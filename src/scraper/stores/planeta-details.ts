@@ -43,6 +43,7 @@ function mapCategory(vrsta: string): string | null {
   if (upper.includes("GORNJI DEL")) return "odeca/duksevi";
   if (upper.includes("PANTALON")) return "odeca/pantalone";
   if (upper.includes("HELANKE") || upper.includes("HELANKI")) return "odeca/helanke";
+  if (upper.includes("HALJ")) return "odeca/haljine";
   if (upper.includes("ŠORC") || upper.includes("SORC") || upper.includes("BERMUD")) return "odeca/sorcevi";
 
   // Swimwear

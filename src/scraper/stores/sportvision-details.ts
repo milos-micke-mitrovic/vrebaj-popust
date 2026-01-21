@@ -36,6 +36,7 @@ function mapCategory(categoryText: string): string | null {
   if (lower.includes("šorc") || lower.includes("sorc")) return "odeca/sorcevi";
   if (lower.includes("trenerka") || lower.includes("trenerke")) return "odeca/trenerke";
   if (lower.includes("helan")) return "odeca/helanke";
+  if (lower.includes("halj")) return "odeca/haljine";
   if (lower.includes("ranac") || lower.includes("rančev")) return "oprema/rancevi";
   if (lower.includes("torb")) return "oprema/torbe";
   if (lower.includes("kapa") || lower.includes("šešir")) return "oprema/kape";
@@ -177,6 +178,7 @@ function extractProductDetails(html: string): ProductDetails {
       else if (url.includes('/sorc') || url.includes('/sortevi')) result.categories.push('odeca/sorcevi');
       else if (url.includes('/trenerka') || url.includes('/trenerke')) result.categories.push('odeca/trenerke');
       else if (url.includes('/helanke')) result.categories.push('odeca/helanke');
+      else if (url.includes('/haljin')) result.categories.push('odeca/haljine');
       else if (url.includes('/torba') || url.includes('/torbe')) result.categories.push('oprema/torbe');
       else if (url.includes('/ranac') || url.includes('/rancevi')) result.categories.push('oprema/rancevi');
     }
