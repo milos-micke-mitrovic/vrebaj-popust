@@ -24,6 +24,7 @@ function parseGender(text: string): Gender | null {
 function mapCategory(categoryText: string): string | null {
   const lower = categoryText.toLowerCase();
 
+  if (lower.includes("kopack") || lower.includes("kopačk")) return "obuca/kopacke";
   if (lower.includes("patike")) return "obuca/patike";
   if (lower.includes("cipele")) return "obuca/cipele";
   if (lower.includes("čizme") || lower.includes("cizme")) return "obuca/cizme";
@@ -155,6 +156,29 @@ function extractProductDetails(html: string): ProductDetails {
       if (category && !result.categories.includes(category)) {
         result.categories.push(category);
       }
+    }
+  }
+
+  // Fallback: extract category from URL if not found (e.g., /kopacke/xxx, /patike/xxx)
+  if (result.categories.length === 0) {
+    const urlMatch = html.match(/og:url[^>]*content="([^"]+)"/i);
+    if (urlMatch) {
+      const url = urlMatch[1].toLowerCase();
+      if (url.includes('/kopacke/') || url.includes('/kopacke-')) result.categories.push('obuca/kopacke');
+      else if (url.includes('/patike/') || url.includes('/patike-')) result.categories.push('obuca/patike');
+      else if (url.includes('/cipele/') || url.includes('/cipele-')) result.categories.push('obuca/cipele');
+      else if (url.includes('/cizme/') || url.includes('/cizme-')) result.categories.push('obuca/cizme');
+      else if (url.includes('/sandale/') || url.includes('/sandale-')) result.categories.push('obuca/sandale');
+      else if (url.includes('/papuce/') || url.includes('/papuce-')) result.categories.push('obuca/papuce');
+      else if (url.includes('/japanke/') || url.includes('/japanke-')) result.categories.push('obuca/sandale');
+      else if (url.includes('/majica') || url.includes('/majice')) result.categories.push('odeca/majice');
+      else if (url.includes('/duks')) result.categories.push('odeca/duksevi');
+      else if (url.includes('/jakna') || url.includes('/jakne')) result.categories.push('odeca/jakne');
+      else if (url.includes('/sorc') || url.includes('/sortevi')) result.categories.push('odeca/sorcevi');
+      else if (url.includes('/trenerka') || url.includes('/trenerke')) result.categories.push('odeca/trenerke');
+      else if (url.includes('/helanke')) result.categories.push('odeca/helanke');
+      else if (url.includes('/torba') || url.includes('/torbe')) result.categories.push('oprema/torbe');
+      else if (url.includes('/ranac') || url.includes('/rancevi')) result.categories.push('oprema/rancevi');
     }
   }
 

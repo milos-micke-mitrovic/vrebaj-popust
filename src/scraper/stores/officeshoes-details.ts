@@ -36,6 +36,8 @@ const CATEGORY_MAP: Record<string, string> = {
   "BALETANKE": "obuca/cipele",
   "KLOMPE": "obuca/papuce",
   "ESPADRILE": "obuca/cipele",
+  "KOPAČKE": "obuca/kopacke",
+  "KOPACKE": "obuca/kopacke",
 };
 
 function sleep(ms: number): Promise<void> {
