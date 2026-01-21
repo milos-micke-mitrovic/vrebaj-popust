@@ -137,71 +137,23 @@ function extractProductDetails(html: string): ProductDetails {
     }
   }
 
-  // Extract sizes from size selector swatches
-  // Try multiple selectors for robustness
-  const sizeSelectors = [
-    '[data-attribute-code="size"] .swatch-option',
-    '.swatch-attribute.size .swatch-option',
-    '.swatch-attribute[data-attribute-code="size"] .swatch-option',
-  ];
+  // Extract sizes from Magento JSON config embedded in script tags
+  // Planeta uses Magento which embeds jsonConfig with size options
+  // Pattern: "code":"size","options":[{"label":"35"},{"label":"36"},...
 
-  for (const selector of sizeSelectors) {
-    if (result.sizes.length > 0) break;
-    const sizeElements = doc.querySelectorAll(selector);
-    for (const el of sizeElements) {
-      if (!el.classList.contains('unavailable') && !el.classList.contains('disabled')) {
-        const size = el.getAttribute('data-option-label') || el.textContent?.trim() || '';
-        if (size && !result.sizes.includes(size)) {
-          result.sizes.push(size);
-        }
-      }
-    }
-  }
-
-  // Alternative: extract sizes from Magento JSON config in script tags
-  if (result.sizes.length === 0) {
-    const jsonConfigMatch = html.match(/\[data-role=swatch-options\][^{]*(\{[\s\S]*?"attributes"[\s\S]*?\})\s*\}/);
-    if (!jsonConfigMatch) {
-      // Try another pattern - look for spConfig or jsonConfig
-      const spConfigMatch = html.match(/"spConfig"\s*:\s*(\{[^}]+\})/);
-      const attributesMatch = html.match(/"attributes"\s*:\s*(\{[\s\S]*?\})\s*,\s*"template"/);
-
-      if (attributesMatch) {
-        try {
-          // Extract size labels from attributes JSON
-          const sizeLabels = attributesMatch[1].match(/"label"\s*:\s*"(\d+(?:\.\d+)?|[XSML]{1,3})"/g);
-          if (sizeLabels) {
-            for (const match of sizeLabels) {
-              const labelMatch = match.match(/"label"\s*:\s*"([^"]+)"/);
-              if (labelMatch && labelMatch[1]) {
-                const size = labelMatch[1];
-                if (!result.sizes.includes(size)) {
-                  result.sizes.push(size);
-                }
-              }
-            }
-          }
-        } catch {
-          // JSON parsing failed, continue
-        }
-      }
-    }
-  }
-
-  // Fallback: look for size options with data-option-label attribute anywhere
-  if (result.sizes.length === 0) {
-    const allOptions = doc.querySelectorAll('[data-option-label]');
-    for (const el of allOptions) {
-      // Check if this is likely a size option (parent has size-related attributes)
-      const parent = el.parentElement;
-      const grandparent = parent?.parentElement;
-      const isSize = grandparent?.getAttribute('data-attribute-code') === 'size' ||
-                     grandparent?.classList.contains('size') ||
-                     parent?.getAttribute('data-attribute-code') === 'size';
-
-      if (isSize && !el.classList.contains('unavailable') && !el.classList.contains('disabled')) {
-        const size = el.getAttribute('data-option-label') || '';
-        if (size && !result.sizes.includes(size)) {
+  // Find the size attribute block and extract all labels
+  const sizeBlockMatch = html.match(/"code"\s*:\s*"size"[^}]*"options"\s*:\s*\[([\s\S]*?)\]/);
+  if (sizeBlockMatch) {
+    const optionsBlock = sizeBlockMatch[1];
+    const labelMatches = optionsBlock.matchAll(/"label"\s*:\s*"([^"]+)"/g);
+    for (const m of labelMatches) {
+      const size = m[1];
+      // Filter: only include valid sizes (numbers or letter sizes)
+      if (size && !result.sizes.includes(size)) {
+        // Check if it's a valid size format
+        const isNumeric = /^\d+(\.\d+)?$/.test(size);
+        const isLetterSize = /^[XSML]{1,3}$/.test(size.toUpperCase());
+        if (isNumeric || isLetterSize) {
           result.sizes.push(size);
         }
       }
