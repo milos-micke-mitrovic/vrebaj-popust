@@ -111,12 +111,25 @@ async function fetchPageProducts(page: Page, pageNum: number): Promise<{ product
           var url = linkEl ? linkEl.href : '';
           var name = '';
 
-          // Try different name selectors
-          var nameEl = container.querySelector('.product-name, .product-title, h3, h4');
-          if (nameEl) {
-            name = nameEl.textContent.trim();
-          } else if (linkEl) {
-            name = linkEl.textContent.trim() || linkEl.getAttribute('title') || '';
+          // Product name is in .title a element
+          var titleEl = container.querySelector('.title a');
+          if (titleEl) {
+            name = titleEl.textContent.trim() || titleEl.getAttribute('title') || '';
+          }
+          // Fallback to other selectors
+          if (!name) {
+            var nameEl = container.querySelector('.product-name, .product-title, h3, h4');
+            if (nameEl) {
+              name = nameEl.textContent.trim();
+            }
+          }
+          // Last resort: use link title attribute (but not text which might be "Detaljnije")
+          if (!name && linkEl) {
+            name = linkEl.getAttribute('title') || '';
+          }
+          // Filter out invalid names (button text, etc.)
+          if (name === 'Detaljnije' || name === 'Dodaj u korpu' || name === 'Uporedi' || name.length < 3) {
+            name = '';
           }
 
           // Get image
@@ -151,11 +164,19 @@ async function fetchPageProducts(page: Page, pageNum: number): Promise<{ product
             if (match) discountPercent = parseInt(match[1], 10);
           }
 
-          // Get brand from data attribute or meta
-          var brand = container.dataset ? container.dataset.productbrand : null;
+          // Get brand from .brand a element
+          var brand = null;
+          var brandEl = container.querySelector('.brand a');
+          if (brandEl) {
+            brand = brandEl.textContent.trim() || brandEl.getAttribute('title');
+          }
           if (!brand) {
-            var brandEl = container.querySelector('.brand, .product-brand');
+            brandEl = container.querySelector('.brand, .product-brand');
             brand = brandEl ? brandEl.textContent.trim() : null;
+          }
+          // Fallback to data attribute
+          if (!brand && container.dataset && container.dataset.productbrand) {
+            brand = container.dataset.productbrand;
           }
 
           // Also try data attributes if available
