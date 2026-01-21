@@ -425,14 +425,23 @@ export default async function DealPage({ params }: Props) {
     ? `https://vrebajpopust.rs${deal.imageUrl}`
     : deal.imageUrl;
 
+  // Fallback image for structured data (required by Google)
+  const schemaImageUrl = imageUrl || "https://vrebajpopust.rs/opengraph-image.png";
+
+  // Generate a short SKU from deal ID (Google requires max ~50 chars)
+  // Use hash of full ID to ensure uniqueness while keeping it short
+  const shortSku = deal.id.length > 50
+    ? deal.id.slice(0, 20) + "-" + deal.id.slice(-20)
+    : deal.id;
+
   // Product structured data - enhanced for better SEO
   const productSchema = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: deal.name,
-    image: imageUrl,
+    image: schemaImageUrl,
     description: `${deal.brand || ""} ${categoryText} ${genderText} sa ${deal.discountPercent}% popusta. Originalna cena ${formatPrice(deal.originalPrice)}, sada samo ${formatPrice(deal.salePrice)}. Dostupno u ${storeInfo.name}.`.trim(),
-    sku: deal.id,
+    sku: shortSku,
     brand: deal.brand
       ? {
           "@type": "Brand",
@@ -454,56 +463,6 @@ export default async function DealPage({ params }: Props) {
         name: storeInfo.name,
         url: storeInfo.url,
       },
-      priceSpecification: {
-        "@type": "PriceSpecification",
-        price: deal.salePrice,
-        priceCurrency: "RSD",
-        valueAddedTaxIncluded: true,
-      },
-      shippingDetails: {
-        "@type": "OfferShippingDetails",
-        shippingDestination: {
-          "@type": "DefinedRegion",
-          addressCountry: "RS",
-        },
-        deliveryTime: {
-          "@type": "ShippingDeliveryTime",
-          handlingTime: {
-            "@type": "QuantitativeValue",
-            minValue: 1,
-            maxValue: 3,
-            unitCode: "d",
-          },
-          transitTime: {
-            "@type": "QuantitativeValue",
-            minValue: 1,
-            maxValue: 5,
-            unitCode: "d",
-          },
-        },
-      },
-      hasMerchantReturnPolicy: {
-        "@type": "MerchantReturnPolicy",
-        applicableCountry: "RS",
-        returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
-        merchantReturnDays: 14,
-        returnMethod: "https://schema.org/ReturnByMail",
-        returnFees: "https://schema.org/FreeReturn",
-      },
-    },
-  };
-
-  // Aggregate offer to show price drop
-  const aggregateOfferSchema = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: deal.name,
-    offers: {
-      "@type": "AggregateOffer",
-      lowPrice: deal.salePrice,
-      highPrice: deal.originalPrice,
-      priceCurrency: "RSD",
-      offerCount: 1,
     },
   };
 
@@ -538,10 +497,6 @@ export default async function DealPage({ params }: Props) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(aggregateOfferSchema) }}
       />
       <script
         type="application/ld+json"

@@ -257,14 +257,21 @@ export function DealsGrid({
   const urlUpdateTimeout = useRef<NodeJS.Timeout | null>(null);
   // Track initial mount to skip the first URL sync (preserve initial values from props)
   const isFirstSyncMount = useRef(true);
-  // Track if URL update effect should skip (separate from sync to avoid race condition)
-  const skipFirstUrlUpdate = useRef(true);
+  // Track if user has interacted with filters (for SEO pages - only redirect after interaction)
+  const hasUserInteracted = useRef(false);
 
   // Sync state from URL params when URL changes externally (e.g., clicking logo to go home)
+  // This is ONLY for /ponude page (not filter pages like /ponude/patike)
   useEffect(() => {
     // Skip the first mount - we want to preserve initialCategories, initialBrands, etc.
     if (isFirstSyncMount.current) {
       isFirstSyncMount.current = false;
+      return;
+    }
+
+    // On filter pages (e.g., /ponude/patike), filters come from URL path via props, not query params.
+    // Don't sync from URL on filter pages - only sync on the main /ponude page.
+    if (filterPageSlug) {
       return;
     }
 
@@ -301,16 +308,17 @@ export function DealsGrid({
       setTimeout(() => { isUpdatingFromUrl.current = false; }, 50);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
+  }, [searchParams, filterPageSlug]);
 
   // Debounced URL update
-  // On filter pages: redirect to /ponude with query params when ANY filter changes
+  // On filter pages: redirect to /ponude with query params ONLY after user interaction
   // On /ponude: just update query params
   useEffect(() => {
     if (isUpdatingFromUrl.current) return;
-    // Skip the first URL update to preserve SEO URLs on initial mount
-    if (skipFirstUrlUpdate.current) {
-      skipFirstUrlUpdate.current = false;
+
+    // On filter pages (SEO landing), only update URL after user has interacted
+    // This prevents redirect on initial page load which would break SEO
+    if (filterPageSlug && !hasUserInteracted.current) {
       return;
     }
 
@@ -412,6 +420,7 @@ export function DealsGrid({
   };
 
   const resetFilters = () => {
+    hasUserInteracted.current = true;
     setSelectedStores([]);
     setSelectedBrands([]);
     setSelectedGenders([]);
@@ -428,6 +437,7 @@ export function DealsGrid({
   };
 
   const toggleStore = (store: Store) => {
+    hasUserInteracted.current = true;
     setSelectedStores((prev) =>
       prev.includes(store) ? prev.filter((s) => s !== store) : [...prev, store]
     );
@@ -436,6 +446,7 @@ export function DealsGrid({
   };
 
   const toggleGender = (gender: Gender) => {
+    hasUserInteracted.current = true;
     setSelectedGenders((prev) =>
       prev.includes(gender)
         ? prev.filter((g) => g !== gender)
@@ -446,6 +457,7 @@ export function DealsGrid({
   };
 
   const toggleCategory = (category: Category) => {
+    hasUserInteracted.current = true;
     setSelectedCategories((prev) =>
       prev.includes(category)
         ? prev.filter((c) => c !== category)
@@ -456,6 +468,7 @@ export function DealsGrid({
   };
 
   const toggleBrand = (brand: string) => {
+    hasUserInteracted.current = true;
     setSelectedBrands((prev) =>
       prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
     );
@@ -464,6 +477,7 @@ export function DealsGrid({
   };
 
   const toggleSize = (size: string) => {
+    hasUserInteracted.current = true;
     setSelectedSizes((prev) =>
       prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
     );
@@ -472,6 +486,7 @@ export function DealsGrid({
   };
 
   const toggleCategoryPath = (path: CategoryPath) => {
+    hasUserInteracted.current = true;
     setSelectedCategoryPaths((prev) =>
       prev.includes(path) ? prev.filter((p) => p !== path) : [...prev, path]
     );
@@ -486,6 +501,7 @@ export function DealsGrid({
   };
 
   const toggleMainCategory = (mainCat: MainCategory) => {
+    hasUserInteracted.current = true;
     const subcats = CATEGORY_HIERARCHY[mainCat];
     const paths = subcats.map((sub) => `${mainCat}/${sub}` as CategoryPath);
     const allSelected = paths.every((p) => selectedCategoryPaths.includes(p));
@@ -566,7 +582,8 @@ export function DealsGrid({
           placeholder="Pretraži proizvode..."
           value={search}
           onChange={(e) => {
-                    setSearch(e.target.value);
+            hasUserInteracted.current = true;
+            setSearch(e.target.value);
             setCurrentPage(1);
           }}
           className="bg-gray-50 border-gray-200 focus:bg-white dark:bg-gray-800 dark:border-gray-700 dark:focus:bg-gray-700 dark:text-white dark:placeholder-gray-400"
@@ -592,7 +609,8 @@ export function DealsGrid({
             <button
               key={level.value}
               onClick={() => {
-                            setMinDiscount(minDiscount === level.value ? 50 : level.value);
+                hasUserInteracted.current = true;
+                setMinDiscount(minDiscount === level.value ? 50 : level.value);
                 setCurrentPage(1);
                 scrollToTop();
               }}
@@ -619,7 +637,8 @@ export function DealsGrid({
                 <button
                   key={`from-${option.label}`}
                   onClick={() => {
-                                    setMinPrice(option.value);
+                    hasUserInteracted.current = true;
+                    setMinPrice(option.value);
                     setCurrentPage(1);
                     scrollToTop();
                   }}
@@ -641,7 +660,8 @@ export function DealsGrid({
                 <button
                   key={`to-${option.label}`}
                   onClick={() => {
-                                    setMaxPrice(option.value);
+                    hasUserInteracted.current = true;
+                    setMaxPrice(option.value);
                     setCurrentPage(1);
                     scrollToTop();
                   }}
@@ -961,280 +981,165 @@ export function DealsGrid({
 
         {/* Main Content */}
         <div className="min-w-0">
-          {/* SEO Title - only shown on clean SEO landing (no query params) */}
-          {seoTitle && searchParams.toString() === "" && (
-            <div className="mb-4">
-              <h1 className="text-xl font-bold text-gray-900 dark:text-white">
-                {seoTitle}
-              </h1>
-              {seoSubtitle && (
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {seoSubtitle}
-                </p>
-              )}
-            </div>
-          )}
+          {/* Top Bar: Sort and count */}
+          <div className="mb-4 flex items-center justify-end gap-4">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              {isLoading || isInitialLoad ? "..." : `${total} ${total === 1 ? "proizvod" : "proizvoda"}`}
+            </p>
+            <select
+              value={sortBy}
+              onChange={(e) => {
+                hasUserInteracted.current = true;
+                setSortBy(e.target.value as SortOption);
+                setCurrentPage(1);
+                scrollToTop();
+              }}
+              className="appearance-none rounded border border-gray-200 bg-white pl-3 pr-8 py-1.5 text-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white cursor-pointer bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Cpath%20fill%3D%22%236b7280%22%20d%3D%22M6%208L1%203h10z%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[right_0.5rem_center]"
+            >
+              <option value="discount">Sortiraj: Popust ↓</option>
+              <option value="price-low">Sortiraj: Cena ↑</option>
+              <option value="price-high">Sortiraj: Cena ↓</option>
+              <option value="newest">Sortiraj: Najnovije</option>
+            </select>
+          </div>
 
-          {/* Top Bar - Sort and Active Filters */}
-          <div className="mb-4">
-            {/* Desktop/Tablet: Single row */}
-            <div className="sm:flex sm:items-center sm:gap-4">
-              {/* Active Filters - left side on sm+, with padding for toggle button on tablet */}
-              {hasActiveFilters && (
-                <div className="hidden sm:flex sm:flex-1 flex-wrap gap-2 pl-14 lg:pl-0">
-                  {search && (
-                    <Badge
-                      variant="secondary"
-                      className="cursor-pointer px-3 py-1.5 text-sm"
-                      onClick={() => {
-                                            setSearch("");
-                        setCurrentPage(1);
-                      }}
-                    >
-                      Pretraga: &quot;{search}&quot; ✕
-                    </Badge>
-                  )}
-                  {selectedStores.map((store) => (
-                    <Badge
-                      key={store}
-                      variant="secondary"
-                      className="cursor-pointer px-3 py-1.5 text-sm"
-                      onClick={() => toggleStore(store)}
-                    >
-                      {STORE_NAMES[store]} ✕
-                    </Badge>
-                  ))}
-                  {selectedGenders.map((gender) => (
-                    <Badge
-                      key={gender}
-                      variant="secondary"
-                      className="cursor-pointer px-3 py-1.5 text-sm"
-                      onClick={() => toggleGender(gender)}
-                    >
-                      {GENDER_NAMES[gender]} ✕
-                    </Badge>
-                  ))}
-                  {selectedCategories.map((category) => (
-                    <Badge
-                      key={category}
-                      variant="secondary"
-                      className="cursor-pointer px-3 py-1.5 text-sm"
-                      onClick={() => toggleCategory(category)}
-                    >
-                      {CATEGORY_NAMES[category]} ✕
-                    </Badge>
-                  ))}
-                  {selectedCategoryPaths.map((path) => {
-                    const [, sub] = path.split("/") as [MainCategory, Subcategory];
-                    return (
-                      <Badge
-                        key={path}
-                        variant="secondary"
-                        className="cursor-pointer px-3 py-1.5 text-sm"
-                        onClick={() => toggleCategoryPath(path)}
-                      >
-                        {SUBCATEGORY_NAMES[sub]} ✕
-                      </Badge>
-                    );
-                  })}
-                  {selectedBrands.map((brand) => (
-                    <Badge
-                      key={brand}
-                      variant="secondary"
-                      className="cursor-pointer px-3 py-1.5 text-sm"
-                      onClick={() => toggleBrand(brand)}
-                    >
-                      {brand} ✕
-                    </Badge>
-                  ))}
-                  {selectedSizes.map((size) => (
-                    <Badge
-                      key={size}
-                      variant="secondary"
-                      className="cursor-pointer px-3 py-1.5 text-sm"
-                      onClick={() => toggleSize(size)}
-                    >
-                      Vel. {size} ✕
-                    </Badge>
-                  ))}
-                  {minDiscount > 50 && (
-                    <Badge
-                      variant="secondary"
-                      className="cursor-pointer px-3 py-1.5 text-sm"
-                      onClick={() => {
-                                            setMinDiscount(50);
-                        setCurrentPage(1);
-                      }}
-                    >
-                      Min {minDiscount}% ✕
-                    </Badge>
-                  )}
-                  {minPrice !== null && (
-                    <Badge
-                      variant="secondary"
-                      className="cursor-pointer px-3 py-1.5 text-sm"
-                      onClick={() => {
-                                            setMinPrice(null);
-                        setCurrentPage(1);
-                      }}
-                    >
-                      Od {minPrice.toLocaleString()} RSD ✕
-                    </Badge>
-                  )}
-                  {maxPrice !== null && (
-                    <Badge
-                      variant="secondary"
-                      className="cursor-pointer px-3 py-1.5 text-sm"
-                      onClick={() => {
-                                            setMaxPrice(null);
-                        setCurrentPage(1);
-                      }}
-                    >
-                      Do {maxPrice.toLocaleString()} RSD ✕
-                    </Badge>
+          {/* Active Filters Row with SEO Title on right */}
+          {(hasActiveFilters || (seoTitle && searchParams.toString() === "")) && (
+            <div className="mb-4 flex items-start justify-between gap-4">
+              {/* Active filter tags on left */}
+              <div className="flex flex-wrap gap-2 flex-1">
+              {search && (
+                <Badge
+                  variant="secondary"
+                  className="cursor-pointer px-3 py-1.5 text-sm"
+                  onClick={() => {
+                    hasUserInteracted.current = true;
+                    setSearch("");
+                    setCurrentPage(1);
+                  }}
+                >
+                  Pretraga: &quot;{search}&quot; ✕
+                </Badge>
+              )}
+              {selectedStores.map((store) => (
+                <Badge
+                  key={store}
+                  variant="secondary"
+                  className="cursor-pointer px-3 py-1.5 text-sm"
+                  onClick={() => toggleStore(store)}
+                >
+                  {STORE_NAMES[store]} ✕
+                </Badge>
+              ))}
+              {selectedGenders.map((gender) => (
+                <Badge
+                  key={gender}
+                  variant="secondary"
+                  className="cursor-pointer px-3 py-1.5 text-sm"
+                  onClick={() => toggleGender(gender)}
+                >
+                  {GENDER_NAMES[gender]} ✕
+                </Badge>
+              ))}
+              {selectedCategories.map((category) => (
+                <Badge
+                  key={category}
+                  variant="secondary"
+                  className="cursor-pointer px-3 py-1.5 text-sm"
+                  onClick={() => toggleCategory(category)}
+                >
+                  {CATEGORY_NAMES[category]} ✕
+                </Badge>
+              ))}
+              {selectedCategoryPaths.map((path) => {
+                const [, sub] = path.split("/") as [MainCategory, Subcategory];
+                return (
+                  <Badge
+                    key={path}
+                    variant="secondary"
+                    className="cursor-pointer px-3 py-1.5 text-sm"
+                    onClick={() => toggleCategoryPath(path)}
+                  >
+                    {SUBCATEGORY_NAMES[sub]} ✕
+                  </Badge>
+                );
+              })}
+              {selectedBrands.map((brand) => (
+                <Badge
+                  key={brand}
+                  variant="secondary"
+                  className="cursor-pointer px-3 py-1.5 text-sm"
+                  onClick={() => toggleBrand(brand)}
+                >
+                  {brand} ✕
+                </Badge>
+              ))}
+              {selectedSizes.map((size) => (
+                <Badge
+                  key={size}
+                  variant="secondary"
+                  className="cursor-pointer px-3 py-1.5 text-sm"
+                  onClick={() => toggleSize(size)}
+                >
+                  Vel. {size} ✕
+                </Badge>
+              ))}
+              {minDiscount > 50 && (
+                <Badge
+                  variant="secondary"
+                  className="cursor-pointer px-3 py-1.5 text-sm"
+                  onClick={() => {
+                    hasUserInteracted.current = true;
+                    setMinDiscount(50);
+                    setCurrentPage(1);
+                  }}
+                >
+                  Min {minDiscount}% ✕
+                </Badge>
+              )}
+              {minPrice !== null && (
+                <Badge
+                  variant="secondary"
+                  className="cursor-pointer px-3 py-1.5 text-sm"
+                  onClick={() => {
+                    hasUserInteracted.current = true;
+                    setMinPrice(null);
+                    setCurrentPage(1);
+                  }}
+                >
+                  Od {minPrice.toLocaleString()} RSD ✕
+                </Badge>
+              )}
+              {maxPrice !== null && (
+                <Badge
+                  variant="secondary"
+                  className="cursor-pointer px-3 py-1.5 text-sm"
+                  onClick={() => {
+                    hasUserInteracted.current = true;
+                    setMaxPrice(null);
+                    setCurrentPage(1);
+                  }}
+                >
+                  Do {maxPrice.toLocaleString()} RSD ✕
+                </Badge>
+              )}
+              </div>
+
+              {/* SEO Title on right - only shown on clean SEO landing (no query params) */}
+              {seoTitle && searchParams.toString() === "" && (
+                <div className="flex-shrink-0 text-right">
+                  <h1 className="text-lg font-bold text-gray-900 dark:text-white">
+                    {seoTitle}
+                  </h1>
+                  {seoSubtitle && (
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      {seoSubtitle}
+                    </p>
                   )}
                 </div>
               )}
-
-              {/* Sort and count - right side, full width when no filters */}
-              <div className={`flex items-center justify-end gap-4 ${hasActiveFilters ? "sm:flex-shrink-0" : "w-full"}`}>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  {isLoading || isInitialLoad ? "..." : `${total} ${total === 1 ? "proizvod" : "proizvoda"}`}
-                </p>
-                <select
-                  value={sortBy}
-                  onChange={(e) => {
-                                    setSortBy(e.target.value as SortOption);
-                    setCurrentPage(1);
-                    scrollToTop();
-                  }}
-                  className="appearance-none rounded border border-gray-200 bg-white pl-3 pr-8 py-1.5 text-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white cursor-pointer bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Cpath%20fill%3D%22%236b7280%22%20d%3D%22M6%208L1%203h10z%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[right_0.5rem_center]"
-                >
-                  <option value="discount">Sortiraj: Popust ↓</option>
-                  <option value="price-low">Sortiraj: Cena ↑</option>
-                  <option value="price-high">Sortiraj: Cena ↓</option>
-                  <option value="newest">Sortiraj: Najnovije</option>
-                </select>
-              </div>
             </div>
-
-            {/* Mobile: Active filters below sort */}
-            {hasActiveFilters && (
-              <div className="mt-3 flex sm:hidden flex-wrap gap-2">
-                {search && (
-                  <Badge
-                    variant="secondary"
-                    className="cursor-pointer px-3 py-1.5 text-sm"
-                    onClick={() => {
-                                        setSearch("");
-                      setCurrentPage(1);
-                    }}
-                  >
-                    Pretraga: &quot;{search}&quot; ✕
-                  </Badge>
-                )}
-                {selectedStores.map((store) => (
-                  <Badge
-                    key={store}
-                    variant="secondary"
-                    className="cursor-pointer px-3 py-1.5 text-sm"
-                    onClick={() => toggleStore(store)}
-                  >
-                    {STORE_NAMES[store]} ✕
-                  </Badge>
-                ))}
-                {selectedGenders.map((gender) => (
-                  <Badge
-                    key={gender}
-                    variant="secondary"
-                    className="cursor-pointer px-3 py-1.5 text-sm"
-                    onClick={() => toggleGender(gender)}
-                  >
-                    {GENDER_NAMES[gender]} ✕
-                  </Badge>
-                ))}
-                {selectedCategories.map((category) => (
-                  <Badge
-                    key={category}
-                    variant="secondary"
-                    className="cursor-pointer px-3 py-1.5 text-sm"
-                    onClick={() => toggleCategory(category)}
-                  >
-                    {CATEGORY_NAMES[category]} ✕
-                  </Badge>
-                ))}
-                {selectedCategoryPaths.map((path) => {
-                  const [, sub] = path.split("/") as [MainCategory, Subcategory];
-                  return (
-                    <Badge
-                      key={path}
-                      variant="secondary"
-                      className="cursor-pointer px-3 py-1.5 text-sm"
-                      onClick={() => toggleCategoryPath(path)}
-                    >
-                      {SUBCATEGORY_NAMES[sub]} ✕
-                    </Badge>
-                  );
-                })}
-                {selectedBrands.map((brand) => (
-                  <Badge
-                    key={brand}
-                    variant="secondary"
-                    className="cursor-pointer px-3 py-1.5 text-sm"
-                    onClick={() => toggleBrand(brand)}
-                  >
-                    {brand} ✕
-                  </Badge>
-                ))}
-                {selectedSizes.map((size) => (
-                  <Badge
-                    key={size}
-                    variant="secondary"
-                    className="cursor-pointer px-3 py-1.5 text-sm"
-                    onClick={() => toggleSize(size)}
-                  >
-                    Vel. {size} ✕
-                  </Badge>
-                ))}
-                {minDiscount > 50 && (
-                  <Badge
-                    variant="secondary"
-                    className="cursor-pointer px-3 py-1.5 text-sm"
-                    onClick={() => {
-                                        setMinDiscount(50);
-                      setCurrentPage(1);
-                    }}
-                  >
-                    Min {minDiscount}% ✕
-                  </Badge>
-                )}
-                {minPrice !== null && (
-                  <Badge
-                    variant="secondary"
-                    className="cursor-pointer px-3 py-1.5 text-sm"
-                    onClick={() => {
-                                        setMinPrice(null);
-                      setCurrentPage(1);
-                    }}
-                  >
-                    Od {minPrice.toLocaleString()} RSD ✕
-                  </Badge>
-                )}
-                {maxPrice !== null && (
-                  <Badge
-                    variant="secondary"
-                    className="cursor-pointer px-3 py-1.5 text-sm"
-                    onClick={() => {
-                                        setMaxPrice(null);
-                      setCurrentPage(1);
-                    }}
-                  >
-                    Do {maxPrice.toLocaleString()} RSD ✕
-                  </Badge>
-                )}
-              </div>
-            )}
-          </div>
+          )}
 
           {/* Deals Grid */}
           {isLoading || isInitialLoad ? (
