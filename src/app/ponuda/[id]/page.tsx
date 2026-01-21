@@ -40,6 +40,54 @@ const CATEGORY_NAMES: Record<string, string> = {
   ostalo: "Ostalo",
 };
 
+// New category path display names (matches deals-grid.tsx SUBCATEGORY_NAMES)
+const CATEGORY_PATH_NAMES: Record<string, string> = {
+  // Obuca
+  "obuca/patike": "Patike",
+  "obuca/cipele": "Cipele",
+  "obuca/cizme": "Čizme",
+  "obuca/papuce": "Papuče",
+  "obuca/sandale": "Sandale",
+  "obuca/japanke": "Japanke",
+  "obuca/patofne": "Patofne",
+  "obuca/kopacke": "Kopačke",
+  // Odeca
+  "odeca/jakne": "Jakne",
+  "odeca/prsluci": "Prsluci",
+  "odeca/duksevi": "Duksevi",
+  "odeca/majice": "Majice",
+  "odeca/pantalone": "Pantalone",
+  "odeca/trenerke": "Trenerke",
+  "odeca/helanke": "Helanke",
+  "odeca/sortevi": "Šorcevi",
+  "odeca/kupaci": "Kupaći",
+  "odeca/haljine": "Haljine",
+  "odeca/kosulje": "Košulje",
+  "odeca/kombinezoni": "Kombinezoni",
+  // Oprema
+  "oprema/torbe": "Torbe",
+  "oprema/rancevi": "Rančevi",
+  "oprema/kacketi": "Kačketi",
+  "oprema/carape": "Čarape",
+  "oprema/kape": "Kape",
+  "oprema/salovi": "Šalovi",
+  "oprema/rukavice": "Rukavice",
+  "oprema/vrece": "Vreće",
+};
+
+// Helper to get category display name from deal (prefers new categories array)
+function getCategoryDisplayName(deal: { category: string; categories?: string[] }): string {
+  // First check new categories array
+  if (deal.categories && deal.categories.length > 0) {
+    const firstCategory = deal.categories[0];
+    if (CATEGORY_PATH_NAMES[firstCategory]) {
+      return CATEGORY_PATH_NAMES[firstCategory];
+    }
+  }
+  // Fall back to legacy category
+  return CATEGORY_NAMES[deal.category] || "Proizvod";
+}
+
 const GENDER_TAGS: Record<string, string> = {
   muski: "Muškarci",
   zenski: "Žene",
@@ -407,7 +455,7 @@ export default async function DealPage({ params }: Props) {
 
   const storeInfo = STORE_INFO[deal.store];
   const savings = deal.originalPrice - deal.salePrice;
-  const categoryText = CATEGORY_NAMES[deal.category] || "Proizvod";
+  const categoryText = getCategoryDisplayName(deal);
   const genderText = GENDER_TEXT[deal.gender] || "";
   const genderTag = GENDER_TAGS[deal.gender] || "";
   const relatedDeals = await getRelatedDeals(deal, 8);
