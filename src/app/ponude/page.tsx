@@ -8,32 +8,59 @@ import { Footer } from "@/components/footer";
 // Revalidate every 5 minutes - pages auto-refresh with new data
 export const revalidate = 300;
 
-export const metadata: Metadata = {
-  title: "Sve ponude | VrebajPopust - Popusti preko 50%",
-  description:
-    "Pregledaj sve aktivne popuste preko 50% na DjakSport, Planeta Sport, Sport Vision i drugim prodavnicama u Srbiji. Filtriraj po brendu, kategoriji i ceni.",
-  keywords: [
-    "popusti",
-    "akcije",
-    "sniženja",
-    "srbija",
-    "djak sport",
-    "planeta sport",
-    "sport vision",
-    "patike",
-    "sportska oprema",
-  ],
-  openGraph: {
-    title: "Sve ponude | VrebajPopust",
+interface Props {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}
+
+// Generate metadata dynamically based on query params
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const params = await searchParams;
+  const hasFilters = Object.keys(params).length > 0;
+
+  // If page has query parameters (user filter state), noindex to avoid duplicates
+  // SEO landing pages are at /ponude/[filter] instead
+  if (hasFilters) {
+    return {
+      title: "Sve ponude | VrebajPopust - Popusti preko 50%",
+      description:
+        "Pregledaj sve aktivne popuste preko 50% na DjakSport, Planeta Sport, Sport Vision i drugim prodavnicama u Srbiji.",
+      robots: {
+        index: false,
+        follow: true,
+      },
+      alternates: {
+        canonical: "https://www.vrebajpopust.rs/ponude",
+      },
+    };
+  }
+
+  return {
+    title: "Sve ponude | VrebajPopust - Popusti preko 50%",
     description:
-      "Pregledaj sve aktivne popuste preko 50% u sportskim prodavnicama u Srbiji.",
-    type: "website",
-    locale: "sr_RS",
-  },
-  alternates: {
-    canonical: "https://www.vrebajpopust.rs/ponude",
-  },
-};
+      "Pregledaj sve aktivne popuste preko 50% na DjakSport, Planeta Sport, Sport Vision i drugim prodavnicama u Srbiji. Filtriraj po brendu, kategoriji i ceni.",
+    keywords: [
+      "popusti",
+      "akcije",
+      "sniženja",
+      "srbija",
+      "djak sport",
+      "planeta sport",
+      "sport vision",
+      "patike",
+      "sportska oprema",
+    ],
+    openGraph: {
+      title: "Sve ponude | VrebajPopust",
+      description:
+        "Pregledaj sve aktivne popuste preko 50% u sportskim prodavnicama u Srbiji.",
+      type: "website",
+      locale: "sr_RS",
+    },
+    alternates: {
+      canonical: "https://www.vrebajpopust.rs/ponude",
+    },
+  };
+}
 
 // Calculate price valid date at build time (7 days from build)
 const priceValidUntilDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
