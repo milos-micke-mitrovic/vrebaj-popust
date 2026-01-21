@@ -88,6 +88,18 @@ function getCategoryDisplayName(deal: { category: string; categories?: string[] 
   return CATEGORY_NAMES[deal.category] || "Proizvod";
 }
 
+// Helper to get category filter URL (prefers new categories array)
+function getCategoryFilterUrl(deal: { category: string; categories?: string[] }): string {
+  // First check new categories array
+  if (deal.categories && deal.categories.length > 0) {
+    const firstCategory = deal.categories[0];
+    // Use catPaths for new category system
+    return `/ponude?catPaths=${encodeURIComponent(firstCategory)}`;
+  }
+  // Fall back to legacy category
+  return `/ponude?categories=${deal.category}`;
+}
+
 const GENDER_TAGS: Record<string, string> = {
   muski: "Muškarci",
   zenski: "Žene",
@@ -284,7 +296,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const storeInfo = STORE_INFO[deal.store];
   const genderText = GENDER_TEXT[deal.gender] || "";
-  const categoryText = CATEGORY_NAMES[deal.category] || "";
+  const categoryText = getCategoryDisplayName(deal);
 
   const savings = deal.originalPrice - deal.salePrice;
   const title = `${deal.name} - ${deal.discountPercent}% popust | VrebajPopust`;
@@ -529,7 +541,7 @@ export default async function DealPage({ params }: Props) {
         "@type": "ListItem",
         position: 2,
         name: categoryText,
-        item: `https://vrebajpopust.rs/ponude?category=${deal.category}`,
+        item: `https://vrebajpopust.rs${getCategoryFilterUrl(deal)}`,
       },
       {
         "@type": "ListItem",
@@ -559,7 +571,7 @@ export default async function DealPage({ params }: Props) {
         <ProductBreadcrumb
           items={[
             { label: "Ponude", href: "/ponude" },
-            { label: categoryText, href: `/ponude?categories=${deal.category}` },
+            { label: categoryText, href: getCategoryFilterUrl(deal) },
             { label: deal.name },
           ]}
         />
@@ -636,10 +648,12 @@ export default async function DealPage({ params }: Props) {
                 {/* Sizes */}
                 {deal.sizes && deal.sizes.length > 0 && (() => {
                   // Filter sizes based on product category
-                  // Also check URL for footwear keywords when category is null
-                  // Match both /patike/ (sportvision) and cipele- (officeshoes) URL patterns
-                  const isFootwear = ["patike", "cipele", "cizme"].includes(deal.category) ||
-                    /(patike|cipele|cizme)[\/\-]/.test(deal.url);
+                  // Check new categories array, legacy category, and URL for footwear keywords
+                  const footwearCategories = ["obuca/patike", "obuca/cipele", "obuca/cizme", "obuca/kopacke", "obuca/sandale", "obuca/papuce", "obuca/japanke"];
+                  const hasFootwearCategory = deal.categories?.some(cat => footwearCategories.includes(cat));
+                  const isFootwear = hasFootwearCategory ||
+                    ["patike", "cipele", "cizme"].includes(deal.category) ||
+                    /(patike|cipele|cizme|kopacke|sandale)[\/\-]/.test(deal.url);
                   const validClothingSizes = ["XS", "S", "M", "L", "XL", "XXL", "2XL", "3XL", "4XL", "5XL"];
                   const invalidSizes = ["ADULT", "PRO", "UNSZ", "BV"];
 
@@ -840,7 +854,7 @@ export default async function DealPage({ params }: Props) {
                 Slične ponude
               </h2>
               <Link
-                href={`/ponude?categories=${deal.category}&genders=${deal.gender}`}
+                href={`${getCategoryFilterUrl(deal)}&genders=${deal.gender}`}
                 className="text-sm text-red-500 hover:underline"
               >
                 Prikaži sve →
