@@ -30,6 +30,7 @@ function mapCategory(categoryText: string): string | null {
   if (lower.includes("čizme") || lower.includes("cizme")) return "obuca/cizme";
   if (lower.includes("sandale")) return "obuca/sandale";
   if (lower.includes("papuč") || lower.includes("papuc")) return "obuca/papuce";
+  if (lower.includes(" top") || lower.startsWith("top ") || lower.includes("sports bra") || lower.includes("tank top") || lower.includes("crop top")) return "odeca/topovi";
   if (lower.includes("majic")) return "odeca/majice";
   if (lower.includes("duks")) return "odeca/duksevi";
   if (lower.includes("jakn")) return "odeca/jakne";
@@ -176,6 +177,7 @@ function extractProductDetails(html: string): ProductDetails {
       else if (url.includes('/sandale/') || url.includes('/sandale-')) result.categories.push('obuca/sandale');
       else if (url.includes('/papuce/') || url.includes('/papuce-')) result.categories.push('obuca/papuce');
       else if (url.includes('/japanke/') || url.includes('/japanke-')) result.categories.push('obuca/papuce');
+      else if (url.includes('/top-') || url.includes('-top-')) result.categories.push('odeca/topovi');
       else if (url.includes('/majica') || url.includes('/majice')) result.categories.push('odeca/majice');
       else if (url.includes('/duks')) result.categories.push('odeca/duksevi');
       else if (url.includes('/jakna') || url.includes('/jakne')) result.categories.push('odeca/jakne');

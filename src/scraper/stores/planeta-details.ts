@@ -31,6 +31,7 @@ function mapCategory(vrsta: string): string | null {
   if (upper.includes("KOPAČKE") || upper.includes("KOPACKE")) return "obuca/kopacke";
 
   // Tops
+  if (upper.includes(" TOP") || upper.startsWith("TOP ") || upper.includes("SPORTS BRA") || upper.includes("TANK TOP") || upper.includes("CROP TOP")) return "odeca/topovi";
   if (upper.includes("MAJIC")) return "odeca/majice";
   if (upper.includes("DUKS")) return "odeca/duksevi";
   if (upper.includes("JAKN")) return "odeca/jakne";
@@ -167,6 +168,7 @@ function extractProductDetails(html: string): ProductDetails {
       else if (url.includes('/cipele-') || url.includes('/cipele/')) result.categories.push('obuca/cipele');
       else if (url.includes('/jakn')) result.categories.push('odeca/jakne');
       else if (url.includes('/duks')) result.categories.push('odeca/duksevi');
+      else if (url.includes('/top-') || url.includes('-top-')) result.categories.push('odeca/topovi');
       else if (url.includes('/majic')) result.categories.push('odeca/majice');
       else if (url.includes('/kosulj')) result.categories.push('odeca/kosulje');
       else if (url.includes('/kupaci') || url.includes('/kupace') || url.includes('/swimwear') || url.includes('/swimming') || url.includes('/bikini')) result.categories.push('odeca/kupaci');

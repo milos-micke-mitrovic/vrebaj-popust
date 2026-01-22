@@ -95,9 +95,11 @@ function extractCategoriesFromUrl(url: string, name: string): string[] {
       categories.push("obuca/sandale");
     } else if (nameLower.includes("japanke") || nameLower.includes("papuče") || nameLower.includes("papuce")) {
       categories.push("obuca/papuce");
+    } else if (nameLower.startsWith("top ") || nameLower.includes(" top ") || nameLower.includes("sports bra") || nameLower.includes("tank top") || nameLower.includes("crop top")) {
+      categories.push("odeca/topovi");
     } else if (nameLower.includes("polo") || nameLower.includes("majica")) {
       categories.push("odeca/majice");
-    } else if (nameLower.includes("t-shirt") || nameLower.includes("tshirt") || nameLower.includes("tank top")) {
+    } else if (nameLower.includes("t-shirt") || nameLower.includes("tshirt")) {
       categories.push("odeca/majice");
     } else if (nameLower.includes("duks") || nameLower.includes("hoodie") || nameLower.includes("dukserica") || nameLower.includes("sweatshirt")) {
       categories.push("odeca/duksevi");

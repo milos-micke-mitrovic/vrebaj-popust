@@ -129,11 +129,15 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
       categories.push("obuca/sandale");
     } else if (nameLower.includes("japanke") || nameLower.includes("papuce") || nameLower.includes("papuče")) {
       categories.push("obuca/papuce");
+    } else if (urlLower.includes("/kupaci") || urlLower.includes("-kupaci") || nameLower.includes("kupaći") || nameLower.includes("kupaci") || nameLower.includes("kupaće") || nameLower.includes("kupace") || nameLower.includes("bikini") || nameLower.includes("swim")) {
+      categories.push("odeca/kupaci");
     } else if (nameLower.includes("trenerka") || nameLower.includes("trenerke") || nameLower.includes("donji deo")) {
       categories.push("odeca/trenerke");
     } else if (nameLower.includes("helanke") || nameLower.includes("tajice")) {
       categories.push("odeca/helanke");
-    } else if (nameLower.includes("majica") || nameLower.includes("dres") || nameLower.includes("top ")) {
+    } else if (nameLower.startsWith("top ") || nameLower.includes(" top ")) {
+      categories.push("odeca/topovi");
+    } else if (nameLower.includes("majica") || nameLower.includes("dres")) {
       categories.push("odeca/majice");
     } else if (nameLower.includes("duks")) {
       categories.push("odeca/duksevi");

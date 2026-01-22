@@ -87,14 +87,24 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
           categories.push("obuca/" + subCat.replace("decije-", "").replace("muske-", "").replace("zenske-", ""));
         }
       } else if (mainCat === "odeca") {
-        if (subCat.includes("jakne") || subCat.includes("prsluci")) {
+        if (subCat.includes("kupaci") || subCat.includes("kupace") || subCat.includes("bikini")) {
+          categories.push("odeca/kupaci");
+        } else if (subCat.includes("jakne") || subCat.includes("prsluci")) {
           categories.push("odeca/jakne");
         } else if (subCat.includes("dukserice") || subCat.includes("duksevi")) {
           categories.push("odeca/duksevi");
         } else if (subCat.includes("trenerke") || subCat.includes("donji-delovi")) {
           categories.push("odeca/trenerke");
+        } else if (subCat.includes("top")) {
+          categories.push("odeca/topovi");
         } else if (subCat.includes("majice") || subCat.includes("dres")) {
           categories.push("odeca/majice");
+        } else if (subCat.includes("halj")) {
+          categories.push("odeca/haljine");
+        } else if (subCat.includes("kosulj")) {
+          categories.push("odeca/kosulje");
+        } else if (subCat.includes("kombinezon")) {
+          categories.push("odeca/kombinezoni");
         } else if (subCat.includes("sorc")) {
           categories.push("odeca/sorcevi");
         } else {
@@ -137,7 +147,9 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
       categories.push("odeca/jakne");
     } else if (nameLower.includes("duks")) {
       categories.push("odeca/duksevi");
-    } else if (nameLower.includes("majica") || nameLower.includes("dres") || nameLower.includes("top ")) {
+    } else if (urlLower.includes("/top-") || urlLower.includes("-top-") || nameLower.startsWith("top ") || nameLower.includes(" top ")) {
+      categories.push("odeca/topovi");
+    } else if (nameLower.includes("majica") || nameLower.includes("dres")) {
       categories.push("odeca/majice");
     } else if (nameLower.includes("trenerka") || nameLower.includes("donji deo")) {
       categories.push("odeca/trenerke");
@@ -145,11 +157,11 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
       categories.push("odeca/pantalone");
     } else if (nameLower.includes("šorc") || nameLower.includes("sorc") || nameLower.includes("bermude")) {
       categories.push("odeca/sorcevi");
-    } else if (nameLower.includes("halj")) {
+    } else if (urlLower.includes("/halj") || urlLower.includes("-halj") || nameLower.includes("halj") || nameLower.includes("dress")) {
       categories.push("odeca/haljine");
     } else if (nameLower.includes("košulj") || nameLower.includes("kosulj")) {
       categories.push("odeca/kosulje");
-    } else if (nameLower.includes("kupaći") || nameLower.includes("kupaci") || nameLower.includes("kupaće") || nameLower.includes("kupace") || nameLower.includes("bikini") || nameLower.includes("swimwear") || nameLower.includes("swimming")) {
+    } else if (urlLower.includes("/kupaci") || urlLower.includes("-kupaci") || nameLower.includes("kupaći") || nameLower.includes("kupaci") || nameLower.includes("kupaće") || nameLower.includes("kupace") || nameLower.includes("bikini") || nameLower.includes("swimwear") || nameLower.includes("swimming")) {
       categories.push("odeca/kupaci");
     } else if (nameLower.includes("kombinezon") || nameLower.includes("jumpsuit") || nameLower.includes("overall")) {
       categories.push("odeca/kombinezoni");

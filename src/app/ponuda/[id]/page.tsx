@@ -56,6 +56,7 @@ const CATEGORY_PATH_NAMES: Record<string, string> = {
   "odeca/prsluci": "Prsluci",
   "odeca/duksevi": "Duksevi",
   "odeca/majice": "Majice",
+  "odeca/topovi": "Topovi",
   "odeca/pantalone": "Pantalone",
   "odeca/trenerke": "Trenerke",
   "odeca/helanke": "Helanke",
