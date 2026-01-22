@@ -71,7 +71,9 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
     if (mainCat && subCat) {
       // Map subcategories to our category format
       if (mainCat === "obuca") {
-        if (subCat.includes("patike") || subCat.includes("kopacke")) {
+        if (subCat.includes("kopacke")) {
+          categories.push("obuca/kopacke");
+        } else if (subCat.includes("patike")) {
           categories.push("obuca/patike");
         } else if (subCat.includes("cipele")) {
           categories.push("obuca/cipele");
@@ -116,7 +118,9 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
     }
 
     // Try to detect category from product name
-    if (nameLower.includes("patike") || nameLower.includes("kopacke")) {
+    if (nameLower.includes("kopacke")) {
+      categories.push("obuca/kopacke");
+    } else if (nameLower.includes("patike")) {
       categories.push("obuca/patike");
     } else if (nameLower.includes("cipele")) {
       categories.push("obuca/cipele");
