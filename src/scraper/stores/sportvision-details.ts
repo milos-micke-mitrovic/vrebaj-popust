@@ -175,7 +175,7 @@ function extractProductDetails(html: string): ProductDetails {
       else if (url.includes('/cizme/') || url.includes('/cizme-')) result.categories.push('obuca/cizme');
       else if (url.includes('/sandale/') || url.includes('/sandale-')) result.categories.push('obuca/sandale');
       else if (url.includes('/papuce/') || url.includes('/papuce-')) result.categories.push('obuca/papuce');
-      else if (url.includes('/japanke/') || url.includes('/japanke-')) result.categories.push('obuca/sandale');
+      else if (url.includes('/japanke/') || url.includes('/japanke-')) result.categories.push('obuca/papuce');
       else if (url.includes('/majica') || url.includes('/majice')) result.categories.push('odeca/majice');
       else if (url.includes('/duks')) result.categories.push('odeca/duksevi');
       else if (url.includes('/jakna') || url.includes('/jakne')) result.categories.push('odeca/jakne');

@@ -79,8 +79,10 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
           categories.push("obuca/cipele");
         } else if (subCat.includes("cizme")) {
           categories.push("obuca/cizme");
-        } else if (subCat.includes("sandale") || subCat.includes("japanke") || subCat.includes("papuce")) {
+        } else if (subCat.includes("sandale")) {
           categories.push("obuca/sandale");
+        } else if (subCat.includes("japanke") || subCat.includes("papuce")) {
+          categories.push("obuca/papuce");
         } else {
           categories.push("obuca/" + subCat.replace("decije-", "").replace("muske-", "").replace("zenske-", ""));
         }
@@ -126,8 +128,10 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
       categories.push("obuca/cipele");
     } else if (nameLower.includes("cizme") || nameLower.includes("čizme")) {
       categories.push("obuca/cizme");
-    } else if (nameLower.includes("sandale") || nameLower.includes("japanke") || nameLower.includes("papuce") || nameLower.includes("papuče")) {
+    } else if (nameLower.includes("sandale")) {
       categories.push("obuca/sandale");
+    } else if (nameLower.includes("japanke") || nameLower.includes("papuce") || nameLower.includes("papuče")) {
+      categories.push("obuca/papuce");
     } else if (nameLower.includes("jakna") || nameLower.includes("prslu")) {
       categories.push("odeca/jakne");
     } else if (nameLower.includes("duks")) {

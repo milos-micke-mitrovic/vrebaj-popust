@@ -44,7 +44,7 @@ function extractCategoriesFromUrl(url: string, name: string): string[] {
   } else if (urlLower.includes("/sandale/")) {
     categories.push("obuca/sandale");
   } else if (urlLower.includes("/japanke/") || urlLower.includes("/papuce/")) {
-    categories.push("obuca/sandale");
+    categories.push("obuca/papuce");
   }
 
   // Odeća - Buzz uses various URL patterns
@@ -91,8 +91,10 @@ function extractCategoriesFromUrl(url: string, name: string): string[] {
       categories.push("obuca/cipele");
     } else if (nameLower.includes("čizme") || nameLower.includes("cizme") || nameLower.includes("boot")) {
       categories.push("obuca/cizme");
-    } else if (nameLower.includes("sandale") || nameLower.includes("japanke") || nameLower.includes("papuče") || nameLower.includes("papuce")) {
+    } else if (nameLower.includes("sandale")) {
       categories.push("obuca/sandale");
+    } else if (nameLower.includes("japanke") || nameLower.includes("papuče") || nameLower.includes("papuce")) {
+      categories.push("obuca/papuce");
     } else if (nameLower.includes("polo") || nameLower.includes("majica")) {
       categories.push("odeca/majice");
     } else if (nameLower.includes("t-shirt") || nameLower.includes("tshirt") || nameLower.includes("tank top")) {

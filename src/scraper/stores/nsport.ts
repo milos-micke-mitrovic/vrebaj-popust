@@ -94,8 +94,10 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
       categories.push("obuca/cipele");
     } else if (category === "cizme") {
       categories.push("obuca/cizme");
-    } else if (category === "sandale" || category === "japanke" || category === "papuce") {
+    } else if (category === "sandale") {
       categories.push("obuca/sandale");
+    } else if (category === "japanke" || category === "papuce") {
+      categories.push("obuca/papuce");
     } else if (category === "trenerka" || category === "trenerke") {
       categories.push("odeca/trenerke");
     } else if (category === "helanke") {
@@ -123,8 +125,10 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
       categories.push("obuca/cipele");
     } else if (nameLower.includes("cizme") || nameLower.includes("čizme")) {
       categories.push("obuca/cizme");
-    } else if (nameLower.includes("sandale") || nameLower.includes("japanke") || nameLower.includes("papuce") || nameLower.includes("papuče")) {
+    } else if (nameLower.includes("sandale")) {
       categories.push("obuca/sandale");
+    } else if (nameLower.includes("japanke") || nameLower.includes("papuce") || nameLower.includes("papuče")) {
+      categories.push("obuca/papuce");
     } else if (nameLower.includes("trenerka") || nameLower.includes("trenerke") || nameLower.includes("donji deo")) {
       categories.push("odeca/trenerke");
     } else if (nameLower.includes("helanke") || nameLower.includes("tajice")) {
