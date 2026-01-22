@@ -106,7 +106,7 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
         } else if (subCat.includes("kombinezon")) {
           categories.push("odeca/kombinezoni");
         } else if (subCat.includes("sorc")) {
-          categories.push("odeca/sorcevi");
+          categories.push("odeca/sortevi");
         } else {
           categories.push("odeca/" + subCat.replace("decija-", "").replace("muska-", "").replace("zenska-", ""));
         }
@@ -158,7 +158,7 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
     } else if (nameLower.includes("pantalon")) {
       categories.push("odeca/pantalone");
     } else if (nameLower.includes("šorc") || nameLower.includes("sorc") || nameLower.includes("bermude")) {
-      categories.push("odeca/sorcevi");
+      categories.push("odeca/sortevi");
     } else if (urlLower.includes("/halj") || urlLower.includes("-halj") || nameLower.includes("halj") || nameLower.includes("dress")) {
       categories.push("odeca/haljine");
     } else if (nameLower.includes("košulj") || nameLower.includes("kosulj")) {

@@ -34,7 +34,7 @@ function mapCategory(categoryText: string): string | null {
   if (lower.includes("majic")) return "odeca/majice";
   if (lower.includes("duks")) return "odeca/duksevi";
   if (lower.includes("jakn")) return "odeca/jakne";
-  if (lower.includes("šorc") || lower.includes("sorc")) return "odeca/sorcevi";
+  if (lower.includes("šorc") || lower.includes("sorc")) return "odeca/sortevi";
   if (lower.includes("trenerka") || lower.includes("trenerke")) return "odeca/trenerke";
   if (lower.includes("pantalon")) return "odeca/pantalone";
   if (lower.includes("helan")) return "odeca/helanke";
@@ -181,7 +181,7 @@ function extractProductDetails(html: string): ProductDetails {
       else if (url.includes('/majica') || url.includes('/majice')) result.categories.push('odeca/majice');
       else if (url.includes('/duks')) result.categories.push('odeca/duksevi');
       else if (url.includes('/jakna') || url.includes('/jakne')) result.categories.push('odeca/jakne');
-      else if (url.includes('/sorc') || url.includes('/sortevi')) result.categories.push('odeca/sorcevi');
+      else if (url.includes('/sorc') || url.includes('/sortevi')) result.categories.push('odeca/sortevi');
       else if (url.includes('/trenerka') || url.includes('/trenerke')) result.categories.push('odeca/trenerke');
       else if (url.includes('/pantalon')) result.categories.push('odeca/pantalone');
       else if (url.includes('/helanke')) result.categories.push('odeca/helanke');

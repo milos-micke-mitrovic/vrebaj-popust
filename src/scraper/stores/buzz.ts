@@ -88,7 +88,7 @@ function extractCategories(url: string, name: string): string[] {
   } else if (urlLower.includes("/pantalone/") || urlLower.includes("/pants/")) {
     categories.push("odeca/pantalone");
   } else if (urlLower.includes("/sorc/") || urlLower.includes("/shorts/")) {
-    categories.push("odeca/sorcevi");
+    categories.push("odeca/sortevi");
   } else if (urlLower.includes("/helanke/") || urlLower.includes("/leggings/") || urlLower.includes("/tajice/")) {
     categories.push("odeca/helanke");
   } else if (urlLower.includes("/haljina/") || urlLower.includes("/dress/") || urlLower.includes("/suknja/")) {
@@ -143,7 +143,7 @@ function extractCategories(url: string, name: string): string[] {
     } else if (nameLower.includes("pantalone") || nameLower.includes("pants")) {
       categories.push("odeca/pantalone");
     } else if (nameLower.includes("šorc") || nameLower.includes("sorc") || nameLower.includes("shorts") || nameLower.includes("bermude")) {
-      categories.push("odeca/sorcevi");
+      categories.push("odeca/sortevi");
     } else if (nameLower.includes("helanke") || nameLower.includes("leggings") || nameLower.includes("tajice") || nameLower.includes("tight")) {
       categories.push("odeca/helanke");
     } else if (nameLower.includes("košulj") || nameLower.includes("kosulj") || nameLower.includes("shirt")) {

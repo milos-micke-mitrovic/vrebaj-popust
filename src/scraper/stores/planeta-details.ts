@@ -46,7 +46,7 @@ function mapCategory(vrsta: string): string | null {
   if (upper.includes("HELANKE") || upper.includes("HELANKI")) return "odeca/helanke";
   if (upper.includes("HALJ")) return "odeca/haljine";
   if (upper.includes("KOŠULJ") || upper.includes("KOSULJ")) return "odeca/kosulje";
-  if (upper.includes("ŠORC") || upper.includes("SORC") || upper.includes("BERMUD")) return "odeca/sorcevi";
+  if (upper.includes("ŠORC") || upper.includes("SORC") || upper.includes("BERMUD")) return "odeca/sortevi";
 
   // Swimwear
   if (upper.includes("KUPAĆI") || upper.includes("KUPACI") || upper.includes("KUPAĆE") || upper.includes("KUPACE") || upper.includes("BIKINI")) return "odeca/kupaci";

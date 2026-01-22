@@ -109,7 +109,7 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
     } else if (category === "jakne" || category === "jakna") {
       categories.push("odeca/jakne");
     } else if (category === "sorcevi" || category === "sorc") {
-      categories.push("odeca/sorcevi");
+      categories.push("odeca/sortevi");
     } else if (category.includes("obuca")) {
       categories.push("obuca");
     } else if (category.includes("odeca")) {
@@ -144,7 +144,7 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
     } else if (nameLower.includes("jakna") || nameLower.includes("prslu")) {
       categories.push("odeca/jakne");
     } else if (nameLower.includes("šorc") || nameLower.includes("sorc") || nameLower.includes("bermude")) {
-      categories.push("odeca/sorcevi");
+      categories.push("odeca/sortevi");
     }
   }
 

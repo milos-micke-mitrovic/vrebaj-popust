@@ -193,7 +193,7 @@ const CATEGORY_DISPLAY_EXPIRED: Record<string, {
   "majica": { singular: "majica", plural: "majice", filterSlug: "majice", catPath: "odeca/majice", grammaticalGender: "f" },
   "duks": { singular: "duks", plural: "duksevi", filterSlug: "duksevi", catPath: "odeca/duksevi", grammaticalGender: "m" },
   "trenerka": { singular: "trenerka", plural: "trenerke", filterSlug: "trenerke", catPath: "odeca/trenerke", grammaticalGender: "f" },
-  "sorc": { singular: "šorc", plural: "šorcevi", filterSlug: "sorcevi", catPath: "odeca/sorcevi", grammaticalGender: "m" },
+  "sorc": { singular: "šorc", plural: "šorcevi", filterSlug: "sortevi", catPath: "odeca/sortevi", grammaticalGender: "m" },
   "helanke": { singular: "helanke", plural: "helanke", filterSlug: "helanke", catPath: "odeca/helanke", grammaticalGender: "f" },
   "ranac": { singular: "ranac", plural: "ranci", filterSlug: "ranac", catPath: "oprema/torbe", grammaticalGender: "m" },
 };
