@@ -115,7 +115,8 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
     } else if (urlLower.includes("za-zene") || nameLower.includes("za žene") || nameLower.includes("za zene")) {
       gender = "zenski";
     } else if (urlLower.includes("za-decake") || urlLower.includes("za-devojcice") || urlLower.includes("za-decu") ||
-               nameLower.includes("za dečake") || nameLower.includes("za devojčice") || nameLower.includes("za decu")) {
+               nameLower.includes("za dečake") || nameLower.includes("za devojčice") || nameLower.includes("za decu") ||
+               nameLower.includes("baby") || nameLower.includes("kids") || nameLower.includes("junior") || nameLower.includes(" jr ")) {
       gender = "deciji";
     }
 

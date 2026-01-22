@@ -34,6 +34,10 @@ export const KNOWN_BRANDS: string[] = [
   "MOON BOOT",
   "DR MARTENS",
   "DR. MARTENS",
+  "RIDER",
+  "IPANEMA",
+  "HAVAIANAS",
+  "CROCS",
 ];
 
 // Brand aliases - map variants to canonical name
@@ -258,14 +262,16 @@ export function extractBrandFromName(name: string): string | null {
     }
   }
 
-  // Fall back to first word if it's uppercase and long enough
+  // Fall back to first/second word if it's uppercase and long enough
   const parts = nameTrimmed.split(/\s+/);
-  if (parts.length > 0) {
-    const firstWord = parts[0];
-    // Check if first word is all uppercase (brand-like) and at least 2 chars
-    if (firstWord === firstWord.toUpperCase() && firstWord.length >= 2) {
+
+  // Check first two words - brand might be second if first is category (e.g., "SANDALE RIDER...")
+  for (let i = 0; i < Math.min(2, parts.length); i++) {
+    const word = parts[i];
+    // Check if word is all uppercase (brand-like) and at least 2 chars
+    if (word === word.toUpperCase() && word.length >= 2) {
       // But filter out gender/category words
-      const normalized = normalizeBrand(firstWord);
+      const normalized = normalizeBrand(word);
       if (normalized) {
         return normalized;
       }
