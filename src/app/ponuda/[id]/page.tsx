@@ -45,6 +45,7 @@ const CATEGORY_PATH_NAMES: Record<string, string> = {
   // Obuca
   "obuca/patike": "Patike",
   "obuca/cipele": "Cipele",
+  "obuca/baletanke": "Baletanke",
   "obuca/cizme": "Čizme",
   "obuca/papuce": "Papuče",
   "obuca/sandale": "Sandale",
@@ -648,7 +649,7 @@ export default async function DealPage({ params }: Props) {
                 {deal.sizes && deal.sizes.length > 0 && (() => {
                   // Filter sizes based on product category
                   // Check new categories array, legacy category, and URL for footwear keywords
-                  const footwearCategories = ["obuca/patike", "obuca/cipele", "obuca/cizme", "obuca/kopacke", "obuca/sandale", "obuca/papuce"];
+                  const footwearCategories = ["obuca/patike", "obuca/cipele", "obuca/baletanke", "obuca/cizme", "obuca/kopacke", "obuca/sandale", "obuca/papuce"];
                   const hasFootwearCategory = deal.categories?.some(cat => footwearCategories.includes(cat));
                   const isFootwear = hasFootwearCategory ||
                     ["patike", "cipele", "cizme"].includes(deal.category) ||

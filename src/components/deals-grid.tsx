@@ -71,6 +71,7 @@ const SUBCATEGORY_NAMES: Record<Subcategory, string> = {
   // Obuca
   patike: "Patike",
   cipele: "Cipele",
+  baletanke: "Baletanke",
   cizme: "Čizme",
   papuce: "Papuče",
   sandale: "Sandale",
@@ -101,7 +102,7 @@ const SUBCATEGORY_NAMES: Record<Subcategory, string> = {
 };
 
 const CATEGORY_HIERARCHY: Record<MainCategory, Subcategory[]> = {
-  obuca: ["patike", "cipele", "cizme", "papuce", "sandale", "kopacke"],
+  obuca: ["patike", "cipele", "baletanke", "cizme", "papuce", "sandale", "kopacke"],
   odeca: ["jakne", "prsluci", "duksevi", "majice", "topovi", "pantalone", "trenerke", "helanke", "sortevi", "kupaci", "haljine", "kosulje", "kombinezoni"],
   oprema: ["torbe", "rancevi", "kacketi", "carape", "kape", "salovi", "rukavice", "vrece"],
 };

@@ -33,7 +33,7 @@ const CATEGORY_MAP: Record<string, string> = {
   "MOKASINE": "obuca/cipele",
   "GLEŽNJAČE": "obuca/cizme",
   "GLEZNJACE": "obuca/cizme",
-  "BALETANKE": "obuca/cipele",
+  "BALETANKE": "obuca/baletanke",
   "KLOMPE": "obuca/papuce",
   "ESPADRILE": "obuca/cipele",
   "KOPAČKE": "obuca/kopacke",

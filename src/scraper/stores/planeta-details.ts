@@ -22,6 +22,7 @@ function mapCategory(vrsta: string): string | null {
 
   // Footwear - check for keywords
   if (upper.includes("PATIKE") || upper.includes("PATIKA")) return "obuca/patike";
+  if (upper.includes("BALETANK")) return "obuca/baletanke";
   if (upper.includes("CIPELE") || upper.includes("CIPELA")) return "obuca/cipele";
   if (upper.includes("ČIZME") || upper.includes("CIZME") || upper.includes("ČIZMA") || upper.includes("CIZMA")) return "obuca/cizme";
   if (upper.includes("PAPUČE") || upper.includes("PAPUCE") || upper.includes("PAPUČA") || upper.includes("PAPUCA")) return "obuca/papuce";
@@ -165,6 +166,7 @@ function extractProductDetails(html: string): ProductDetails {
     if (urlMatch) {
       const url = urlMatch[1].toLowerCase();
       if (url.includes('/patike-') || url.includes('/patike/')) result.categories.push('obuca/patike');
+      else if (url.includes('/baletank')) result.categories.push('obuca/baletanke');
       else if (url.includes('/cipele-') || url.includes('/cipele/')) result.categories.push('obuca/cipele');
       else if (url.includes('/jakn')) result.categories.push('odeca/jakne');
       else if (url.includes('/duks')) result.categories.push('odeca/duksevi');

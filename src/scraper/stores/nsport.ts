@@ -90,6 +90,8 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
     // Map URL category to our category format
     if (category.includes("patike") || category === "patike-za-trening" || category === "lifestyle-patike") {
       categories.push("obuca/patike");
+    } else if (category === "baletanke") {
+      categories.push("obuca/baletanke");
     } else if (category === "cipele") {
       categories.push("obuca/cipele");
     } else if (category === "cizme") {
@@ -121,6 +123,8 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
   if (categories.length === 0) {
     if (nameLower.includes("patike") || nameLower.includes("kopacke")) {
       categories.push("obuca/patike");
+    } else if (nameLower.includes("baletank")) {
+      categories.push("obuca/baletanke");
     } else if (nameLower.includes("cipele")) {
       categories.push("obuca/cipele");
     } else if (nameLower.includes("cizme") || nameLower.includes("čizme")) {

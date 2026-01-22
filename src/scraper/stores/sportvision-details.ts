@@ -26,6 +26,7 @@ function mapCategory(categoryText: string): string | null {
 
   if (lower.includes("kopack") || lower.includes("kopačk")) return "obuca/kopacke";
   if (lower.includes("patike")) return "obuca/patike";
+  if (lower.includes("baletank")) return "obuca/baletanke";
   if (lower.includes("cipele")) return "obuca/cipele";
   if (lower.includes("čizme") || lower.includes("cizme")) return "obuca/cizme";
   if (lower.includes("sandale")) return "obuca/sandale";

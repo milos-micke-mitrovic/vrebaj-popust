@@ -37,6 +37,8 @@ function extractCategoriesFromUrl(url: string, name: string): string[] {
   // Obuća
   if (urlLower.includes("/patike/") || urlLower.includes("/sneakers/")) {
     categories.push("obuca/patike");
+  } else if (urlLower.includes("/baletanke/")) {
+    categories.push("obuca/baletanke");
   } else if (urlLower.includes("/cipele/")) {
     categories.push("obuca/cipele");
   } else if (urlLower.includes("/cizme/") || urlLower.includes("/boots/")) {
@@ -87,6 +89,8 @@ function extractCategoriesFromUrl(url: string, name: string): string[] {
   if (categories.length === 0) {
     if (nameLower.includes("patike") || nameLower.includes("sneaker") || nameLower.includes("tenisice")) {
       categories.push("obuca/patike");
+    } else if (nameLower.includes("baletank")) {
+      categories.push("obuca/baletanke");
     } else if (nameLower.includes("cipele") || nameLower.includes("shoes")) {
       categories.push("obuca/cipele");
     } else if (nameLower.includes("čizme") || nameLower.includes("cizme") || nameLower.includes("boot")) {

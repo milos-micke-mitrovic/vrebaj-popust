@@ -75,6 +75,8 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
           categories.push("obuca/kopacke");
         } else if (subCat.includes("patike")) {
           categories.push("obuca/patike");
+        } else if (subCat.includes("baletanke")) {
+          categories.push("obuca/baletanke");
         } else if (subCat.includes("cipele")) {
           categories.push("obuca/cipele");
         } else if (subCat.includes("cizme")) {
@@ -135,6 +137,8 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
       categories.push("obuca/kopacke");
     } else if (nameLower.includes("patike")) {
       categories.push("obuca/patike");
+    } else if (urlLower.includes("-baletank") || nameLower.includes("baletank")) {
+      categories.push("obuca/baletanke");
     } else if (nameLower.includes("cipele")) {
       categories.push("obuca/cipele");
     } else if (nameLower.includes("cizme") || nameLower.includes("čizme")) {
