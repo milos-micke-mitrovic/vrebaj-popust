@@ -105,6 +105,8 @@ function extractCategoriesFromUrl(url: string, name: string): string[] {
       categories.push("odeca/duksevi");
     } else if (nameLower.includes("jakna") || nameLower.includes("jacket") || nameLower.includes("prslu") || nameLower.includes("vest") || nameLower.includes("windbreaker")) {
       categories.push("odeca/jakne");
+    } else if (nameLower.includes("kupaći") || nameLower.includes("kupaci") || nameLower.includes("kupaće") || nameLower.includes("kupace") || nameLower.includes("bikini") || nameLower.includes("swimwear") || nameLower.includes("swimming")) {
+      categories.push("odeca/kupaci");
     } else if (nameLower.includes("trenerka") || nameLower.includes("jogger") || nameLower.includes("donji deo") || nameLower.includes("gornji deo")) {
       categories.push("odeca/trenerke");
     } else if (nameLower.includes("pantalone") || nameLower.includes("pants")) {
@@ -115,8 +117,6 @@ function extractCategoriesFromUrl(url: string, name: string): string[] {
       categories.push("odeca/helanke");
     } else if (nameLower.includes("košulj") || nameLower.includes("kosulj") || nameLower.includes("shirt")) {
       categories.push("odeca/kosulje");
-    } else if (nameLower.includes("kupaći") || nameLower.includes("kupaci") || nameLower.includes("kupaće") || nameLower.includes("kupace") || nameLower.includes("bikini") || nameLower.includes("swimwear") || nameLower.includes("swimming")) {
-      categories.push("odeca/kupaci");
     } else if (nameLower.includes("kombinezon") || nameLower.includes("jumpsuit") || nameLower.includes("overall")) {
       categories.push("odeca/kombinezoni");
     } else if (nameLower.includes("ranac") || nameLower.includes("backpack") || nameLower.includes("torba") || nameLower.includes("bag") || nameLower.includes("torbica")) {
