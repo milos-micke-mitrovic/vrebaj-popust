@@ -115,7 +115,7 @@ function mapCategoryPathToCategory(categoryPath: string): Category {
   if (path.includes("obuca/patike") || path.includes("kopacke")) return "patike";
   if (path.includes("obuca/cipele")) return "cipele";
   if (path.includes("obuca/cizme")) return "cizme";
-  if (path.includes("obuca/sandale") || path.includes("obuca/japanke") || path.includes("obuca/papuce")) return "patike"; // Group with patike for now
+  if (path.includes("obuca/sandale") || path.includes("obuca/papuce")) return "patike"; // Group with patike for now
 
   // Odeca mappings
   if (path.includes("odeca/jakne") || path.includes("odeca/prsluci")) return "jakna";

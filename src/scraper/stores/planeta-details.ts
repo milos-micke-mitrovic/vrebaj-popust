@@ -26,7 +26,7 @@ function mapCategory(vrsta: string): string | null {
   if (upper.includes("ČIZME") || upper.includes("CIZME") || upper.includes("ČIZMA") || upper.includes("CIZMA")) return "obuca/cizme";
   if (upper.includes("PAPUČE") || upper.includes("PAPUCE") || upper.includes("PAPUČA") || upper.includes("PAPUCA")) return "obuca/papuce";
   if (upper.includes("SANDALE") || upper.includes("SANDALA")) return "obuca/sandale";
-  if (upper.includes("JAPANKE") || upper.includes("JAPANKA")) return "obuca/japanke";
+  if (upper.includes("JAPANKE") || upper.includes("JAPANKA")) return "obuca/papuce";
   if (upper.includes("KLOMPE") || upper.includes("KLOMPA")) return "obuca/klompe";
   if (upper.includes("KOPAČKE") || upper.includes("KOPACKE")) return "obuca/kopacke";
 

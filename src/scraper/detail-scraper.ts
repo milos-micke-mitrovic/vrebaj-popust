@@ -46,8 +46,8 @@ const CATEGORY_MAPPINGS: CategoryMapping[] = [
   { keywords: ["cizm", "cizma", "boots", " boot "], category: "obuca/cizme" },
   { keywords: ["papuc"], category: "obuca/papuce" },
   { keywords: ["sandal"], category: "obuca/sandale" },
-  { keywords: ["japank", "flip flop"], category: "obuca/japanke" },
-  { keywords: ["patofn", "slipper"], category: "obuca/patofne" },
+  { keywords: ["japank", "flip flop"], category: "obuca/papuce" },
+  { keywords: ["patofn", "slipper"], category: "obuca/papuce" },
 
   // Odeca (clothing)
   // Note: "donji deo trenerke" must be checked before generic "donji deo"
