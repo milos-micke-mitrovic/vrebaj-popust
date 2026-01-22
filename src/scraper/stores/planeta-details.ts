@@ -150,9 +150,11 @@ function extractProductDetails(html: string): ProductDetails {
       for (const m of labelMatches) {
         const size = m[1];
         if (size && !result.sizes.includes(size)) {
-          const isNumeric = /^\d+(\.\d+)?$/.test(size);
-          const isLetterSize = /^[XSML]{1,3}$/.test(size.toUpperCase());
-          if (isNumeric || isLetterSize) {
+          const isNumeric = /^\d+(\.\d+)?$/.test(size);  // 37, 42.5
+          const isFraction = /^\d+\s+\d+\/\d+$/.test(size);  // 37 1/3, 42 2/3
+          const isLetterSize = /^[XSML]{1,3}$/.test(size.toUpperCase());  // S, M, XL, XXL
+          const isCompoundSize = /^[XSML]{1,3}\/[XSML0-9]{1,3}$/i.test(size);  // M/L, XL/2
+          if (isNumeric || isFraction || isLetterSize || isCompoundSize) {
             result.sizes.push(size);
           }
         }
