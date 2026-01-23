@@ -77,7 +77,16 @@ function isRateLimited(key: string): boolean {
 }
 
 export function proxy(request: NextRequest) {
-  // Only apply to API routes
+  const hostname = request.headers.get("host") || "";
+
+  // Redirect non-www to www (fixes CORS issues)
+  if (hostname === "vrebajpopust.rs") {
+    const url = request.nextUrl.clone();
+    url.host = "www.vrebajpopust.rs";
+    return NextResponse.redirect(url, 308);
+  }
+
+  // Only apply rate limiting/bot blocking to API routes
   if (request.nextUrl.pathname.startsWith("/api/")) {
     const userAgent = request.headers.get("user-agent");
 
@@ -112,5 +121,8 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/api/:path*"],
+  matcher: [
+    // Match all paths except static files
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.png$|.*\\.ico$|.*\\.xml$|.*\\.txt$).*)",
+  ],
 };
