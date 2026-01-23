@@ -884,7 +884,7 @@ export function DealsGrid({
           onChange={(e) => setBrandSearch(e.target.value)}
           className="mb-3 h-9 text-sm bg-gray-50 border-gray-200 focus:bg-white dark:bg-gray-800 dark:border-gray-700 dark:focus:bg-gray-700 dark:text-white dark:placeholder-gray-400"
         />
-        <div className="max-h-[200px] overflow-y-auto scrollbar-thin">
+        <ScrollFade maxHeight="200px">
           <div className="space-y-0.5 pr-1">
             {filteredBrands.map((brand) => (
               <button
@@ -915,7 +915,7 @@ export function DealsGrid({
               <p className="text-sm text-gray-400 dark:text-gray-500 p-2">Nema rezultata</p>
             )}
           </div>
-        </div>
+        </ScrollFade>
       </div>
     </div>
   );

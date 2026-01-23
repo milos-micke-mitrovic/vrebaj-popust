@@ -595,7 +595,7 @@ export default async function DealPage({ params }: Props) {
                   </div>
                 )}
                 {/* Discount ribbon */}
-                <div className="absolute -left-12 top-7 rotate-[-45deg] bg-red-500 px-20 py-2 text-lg font-bold text-white shadow-md">
+                <div className="absolute -left-12 top-5 rotate-[-45deg] bg-red-500 px-20 py-2 text-lg font-bold text-white shadow-md ribbon-shimmer">
                   -{deal.discountPercent}%
                 </div>
               </div>

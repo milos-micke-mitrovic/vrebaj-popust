@@ -49,7 +49,7 @@ function CarouselCard({ deal }: { deal: Deal }) {
       draggable={false}
       onClick={handleClick}
     >
-      <Card className="group h-full overflow-hidden transition-shadow hover:shadow-lg dark:bg-gray-800 dark:border-gray-700 !p-0">
+      <Card className="group h-full overflow-hidden transition-shadow hover:shadow-lg dark:bg-gray-800 dark:border-gray-700 !p-0 card-glow">
         <div className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-700">
           <Image
             src={!imgError ? getProxiedImageUrl(deal.imageUrl) : "/images/placeholder.png"}
@@ -63,7 +63,7 @@ function CarouselCard({ deal }: { deal: Deal }) {
             draggable={false}
           />
           {/* Discount ribbon */}
-          <div className="absolute -left-8 top-3 rotate-[-45deg] bg-red-500 px-8 py-0.5 text-xs font-bold text-white shadow-md">
+          <div className="absolute -left-8 top-2 rotate-[-45deg] bg-red-500 px-8 py-0.5 text-xs font-bold text-white shadow-md ribbon-shimmer">
             -{deal.discountPercent}%
           </div>
           {/* Store logo */}

@@ -8,6 +8,7 @@ import { useWishlistContext } from "@/context/wishlist-context";
 import { useRecentlyViewedContext } from "@/context/recently-viewed-context";
 import { formatPrice, getProxiedImageUrl } from "@/lib/utils";
 import { ConfirmDialog } from "@/components/confirm-dialog";
+import { ScrollFade } from "@/components/scroll-fade";
 import { Deal } from "@/types/deal";
 
 function DrawerImage({ src, alt }: { src: string; alt: string }) {
@@ -259,26 +260,28 @@ export function WishlistDrawer({ availableDealIds }: WishlistDrawerProps) {
         </div>
 
         {/* Content */}
-        <div className="flex-1 overflow-y-auto overscroll-contain">
-          {!isLoaded ? (
-            <div className="flex items-center justify-center h-32 text-gray-500 dark:text-gray-400">
-              Učitavanje...
-            </div>
-          ) : currentItems.length === 0 ? (
-            renderEmptyState()
-          ) : (
-            <div className="divide-y dark:divide-gray-800">
-              {visibleItems.map((deal) => renderItem(deal, activeTab === "wishlist"))}
-              {hasMore && (
-                <button
-                  onClick={() => setVisibleCount((prev) => prev + ITEMS_PER_PAGE)}
-                  className="w-full py-3 text-sm text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition-colors cursor-pointer"
-                >
-                  Prikaži još ({currentItems.length - visibleCount} preostalo)
-                </button>
-              )}
-            </div>
-          )}
+        <div className="flex-1 min-h-0">
+          <ScrollFade maxHeight="calc(100vh - 180px)" className="overscroll-contain">
+            {!isLoaded ? (
+              <div className="flex items-center justify-center h-32 text-gray-500 dark:text-gray-400">
+                Učitavanje...
+              </div>
+            ) : currentItems.length === 0 ? (
+              renderEmptyState()
+            ) : (
+              <div className="divide-y dark:divide-gray-800">
+                {visibleItems.map((deal) => renderItem(deal, activeTab === "wishlist"))}
+                {hasMore && (
+                  <button
+                    onClick={() => setVisibleCount((prev) => prev + ITEMS_PER_PAGE)}
+                    className="w-full py-3 text-sm text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 transition-colors cursor-pointer"
+                  >
+                    Prikaži još ({currentItems.length - visibleCount} preostalo)
+                  </button>
+                )}
+              </div>
+            )}
+          </ScrollFade>
         </div>
 
         {/* Footer with clear all */}

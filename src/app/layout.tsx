@@ -6,6 +6,7 @@ import { AppProviders } from "@/components/app-providers";
 import { DisableScrollRestoration } from "@/components/scroll-to-top";
 import { ServiceWorkerCleanup } from "@/components/sw-cleanup";
 import "./globals.css";
+import "@/styles/effects.css";
 
 // Replace with your GA4 Measurement ID
 const GA_MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_ID || "";
