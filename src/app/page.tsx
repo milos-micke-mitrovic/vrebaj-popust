@@ -1,10 +1,11 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import Image from "next/image";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { HeroBanner } from "@/components/hero-banner";
-import { getAllDealsAsync, STORE_INFO } from "@/lib/deals";
+import { TopDealsCarousel } from "@/components/top-deals-carousel";
+import { StoresCarousel } from "@/components/stores-carousel";
+import { getAllDealsAsync } from "@/lib/deals";
 import { Store } from "@/types/deal";
 
 // Revalidate every 5 minutes
@@ -48,6 +49,11 @@ export default async function Home() {
   const avgDiscount = Math.round(
     deals.reduce((sum, d) => sum + d.discountPercent, 0) / deals.length
   );
+
+  // Get top 10 deals by discount for carousel
+  const topDeals = [...deals]
+    .sort((a, b) => b.discountPercent - a.discountPercent)
+    .slice(0, 10);
 
   // WebSite structured data
   const websiteSchema = {
@@ -235,6 +241,9 @@ export default async function Home() {
           </div>
         </section>
 
+        {/* Top Deals Carousel */}
+        <TopDealsCarousel deals={topDeals} />
+
         {/* How it works */}
         <section className="py-16">
           <div className="mx-auto max-w-7xl px-4">
@@ -282,35 +291,8 @@ export default async function Home() {
           </div>
         </section>
 
-        {/* Stores we track */}
-        <section className="border-t bg-white dark:bg-gray-900 dark:border-gray-800 py-16">
-          <div className="mx-auto max-w-7xl px-4">
-            <h2 className="text-center text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
-              Prodavnice koje pratimo
-            </h2>
-            <div className="mt-12 grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-6">
-              {stores.map((store) => {
-                const info = STORE_INFO[store];
-                return (
-                  <div
-                    key={store}
-                    className="flex flex-col items-center gap-2"
-                  >
-                    <Image
-                      src={info.logo}
-                      alt={info.name}
-                      width={96}
-                      height={48}
-                      style={{ height: '48px', width: 'auto' }}
-                      className="object-contain grayscale hover:grayscale-0 transition-all dark:brightness-90 dark:hover:brightness-100"
-                    />
-                    <span className="text-sm text-gray-600 dark:text-gray-400">{info.name}</span>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
+        {/* Stores Carousel */}
+        <StoresCarousel stores={stores} />
 
         {/* CTA */}
         <section className="bg-gray-900 dark:bg-gray-800 py-16">

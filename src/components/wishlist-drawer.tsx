@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useWishlistContext } from "@/context/wishlist-context";
@@ -31,6 +31,7 @@ const ITEMS_PER_PAGE = 10;
 
 export function WishlistDrawer({ availableDealIds }: WishlistDrawerProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const { wishlist, isLoaded, isDrawerOpen, closeDrawer, removeFromWishlist, clearWishlist } =
     useWishlistContext();
   const [showClearConfirm, setShowClearConfirm] = useState(false);
@@ -43,6 +44,22 @@ export function WishlistDrawer({ availableDealIds }: WishlistDrawerProps) {
   const handleClose = () => {
     closeDrawer();
     setVisibleCount(ITEMS_PER_PAGE);
+  };
+
+  // Handle clicking on a wishlist item
+  const handleItemClick = () => {
+    // Only set origin if:
+    // 1. No existing origin (don't overwrite)
+    // 2. Current page is NOT a product detail page (those should preserve previous origin)
+    const existingOrigin = sessionStorage.getItem("dealsReturnUrl");
+    const isOnProductPage = pathname.startsWith("/ponuda/");
+
+    if (!existingOrigin && !isOnProductPage) {
+      // Set current page as origin
+      sessionStorage.setItem("dealsReturnUrl", pathname);
+    }
+
+    handleClose();
   };
 
   if (!isDrawerOpen) return null;
@@ -162,7 +179,7 @@ export function WishlistDrawer({ availableDealIds }: WishlistDrawerProps) {
                       {isAvailable && (
                         <Link
                           href={`/ponuda/${deal.id}`}
-                          onClick={handleClose}
+                          onClick={handleItemClick}
                           className="text-xs text-red-500 hover:underline"
                         >
                           Pogledaj
