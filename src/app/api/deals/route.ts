@@ -151,7 +151,7 @@ export async function GET(request: NextRequest) {
       orderBy = { salePrice: "desc" };
       break;
     case "newest":
-      orderBy = { scrapedAt: "desc" };
+      orderBy = { createdAt: "desc" };
       break;
     case "discount":
     default:

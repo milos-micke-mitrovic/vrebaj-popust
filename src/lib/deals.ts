@@ -364,6 +364,7 @@ function convertDeal(prismaDeal: PrismaDeal): Deal {
     gender: (prismaDeal.gender as Gender) || extractGender(prismaDeal.name, prismaDeal.url),
     category: getCategory(prismaDeal.categories, prismaDeal.name, prismaDeal.url),
     scrapedAt: prismaDeal.scrapedAt,
+    createdAt: prismaDeal.createdAt,
     sizes: prismaDeal.sizes,
     description: prismaDeal.description,
     detailImageUrl: prismaDeal.detailImageUrl,

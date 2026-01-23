@@ -8,6 +8,15 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Deal, Store } from "@/types/deal";
 import { formatPrice, getProxiedImageUrl } from "@/lib/utils";
 import { WishlistButton } from "@/components/wishlist-button";
+import { Tooltip } from "@/components/ui/tooltip";
+
+const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
+
+function isNewDeal(createdAt: Date | string): boolean {
+  const created = new Date(createdAt).getTime();
+  const now = Date.now();
+  return now - created < TWENTY_FOUR_HOURS;
+}
 
 interface DealCardProps {
   deal: Deal;
@@ -113,6 +122,16 @@ export function DealCard({ deal }: DealCardProps) {
           <div className="absolute right-2 bottom-2">
             <WishlistButton deal={deal} size="sm" />
           </div>
+          {/* New badge */}
+          {isNewDeal(deal.createdAt) && (
+            <div className="absolute left-2 bottom-2.5">
+              <Tooltip content="Dodato u poslednjih 24h">
+                <div className="rounded bg-green-500 px-2 py-1 text-[10px] font-bold text-white shadow-sm cursor-help">
+                  SVEŽE
+                </div>
+              </Tooltip>
+            </div>
+          )}
         </div>
         <CardContent className="p-3">
           {deal.brand && (
