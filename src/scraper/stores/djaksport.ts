@@ -151,7 +151,7 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
       categories.push("odeca/jakne");
     } else if (nameLower.includes("duks")) {
       categories.push("odeca/duksevi");
-    } else if (urlLower.includes("/top-") || urlLower.includes("-top-") || nameLower.startsWith("top ") || nameLower.includes(" top ")) {
+    } else if (urlLower.includes("/top-") || urlLower.includes("-top-") || nameLower.startsWith("top ") || nameLower.includes(" top ") || nameLower.includes(" bra ") || nameLower.includes(" bra") || nameLower.startsWith("bra ")) {
       categories.push("odeca/topovi");
     } else if (nameLower.includes("majica") || nameLower.includes("dres")) {
       categories.push("odeca/majice");

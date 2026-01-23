@@ -32,7 +32,7 @@ function mapCategory(vrsta: string): string | null {
   if (upper.includes("KOPAČKE") || upper.includes("KOPACKE")) return "obuca/kopacke";
 
   // Tops
-  if (upper.includes(" TOP") || upper.startsWith("TOP ") || upper.includes("SPORTS BRA") || upper.includes("TANK TOP") || upper.includes("CROP TOP")) return "odeca/topovi";
+  if (upper.includes(" TOP") || upper.startsWith("TOP ") || upper.includes("SPORTS BRA") || upper.includes("TANK TOP") || upper.includes("CROP TOP") || upper.includes(" BRA ") || upper.endsWith(" BRA") || upper.startsWith("BRA ")) return "odeca/topovi";
   if (upper.includes("MAJIC")) return "odeca/majice";
   if (upper.includes("DUKS")) return "odeca/duksevi";
   if (upper.includes("JAKN")) return "odeca/jakne";

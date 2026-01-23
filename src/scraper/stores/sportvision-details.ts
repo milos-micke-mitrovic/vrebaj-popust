@@ -31,7 +31,7 @@ function mapCategory(categoryText: string): string | null {
   if (lower.includes("čizme") || lower.includes("cizme")) return "obuca/cizme";
   if (lower.includes("sandale")) return "obuca/sandale";
   if (lower.includes("papuč") || lower.includes("papuc")) return "obuca/papuce";
-  if (lower.includes(" top") || lower.startsWith("top ") || lower.includes("sports bra") || lower.includes("tank top") || lower.includes("crop top")) return "odeca/topovi";
+  if (lower.includes(" top") || lower.startsWith("top ") || lower.includes("sports bra") || lower.includes("tank top") || lower.includes("crop top") || lower.includes(" bra ") || lower.endsWith(" bra") || lower.startsWith("bra ")) return "odeca/topovi";
   if (lower.includes("majic")) return "odeca/majice";
   if (lower.includes("duks")) return "odeca/duksevi";
   if (lower.includes("jakn")) return "odeca/jakne";

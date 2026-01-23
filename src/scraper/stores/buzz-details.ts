@@ -99,7 +99,7 @@ function extractCategoriesFromUrl(url: string, name: string): string[] {
       categories.push("obuca/sandale");
     } else if (nameLower.includes("japanke") || nameLower.includes("papuče") || nameLower.includes("papuce")) {
       categories.push("obuca/papuce");
-    } else if (nameLower.startsWith("top ") || nameLower.includes(" top ") || nameLower.includes("sports bra") || nameLower.includes("tank top") || nameLower.includes("crop top")) {
+    } else if (nameLower.startsWith("top ") || nameLower.includes(" top ") || nameLower.includes("sports bra") || nameLower.includes("tank top") || nameLower.includes("crop top") || nameLower.includes(" bra ") || nameLower.endsWith(" bra") || nameLower.startsWith("bra ")) {
       categories.push("odeca/topovi");
     } else if (nameLower.includes("polo") || nameLower.includes("majica")) {
       categories.push("odeca/majice");

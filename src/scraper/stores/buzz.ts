@@ -130,7 +130,7 @@ function extractCategories(url: string, name: string): string[] {
     } else if (nameLower.includes("japanke") || nameLower.includes("papuče") || nameLower.includes("papuce") || nameLower.includes("natikač") || nameLower.includes("natikac")) {
       categories.push("obuca/papuce");
     // Odeća - clothing
-    } else if (nameLower.startsWith("top ") || nameLower.includes(" top ") || nameLower.includes("sports bra") || nameLower.includes("tank top") || nameLower.includes("crop top")) {
+    } else if (nameLower.startsWith("top ") || nameLower.includes(" top ") || nameLower.includes("sports bra") || nameLower.includes("tank top") || nameLower.includes("crop top") || nameLower.includes(" bra ") || nameLower.endsWith(" bra") || nameLower.startsWith("bra ")) {
       categories.push("odeca/topovi");
     } else if (nameLower.includes("polo") || (nameLower.includes("majica") && !nameLower.includes("patike"))) {
       categories.push("odeca/majice");
