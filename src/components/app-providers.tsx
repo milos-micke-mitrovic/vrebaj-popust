@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/context/theme-context";
 import { WishlistProvider } from "@/context/wishlist-context";
 import { RecentlyViewedProvider } from "@/context/recently-viewed-context";
 import { WishlistDrawer } from "@/components/wishlist-drawer";
+import { ScrollToTopButton } from "@/components/scroll-to-top-button";
 
 interface AppProvidersProps {
   children: ReactNode;
@@ -20,6 +21,7 @@ export function AppProviders({ children, availableDealIds }: AppProvidersProps) 
         <RecentlyViewedProvider>
           {children}
           <WishlistDrawer availableDealIds={availableSet} />
+          <ScrollToTopButton />
         </RecentlyViewedProvider>
       </WishlistProvider>
     </ThemeProvider>

@@ -13,13 +13,43 @@ export default function GlobalError({
     console.error("Global error:", error);
   }, [error]);
 
+  // Using inline styles because global-error.tsx runs when root layout fails,
+  // which means Tailwind CSS won't be loaded
   return (
     <html lang="sr">
-      <body className="bg-gray-50">
-        <div className="flex min-h-screen flex-col items-center justify-center px-4 text-center">
-          <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-red-100">
+      <body
+        style={{
+          margin: 0,
+          backgroundColor: "#f9fafb",
+          fontFamily:
+            '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            minHeight: "100vh",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "0 16px",
+            textAlign: "center",
+          }}
+        >
+          <div
+            style={{
+              marginBottom: "24px",
+              display: "flex",
+              height: "80px",
+              width: "80px",
+              alignItems: "center",
+              justifyContent: "center",
+              borderRadius: "50%",
+              backgroundColor: "#fee2e2",
+            }}
+          >
             <svg
-              className="h-10 w-10 text-red-500"
+              style={{ height: "40px", width: "40px", color: "#ef4444" }}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -33,24 +63,65 @@ export default function GlobalError({
             </svg>
           </div>
 
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1
+            style={{
+              margin: 0,
+              fontSize: "24px",
+              fontWeight: "bold",
+              color: "#111827",
+            }}
+          >
             Ups! Nešto nije u redu
           </h1>
-          <p className="mt-4 text-gray-600 max-w-md">
-            Došlo je do greške. Molimo osvežite stranicu ili se vratite na početnu.
+          <p
+            style={{
+              marginTop: "16px",
+              color: "#4b5563",
+              maxWidth: "400px",
+              lineHeight: 1.5,
+            }}
+          >
+            Došlo je do greške. Molimo osvežite stranicu ili se vratite na
+            početnu.
           </p>
 
-          <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <div
+            style={{
+              marginTop: "32px",
+              display: "flex",
+              flexWrap: "wrap",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "16px",
+            }}
+          >
             <button
               onClick={reset}
-              className="cursor-pointer rounded-lg bg-red-500 px-6 py-3 font-medium text-white hover:bg-red-600 transition-colors"
+              style={{
+                cursor: "pointer",
+                borderRadius: "8px",
+                backgroundColor: "#ef4444",
+                padding: "12px 24px",
+                fontWeight: 500,
+                color: "white",
+                border: "none",
+                fontSize: "16px",
+              }}
             >
               Pokušaj ponovo
             </button>
             {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
             <a
               href="/"
-              className="rounded-lg border border-gray-300 px-6 py-3 font-medium text-gray-700 hover:bg-gray-100 transition-colors"
+              style={{
+                borderRadius: "8px",
+                border: "1px solid #d1d5db",
+                padding: "12px 24px",
+                fontWeight: 500,
+                color: "#374151",
+                textDecoration: "none",
+                fontSize: "16px",
+              }}
             >
               Početna stranica
             </a>
