@@ -9,6 +9,8 @@ import { Deal, Store } from "@/types/deal";
 import { formatPrice, getProxiedImageUrl } from "@/lib/utils";
 import { WishlistButton } from "@/components/wishlist-button";
 import { Tooltip } from "@/components/ui/tooltip";
+import { useQuickView } from "@/context/quick-view-context";
+import { Eye } from "lucide-react";
 
 const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
 
@@ -67,6 +69,7 @@ export function DealCard({ deal }: DealCardProps) {
   const storeInfo = STORE_INFO[deal.store];
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { openQuickView } = useQuickView();
 
   // Save current URL with filters and scroll position when clicking a product
   // Only save when on /ponude pages, not on product detail pages
@@ -96,7 +99,7 @@ export function DealCard({ deal }: DealCardProps) {
             unoptimized
           />
           {/* Discount ribbon */}
-          <div className="absolute -left-8 top-2 rotate-[-45deg] bg-red-500 px-8 py-0.5 text-xs font-bold text-white shadow-md ribbon-shimmer">
+          <div className="absolute -left-8 top-2 rotate-[-45deg] bg-gradient-to-r from-red-500 to-red-600 px-8 py-0.5 text-xs font-bold text-white shadow-md ribbon-shimmer">
             -{deal.discountPercent}%
           </div>
           {/* Store logo */}
@@ -118,8 +121,22 @@ export function DealCard({ deal }: DealCardProps) {
               </div>
             )}
           </div>
-          {/* Wishlist button */}
-          <div className="absolute right-2 bottom-2">
+          {/* Bottom right buttons */}
+          <div className="absolute right-2 bottom-2 flex items-center gap-1.5">
+            {/* Quick view button */}
+            <Tooltip content="Brzi pregled">
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  openQuickView(deal);
+                }}
+                className="p-1.5 rounded-full bg-white/90 shadow-sm hover:bg-white transition-all cursor-pointer"
+              >
+                <Eye className="w-5 h-5 text-gray-600" />
+              </button>
+            </Tooltip>
+            {/* Wishlist button */}
             <WishlistButton deal={deal} size="sm" />
           </div>
           {/* New badge */}
