@@ -4,6 +4,7 @@ import { GoogleAnalytics } from "@next/third-parties/google";
 import { getAllDealsAsync } from "@/lib/deals";
 import { AppProviders } from "@/components/app-providers";
 import { DisableScrollRestoration } from "@/components/scroll-to-top";
+import { ServiceWorkerCleanup } from "@/components/sw-cleanup";
 import "./globals.css";
 
 // Replace with your GA4 Measurement ID
@@ -134,7 +135,6 @@ export default async function RootLayout({
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="manifest" href="/manifest.json" />
         {/* Preload hero image for faster LCP */}
         <link
           rel="preload"
@@ -170,6 +170,7 @@ export default async function RootLayout({
       <body
         className={`${outfit.variable} font-sans antialiased`}
       >
+        <ServiceWorkerCleanup />
         <DisableScrollRestoration />
         <AppProviders availableDealIds={availableDealIds}>
           {children}
