@@ -15,6 +15,7 @@ import { ProductWishlistButton } from "@/components/product-wishlist-button";
 import { ProductImage } from "@/components/product-image";
 import { ProductBreadcrumb } from "@/components/product-breadcrumb";
 import { ScrollToTop } from "@/components/scroll-to-top";
+import { TrackProductView } from "@/components/track-product-view";
 import { Deal } from "@/types/deal";
 
 // Calculate price valid date at build time (7 days from build)
@@ -562,6 +563,7 @@ export default async function DealPage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
       />
+      <TrackProductView deal={deal} />
       <ScrollToTop />
 
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950">

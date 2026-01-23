@@ -3,6 +3,7 @@
 import { ReactNode } from "react";
 import { ThemeProvider } from "@/context/theme-context";
 import { WishlistProvider } from "@/context/wishlist-context";
+import { RecentlyViewedProvider } from "@/context/recently-viewed-context";
 import { WishlistDrawer } from "@/components/wishlist-drawer";
 
 interface AppProvidersProps {
@@ -16,8 +17,10 @@ export function AppProviders({ children, availableDealIds }: AppProvidersProps) 
   return (
     <ThemeProvider>
       <WishlistProvider>
-        {children}
-        <WishlistDrawer availableDealIds={availableSet} />
+        <RecentlyViewedProvider>
+          {children}
+          <WishlistDrawer availableDealIds={availableSet} />
+        </RecentlyViewedProvider>
       </WishlistProvider>
     </ThemeProvider>
   );
