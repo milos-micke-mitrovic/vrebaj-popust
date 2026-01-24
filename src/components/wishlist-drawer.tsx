@@ -169,7 +169,7 @@ export function WishlistDrawer({ availableDealIds }: WishlistDrawerProps) {
   const renderEmptyState = () => {
     if (activeTab === "wishlist") {
       return (
-        <div className="flex flex-col items-center justify-center h-full text-center px-4">
+        <div className="flex flex-col items-center justify-center min-h-[250px] text-center px-4 py-8">
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
             <svg className="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -190,7 +190,7 @@ export function WishlistDrawer({ availableDealIds }: WishlistDrawerProps) {
     }
 
     return (
-      <div className="flex flex-col items-center justify-center h-full text-center px-4">
+      <div className="flex flex-col items-center justify-center min-h-[250px] text-center px-4 py-8">
         <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
           <svg className="h-8 w-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />

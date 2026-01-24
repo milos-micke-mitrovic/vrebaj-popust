@@ -1,4 +1,14 @@
-import { Category, Gender } from "@/types/deal";
+import { Category, Gender, Store } from "@/types/deal";
+
+// Known stores (URL slug → internal Store value)
+const STORE_SLUGS: Record<string, Store> = {
+  djaksport: "djaksport",
+  planeta: "planeta",
+  sportvision: "sportvision",
+  nsport: "nsport",
+  buzz: "buzz",
+  officeshoes: "officeshoes",
+};
 
 // Known genders (URL slug → internal value)
 const GENDER_SLUGS: Record<string, Gender> = {
@@ -58,12 +68,23 @@ const CATEGORY_DISPLAY: Record<Category, string> = {
   ostalo: "ostalo",
 };
 
+// Display names for stores
+const STORE_DISPLAY: Record<Store, string> = {
+  djaksport: "Djak Sport",
+  planeta: "Planeta Sport",
+  sportvision: "Sport Vision",
+  nsport: "N Sport",
+  buzz: "Buzz",
+  officeshoes: "Office Shoes",
+};
+
 export interface ParsedFilter {
   gender: Gender | null;
   brand: string | null;      // Uppercase for API
   brandSlug: string | null;  // Original slug
   category: Category | null;
   categorySlug: string | null;
+  store: Store | null;
   isValid: boolean;
 }
 
@@ -84,6 +105,7 @@ export function parseFilterSlug(slug: string): ParsedFilter {
     brandSlug: null,
     category: null,
     categorySlug: null,
+    store: null,
     isValid: false,
   };
 
@@ -109,8 +131,12 @@ export function parseFilterSlug(slug: string): ParsedFilter {
   }
 
   for (const part of parts) {
+    // Check if it's a store FIRST (before treating as brand)
+    if (STORE_SLUGS[part] && !result.store) {
+      result.store = STORE_SLUGS[part];
+    }
     // Check if it's a gender
-    if (GENDER_SLUGS[part] && !result.gender) {
+    else if (GENDER_SLUGS[part] && !result.gender) {
       result.gender = GENDER_SLUGS[part];
     }
     // Check if it's a category
@@ -126,7 +152,7 @@ export function parseFilterSlug(slug: string): ParsedFilter {
   }
 
   // Valid if we found at least one filter
-  result.isValid = !!(result.gender || result.brand || result.category);
+  result.isValid = !!(result.gender || result.brand || result.category || result.store);
 
   return result;
 }
@@ -149,6 +175,10 @@ export function generateSeoTitle(parsed: ParsedFilter): string {
     parts.push(`za ${GENDER_DISPLAY[parsed.gender]}`);
   }
 
+  if (parsed.store) {
+    parts.push(`u ${STORE_DISPLAY[parsed.store]}`);
+  }
+
   if (parts.length === 0) {
     return "Proizvodi na popustu";
   }
@@ -165,8 +195,9 @@ export function generateSeoDescription(parsed: ParsedFilter): string {
   const brandText = parsed.brand || "Sportski proizvodi";
   const categoryText = parsed.category ? CATEGORY_DISPLAY[parsed.category] : "oprema";
   const genderText = parsed.gender ? ` za ${GENDER_DISPLAY[parsed.gender]}` : "";
+  const storeText = parsed.store ? ` u prodavnici ${STORE_DISPLAY[parsed.store]}` : "";
 
-  return `${brandText} ${categoryText}${genderText} sa popustima preko 50%. Pronađi najbolje ponude na sportsku opremu u Srbiji.`;
+  return `${brandText} ${categoryText}${genderText}${storeText} sa popustima preko 50%. Pronađi najbolje ponude na sportsku opremu u Srbiji.`;
 }
 
 /**
@@ -201,4 +232,4 @@ export function generateKeywords(parsed: ParsedFilter): string[] {
 }
 
 // Export constants for use elsewhere
-export { GENDER_SLUGS, CATEGORY_SLUGS, GENDER_DISPLAY, CATEGORY_DISPLAY };
+export { GENDER_SLUGS, CATEGORY_SLUGS, GENDER_DISPLAY, CATEGORY_DISPLAY, STORE_SLUGS, STORE_DISPLAY };

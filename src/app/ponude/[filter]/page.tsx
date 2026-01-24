@@ -114,6 +114,9 @@ function buildWhereClause(parsed: ParsedFilter) {
   if (parsed.gender) {
     where.gender = parsed.gender;
   }
+  if (parsed.store) {
+    where.store = parsed.store;
+  }
   // Category filtering uses the categories array field
   if (parsed.category) {
     // Map category to categoryPath for database query
@@ -241,6 +244,7 @@ export default async function FilterPage({ params }: Props) {
               initialCategories={parsed.category ? [parsed.category] : undefined}
               initialBrands={parsed.brand ? [parsed.brand] : undefined}
               initialGenders={parsed.gender ? [parsed.gender] : undefined}
+              initialStores={parsed.store ? [parsed.store] : undefined}
               seoTitle={title}
               seoSubtitle="Proizvodi sa popustima preko 50%"
               filterPageSlug={filter}
