@@ -1,22 +1,9 @@
 import { Category, Gender, Store } from "@/types/deal";
 
 // Known stores (URL slug → internal Store value)
-// Multiple slug variations map to same store
+// Must match sitemap.ts exactly
 const STORE_SLUGS: Record<string, Store> = {
-  // Djak Sport
-  djaksport: "djaksport",
-  "djak": "djaksport",
-  // Planeta Sport
-  planeta: "planeta",
-  planetasport: "planeta",
-  // Sport Vision
-  sportvision: "sportvision",
-  // N Sport
-  nsport: "nsport",
-  // Buzz
   buzz: "buzz",
-  // Office Shoes
-  officeshoes: "officeshoes",
 };
 
 // Known genders (URL slug → internal value)
@@ -41,7 +28,7 @@ const CATEGORY_SLUGS: Record<string, Category> = {
 };
 
 // Known multi-word stores (URL slug → Store value)
-// These must be matched FIRST before splitting by dash
+// Must match sitemap.ts exactly
 const MULTI_WORD_STORES: Record<string, Store> = {
   "djak-sport": "djaksport",
   "planeta-sport": "planeta",

@@ -48,7 +48,7 @@ const FILTER_PAGES = [
   "zenski",
   "deciji",
   // Stores
-  "djaksport",
+  "djak-sport",
   "planeta-sport",
   "sport-vision",
   "n-sport",
