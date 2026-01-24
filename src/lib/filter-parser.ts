@@ -1,12 +1,21 @@
 import { Category, Gender, Store } from "@/types/deal";
 
 // Known stores (URL slug → internal Store value)
+// Multiple slug variations map to same store
 const STORE_SLUGS: Record<string, Store> = {
+  // Djak Sport
   djaksport: "djaksport",
+  "djak": "djaksport",
+  // Planeta Sport
   planeta: "planeta",
+  planetasport: "planeta",
+  // Sport Vision
   sportvision: "sportvision",
+  // N Sport
   nsport: "nsport",
+  // Buzz
   buzz: "buzz",
+  // Office Shoes
   officeshoes: "officeshoes",
 };
 
@@ -31,6 +40,16 @@ const CATEGORY_SLUGS: Record<string, Category> = {
   ranac: "ranac",
 };
 
+// Known multi-word stores (URL slug → Store value)
+// These must be matched FIRST before splitting by dash
+const MULTI_WORD_STORES: Record<string, Store> = {
+  "djak-sport": "djaksport",
+  "planeta-sport": "planeta",
+  "sport-vision": "sportvision",
+  "office-shoes": "officeshoes",
+  "n-sport": "nsport",
+};
+
 // Known multi-word brands (URL slug → brand name for API)
 // These must be matched FIRST before splitting by dash
 const MULTI_WORD_BRANDS: Record<string, string> = {
@@ -39,10 +58,6 @@ const MULTI_WORD_BRANDS: Record<string, string> = {
   "the-north-face": "THE NORTH FACE",
   "tommy-hilfiger": "TOMMY HILFIGER",
   "calvin-klein": "CALVIN KLEIN",
-  "office-shoes": "OFFICE SHOES",
-  "planeta-sport": "PLANETA SPORT",
-  "sport-vision": "SPORT VISION",
-  "n-sport": "N SPORT",
 };
 
 // Display names for genders
@@ -114,7 +129,17 @@ export function parseFilterSlug(slug: string): ParsedFilter {
   let remaining = slug.toLowerCase();
   const parts: string[] = [];
 
-  // Step 1: Extract known multi-word brands first
+  // Step 1: Extract known multi-word stores first
+  for (const [storeSlug, storeValue] of Object.entries(MULTI_WORD_STORES)) {
+    if (remaining.includes(storeSlug)) {
+      result.store = storeValue;
+      // Remove the store from remaining string
+      remaining = remaining.replace(storeSlug, "").replace(/^-+|-+$/g, "").replace(/-{2,}/g, "-");
+      break;
+    }
+  }
+
+  // Step 2: Extract known multi-word brands
   for (const [brandSlug, brandName] of Object.entries(MULTI_WORD_BRANDS)) {
     if (remaining.includes(brandSlug)) {
       result.brand = brandName;
