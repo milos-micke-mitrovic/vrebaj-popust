@@ -7,6 +7,7 @@ import { TopDealsCarousel } from "@/components/top-deals-carousel";
 import { StoresCarousel } from "@/components/stores-carousel";
 import { FAQSection } from "@/components/faq-section";
 import { ScrollReveal } from "@/components/scroll-reveal";
+import { WaveText } from "@/components/wave-text";
 import { getAllDealsAsync } from "@/lib/deals";
 import { Store } from "@/types/deal";
 
@@ -48,9 +49,6 @@ export default async function Home() {
   const stores = [...new Set(deals.map((d) => d.store))] as Store[];
   const totalDeals = deals.length;
   const displayCount = roundToThousand(totalDeals);
-  const avgDiscount = Math.round(
-    deals.reduce((sum, d) => sum + d.discountPercent, 0) / deals.length
-  );
 
   // Get top 10 deals by discount for carousel
   const topDeals = [...deals]
@@ -194,7 +192,7 @@ export default async function Home() {
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
               Sportski popusti
               <br />
-              <span className="text-red-400">preko 50%</span>
+              <WaveText text="preko 50%" />
             </h1>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-gray-200 sm:text-xl">
               Svakodnevno pretražujemo najveće sportske prodavnice u Srbiji i
@@ -210,40 +208,6 @@ export default async function Home() {
             </div>
           </div>
         </HeroBanner>
-
-        {/* Stats Section */}
-        <section className="bg-white dark:bg-gray-900 py-12">
-          <ScrollReveal>
-            <div className="mx-auto max-w-7xl px-4">
-              <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-red-500 sm:text-4xl">
-                    {displayCount}+
-                  </div>
-                  <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">Aktivnih ponuda</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-red-500 sm:text-4xl">
-                    {stores.length}
-                  </div>
-                  <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">Prodavnica</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-red-500 sm:text-4xl">
-                    {avgDiscount}%
-                  </div>
-                  <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">Prosečan popust</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-red-500 sm:text-4xl">
-                    24h
-                  </div>
-                  <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">Ažuriranje</div>
-                </div>
-              </div>
-            </div>
-          </ScrollReveal>
-        </section>
 
         {/* Top Deals Carousel */}
         <TopDealsCarousel deals={topDeals} />
