@@ -222,7 +222,7 @@ export function TopDealsCarousel({ deals }: TopDealsCarouselProps) {
   if (deals.length === 0) return null;
 
   return (
-    <section id="top-deals" className="py-12 bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-950 overflow-hidden scroll-mt-16">
+    <section id="top-deals" className="py-12 bg-gray-50 dark:bg-gray-800 overflow-hidden scroll-mt-16">
       <div className="mx-auto max-w-7xl px-4">
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
@@ -237,8 +237,8 @@ export function TopDealsCarousel({ deals }: TopDealsCarouselProps) {
       {/* Carousel container */}
       <div className="relative">
         {/* Gradient masks */}
-        <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-gray-50 dark:from-gray-900 to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-gray-50 dark:from-gray-900 to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-gray-50 dark:from-gray-800 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-gray-50 dark:from-gray-800 to-transparent z-10 pointer-events-none" />
 
         {/* Scrolling track */}
         <div

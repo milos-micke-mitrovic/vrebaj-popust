@@ -5,6 +5,8 @@ import { Footer } from "@/components/footer";
 import { HeroBanner } from "@/components/hero-banner";
 import { TopDealsCarousel } from "@/components/top-deals-carousel";
 import { StoresCarousel } from "@/components/stores-carousel";
+import { FAQSection } from "@/components/faq-section";
+import { ScrollReveal } from "@/components/scroll-reveal";
 import { getAllDealsAsync } from "@/lib/deals";
 import { Store } from "@/types/deal";
 
@@ -210,107 +212,71 @@ export default async function Home() {
         </HeroBanner>
 
         {/* Stats Section */}
-        <section className="border-b bg-white dark:bg-gray-900 dark:border-gray-800 py-12">
-          <div className="mx-auto max-w-7xl px-4">
-            <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
-              <div className="text-center">
-                <div className="text-3xl font-bold text-red-500 sm:text-4xl">
-                  {displayCount}+
+        <section className="bg-white dark:bg-gray-900 py-12">
+          <ScrollReveal>
+            <div className="mx-auto max-w-7xl px-4">
+              <div className="grid grid-cols-2 gap-8 md:grid-cols-4">
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-red-500 sm:text-4xl">
+                    {displayCount}+
+                  </div>
+                  <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">Aktivnih ponuda</div>
                 </div>
-                <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">Aktivnih ponuda</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-red-500 sm:text-4xl">
-                  {stores.length}
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-red-500 sm:text-4xl">
+                    {stores.length}
+                  </div>
+                  <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">Prodavnica</div>
                 </div>
-                <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">Prodavnica</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-red-500 sm:text-4xl">
-                  {avgDiscount}%
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-red-500 sm:text-4xl">
+                    {avgDiscount}%
+                  </div>
+                  <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">Prosečan popust</div>
                 </div>
-                <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">Prosečan popust</div>
-              </div>
-              <div className="text-center">
-                <div className="text-3xl font-bold text-red-500 sm:text-4xl">
-                  24h
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-red-500 sm:text-4xl">
+                    24h
+                  </div>
+                  <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">Ažuriranje</div>
                 </div>
-                <div className="mt-2 text-sm text-gray-600 dark:text-gray-400">Ažuriranje</div>
               </div>
             </div>
-          </div>
+          </ScrollReveal>
         </section>
 
         {/* Top Deals Carousel */}
         <TopDealsCarousel deals={topDeals} />
 
-        {/* How it works */}
-        <section className="py-16">
-          <div className="mx-auto max-w-7xl px-4">
-            <h2 className="text-center text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
-              Kako funkcioniše?
-            </h2>
-            <div className="mt-12 grid gap-8 md:grid-cols-3">
-              <div className="text-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 text-2xl dark:text-red-400">
-                  1
-                </div>
-                <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
-                  Pretražujemo prodavnice
-                </h3>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">
-                  Automatski skeniramo najveće sportske prodavnice u Srbiji svaki
-                  dan.
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 text-2xl dark:text-red-400">
-                  2
-                </div>
-                <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
-                  Filtriramo popuste
-                </h3>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">
-                  Prikazujemo samo proizvode sa popustom preko 50% - prave
-                  uštede.
-                </p>
-              </div>
-              <div className="text-center">
-                <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30 text-2xl dark:text-red-400">
-                  3
-                </div>
-                <h3 className="mt-4 text-lg font-semibold text-gray-900 dark:text-white">
-                  Ti uštediš
-                </h3>
-                <p className="mt-2 text-gray-600 dark:text-gray-400">
-                  Pronađi savršenu ponudu i kupi direktno u prodavnici po
-                  sniženoj ceni.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
         {/* Stores Carousel */}
-        <StoresCarousel stores={stores} />
+        <ScrollReveal>
+          <StoresCarousel stores={stores} />
+        </ScrollReveal>
+
+        {/* FAQ Section */}
+        <ScrollReveal>
+          <FAQSection />
+        </ScrollReveal>
 
         {/* CTA */}
-        <section className="bg-gray-900 dark:bg-gray-800 py-16">
-          <div className="mx-auto max-w-7xl px-4 text-center">
-            <h2 className="text-2xl font-bold text-white sm:text-3xl">
-              Spreman da uštediš?
-            </h2>
-            <p className="mx-auto mt-4 max-w-xl text-gray-400">
-              Pregledaj sve aktivne ponude i pronađi savršen proizvod po
-              sniženoj ceni.
-            </p>
-            <Link
-              href="/ponude"
-              className="mt-8 inline-block rounded-lg bg-red-500 px-8 py-4 text-lg font-semibold text-white hover:bg-red-600 transition-colors"
-            >
-              Pregledaj ponude
-            </Link>
-          </div>
+        <section className="bg-gray-900 dark:bg-gray-950 py-16">
+          <ScrollReveal>
+            <div className="mx-auto max-w-7xl px-4 text-center">
+              <h2 className="text-2xl font-bold text-white sm:text-3xl">
+                Spreman da uštediš?
+              </h2>
+              <p className="mx-auto mt-4 max-w-xl text-gray-400">
+                Pregledaj sve aktivne ponude i pronađi savršen proizvod po
+                sniženoj ceni.
+              </p>
+              <Link
+                href="/ponude"
+                className="mt-8 inline-block rounded-lg bg-red-500 px-8 py-4 text-lg font-semibold text-white hover:bg-red-600 transition-colors"
+              >
+                Pregledaj ponude
+              </Link>
+            </div>
+          </ScrollReveal>
         </section>
 
         <Footer />

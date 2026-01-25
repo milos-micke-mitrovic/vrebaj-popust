@@ -13,7 +13,7 @@ export function StoresCarousel({ stores }: StoresCarouselProps) {
   const duplicatedStores = [...stores, ...stores];
 
   return (
-    <section className="border-t bg-white dark:bg-gray-900 dark:border-gray-800 py-12 overflow-hidden">
+    <section className="bg-white dark:bg-gray-900 py-12 overflow-hidden">
       <div className="mx-auto max-w-7xl px-4">
         <h2 className="text-center text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl mb-8">
           Prodavnice koje pratimo
