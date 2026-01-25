@@ -8,7 +8,7 @@ import { ScrollFade } from "./scroll-fade";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SearchX } from "lucide-react";
+import { SearchX, Percent, Banknote, Users, ShoppingBag, Grid3X3, Footprints, Shirt, Tag } from "lucide-react";
 import { useDealsApi } from "@/hooks/use-deals-api";
 
 interface DealsGridProps {
@@ -637,6 +637,7 @@ export function DealsGrid({
             onClick={() => toggleSection("discount")}
             className="flex items-center gap-2 cursor-pointer"
           >
+            <Percent className="w-4 h-4 text-gray-500" />
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Popust</h3>
             {minDiscount > 50 && (
               <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">1</span>
@@ -695,6 +696,7 @@ export function DealsGrid({
             onClick={() => toggleSection("price")}
             className="flex items-center gap-2 cursor-pointer"
           >
+            <Banknote className="w-4 h-4 text-gray-500" />
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Cena (RSD)</h3>
             {(minPrice !== null || maxPrice !== null) && (
               <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">
@@ -784,6 +786,7 @@ export function DealsGrid({
             onClick={() => toggleSection("gender")}
             className="flex items-center gap-2 cursor-pointer"
           >
+            <Users className="w-4 h-4 text-gray-500" />
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Pol</h3>
             {selectedGenders.length > 0 && (
               <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">{selectedGenders.length}</span>
@@ -837,6 +840,7 @@ export function DealsGrid({
             onClick={() => toggleSection("store")}
             className="flex items-center gap-2 cursor-pointer"
           >
+            <ShoppingBag className="w-4 h-4 text-gray-500" />
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Prodavnica</h3>
             {selectedStores.length > 0 && (
               <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">{selectedStores.length}</span>
@@ -902,6 +906,7 @@ export function DealsGrid({
             onClick={() => toggleSection("category")}
             className="flex items-center gap-2 cursor-pointer"
           >
+            <Grid3X3 className="w-4 h-4 text-gray-500" />
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Kategorija</h3>
             {selectedCategoryPaths.length > 0 && (
               <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">{selectedCategoryPaths.length}</span>
@@ -1034,6 +1039,7 @@ export function DealsGrid({
               onClick={() => toggleSection("shoeSize")}
               className="flex items-center gap-2 cursor-pointer"
             >
+              <Footprints className="w-4 h-4 text-gray-500" />
               <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Veličina obuće</h3>
               {selectedShoeCount > 0 && (
                 <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">{selectedShoeCount}</span>
@@ -1094,6 +1100,7 @@ export function DealsGrid({
               onClick={() => toggleSection("clothingSize")}
               className="flex items-center gap-2 cursor-pointer"
             >
+              <Shirt className="w-4 h-4 text-gray-500" />
               <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Veličina odeće</h3>
               {selectedClothingCount > 0 && (
                 <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">{selectedClothingCount}</span>
@@ -1149,6 +1156,7 @@ export function DealsGrid({
             onClick={() => toggleSection("brand")}
             className="flex items-center gap-2 cursor-pointer"
           >
+            <Tag className="w-4 h-4 text-gray-500" />
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Brend</h3>
             {selectedBrands.length > 0 && (
               <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">{selectedBrands.length}</span>
