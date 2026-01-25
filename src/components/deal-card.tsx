@@ -131,7 +131,7 @@ export function DealCard({ deal }: DealCardProps) {
                   e.stopPropagation();
                   openQuickView(deal);
                 }}
-                className="p-1.5 rounded-full bg-white/90 shadow-sm hover:bg-white transition-all cursor-pointer"
+                className="p-1.5 rounded-full bg-white/90 shadow-lg hover:bg-white transition-all cursor-pointer"
               >
                 <Eye className="w-5 h-5 text-gray-600" />
               </button>

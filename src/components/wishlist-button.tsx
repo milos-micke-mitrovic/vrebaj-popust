@@ -31,7 +31,7 @@ export function WishlistButton({ deal, size = "sm", className = "" }: WishlistBu
           e.stopPropagation();
           toggleWishlist(deal);
         }}
-        className={`${padding} rounded-full bg-white/90 hover:bg-white shadow-sm transition-all cursor-pointer ${className}`}
+        className={`${padding} rounded-full bg-white/90 hover:bg-white shadow-lg transition-all cursor-pointer ${className}`}
         aria-label={tooltipText}
       >
         {inWishlist ? (
