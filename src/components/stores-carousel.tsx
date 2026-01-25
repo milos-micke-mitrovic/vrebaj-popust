@@ -13,7 +13,7 @@ export function StoresCarousel({ stores }: StoresCarouselProps) {
   const duplicatedStores = [...stores, ...stores];
 
   return (
-    <section className="bg-white dark:bg-gray-900 py-12 overflow-hidden">
+    <section className="bg-white dark:bg-gray-800 py-12 overflow-hidden">
       <div className="mx-auto max-w-7xl px-4">
         <h2 className="text-center text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl mb-8">
           Prodavnice koje pratimo
@@ -23,8 +23,8 @@ export function StoresCarousel({ stores }: StoresCarouselProps) {
       {/* Infinite scroll container */}
       <div className="relative">
         {/* Gradient masks for smooth edges */}
-        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white dark:from-gray-900 to-transparent z-10 pointer-events-none" />
-        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white dark:from-gray-900 to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white dark:from-gray-800 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white dark:from-gray-800 to-transparent z-10 pointer-events-none" />
 
         {/* Scrolling track */}
         <div className="flex animate-scroll hover:pause-animation">

@@ -44,6 +44,17 @@ function roundToThousand(n: number): number {
   return Math.floor(n / 1000) * 1000;
 }
 
+// Serbian grammar for "ponuda" based on number
+function getPonudaForm(n: number): string {
+  const lastTwo = n % 100;
+  const lastOne = n % 10;
+
+  if (lastTwo >= 11 && lastTwo <= 19) return "ponuda";
+  if (lastOne === 1) return "ponuda";
+  if (lastOne >= 2 && lastOne <= 4) return "ponude";
+  return "ponuda";
+}
+
 export default async function Home() {
   const deals = await getAllDealsAsync();
   const stores = [...new Set(deals.map((d) => d.store))] as Store[];
@@ -201,9 +212,9 @@ export default async function Home() {
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link
                 href="/ponude"
-                className="rounded-lg bg-red-600 px-8 py-4 text-lg font-semibold text-white shadow-lg hover:bg-red-700 transition-colors"
+                className="rounded-lg bg-red-600 px-8 py-4 text-lg font-semibold text-white shadow-lg hover:bg-red-700 transition-colors animate-pulse-glow"
               >
-                Pregledaj {totalDeals} ponuda
+                Pregledaj {totalDeals} {getPonudaForm(totalDeals)}
               </Link>
             </div>
           </div>
@@ -235,7 +246,7 @@ export default async function Home() {
               </p>
               <Link
                 href="/ponude"
-                className="mt-8 inline-block rounded-lg bg-red-500 px-8 py-4 text-lg font-semibold text-white hover:bg-red-600 transition-colors"
+                className="mt-8 inline-block rounded-lg bg-red-500 px-8 py-4 text-lg font-semibold text-white hover:bg-red-600 transition-colors animate-pulse-glow"
               >
                 Pregledaj ponude
               </Link>

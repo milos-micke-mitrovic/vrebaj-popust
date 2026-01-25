@@ -268,3 +268,19 @@ input[type="search"]::-webkit-search-cancel-button:hover {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
+
+/* Pulsing glow animation for CTA buttons */
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 25px rgba(239, 68, 68, 0.5);
+    transform: scale(1);
+  }
+  50% {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 0 45px rgba(239, 68, 68, 0.7);
+    transform: scale(1.015);
+  }
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
+}

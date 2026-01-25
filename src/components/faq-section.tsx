@@ -56,7 +56,7 @@ export function FAQSection() {
   };
 
   return (
-    <section className="py-16 bg-gray-50 dark:bg-gray-800">
+    <section className="py-16 bg-gray-50 dark:bg-gray-900">
       <div className="mx-auto max-w-5xl px-4">
         <h2 className="text-center text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl">
           Česta pitanja
