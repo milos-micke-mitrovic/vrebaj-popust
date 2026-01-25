@@ -19,17 +19,13 @@ export function WaveText({ text }: WaveTextProps) {
   return (
     <span className="inline-block">
       {chars.map((char, index) => {
-        // Calculate gradient color based on position
+        // Calculate gradient color based on position (white to red)
         const progress = index / (totalChars - 1);
-        let color: string;
-        if (progress < 0.5) {
-          // Red to orange
-          color = `rgb(248, ${132 + progress * 2 * (196 - 132)}, 60)`;
-        } else {
-          // Orange to yellow
-          const p = (progress - 0.5) * 2;
-          color = `rgb(250, ${196 + p * (204 - 196)}, ${60 + p * (21 - 60)})`;
-        }
+        // White (#ffffff) to Red (#ef4444)
+        const r = Math.round(255 - progress * (255 - 239));
+        const g = Math.round(255 - progress * (255 - 68));
+        const b = Math.round(255 - progress * (255 - 68));
+        const color = `rgb(${r}, ${g}, ${b})`;
 
         return (
           <span

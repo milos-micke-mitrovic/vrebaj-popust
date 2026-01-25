@@ -212,7 +212,7 @@ export default async function Home() {
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link
                 href="/ponude"
-                className="rounded-lg bg-red-600 px-8 py-4 text-lg font-semibold text-white shadow-lg hover:bg-red-700 transition-colors animate-pulse-glow"
+                className="rounded-lg bg-red-600 px-8 py-4 text-lg font-semibold text-white shadow-lg hover:bg-red-700 transition-colors animate-gradient-border"
               >
                 Pregledaj {totalDeals} {getPonudaForm(totalDeals)}
               </Link>
@@ -246,7 +246,7 @@ export default async function Home() {
               </p>
               <Link
                 href="/ponude"
-                className="mt-8 inline-block rounded-lg bg-red-500 px-8 py-4 text-lg font-semibold text-white hover:bg-red-600 transition-colors animate-pulse-glow"
+                className="mt-8 inline-block rounded-lg bg-red-500 px-8 py-4 text-lg font-semibold text-white hover:bg-red-600 transition-colors animate-gradient-border"
               >
                 Pregledaj ponude
               </Link>
