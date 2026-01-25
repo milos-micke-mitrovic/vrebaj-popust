@@ -6,9 +6,13 @@ interface ScrollFadeProps {
   children: ReactNode;
   maxHeight: string;
   className?: string;
+  fadeColor?: "white" | "gray";
 }
 
-export function ScrollFade({ children, maxHeight, className = "" }: ScrollFadeProps) {
+export function ScrollFade({ children, maxHeight, className = "", fadeColor = "white" }: ScrollFadeProps) {
+  const fadeClasses = fadeColor === "gray"
+    ? "from-gray-50 via-gray-50/80 dark:from-gray-800 dark:via-gray-800/80"
+    : "from-white via-white/80 dark:from-gray-900 dark:via-gray-900/80";
   const scrollRef = useRef<HTMLDivElement>(null);
   const [showTopFade, setShowTopFade] = useState(false);
   const [showBottomFade, setShowBottomFade] = useState(false);
@@ -41,7 +45,7 @@ export function ScrollFade({ children, maxHeight, className = "" }: ScrollFadePr
     <div className="relative overflow-hidden">
       {/* Top fade */}
       <div
-        className={`pointer-events-none absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-white via-white/80 to-transparent dark:from-gray-900 dark:via-gray-900/80 z-10 transition-opacity duration-200 ${
+        className={`pointer-events-none absolute top-0 left-0 right-0 h-8 bg-gradient-to-b ${fadeClasses} to-transparent z-10 transition-opacity duration-200 ${
           showTopFade ? "opacity-100" : "opacity-0"
         }`}
       />
@@ -57,7 +61,7 @@ export function ScrollFade({ children, maxHeight, className = "" }: ScrollFadePr
 
       {/* Bottom fade */}
       <div
-        className={`pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-white via-white/80 to-transparent dark:from-gray-900 dark:via-gray-900/80 z-10 transition-opacity duration-200 ${
+        className={`pointer-events-none absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t ${fadeClasses} to-transparent z-10 transition-opacity duration-200 ${
           showBottomFade ? "opacity-100" : "opacity-0"
         }`}
       />

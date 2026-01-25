@@ -603,7 +603,7 @@ export function DealsGrid({
 
   // Filter content JSX - rendered directly to avoid re-creating on each render
   const filterContentJSX = (
-    <div className="space-y-6">
+    <div className="space-y-3">
       {/* Search */}
       <div>
         <Input
@@ -620,16 +620,31 @@ export function DealsGrid({
       </div>
 
       {/* Discount Level */}
-      <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-        <div className="flex items-center justify-between mb-3">
-          <button
-            onClick={() => toggleSection("discount")}
-            className="flex items-center gap-2 cursor-pointer"
-          >
+      <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+        <button
+          onClick={() => toggleSection("discount")}
+          className={`w-full flex items-center justify-between cursor-pointer ${!isSectionCollapsed("discount") ? "mb-3" : ""}`}
+        >
+          <span className="flex items-center gap-2">
             <Percent className="w-4 h-4 text-gray-500" />
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Popust</h3>
             {minDiscount > 50 && (
               <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">1</span>
+            )}
+          </span>
+          <span className="flex items-center gap-2">
+            {minDiscount > 50 && (
+              <span
+                onClick={(e) => {
+                  e.stopPropagation();
+                  hasUserInteracted.current = true;
+                  setMinDiscount(50);
+                  setCurrentPage(1);
+                }}
+                className="text-xs text-red-500 hover:text-red-600"
+              >
+                Obriši
+              </span>
             )}
             <svg
               className={`w-4 h-4 text-gray-500 transition-transform ${isSectionCollapsed("discount") ? "" : "rotate-180"}`}
@@ -639,57 +654,62 @@ export function DealsGrid({
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
-          </button>
-          {minDiscount > 50 && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                hasUserInteracted.current = true;
-                setMinDiscount(50);
-                setCurrentPage(1);
-              }}
-              className="text-xs text-red-500 hover:text-red-600 cursor-pointer"
-            >
-              Obriši
-            </button>
-          )}
-        </div>
-        {!isSectionCollapsed("discount") && (
-          <div className="flex flex-wrap gap-2">
-            {discountLevels.map((level) => (
-              <button
-                key={level.value}
-                onClick={() => {
-                  hasUserInteracted.current = true;
-                  setMinDiscount(minDiscount === level.value ? 50 : level.value);
-                  setCurrentPage(1);
-                  scrollToTop();
-                }}
-                className={`cursor-pointer px-3 py-1.5 text-sm rounded-full transition-colors ${
-                  minDiscount === level.value
-                    ? "bg-red-500 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-                }`}
-              >
-                {level.label}
-              </button>
-            ))}
+          </span>
+        </button>
+        <div className={`grid transition-[grid-template-rows] duration-200 ease-out ${isSectionCollapsed("discount") ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}>
+          <div className="overflow-hidden">
+            <div className="flex flex-wrap gap-2">
+              {discountLevels.map((level) => (
+                <button
+                  key={level.value}
+                  onClick={() => {
+                    hasUserInteracted.current = true;
+                    setMinDiscount(minDiscount === level.value ? 50 : level.value);
+                    setCurrentPage(1);
+                    scrollToTop();
+                  }}
+                  className={`cursor-pointer px-3 py-1.5 text-sm rounded-full transition-colors ${
+                    minDiscount === level.value
+                      ? "bg-red-500 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                  }`}
+                >
+                  {level.label}
+                </button>
+              ))}
+            </div>
           </div>
-        )}
+        </div>
       </div>
 
       {/* Price Range */}
-      <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-        <div className="flex items-center justify-between mb-3">
-          <button
-            onClick={() => toggleSection("price")}
-            className="flex items-center gap-2 cursor-pointer"
-          >
+      <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+        <button
+          onClick={() => toggleSection("price")}
+          className={`w-full flex items-center justify-between cursor-pointer ${!isSectionCollapsed("price") ? "mb-3" : ""}`}
+        >
+          <span className="flex items-center gap-2">
             <Banknote className="w-4 h-4 text-gray-500" />
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Cena (RSD)</h3>
             {(minPrice !== null || maxPrice !== null) && (
               <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">
                 {(minPrice !== null ? 1 : 0) + (maxPrice !== null ? 1 : 0)}
+              </span>
+            )}
+          </span>
+          <span className="flex items-center gap-2">
+            {(minPrice !== null || maxPrice !== null) && (
+              <span
+                onClick={(e) => {
+                  e.stopPropagation();
+                  hasUserInteracted.current = true;
+                  setMinPrice(null);
+                  setMaxPrice(null);
+                  setCurrentPage(1);
+                }}
+                className="text-xs text-red-500 hover:text-red-600"
+              >
+                Obriši
               </span>
             )}
             <svg
@@ -700,85 +720,88 @@ export function DealsGrid({
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
-          </button>
-          {(minPrice !== null || maxPrice !== null) && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                hasUserInteracted.current = true;
-                setMinPrice(null);
-                setMaxPrice(null);
-                setCurrentPage(1);
-              }}
-              className="text-xs text-red-500 hover:text-red-600 cursor-pointer"
-            >
-              Obriši
-            </button>
-          )}
-        </div>
-        {!isSectionCollapsed("price") && (
-        <div className="space-y-3">
-          <div>
-            <span className="text-xs text-gray-500 dark:text-gray-400 block mb-1.5">Od</span>
-            <div className="flex flex-wrap gap-1.5">
-              {priceFromOptions.map((option) => (
-                <button
-                  key={`from-${option.label}`}
-                  onClick={() => {
-                    hasUserInteracted.current = true;
-                    setMinPrice(option.value);
-                    setCurrentPage(1);
-                    scrollToTop();
-                  }}
-                  className={`cursor-pointer px-2.5 py-1 text-xs rounded-full transition-colors ${
-                    minPrice === option.value
-                      ? "bg-red-500 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-                  }`}
-                >
-                  {option.label}
-                </button>
-              ))}
-            </div>
-          </div>
-          <div>
-            <span className="text-xs text-gray-500 dark:text-gray-400 block mb-1.5">Do</span>
-            <div className="flex flex-wrap gap-1.5">
-              {priceToOptions.map((option) => (
-                <button
-                  key={`to-${option.label}`}
-                  onClick={() => {
-                    hasUserInteracted.current = true;
-                    setMaxPrice(option.value);
-                    setCurrentPage(1);
-                    scrollToTop();
-                  }}
-                  className={`cursor-pointer px-2.5 py-1 text-xs rounded-full transition-colors ${
-                    maxPrice === option.value
-                      ? "bg-red-500 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-                  }`}
-                >
-                  {option.label}
-                </button>
-              ))}
+          </span>
+        </button>
+        <div className={`grid transition-[grid-template-rows] duration-200 ease-out ${isSectionCollapsed("price") ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}>
+          <div className="overflow-hidden">
+            <div className="space-y-3">
+              <div>
+                <span className="text-xs text-gray-500 dark:text-gray-400 block mb-1.5">Od</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {priceFromOptions.map((option) => (
+                    <button
+                      key={`from-${option.label}`}
+                      onClick={() => {
+                        hasUserInteracted.current = true;
+                        setMinPrice(option.value);
+                        setCurrentPage(1);
+                        scrollToTop();
+                      }}
+                      className={`cursor-pointer px-2.5 py-1 text-xs rounded-full transition-colors ${
+                        minPrice === option.value
+                          ? "bg-red-500 text-white"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <div>
+                <span className="text-xs text-gray-500 dark:text-gray-400 block mb-1.5">Do</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {priceToOptions.map((option) => (
+                    <button
+                      key={`to-${option.label}`}
+                      onClick={() => {
+                        hasUserInteracted.current = true;
+                        setMaxPrice(option.value);
+                        setCurrentPage(1);
+                        scrollToTop();
+                      }}
+                      className={`cursor-pointer px-2.5 py-1 text-xs rounded-full transition-colors ${
+                        maxPrice === option.value
+                          ? "bg-red-500 text-white"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                      }`}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
             </div>
           </div>
         </div>
-        )}
       </div>
 
       {/* Gender */}
-      <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-        <div className="flex items-center justify-between mb-3">
-          <button
-            onClick={() => toggleSection("gender")}
-            className="flex items-center gap-2 cursor-pointer"
-          >
+      <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+        <button
+          onClick={() => toggleSection("gender")}
+          className={`w-full flex items-center justify-between cursor-pointer ${!isSectionCollapsed("gender") ? "mb-3" : ""}`}
+        >
+          <span className="flex items-center gap-2">
             <Users className="w-4 h-4 text-gray-500" />
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Pol</h3>
             {selectedGenders.length > 0 && (
               <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">{selectedGenders.length}</span>
+            )}
+          </span>
+          <span className="flex items-center gap-2">
+            {selectedGenders.length > 0 && (
+              <span
+                onClick={(e) => {
+                  e.stopPropagation();
+                  hasUserInteracted.current = true;
+                  setSelectedGenders([]);
+                  setCurrentPage(1);
+                }}
+                className="text-xs text-red-500 hover:text-red-600"
+              >
+                Obriši
+              </span>
             )}
             <svg
               className={`w-4 h-4 text-gray-500 transition-transform ${isSectionCollapsed("gender") ? "" : "rotate-180"}`}
@@ -788,51 +811,55 @@ export function DealsGrid({
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
-          </button>
-          {selectedGenders.length > 0 && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                hasUserInteracted.current = true;
-                setSelectedGenders([]);
-                setCurrentPage(1);
-              }}
-              className="text-xs text-red-500 hover:text-red-600 cursor-pointer"
-            >
-              Obriši
-            </button>
-          )}
-        </div>
-        {!isSectionCollapsed("gender") && (
-          <div className="flex flex-wrap gap-2">
-            {(["muski", "zenski", "deciji", "unisex"] as Gender[]).map((gender) => (
-              <button
-                key={gender}
-                onClick={() => toggleGender(gender)}
-                className={`cursor-pointer px-3 py-1.5 text-sm rounded-full transition-colors ${
-                  selectedGenders.includes(gender)
-                    ? "bg-red-500 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-                }`}
-              >
-                {GENDER_NAMES[gender]}
-              </button>
-            ))}
+          </span>
+        </button>
+        <div className={`grid transition-[grid-template-rows] duration-200 ease-out ${isSectionCollapsed("gender") ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}>
+          <div className="overflow-hidden">
+            <div className="flex flex-wrap gap-2">
+              {(["muski", "zenski", "deciji", "unisex"] as Gender[]).map((gender) => (
+                <button
+                  key={gender}
+                  onClick={() => toggleGender(gender)}
+                  className={`cursor-pointer px-3 py-1.5 text-sm rounded-full transition-colors ${
+                    selectedGenders.includes(gender)
+                      ? "bg-red-500 text-white"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                  }`}
+                >
+                  {GENDER_NAMES[gender]}
+                </button>
+              ))}
+            </div>
           </div>
-        )}
+        </div>
       </div>
 
       {/* Store */}
-      <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-        <div className="flex items-center justify-between mb-3">
-          <button
-            onClick={() => toggleSection("store")}
-            className="flex items-center gap-2 cursor-pointer"
-          >
+      <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+        <button
+          onClick={() => toggleSection("store")}
+          className={`w-full flex items-center justify-between cursor-pointer ${!isSectionCollapsed("store") ? "mb-3" : ""}`}
+        >
+          <span className="flex items-center gap-2">
             <ShoppingBag className="w-4 h-4 text-gray-500" />
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Prodavnica</h3>
             {selectedStores.length > 0 && (
               <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">{selectedStores.length}</span>
+            )}
+          </span>
+          <span className="flex items-center gap-2">
+            {selectedStores.length > 0 && (
+              <span
+                onClick={(e) => {
+                  e.stopPropagation();
+                  hasUserInteracted.current = true;
+                  setSelectedStores([]);
+                  setCurrentPage(1);
+                }}
+                className="text-xs text-red-500 hover:text-red-600"
+              >
+                Obriši
+              </span>
             )}
             <svg
               className={`w-4 h-4 text-gray-500 transition-transform ${isSectionCollapsed("store") ? "" : "rotate-180"}`}
@@ -842,63 +869,67 @@ export function DealsGrid({
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
-          </button>
-          {selectedStores.length > 0 && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                hasUserInteracted.current = true;
-                setSelectedStores([]);
-                setCurrentPage(1);
-              }}
-              className="text-xs text-red-500 hover:text-red-600 cursor-pointer"
-            >
-              Obriši
-            </button>
-          )}
+          </span>
+        </button>
+        <div className={`grid transition-[grid-template-rows] duration-200 ease-out ${isSectionCollapsed("store") ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}>
+          <div className="overflow-hidden">
+            <div className="space-y-1">
+              {(Object.keys(STORE_NAMES) as Store[]).map((store) => (
+                <button
+                  key={store}
+                  type="button"
+                  onClick={() => toggleStore(store)}
+                  className={`flex w-full cursor-pointer items-center gap-2 p-1.5 rounded-lg transition-colors text-left ${
+                    selectedStores.includes(store)
+                      ? "bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800"
+                      : "hover:bg-gray-50 dark:hover:bg-gray-800"
+                  }`}
+                >
+                  <div className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 ${
+                    selectedStores.includes(store)
+                      ? "bg-red-500 border-red-500"
+                      : "border-gray-300 dark:border-gray-600"
+                  }`}>
+                    {selectedStores.includes(store) && (
+                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                      </svg>
+                    )}
+                  </div>
+                  <span className="text-sm text-gray-700 dark:text-gray-300">{STORE_NAMES[store]}</span>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
-        {!isSectionCollapsed("store") && (
-        <div className="space-y-1">
-          {(Object.keys(STORE_NAMES) as Store[]).map((store) => (
-            <button
-              key={store}
-              type="button"
-              onClick={() => toggleStore(store)}
-              className={`flex w-full cursor-pointer items-center gap-2 p-1.5 rounded-lg transition-colors text-left ${
-                selectedStores.includes(store)
-                  ? "bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800"
-                  : "hover:bg-gray-50 dark:hover:bg-gray-800"
-              }`}
-            >
-              <div className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 ${
-                selectedStores.includes(store)
-                  ? "bg-red-500 border-red-500"
-                  : "border-gray-300 dark:border-gray-600"
-              }`}>
-                {selectedStores.includes(store) && (
-                  <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                )}
-              </div>
-              <span className="text-sm text-gray-700 dark:text-gray-300">{STORE_NAMES[store]}</span>
-            </button>
-          ))}
-        </div>
-        )}
       </div>
 
       {/* Category - Hierarchical */}
-      <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-        <div className="flex items-center justify-between mb-3">
-          <button
-            onClick={() => toggleSection("category")}
-            className="flex items-center gap-2 cursor-pointer"
-          >
+      <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+        <button
+          onClick={() => toggleSection("category")}
+          className={`w-full flex items-center justify-between cursor-pointer ${!isSectionCollapsed("category") ? "mb-3" : ""}`}
+        >
+          <span className="flex items-center gap-2">
             <Grid3X3 className="w-4 h-4 text-gray-500" />
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Kategorija</h3>
             {selectedCategoryPaths.length > 0 && (
               <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">{selectedCategoryPaths.length}</span>
+            )}
+          </span>
+          <span className="flex items-center gap-2">
+            {selectedCategoryPaths.length > 0 && (
+              <span
+                onClick={(e) => {
+                  e.stopPropagation();
+                  hasUserInteracted.current = true;
+                  setSelectedCategoryPaths([]);
+                  setCurrentPage(1);
+                }}
+                className="text-xs text-red-500 hover:text-red-600"
+              >
+                Obriši
+              </span>
             )}
             <svg
               className={`w-4 h-4 text-gray-500 transition-transform ${isSectionCollapsed("category") ? "" : "rotate-180"}`}
@@ -908,130 +939,136 @@ export function DealsGrid({
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
-          </button>
-          {selectedCategoryPaths.length > 0 && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                hasUserInteracted.current = true;
-                setSelectedCategoryPaths([]);
-                setCurrentPage(1);
-              }}
-              className="text-xs text-red-500 hover:text-red-600 cursor-pointer"
-            >
-              Obriši
-            </button>
-          )}
-        </div>
-        {!isSectionCollapsed("category") && (
-        <div className="space-y-2">
-          {(Object.keys(CATEGORY_HIERARCHY) as MainCategory[]).map((mainCat) => {
-            const subcats = CATEGORY_HIERARCHY[mainCat];
-            const paths = subcats.map((sub) => `${mainCat}/${sub}` as CategoryPath);
-            const selectedCount = paths.filter((p) => selectedCategoryPaths.includes(p)).length;
-            const allSelected = selectedCount === paths.length;
-            const someSelected = selectedCount > 0 && selectedCount < paths.length;
-            const isExpanded = expandedCategories.includes(mainCat);
+          </span>
+        </button>
+        <div className={`grid transition-[grid-template-rows] duration-200 ease-out ${isSectionCollapsed("category") ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}>
+          <div className="overflow-hidden">
+            <div className="space-y-2">
+              {(Object.keys(CATEGORY_HIERARCHY) as MainCategory[]).map((mainCat) => {
+                const subcats = CATEGORY_HIERARCHY[mainCat];
+                const paths = subcats.map((sub) => `${mainCat}/${sub}` as CategoryPath);
+                const selectedCount = paths.filter((p) => selectedCategoryPaths.includes(p)).length;
+                const allSelected = selectedCount === paths.length;
+                const someSelected = selectedCount > 0 && selectedCount < paths.length;
+                const isExpanded = expandedCategories.includes(mainCat);
 
-            return (
-              <div key={mainCat} className="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-                {/* Main category header */}
-                <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-800">
-                  <button
-                    type="button"
-                    onClick={() => toggleMainCategory(mainCat)}
-                    className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 cursor-pointer ${
-                      allSelected
-                        ? "bg-red-500 border-red-500"
-                        : someSelected
-                        ? "bg-red-200 border-red-500"
-                        : "border-gray-300 dark:border-gray-600"
-                    }`}
-                  >
-                    {(allSelected || someSelected) && (
-                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    )}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => toggleExpandedCategory(mainCat)}
-                    className="flex-1 flex items-center justify-between cursor-pointer text-left"
-                  >
-                    <span className="text-sm font-medium text-gray-900 dark:text-white">
-                      {MAIN_CATEGORY_NAMES[mainCat]}
-                      {selectedCount > 0 && (
-                        <span className="ml-2 text-xs text-red-500">({selectedCount})</span>
-                      )}
-                    </span>
-                    <svg
-                      className={`w-4 h-4 text-gray-500 transition-transform ${isExpanded ? "rotate-180" : ""}`}
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </button>
-                </div>
-
-                {/* Subcategories */}
-                {isExpanded && (
-                  <div className="p-2 space-y-1 bg-white dark:bg-gray-900">
-                    {subcats.map((subcat) => {
-                      const path = `${mainCat}/${subcat}` as CategoryPath;
-                      const isSelected = selectedCategoryPaths.includes(path);
-
-                      return (
-                        <button
-                          key={subcat}
-                          type="button"
-                          onClick={() => toggleCategoryPath(path)}
-                          className={`w-full flex items-center gap-2 p-1.5 rounded text-left transition-colors cursor-pointer ${
-                            isSelected
-                              ? "bg-red-50 dark:bg-red-900/20"
-                              : "hover:bg-gray-50 dark:hover:bg-gray-800"
-                          }`}
+                return (
+                  <div key={mainCat} className="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+                    {/* Main category header */}
+                    <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-800">
+                      <button
+                        type="button"
+                        onClick={() => toggleMainCategory(mainCat)}
+                        className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 cursor-pointer ${
+                          allSelected
+                            ? "bg-red-500 border-red-500"
+                            : someSelected
+                            ? "bg-red-200 border-red-500"
+                            : "border-gray-300 dark:border-gray-600"
+                        }`}
+                      >
+                        {(allSelected || someSelected) && (
+                          <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                        )}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => toggleExpandedCategory(mainCat)}
+                        className="flex-1 flex items-center justify-between cursor-pointer text-left"
+                      >
+                        <span className="text-sm font-medium text-gray-900 dark:text-white">
+                          {MAIN_CATEGORY_NAMES[mainCat]}
+                          {selectedCount > 0 && (
+                            <span className="ml-2 text-xs text-red-500">({selectedCount})</span>
+                          )}
+                        </span>
+                        <svg
+                          className={`w-4 h-4 text-gray-500 transition-transform ${isExpanded ? "rotate-180" : ""}`}
+                          fill="none"
+                          stroke="currentColor"
+                          viewBox="0 0 24 24"
                         >
-                          <div className={`w-3.5 h-3.5 rounded border-2 flex items-center justify-center shrink-0 ${
-                            isSelected
-                              ? "bg-red-500 border-red-500"
-                              : "border-gray-300 dark:border-gray-600"
-                          }`}>
-                            {isSelected && (
-                              <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                              </svg>
-                            )}
-                          </div>
-                          <span className="text-sm text-gray-700 dark:text-gray-300">{SUBCATEGORY_NAMES[subcat]}</span>
-                        </button>
-                      );
-                    })}
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+                    </div>
+
+                    {/* Subcategories */}
+                    <div className={`grid transition-[grid-template-rows] duration-200 ease-out ${isExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
+                      <div className="overflow-hidden">
+                        <div className="p-2 space-y-1 bg-white dark:bg-gray-900">
+                          {subcats.map((subcat) => {
+                            const path = `${mainCat}/${subcat}` as CategoryPath;
+                            const isSelected = selectedCategoryPaths.includes(path);
+
+                            return (
+                              <button
+                                key={subcat}
+                                type="button"
+                                onClick={() => toggleCategoryPath(path)}
+                                className={`w-full flex items-center gap-2 p-1.5 rounded text-left transition-colors cursor-pointer ${
+                                  isSelected
+                                    ? "bg-red-50 dark:bg-red-900/20"
+                                    : "hover:bg-gray-50 dark:hover:bg-gray-800"
+                                }`}
+                              >
+                                <div className={`w-3.5 h-3.5 rounded border-2 flex items-center justify-center shrink-0 ${
+                                  isSelected
+                                    ? "bg-red-500 border-red-500"
+                                    : "border-gray-300 dark:border-gray-600"
+                                }`}>
+                                  {isSelected && (
+                                    <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                                    </svg>
+                                  )}
+                                </div>
+                                <span className="text-sm text-gray-700 dark:text-gray-300">{SUBCATEGORY_NAMES[subcat]}</span>
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
                   </div>
-                )}
-              </div>
-            );
-          })}
+                );
+              })}
+            </div>
+          </div>
         </div>
-        )}
       </div>
 
       {/* Shoe Size */}
       {shoeSizes.length > 0 && (() => {
         const selectedShoeCount = selectedSizes.filter(s => shoeSizes.includes(s)).length;
         return (
-        <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-          <div className="flex items-center justify-between mb-3">
-            <button
-              onClick={() => toggleSection("shoeSize")}
-              className="flex items-center gap-2 cursor-pointer"
-            >
+        <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+          <button
+            onClick={() => toggleSection("shoeSize")}
+            className={`w-full flex items-center justify-between cursor-pointer ${!isSectionCollapsed("shoeSize") ? "mb-3" : ""}`}
+          >
+            <span className="flex items-center gap-2">
               <Footprints className="w-4 h-4 text-gray-500" />
               <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Veličina obuće</h3>
               {selectedShoeCount > 0 && (
                 <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">{selectedShoeCount}</span>
+              )}
+            </span>
+            <span className="flex items-center gap-2">
+              {selectedShoeCount > 0 && (
+                <span
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    hasUserInteracted.current = true;
+                    setSelectedSizes(prev => prev.filter(s => !shoeSizes.includes(s)));
+                    setCurrentPage(1);
+                  }}
+                  className="text-xs text-red-500 hover:text-red-600"
+                >
+                  Obriši
+                </span>
               )}
               <svg
                 className={`w-4 h-4 text-gray-500 transition-transform ${isSectionCollapsed("shoeSize") ? "" : "rotate-180"}`}
@@ -1041,40 +1078,29 @@ export function DealsGrid({
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
-            </button>
-            {selectedShoeCount > 0 && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  hasUserInteracted.current = true;
-                  setSelectedSizes(prev => prev.filter(s => !shoeSizes.includes(s)));
-                  setCurrentPage(1);
-                }}
-                className="text-xs text-red-500 hover:text-red-600 cursor-pointer"
-              >
-                Obriši
-              </button>
-            )}
-          </div>
-          {!isSectionCollapsed("shoeSize") && (
-          <ScrollFade maxHeight="120px">
-            <div className="flex flex-wrap gap-1.5 pr-1">
-              {shoeSizes.map((size) => (
-                <button
-                  key={size}
-                  onClick={() => toggleSize(size)}
-                  className={`cursor-pointer px-2.5 py-1 text-xs rounded-full transition-colors ${
-                    selectedSizes.includes(size)
-                      ? "bg-red-500 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-                  }`}
-                >
-                  {size}
-                </button>
-              ))}
+            </span>
+          </button>
+          <div className={`grid transition-[grid-template-rows] duration-200 ease-out ${isSectionCollapsed("shoeSize") ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}>
+            <div className="overflow-hidden">
+              <ScrollFade maxHeight="120px" fadeColor="gray">
+                <div className="flex flex-wrap gap-1.5 pr-1">
+                  {shoeSizes.map((size) => (
+                    <button
+                      key={size}
+                      onClick={() => toggleSize(size)}
+                      className={`cursor-pointer px-2.5 py-1 text-xs rounded-full transition-colors ${
+                        selectedSizes.includes(size)
+                          ? "bg-red-500 text-white"
+                          : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                      }`}
+                    >
+                      {size}
+                    </button>
+                  ))}
+                </div>
+              </ScrollFade>
             </div>
-          </ScrollFade>
-          )}
+          </div>
         </div>
         );
       })()}
@@ -1083,16 +1109,31 @@ export function DealsGrid({
       {clothingSizes.length > 0 && (() => {
         const selectedClothingCount = selectedSizes.filter(s => clothingSizes.includes(s)).length;
         return (
-        <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-          <div className="flex items-center justify-between mb-3">
-            <button
-              onClick={() => toggleSection("clothingSize")}
-              className="flex items-center gap-2 cursor-pointer"
-            >
+        <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+          <button
+            onClick={() => toggleSection("clothingSize")}
+            className={`w-full flex items-center justify-between cursor-pointer ${!isSectionCollapsed("clothingSize") ? "mb-3" : ""}`}
+          >
+            <span className="flex items-center gap-2">
               <Shirt className="w-4 h-4 text-gray-500" />
               <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Veličina odeće</h3>
               {selectedClothingCount > 0 && (
                 <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">{selectedClothingCount}</span>
+              )}
+            </span>
+            <span className="flex items-center gap-2">
+              {selectedClothingCount > 0 && (
+                <span
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    hasUserInteracted.current = true;
+                    setSelectedSizes(prev => prev.filter(s => !clothingSizes.includes(s)));
+                    setCurrentPage(1);
+                  }}
+                  className="text-xs text-red-500 hover:text-red-600"
+                >
+                  Obriši
+                </span>
               )}
               <svg
                 className={`w-4 h-4 text-gray-500 transition-transform ${isSectionCollapsed("clothingSize") ? "" : "rotate-180"}`}
@@ -1102,53 +1143,58 @@ export function DealsGrid({
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
-            </button>
-            {selectedClothingCount > 0 && (
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  hasUserInteracted.current = true;
-                  setSelectedSizes(prev => prev.filter(s => !clothingSizes.includes(s)));
-                  setCurrentPage(1);
-                }}
-                className="text-xs text-red-500 hover:text-red-600 cursor-pointer"
-              >
-                Obriši
-              </button>
-            )}
+            </span>
+          </button>
+          <div className={`grid transition-[grid-template-rows] duration-200 ease-out ${isSectionCollapsed("clothingSize") ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}>
+            <div className="overflow-hidden">
+              <div className="flex flex-wrap gap-1.5">
+                {clothingSizes.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => toggleSize(size)}
+                    className={`cursor-pointer px-2.5 py-1 text-xs rounded-full transition-colors ${
+                      selectedSizes.includes(size)
+                        ? "bg-red-500 text-white"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
+                    }`}
+                  >
+                    {size}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
-          {!isSectionCollapsed("clothingSize") && (
-          <div className="flex flex-wrap gap-1.5">
-            {clothingSizes.map((size) => (
-              <button
-                key={size}
-                onClick={() => toggleSize(size)}
-                className={`cursor-pointer px-2.5 py-1 text-xs rounded-full transition-colors ${
-                  selectedSizes.includes(size)
-                    ? "bg-red-500 text-white"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-                }`}
-              >
-                {size}
-              </button>
-            ))}
-          </div>
-          )}
         </div>
         );
       })()}
 
       {/* Brand */}
-      <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
-        <div className="flex items-center justify-between mb-3">
-          <button
-            onClick={() => toggleSection("brand")}
-            className="flex items-center gap-2 cursor-pointer"
-          >
+      <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
+        <button
+          onClick={() => toggleSection("brand")}
+          className={`w-full flex items-center justify-between cursor-pointer ${!isSectionCollapsed("brand") ? "mb-3" : ""}`}
+        >
+          <span className="flex items-center gap-2">
             <Tag className="w-4 h-4 text-gray-500" />
             <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Brend</h3>
             {selectedBrands.length > 0 && (
               <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">{selectedBrands.length}</span>
+            )}
+          </span>
+          <span className="flex items-center gap-2">
+            {selectedBrands.length > 0 && (
+              <span
+                onClick={(e) => {
+                  e.stopPropagation();
+                  hasUserInteracted.current = true;
+                  setSelectedBrands([]);
+                  setBrandSearch("");
+                  setCurrentPage(1);
+                }}
+                className="text-xs text-red-500 hover:text-red-600"
+              >
+                Obriši
+              </span>
             )}
             <svg
               className={`w-4 h-4 text-gray-500 transition-transform ${isSectionCollapsed("brand") ? "" : "rotate-180"}`}
@@ -1158,65 +1204,51 @@ export function DealsGrid({
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
             </svg>
-          </button>
-          {selectedBrands.length > 0 && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                hasUserInteracted.current = true;
-                setSelectedBrands([]);
-                setBrandSearch("");
-                setCurrentPage(1);
-              }}
-              className="text-xs text-red-500 hover:text-red-600 cursor-pointer"
-            >
-              Obriši
-            </button>
-          )}
-        </div>
-        {!isSectionCollapsed("brand") && (
-        <>
-        <Input
-          type="search"
-          placeholder="Pretraži brendove..."
-          value={brandSearch}
-          onChange={(e) => setBrandSearch(e.target.value)}
-          className="mb-3 h-9 text-sm bg-gray-50 border-gray-200 focus:bg-white dark:bg-gray-800 dark:border-gray-700 dark:focus:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-        />
-        <ScrollFade maxHeight="200px">
-          <div className="space-y-0.5 pr-1">
-            {filteredBrands.map((brand) => (
-              <button
-                key={brand}
-                type="button"
-                onClick={() => toggleBrand(brand)}
-                className={`flex w-full cursor-pointer items-center gap-2 p-1.5 rounded-lg transition-colors text-left ${
-                  selectedBrands.includes(brand)
-                    ? "bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800"
-                    : "hover:bg-gray-50 dark:hover:bg-gray-800"
-                }`}
-              >
-                <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${
-                  selectedBrands.includes(brand)
-                    ? "bg-red-500 border-red-500"
-                    : "border-gray-300 dark:border-gray-600"
-                }`}>
-                  {selectedBrands.includes(brand) && (
-                    <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                    </svg>
-                  )}
-                </div>
-                <span className="text-sm text-gray-700 dark:text-gray-300 truncate">{brand}</span>
-              </button>
-            ))}
-            {filteredBrands.length === 0 && (
-              <p className="text-sm text-gray-400 dark:text-gray-500 p-2">Nema rezultata</p>
-            )}
+          </span>
+        </button>
+        <div className={`grid transition-[grid-template-rows] duration-200 ease-out ${isSectionCollapsed("brand") ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}>
+          <div className="overflow-hidden">
+            <Input
+              type="search"
+              placeholder="Pretraži brendove..."
+              value={brandSearch}
+              onChange={(e) => setBrandSearch(e.target.value)}
+              className="mb-3 h-9 text-sm bg-gray-50 border-gray-200 focus:bg-white dark:bg-gray-800 dark:border-gray-700 dark:focus:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+            />
+            <ScrollFade maxHeight="200px" fadeColor="gray">
+              <div className="space-y-0.5 pr-1">
+                {filteredBrands.map((brand) => (
+                  <button
+                    key={brand}
+                    type="button"
+                    onClick={() => toggleBrand(brand)}
+                    className={`flex w-full cursor-pointer items-center gap-2 p-1.5 rounded-lg transition-colors text-left ${
+                      selectedBrands.includes(brand)
+                        ? "bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800"
+                        : "hover:bg-gray-50 dark:hover:bg-gray-800"
+                    }`}
+                  >
+                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${
+                      selectedBrands.includes(brand)
+                        ? "bg-red-500 border-red-500"
+                        : "border-gray-300 dark:border-gray-600"
+                    }`}>
+                      {selectedBrands.includes(brand) && (
+                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                        </svg>
+                      )}
+                    </div>
+                    <span className="text-sm text-gray-700 dark:text-gray-300 truncate">{brand}</span>
+                  </button>
+                ))}
+                {filteredBrands.length === 0 && (
+                  <p className="text-sm text-gray-400 dark:text-gray-500 p-2">Nema rezultata</p>
+                )}
+              </div>
+            </ScrollFade>
           </div>
-        </ScrollFade>
-        </>
-        )}
+        </div>
       </div>
     </div>
   );
