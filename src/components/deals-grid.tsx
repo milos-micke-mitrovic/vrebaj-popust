@@ -619,17 +619,6 @@ export function DealsGrid({
         />
       </div>
 
-      {hasActiveFilters && (
-        <Button
-          variant="outline"
-          size="sm"
-          onClick={resetFilters}
-          className="w-full border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/30"
-        >
-          Resetuj filtere ✕
-        </Button>
-      )}
-
       {/* Discount Level */}
       <div className="border-t border-gray-200 dark:border-gray-700 pt-6">
         <div className="flex items-center justify-between mb-3">
@@ -1274,9 +1263,21 @@ export function DealsGrid({
                 </svg>
               </button>
             </div>
-            <div className="flex-1 overflow-y-auto overscroll-contain p-4 pb-8">
+            <div className="flex-1 overflow-y-auto overscroll-contain p-4 pb-4">
               {filterContentJSX}
             </div>
+            {hasActiveFilters && (
+              <div className="flex-shrink-0 p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={resetFilters}
+                  className="w-full border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/30"
+                >
+                  Resetuj filtere ✕
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       )}
@@ -1285,10 +1286,22 @@ export function DealsGrid({
       <div className="lg:grid lg:grid-cols-[260px_1fr] lg:gap-6">
         {/* Desktop Sidebar - hidden on mobile/tablet */}
         <aside className="hidden lg:block">
-          <div className="sticky top-20 rounded-xl bg-white dark:bg-gray-900 shadow-sm border border-gray-100 dark:border-gray-800">
-            <div className="max-h-[calc(100vh-6rem)] overflow-y-auto scrollbar-thin p-5">
+          <div className="sticky top-20 rounded-xl bg-white dark:bg-gray-900 shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col max-h-[calc(100vh-6rem)]">
+            <div className="flex-1 overflow-y-auto scrollbar-thin p-5">
               {filterContentJSX}
             </div>
+            {hasActiveFilters && (
+              <div className="flex-shrink-0 p-4 border-t border-gray-200 dark:border-gray-700">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={resetFilters}
+                  className="w-full border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/30"
+                >
+                  Resetuj filtere ✕
+                </Button>
+              </div>
+            )}
           </div>
         </aside>
 
