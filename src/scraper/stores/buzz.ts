@@ -40,14 +40,16 @@ function calcDiscount(original: number, sale: number): number {
   return Math.round(((original - sale) / original) * 100);
 }
 
-let idCounter = 0;
 function generateId(url: string): string {
-  const slug = url
-    .replace(/https?:\/\//, "")
+  // Use URL path only (without domain) for deterministic IDs
+  const pathOnly = url
+    .replace(/https?:\/\/[^\/]+/, "")  // Remove domain completely
+    .replace(/\.html?$/i, "")  // Remove .html or .htm extension
     .replace(/[^a-zA-Z0-9]/g, "-")
+    .replace(/-+/g, "-")  // Collapse multiple dashes
+    .replace(/^-|-$/g, "")  // Trim leading/trailing dashes
     .slice(0, 80);
-  idCounter++;
-  return `${STORE}-${slug}-${idCounter}`;
+  return `${STORE}-${pathOnly}`;
 }
 
 function sleep(ms: number): Promise<void> {

@@ -29,14 +29,20 @@ interface FetchResult {
   hasMore: boolean;
 }
 
-let idCounter = 0;
-function generateId(url: string): string {
-  const slug = url
-    .replace(/https?:\/\//, "")
+function generateId(productId: string, url: string): string {
+  // Use Magento product ID if available (deterministic)
+  if (productId) {
+    return `${STORE}-${productId}`;
+  }
+  // Fallback: use URL path only (without domain)
+  const pathOnly = url
+    .replace(/https?:\/\/[^\/]+/, "")  // Remove domain completely
+    .replace(/\.html?$/i, "")  // Remove .html or .htm extension
     .replace(/[^a-zA-Z0-9]/g, "-")
+    .replace(/-+/g, "-")  // Collapse multiple dashes
+    .replace(/^-|-$/g, "")  // Trim leading/trailing dashes
     .slice(0, 80);
-  idCounter++;
-  return `${STORE}-${slug}-${idCounter}`;
+  return `${STORE}-${pathOnly}`;
 }
 
 function sleep(ms: number): Promise<void> {
@@ -386,7 +392,7 @@ async function scrapeDjakSport(): Promise<void> {
           }
 
           await upsertDeal({
-            id: generateId(product.url),
+            id: generateId(product.productId, product.url),
             store: STORE,
             name: product.name,
             brand: brand,
