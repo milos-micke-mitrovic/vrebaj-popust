@@ -169,7 +169,7 @@ export function TopDealsCarousel({ deals }: TopDealsCarouselProps) {
       <div className="mt-6 text-center px-4">
         <Link
           href="/ponude?sortBy=discount"
-          className="inline-flex items-center text-red-500 hover:text-red-600 font-medium"
+          className="inline-flex items-center text-red-600 hover:text-red-700 font-medium"
         >
           Vidi sve ponude
           <ChevronRight className="ml-1 h-4 w-4" />

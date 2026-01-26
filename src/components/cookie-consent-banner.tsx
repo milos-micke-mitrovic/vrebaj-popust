@@ -76,7 +76,7 @@ export function CookieConsentBanner() {
               </button>
               <button
                 onClick={handleAccept}
-                className="flex-1 sm:flex-initial px-4 py-2 text-sm font-medium text-white bg-red-500 hover:bg-red-600 rounded-lg transition-colors cursor-pointer"
+                className="flex-1 sm:flex-initial px-4 py-2 text-sm font-medium text-white bg-red-600 hover:bg-red-700 rounded-lg transition-colors cursor-pointer"
               >
                 Prihvati
               </button>
