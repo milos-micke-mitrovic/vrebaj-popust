@@ -4,79 +4,65 @@
 User-agent: Googlebot
 Allow: /
 Disallow: /api/
-Disallow: /admin/
 
 # Bing
 User-agent: Bingbot
 Allow: /
 Disallow: /api/
-Disallow: /admin/
 
 # OpenAI GPT
 User-agent: GPTBot
 Allow: /
 Disallow: /api/
-Disallow: /admin/
 
 # Anthropic Claude
 User-agent: ClaudeBot
 Allow: /
 Disallow: /api/
-Disallow: /admin/
 User-agent: Claude-Web
 Allow: /
 Disallow: /api/
-Disallow: /admin/
 
 # Perplexity AI
 User-agent: PerplexityBot
 Allow: /
 Disallow: /api/
-Disallow: /admin/
 
 # Google AI / Bard
 User-agent: Google-Extended
 Allow: /
 Disallow: /api/
-Disallow: /admin/
 
 # Apple (Siri, Spotlight)
 User-agent: Applebot
 Allow: /
 Disallow: /api/
-Disallow: /admin/
 User-agent: Applebot-Extended
 Allow: /
 Disallow: /api/
-Disallow: /admin/
 
 # Meta AI
 User-agent: FacebookBot
 Allow: /
 Disallow: /api/
-Disallow: /admin/
 User-agent: meta-externalagent
 Allow: /
 Disallow: /api/
-Disallow: /admin/
 
 # Common Crawl (training data)
 User-agent: CCBot
 Allow: /
 Disallow: /api/
-Disallow: /admin/
 
 # Yandex
 User-agent: YandexBot
 Allow: /
 Disallow: /api/
-Disallow: /admin/
 
 # Default for all other bots
 User-agent: *
 Allow: /
 Disallow: /api/
-Disallow: /admin/
 
 # Sitemap
 Sitemap: https://www.vrebajpopust.rs/sitemap.xml
