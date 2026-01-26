@@ -683,6 +683,8 @@ export default async function DealPage({ params }: Props) {
                       if (validClothingSizes.includes(size.toUpperCase())) return true;
                       // Kids height sizes
                       if (!isNaN(num) && num >= 92 && num <= 176) return true;
+                      // Women's EU sizes (32-46)
+                      if (!isNaN(num) && num >= 32 && num <= 46) return true;
                       // Men's EU sizes (48-60)
                       if (!isNaN(num) && num >= 48 && num <= 60) return true;
                       return false;
