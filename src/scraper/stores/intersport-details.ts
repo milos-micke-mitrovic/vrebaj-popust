@@ -26,7 +26,8 @@ function mapCategory(text: string): string | null {
   if (lower.includes("papuč") || lower.includes("papuc")) return "obuca/papuce";
 
   // Clothing - specific first
-  if (lower.includes("kupaći") || lower.includes("kupaci") || lower.includes("bikini")) return "odeca/kupaci";
+  if (lower.includes("kupaći") || lower.includes("kupaci") || lower.includes("kupaće") || lower.includes("kupace") || lower.includes("bikini")) return "odeca/kupaci";
+  if (lower.includes(" top") || lower.startsWith("top ") || lower.includes("sports bra") || lower.includes("tank top") || lower.includes("crop top")) return "odeca/topovi";
   if (lower.includes("jakn")) return "odeca/jakne";
   if (lower.includes("prsluk") || lower.includes("prsluci")) return "odeca/prsluci";
   if (lower.includes("duks")) return "odeca/duksevi";
@@ -36,17 +37,21 @@ function mapCategory(text: string): string | null {
   if (lower.includes("pantalone") || lower.includes("ski pantalone")) return "odeca/pantalone";
   if (lower.includes("trenerka") || lower.includes("trenerke")) return "odeca/trenerke";
   if (lower.includes("halj")) return "odeca/haljine";
+  if (lower.includes("košulj") || lower.includes("kosulj")) return "odeca/kosulje";
+  if (lower.includes("kombinezon") || lower.includes("jumpsuit") || lower.includes("overall")) return "odeca/kombinezoni";
 
   // Accessories
-  if (lower.includes("ranac") || lower.includes("ruksak")) return "oprema/rancevi";
+  if (lower.includes("ranac") || lower.includes("ruksak") || lower.includes("rančev")) return "oprema/rancevi";
   if (lower.includes("torb")) return "oprema/torbe";
-  if (lower.includes("kapa") || lower.includes("kačket") || lower.includes("kacket")) return "oprema/kape";
+  if (lower.includes("kapa") || lower.includes("kačket") || lower.includes("kacket") || lower.includes("šešir")) return "oprema/kape";
   if (lower.includes("rukavic")) return "oprema/rukavice";
+  if (lower.includes("čarap") || lower.includes("carap")) return "oprema/carape";
+  if (lower.includes("novčanik") || lower.includes("novcanik")) return "oprema/novcanici";
 
   return null;
 }
 
-async function fetchProductDetails(url: string): Promise<ProductDetails> {
+async function fetchProductDetails(url: string, productName: string): Promise<ProductDetails> {
   const result: ProductDetails = { sizes: [], description: null, categories: [] };
 
   try {
@@ -106,12 +111,23 @@ async function fetchProductDetails(url: string): Promise<ProductDetails> {
       else if (urlLower.includes('/cipele/') || urlLower.includes('-cipele-')) result.categories.push('obuca/cipele');
       else if (urlLower.includes('/cizme/') || urlLower.includes('-cizme-')) result.categories.push('obuca/cizme');
       else if (urlLower.includes('/papuce/') || urlLower.includes('-papuce-')) result.categories.push('obuca/papuce');
+      else if (urlLower.includes('/sandale/') || urlLower.includes('-sandale-')) result.categories.push('obuca/sandale');
+      else if (urlLower.includes('/kopacke/') || urlLower.includes('-kopacke-')) result.categories.push('obuca/kopacke');
       else if (urlLower.includes('/jakne/') || urlLower.includes('-jakna-') || urlLower.includes('-jakne-')) result.categories.push('odeca/jakne');
       else if (urlLower.includes('/duksevi/') || urlLower.includes('-duks-')) result.categories.push('odeca/duksevi');
       else if (urlLower.includes('/majice/') || urlLower.includes('-majica-')) result.categories.push('odeca/majice');
       else if (urlLower.includes('/pantalone/') || urlLower.includes('-pantalone-') || urlLower.includes('ski-pantalone')) result.categories.push('odeca/pantalone');
       else if (urlLower.includes('/trenerke/') || urlLower.includes('-trenerka-')) result.categories.push('odeca/trenerke');
       else if (urlLower.includes('/sortevi/') || urlLower.includes('-sorc-')) result.categories.push('odeca/sortevi');
+      else if (urlLower.includes('/kupaci/') || urlLower.includes('-kupaci-')) result.categories.push('odeca/kupaci');
+    }
+
+    // Final fallback: extract category from product name
+    if (result.categories.length === 0 && productName) {
+      const category = mapCategory(productName);
+      if (category) {
+        result.categories.push(category);
+      }
     }
 
     // Extract description from product declaration
@@ -149,7 +165,7 @@ async function scrapeIntersportDetails(): Promise<void> {
     const progress = `[${processed + 1}/${deals.length}]`;
 
     try {
-      const details = await fetchProductDetails(deal.url);
+      const details = await fetchProductDetails(deal.url, deal.name);
 
       if (details.sizes.length > 0 || details.description || details.categories.length > 0) {
         await updateDealDetails(deal.url, {
