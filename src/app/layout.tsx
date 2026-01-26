@@ -29,7 +29,7 @@ export const metadata: Metadata = {
     template: "%s | VrebajPopust",
   },
   description:
-    "Pronađi najveće popuste i sniženja preko 50% na sportsku opremu, obuću i odeću u Srbiji. DjakSport, Planeta Sport i druge prodavnice. Ažurirano svakodnevno.",
+    "Pronađi najveće popuste, akcije i sniženja preko 50% na sportsku opremu, obuću i odeću u Srbiji. DjakSport, Planeta Sport i druge prodavnice. Ažurirano svakodnevno.",
   keywords: [
     "popusti",
     "sniženja",
@@ -64,7 +64,7 @@ export const metadata: Metadata = {
     siteName: "VrebajPopust",
     title: "VrebajPopust | Najveći popusti preko 50% u Srbiji",
     description:
-      "Pronađi najveće popuste i sniženja preko 50% na sportsku opremu u Srbiji. Ažurirano svakodnevno.",
+      "Pronađi najveće popuste, akcije i sniženja preko 50% na sportsku opremu u Srbiji. Ažurirano svakodnevno.",
     images: [
       {
         url: "/opengraph-image.png",

@@ -209,7 +209,7 @@ export function generateSeoDescription(parsed: ParsedFilter): string {
   const genderText = parsed.gender ? ` za ${GENDER_DISPLAY[parsed.gender]}` : "";
   const storeText = parsed.store ? ` u prodavnici ${STORE_DISPLAY[parsed.store]}` : "";
 
-  return `${brandText} ${categoryText}${genderText}${storeText} sa popustima preko 50%. Pronađi najbolje ponude na sportsku opremu u Srbiji.`;
+  return `${brandText} ${categoryText}${genderText}${storeText} sa popustima i akcijama preko 50%. Pronađi najbolje ponude na sportsku opremu u Srbiji.`;
 }
 
 /**

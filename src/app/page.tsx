@@ -17,7 +17,7 @@ export const revalidate = 300;
 export const metadata: Metadata = {
   title: "VrebajPopust | Najveći sportski popusti preko 50% u Srbiji",
   description:
-    "Pronađi najveće popuste preko 50% na sportsku opremu, patike i odeću. Pratimo DjakSport, Planeta Sport, Sport Vision, N Sport, Buzz i Office Shoes. Ažurirano svakodnevno.",
+    "Pronađi najveće popuste i akcije preko 50% na sportsku opremu, patike i odeću. Pratimo DjakSport, Planeta Sport, Sport Vision, N Sport, Buzz i Office Shoes. Ažurirano svakodnevno.",
   keywords: [
     "popusti",
     "akcije",
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "VrebajPopust | Najveći sportski popusti preko 50% u Srbiji",
     description:
-      "Pronađi najveće popuste preko 50% na sportsku opremu, patike i odeću u Srbiji.",
+      "Pronađi najveće popuste i akcije preko 50% na sportsku opremu, patike i odeću u Srbiji.",
     type: "website",
     locale: "sr_RS",
   },
