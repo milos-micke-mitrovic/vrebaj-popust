@@ -5,6 +5,8 @@
   "scripts": {
     "dev": "next dev -p 3191",
     "build": "next build --webpack",
+    "postinstall": "prisma generate",
+    "clean:build": "rm -rf node_modules && pnpm install && pnpm run build",
     "start": "next start",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
