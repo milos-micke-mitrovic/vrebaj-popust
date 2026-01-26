@@ -8,6 +8,7 @@ const STORES = [
   { name: "N Sport", logo: "/logos/nsport.jpg", slug: "n-sport" },
   { name: "Buzz", logo: "/logos/buzz.png", slug: "buzz" },
   { name: "Office Shoes", logo: "/logos/officeshoes.png", slug: "office-shoes" },
+  { name: "Intersport", logo: "/logos/intersport.jpg", slug: "intersport" },
 ];
 
 export function Footer() {

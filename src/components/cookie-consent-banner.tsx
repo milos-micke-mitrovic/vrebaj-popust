@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Cookie, X } from "lucide-react";
+import { Cookie } from "lucide-react";
 import { useCookieConsent } from "@/context/cookie-consent-context";
 
 export function CookieConsentBanner() {

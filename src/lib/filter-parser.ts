@@ -4,6 +4,7 @@ import { Category, Gender, Store } from "@/types/deal";
 // Must match sitemap.ts exactly
 const STORE_SLUGS: Record<string, Store> = {
   buzz: "buzz",
+  intersport: "intersport",
 };
 
 // Known genders (URL slug → internal value)
@@ -78,6 +79,7 @@ const STORE_DISPLAY: Record<Store, string> = {
   nsport: "N Sport",
   buzz: "Buzz",
   officeshoes: "Office Shoes",
+  intersport: "Intersport",
 };
 
 export interface ParsedFilter {

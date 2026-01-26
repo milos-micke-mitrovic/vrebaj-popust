@@ -11,6 +11,7 @@ const STORE_STYLES: Record<Store, { name: string; color: string }> = {
   nsport: { name: "N-SPORT", color: "bg-green-600" },
   buzz: { name: "BUZZ", color: "bg-yellow-500" },
   officeshoes: { name: "OFFICE", color: "bg-purple-600" },
+  intersport: { name: "INTER", color: "bg-blue-700" },
 };
 
 interface StoreLogoProps {

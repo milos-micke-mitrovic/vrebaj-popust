@@ -4,6 +4,7 @@ import { scrapeNSport } from "./stores/nsport";
 import { scrapeSportVision } from "./stores/sportvision";
 import { scrapeBuzz } from "./stores/buzz";
 import { scrapeOfficeShoes } from "./stores/officeshoes";
+import { scrapeIntersport } from "./stores/intersport";
 import { scrapePlanetaDetails } from "./stores/planeta-details";
 import { scrapeNSportDetails } from "./stores/nsport-details";
 import { scrapeSportVisionDetails } from "./stores/sportvision-details";
@@ -48,6 +49,7 @@ async function runAllScrapers(): Promise<void> {
     { name: "SportVision", fn: scrapeSportVision },
     { name: "Buzz Sneakers", fn: scrapeBuzz },
     { name: "Office Shoes", fn: scrapeOfficeShoes },
+    { name: "Intersport", fn: scrapeIntersport },
     { name: "DjakSport", fn: scrapeDjakSport },
   ];
 

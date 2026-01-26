@@ -3,7 +3,7 @@
 import { useCookieConsent } from "@/context/cookie-consent-context";
 
 export function CookiePreferences() {
-  const { consentStatus, acceptCookies, rejectCookies, resetConsent } = useCookieConsent();
+  const { consentStatus, acceptCookies, rejectCookies } = useCookieConsent();
 
   const statusText = {
     pending: "Niste još izabrali",

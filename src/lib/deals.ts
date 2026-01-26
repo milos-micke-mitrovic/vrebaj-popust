@@ -347,6 +347,11 @@ export const STORE_INFO: Record<
     logo: "/logos/officeshoes.png",
     url: "https://www.officeshoes.rs",
   },
+  intersport: {
+    name: "Intersport",
+    logo: "/logos/intersport.jpg",
+    url: "https://www.intersport.rs",
+  },
 };
 
 // Convert Prisma deal to app Deal type

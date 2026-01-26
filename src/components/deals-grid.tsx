@@ -37,6 +37,7 @@ const STORE_NAMES: Record<Store, string> = {
   nsport: "N Sport",
   buzz: "Buzz Sneakers",
   officeshoes: "Office Shoes",
+  intersport: "Intersport",
 };
 
 const GENDER_NAMES: Record<Gender, string> = {
