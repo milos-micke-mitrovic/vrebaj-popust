@@ -66,7 +66,7 @@ Prikazujemo samo proizvode sa popustom od 50% ili vise. To znaci da svaki proizv
 ## Statistike
 
 - Preko 5000 aktivnih ponuda
-- 6 prodavnica
+- 7 prodavnica
 - Prosecni popust oko 60%
 - Azuriranje svakih 24 sata
 

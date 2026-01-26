@@ -93,7 +93,7 @@ export default async function Home() {
         name: "Gde mogu da pronađem najveće popuste na patike u Srbiji?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Na VrebajPopust.rs možete pronaći patike sa popustom preko 50% iz svih velikih sportskih prodavnica u Srbiji. Pratimo Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz Sneakers i Office Shoes. Sve ponude se ažuriraju svakodnevno.",
+          text: "Na VrebajPopust.rs možete pronaći patike sa popustom preko 50% iz svih velikih sportskih prodavnica u Srbiji. Pratimo Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz Sneakers, Office Shoes i Intersport. Sve ponude se ažuriraju svakodnevno.",
         },
       },
       {
@@ -101,7 +101,7 @@ export default async function Home() {
         name: "Koje sportske prodavnice VrebajPopust prati?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "VrebajPopust prati 6 najvećih sportskih prodavnica u Srbiji: Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz Sneakers i Office Shoes. Skeniramo njihove sajtove svakodnevno i prikazujemo samo proizvode sa popustom preko 50%.",
+          text: "VrebajPopust prati 7 najvećih sportskih prodavnica u Srbiji: Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz Sneakers, Office Shoes i Intersport. Skeniramo njihove sajtove svakodnevno i prikazujemo samo proizvode sa popustom preko 50%.",
         },
       },
       {
