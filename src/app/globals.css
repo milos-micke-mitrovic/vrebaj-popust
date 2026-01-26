@@ -259,6 +259,16 @@ input[type="search"]::-webkit-search-cancel-button:hover {
   animation-play-state: paused;
 }
 
+/* Deals carousel - slower animation for larger cards */
+.animate-scroll-deals {
+  animation: scroll 40s linear infinite;
+}
+
+.animate-scroll-deals:hover,
+.animate-scroll-deals.pause-animation {
+  animation-play-state: paused;
+}
+
 /* Hide scrollbar for carousel */
 .scrollbar-hide {
   -ms-overflow-style: none;

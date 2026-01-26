@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronRight } from "lucide-react";
@@ -125,99 +125,10 @@ function CarouselCard({ deal }: { deal: Deal }) {
 }
 
 export function TopDealsCarousel({ deals }: TopDealsCarouselProps) {
-  const scrollRef = useRef<HTMLDivElement>(null);
   const [isPaused, setIsPaused] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-  const dragStartX = useRef(0);
-  const scrollStartX = useRef(0);
-  const hasDragged = useRef(false);
-  const animationRef = useRef<number | null>(null);
 
   // Duplicate deals for seamless infinite scroll
   const duplicatedDeals = [...deals, ...deals];
-
-  // Auto-scroll animation
-  useEffect(() => {
-    const animate = () => {
-      if (scrollRef.current && !isPaused && !isDragging) {
-        scrollRef.current.scrollLeft += 0.5; // Slow smooth scroll
-
-        // Reset to start when we've scrolled halfway (first set of items)
-        const halfWidth = scrollRef.current.scrollWidth / 2;
-        if (scrollRef.current.scrollLeft >= halfWidth) {
-          scrollRef.current.scrollLeft = 0;
-        }
-      }
-      animationRef.current = requestAnimationFrame(animate);
-    };
-
-    animationRef.current = requestAnimationFrame(animate);
-    return () => {
-      if (animationRef.current) {
-        cancelAnimationFrame(animationRef.current);
-      }
-    };
-  }, [isPaused, isDragging]);
-
-  // Prevent click if user dragged
-  const handleClickCapture = (e: React.MouseEvent) => {
-    if (hasDragged.current) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  };
-
-  // Mouse drag handlers
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    hasDragged.current = false;
-    dragStartX.current = e.clientX;
-    scrollStartX.current = scrollRef.current?.scrollLeft || 0;
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging || !scrollRef.current) return;
-    e.preventDefault();
-    const dx = e.clientX - dragStartX.current;
-    // Mark as dragged if moved more than 5px
-    if (Math.abs(dx) > 5) {
-      hasDragged.current = true;
-    }
-    scrollRef.current.scrollLeft = scrollStartX.current - dx;
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-    // Reset hasDragged after a short delay to allow click prevention
-    setTimeout(() => {
-      hasDragged.current = false;
-    }, 100);
-  };
-
-  // Touch drag handlers
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setIsDragging(true);
-    hasDragged.current = false;
-    dragStartX.current = e.touches[0].clientX;
-    scrollStartX.current = scrollRef.current?.scrollLeft || 0;
-  };
-
-  const handleTouchMove = (e: React.TouchEvent) => {
-    if (!isDragging || !scrollRef.current) return;
-    const dx = e.touches[0].clientX - dragStartX.current;
-    // Mark as dragged if moved more than 5px
-    if (Math.abs(dx) > 5) {
-      hasDragged.current = true;
-    }
-    scrollRef.current.scrollLeft = scrollStartX.current - dx;
-  };
-
-  const handleTouchEnd = () => {
-    setIsDragging(false);
-    setTimeout(() => {
-      hasDragged.current = false;
-    }, 100);
-  };
 
   if (deals.length === 0) return null;
 
@@ -240,30 +151,17 @@ export function TopDealsCarousel({ deals }: TopDealsCarouselProps) {
         <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-gray-50 dark:from-gray-900 to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-gray-50 dark:from-gray-900 to-transparent z-10 pointer-events-none" />
 
-        {/* Scrolling track */}
+        {/* Scrolling track - CSS animation like StoresCarousel */}
         <div
-          ref={scrollRef}
-          className="flex gap-4 overflow-x-auto scrollbar-hide cursor-grab active:cursor-grabbing select-none"
-          style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
+          className={`flex gap-4 animate-scroll-deals ${isPaused ? "pause-animation" : ""}`}
           onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => { setIsPaused(false); setIsDragging(false); }}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onClickCapture={handleClickCapture}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
+          onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={() => setIsPaused(true)}
+          onTouchEnd={() => setIsPaused(false)}
         >
-          {/* Spacer for left padding */}
-          <div className="flex-shrink-0 w-4 sm:w-8" />
-
           {duplicatedDeals.map((deal, index) => (
             <CarouselCard key={`${deal.id}-${index}`} deal={deal} />
           ))}
-
-          {/* Spacer for right padding */}
-          <div className="flex-shrink-0 w-4 sm:w-8" />
         </div>
       </div>
 
