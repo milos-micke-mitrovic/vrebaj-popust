@@ -1,5 +1,5 @@
 import { JSDOM } from "jsdom";
-import { getDealsWithoutDetails, updateDealDetails, disconnect } from "../db-writer";
+import { getDealsWithoutDetails, updateDealDetails, deleteDealByUrl, disconnect } from "../db-writer";
 
 const STORE = "intersport" as const;
 
@@ -158,6 +158,7 @@ async function scrapeIntersportDetails(): Promise<void> {
 
   let processed = 0;
   let updated = 0;
+  let deleted = 0;
   let errors = 0;
   const startTime = Date.now();
 
@@ -167,16 +168,19 @@ async function scrapeIntersportDetails(): Promise<void> {
     try {
       const details = await fetchProductDetails(deal.url, deal.name);
 
-      if (details.sizes.length > 0 || details.description || details.categories.length > 0) {
+      // If no sizes found, product is out of stock - delete it
+      if (details.sizes.length === 0) {
+        await deleteDealByUrl(deal.url);
+        deleted++;
+        console.log(`${progress} ✗ ${deal.name.substring(0, 40)}... | no sizes - DELETED`);
+      } else {
         await updateDealDetails(deal.url, {
           sizes: details.sizes,
           description: details.description,
           ...(details.categories.length > 0 && { categories: details.categories }),
         });
         updated++;
-        console.log(`${progress} ✓ ${deal.name.substring(0, 40)}... | sizes: ${details.sizes.join(", ") || "none"} | cat: ${details.categories.join(", ") || "none"}`);
-      } else {
-        console.log(`${progress} - ${deal.name.substring(0, 40)}... | no details found`);
+        console.log(`${progress} ✓ ${deal.name.substring(0, 40)}... | sizes: ${details.sizes.join(", ")} | cat: ${details.categories.join(", ") || "none"}`);
       }
 
       processed++;
@@ -207,6 +211,7 @@ async function scrapeIntersportDetails(): Promise<void> {
   console.log("\n=== Detail Scraping Complete ===");
   console.log(`Processed: ${processed}`);
   console.log(`Updated with details: ${updated}`);
+  console.log(`Deleted (no sizes): ${deleted}`);
   console.log(`Errors: ${errors}`);
   console.log(`Total time: ${(totalTime / 60).toFixed(1)} minutes`);
   console.log(`Average rate: ${(processed / totalTime).toFixed(2)} products/second`);

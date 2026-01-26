@@ -179,6 +179,18 @@ export async function cleanupStaleProducts(
 }
 
 /**
+ * Delete a deal by URL (used when product is out of stock / no sizes)
+ */
+export async function deleteDealByUrl(url: string): Promise<boolean> {
+  try {
+    await prisma.deal.delete({ where: { url } });
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Get count of existing products for a store
  */
 export async function getStoreProductCount(store: Store): Promise<number> {
