@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Outfit } from "next/font/google";
-import { GoogleAnalytics } from "@next/third-parties/google";
 import { getAllDealsAsync } from "@/lib/deals";
 import { AppProviders } from "@/components/app-providers";
 import { DisableScrollRestoration } from "@/components/scroll-to-top";
@@ -173,10 +172,9 @@ export default async function RootLayout({
       >
         <ServiceWorkerCleanup />
         <DisableScrollRestoration />
-        <AppProviders availableDealIds={availableDealIds}>
+        <AppProviders availableDealIds={availableDealIds} gaId={GA_MEASUREMENT_ID || undefined}>
           {children}
         </AppProviders>
-        {GA_MEASUREMENT_ID && <GoogleAnalytics gaId={GA_MEASUREMENT_ID} />}
       </body>
     </html>
   );

@@ -15,9 +15,9 @@ export function Footer() {
     <footer className="border-t bg-white dark:bg-gray-900 dark:border-gray-800">
       <div className="mx-auto max-w-7xl px-4 py-10">
         {/* Main footer content */}
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="flex flex-wrap gap-8 lg:gap-16">
           {/* Logo and description */}
-          <div className="sm:col-span-2 lg:col-span-1">
+          <div className="w-full sm:w-auto sm:max-w-[280px]">
             <Link href="/" className="flex items-center gap-1.5">
               <Image src="/logos/logo.png" alt="VrebajPopust" width={40} height={40} className="h-10 w-10" />
               <span className="text-xl font-bold text-gray-900 dark:text-white">
@@ -55,44 +55,48 @@ export function Footer() {
           {/* Categories */}
           <div>
             <h3 className="font-semibold text-gray-900 dark:text-white">Kategorije</h3>
-            <ul className="mt-3 space-y-2 text-sm">
-              <li>
-                <Link href="/ponude/patike" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
-                  Patike
-                </Link>
-              </li>
-              <li>
-                <Link href="/ponude/cipele" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
-                  Cipele
-                </Link>
-              </li>
-              <li>
-                <Link href="/ponude/jakne" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
-                  Jakne
-                </Link>
-              </li>
-              <li>
-                <Link href="/ponude/duksevi" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
-                  Duksevi
-                </Link>
-              </li>
-              <li>
-                <Link href="/ponude/trenerke" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
-                  Trenerke
-                </Link>
-              </li>
-              <li>
-                <Link href="/ponude/majice" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
-                  Majice
-                </Link>
-              </li>
-            </ul>
+            <div className="mt-3 flex gap-4 text-sm">
+              <ul className="space-y-2">
+                <li>
+                  <Link href="/ponude/patike" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
+                    Patike
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/ponude/cipele" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
+                    Cipele
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/ponude/jakne" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
+                    Jakne
+                  </Link>
+                </li>
+              </ul>
+              <ul className="space-y-2">
+                <li>
+                  <Link href="/ponude/duksevi" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
+                    Duksevi
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/ponude/trenerke" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
+                    Trenerke
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/ponude/majice" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
+                    Majice
+                  </Link>
+                </li>
+              </ul>
+            </div>
           </div>
 
           {/* Stores we track */}
-          <div className="lg:w-fit">
+          <div>
             <h3 className="font-semibold text-gray-900 dark:text-white">Pratimo prodavnice</h3>
-            <div className="mt-3 flex flex-wrap gap-3 lg:max-w-[160px]">
+            <div className="mt-3 flex flex-wrap gap-3 max-w-[200px]">
               {STORES.map((store) => (
                 <Link
                   key={store.name}

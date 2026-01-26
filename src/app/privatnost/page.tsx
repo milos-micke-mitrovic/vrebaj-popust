@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { CookiePreferences } from "@/components/cookie-preferences";
 
 export const metadata: Metadata = {
   title: "Politika privatnosti | VrebajPopust",
@@ -113,9 +114,13 @@ export default function PrivacyPage() {
             </h2>
             <p className="mb-4">
               Naš sajt koristi kolačiće za analitiku. Kolačići su male tekstualne
-              datoteke koje se čuvaju na vašem uređaju. Možete ih obrisati ili
-              blokirati putem podešavanja pretraživača.
+              datoteke koje se čuvaju na vašem uređaju. Pri prvoj poseti sajtu,
+              tražimo vaš pristanak za korišćenje analitičkih kolačića.
             </p>
+            <p className="mb-4">
+              Možete promeniti svoju odluku u bilo kom trenutku:
+            </p>
+            <CookiePreferences />
 
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
               Linkovi ka drugim sajtovima
