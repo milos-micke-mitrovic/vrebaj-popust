@@ -2,12 +2,12 @@ import Link from "next/link";
 import Image from "next/image";
 
 const STORES = [
-  { name: "Djak Sport", logo: "/logos/djaksport.png" },
-  { name: "Planeta Sport", logo: "/logos/planeta.png" },
-  { name: "Sport Vision", logo: "/logos/sportvision.png" },
-  { name: "N Sport", logo: "/logos/nsport.jpg" },
-  { name: "Buzz Sneakers", logo: "/logos/buzz.png" },
-  { name: "Office Shoes", logo: "/logos/officeshoes.png" },
+  { name: "Djak Sport", logo: "/logos/djaksport.png", slug: "djak-sport" },
+  { name: "Planeta Sport", logo: "/logos/planeta.png", slug: "planeta-sport" },
+  { name: "Sport Vision", logo: "/logos/sportvision.png", slug: "sport-vision" },
+  { name: "N Sport", logo: "/logos/nsport.jpg", slug: "n-sport" },
+  { name: "Buzz", logo: "/logos/buzz.png", slug: "buzz" },
+  { name: "Office Shoes", logo: "/logos/officeshoes.png", slug: "office-shoes" },
 ];
 
 export function Footer() {
@@ -49,16 +49,6 @@ export function Footer() {
                   O nama
                 </Link>
               </li>
-              <li>
-                <Link href="/privatnost" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
-                  Privatnost
-                </Link>
-              </li>
-              <li>
-                <Link href="/uslovi" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
-                  Uslovi korišćenja
-                </Link>
-              </li>
             </ul>
           </div>
 
@@ -67,22 +57,32 @@ export function Footer() {
             <h3 className="font-semibold text-gray-900 dark:text-white">Kategorije</h3>
             <ul className="mt-3 space-y-2 text-sm">
               <li>
-                <Link href="/ponude?categories=patike" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
+                <Link href="/ponude/patike" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
                   Patike
                 </Link>
               </li>
               <li>
-                <Link href="/ponude?categories=jakna" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
+                <Link href="/ponude/cipele" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
+                  Cipele
+                </Link>
+              </li>
+              <li>
+                <Link href="/ponude/jakne" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
                   Jakne
                 </Link>
               </li>
               <li>
-                <Link href="/ponude?categories=duks" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
+                <Link href="/ponude/duksevi" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
                   Duksevi
                 </Link>
               </li>
               <li>
-                <Link href="/ponude?categories=majica" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
+                <Link href="/ponude/trenerke" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
+                  Trenerke
+                </Link>
+              </li>
+              <li>
+                <Link href="/ponude/majice" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
                   Majice
                 </Link>
               </li>
@@ -94,16 +94,20 @@ export function Footer() {
             <h3 className="font-semibold text-gray-900 dark:text-white">Pratimo prodavnice</h3>
             <div className="mt-3 flex flex-wrap gap-3 lg:max-w-[160px]">
               {STORES.map((store) => (
-                <Image
+                <Link
                   key={store.name}
-                  src={store.logo}
-                  alt={store.name}
-                  title={store.name}
-                  width={60}
-                  height={24}
-                  style={{ height: '24px', width: 'auto' }}
-                  className="grayscale hover:grayscale-0 transition-all dark:brightness-90 dark:hover:brightness-100"
-                />
+                  href={`/ponude/${store.slug}`}
+                  title={`Pogledaj ponude - ${store.name}`}
+                >
+                  <Image
+                    src={store.logo}
+                    alt={store.name}
+                    width={60}
+                    height={24}
+                    style={{ height: '24px', width: 'auto' }}
+                    className="grayscale hover:grayscale-0 transition-all dark:brightness-90 dark:hover:brightness-100"
+                  />
+                </Link>
               ))}
             </div>
           </div>
@@ -111,7 +115,20 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="mt-10 border-t dark:border-gray-800 pt-6">
-          <p className="text-xs text-gray-500 dark:text-gray-400 text-center">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              © {new Date().getFullYear()} VrebajPopust. Sva prava zadržana.
+            </p>
+            <div className="flex items-center gap-4 text-xs">
+              <Link href="/privatnost" className="text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
+                Privatnost
+              </Link>
+              <Link href="/uslovi" className="text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
+                Uslovi korišćenja
+              </Link>
+            </div>
+          </div>
+          <p className="mt-4 text-xs text-gray-400 dark:text-gray-500 text-center">
             Cene se ažuriraju automatski. VrebajPopust nije odgovoran za tačnost cena na sajtovima prodavaca.
           </p>
         </div>
