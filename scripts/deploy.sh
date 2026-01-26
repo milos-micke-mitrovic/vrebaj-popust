@@ -15,10 +15,7 @@ git pull
 echo "2. Installing dependencies..."
 pnpm install
 
-echo "3. Generating Prisma client..."
-pnpm prisma generate
-
-echo "4. Building app (keeping old build running)..."
+echo "3. Building app (keeping old build running)..."
 # Don't delete .next - Next.js handles incremental builds
 # Old .next stays active until PM2 restart
 pnpm build
