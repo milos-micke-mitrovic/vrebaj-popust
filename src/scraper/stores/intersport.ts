@@ -59,8 +59,12 @@ function parseCategory(url: string, name: string): string[] {
   const nameLower = name.toLowerCase();
   const categories: string[] = [];
 
-  // Extract from URL path
-  if (urlLower.includes("/patike/") || nameLower.includes("patike")) {
+  // Check footwear first (more specific checks first)
+  if (nameLower.includes("kopacke") || nameLower.includes("kopačke")) {
+    categories.push("obuca/kopacke");
+  } else if (nameLower.includes("baletank")) {
+    categories.push("obuca/baletanke");
+  } else if (urlLower.includes("/patike/") || nameLower.includes("patike")) {
     categories.push("obuca/patike");
   } else if (urlLower.includes("/cipele/") || nameLower.includes("cipele")) {
     categories.push("obuca/cipele");
@@ -70,8 +74,10 @@ function parseCategory(url: string, name: string): string[] {
     categories.push("obuca/sandale");
   } else if (urlLower.includes("/papuce/") || nameLower.includes("papuče") || nameLower.includes("papuce")) {
     categories.push("obuca/papuce");
-  } else if (nameLower.includes("kopacke") || nameLower.includes("kopačke")) {
-    categories.push("obuca/kopacke");
+  }
+  // Clothing - check specific items before generic ones
+  else if (nameLower.includes("kupaći") || nameLower.includes("kupaci") || nameLower.includes("bikini")) {
+    categories.push("odeca/kupaci");
   } else if (nameLower.includes("jakna") || nameLower.includes("jakne")) {
     categories.push("odeca/jakne");
   } else if (nameLower.includes("prsluk") || nameLower.includes("prsluci")) {
@@ -80,20 +86,26 @@ function parseCategory(url: string, name: string): string[] {
     categories.push("odeca/duksevi");
   } else if (nameLower.includes("majica") || nameLower.includes("dres")) {
     categories.push("odeca/majice");
-  } else if (nameLower.includes("trenerka") || nameLower.includes("donji deo")) {
-    categories.push("odeca/trenerke");
   } else if (nameLower.includes("helanke") || nameLower.includes("tajice")) {
     categories.push("odeca/helanke");
   } else if (nameLower.includes("šorc") || nameLower.includes("sorc") || nameLower.includes("bermude")) {
     categories.push("odeca/sortevi");
-  } else if (nameLower.includes("kupaći") || nameLower.includes("kupaci") || nameLower.includes("bikini")) {
-    categories.push("odeca/kupaci");
-  } else if (nameLower.includes("ranac") || nameLower.includes("ruksak")) {
+  } else if (nameLower.includes("pantalone") || nameLower.includes("ski pantalone")) {
+    categories.push("odeca/pantalone");
+  } else if (nameLower.includes("trenerka") || nameLower.includes("donji deo")) {
+    categories.push("odeca/trenerke");
+  } else if (nameLower.includes("haljin")) {
+    categories.push("odeca/haljine");
+  }
+  // Accessories
+  else if (nameLower.includes("ranac") || nameLower.includes("ruksak")) {
     categories.push("oprema/rancevi");
   } else if (nameLower.includes("torba")) {
     categories.push("oprema/torbe");
-  } else if (nameLower.includes("kapa") || nameLower.includes("kačket")) {
+  } else if (nameLower.includes("kapa") || nameLower.includes("kačket") || nameLower.includes("kacket")) {
     categories.push("oprema/kape");
+  } else if (nameLower.includes("rukavic")) {
+    categories.push("oprema/rukavice");
   }
 
   return categories;

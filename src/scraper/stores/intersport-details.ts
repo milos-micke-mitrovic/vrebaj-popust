@@ -1,3 +1,4 @@
+import { JSDOM } from "jsdom";
 import { getDealsWithoutDetails, updateDealDetails, disconnect } from "../db-writer";
 
 const STORE = "intersport" as const;
@@ -9,10 +10,44 @@ function sleep(ms: number): Promise<void> {
 interface ProductDetails {
   sizes: string[];
   description: string | null;
+  categories: string[];
+}
+
+function mapCategory(text: string): string | null {
+  const lower = text.toLowerCase();
+
+  // Footwear
+  if (lower.includes("kopack") || lower.includes("kopačk")) return "obuca/kopacke";
+  if (lower.includes("baletank")) return "obuca/baletanke";
+  if (lower.includes("patike")) return "obuca/patike";
+  if (lower.includes("cipele")) return "obuca/cipele";
+  if (lower.includes("čizme") || lower.includes("cizme")) return "obuca/cizme";
+  if (lower.includes("sandale")) return "obuca/sandale";
+  if (lower.includes("papuč") || lower.includes("papuc")) return "obuca/papuce";
+
+  // Clothing - specific first
+  if (lower.includes("kupaći") || lower.includes("kupaci") || lower.includes("bikini")) return "odeca/kupaci";
+  if (lower.includes("jakn")) return "odeca/jakne";
+  if (lower.includes("prsluk") || lower.includes("prsluci")) return "odeca/prsluci";
+  if (lower.includes("duks")) return "odeca/duksevi";
+  if (lower.includes("majic")) return "odeca/majice";
+  if (lower.includes("helan") || lower.includes("tajice")) return "odeca/helanke";
+  if (lower.includes("šorc") || lower.includes("sorc") || lower.includes("bermude")) return "odeca/sortevi";
+  if (lower.includes("pantalone") || lower.includes("ski pantalone")) return "odeca/pantalone";
+  if (lower.includes("trenerka") || lower.includes("trenerke")) return "odeca/trenerke";
+  if (lower.includes("halj")) return "odeca/haljine";
+
+  // Accessories
+  if (lower.includes("ranac") || lower.includes("ruksak")) return "oprema/rancevi";
+  if (lower.includes("torb")) return "oprema/torbe";
+  if (lower.includes("kapa") || lower.includes("kačket") || lower.includes("kacket")) return "oprema/kape";
+  if (lower.includes("rukavic")) return "oprema/rukavice";
+
+  return null;
 }
 
 async function fetchProductDetails(url: string): Promise<ProductDetails> {
-  const result: ProductDetails = { sizes: [], description: null };
+  const result: ProductDetails = { sizes: [], description: null, categories: [] };
 
   try {
     const response = await fetch(url, {
@@ -28,30 +63,61 @@ async function fetchProductDetails(url: string): Promise<ProductDetails> {
     }
 
     const html = await response.text();
+    const dom = new JSDOM(html);
+    const doc = dom.window.document;
 
-    // Extract sizes from data-size attributes on input elements
-    // Pattern: <input ... class="fnc-product-cart-size" ... data-size="36">
-    const sizeRegex = /data-size="([^"]+)"[^>]*class="fnc-product-cart-size|class="fnc-product-cart-size[^"]*"[^>]*data-size="([^"]+)"/g;
-    let match;
+    // Extract sizes from input elements with data-size attribute
+    const sizeInputs = doc.querySelectorAll('input.fnc-product-cart-size[data-size]');
     const seenSizes = new Set<string>();
-
-    while ((match = sizeRegex.exec(html)) !== null) {
-      const size = (match[1] || match[2])?.trim();
-      // Filter: must be alphanumeric with optional dash/slash/dot (e.g., "42", "36-37", "XL", "S/M", "37.5")
-      if (size && !seenSizes.has(size) && /^[\dA-Za-z][\dA-Za-z\-\/\.]*$/.test(size) && !size.includes('input')) {
+    for (const input of sizeInputs) {
+      const size = input.getAttribute('data-size')?.trim();
+      if (size && !seenSizes.has(size)) {
         seenSizes.add(size);
         result.sizes.push(size);
       }
     }
 
+    // Fallback: try size-list li elements
+    if (result.sizes.length === 0) {
+      const sizeItems = doc.querySelectorAll('.size-list li, .size-values');
+      for (const item of sizeItems) {
+        const size = item.textContent?.trim();
+        if (size && !seenSizes.has(size) && /^[\dA-Za-z][\dA-Za-z\-\/\.\s]*$/.test(size)) {
+          seenSizes.add(size);
+          result.sizes.push(size);
+        }
+      }
+    }
+
+    // Extract categories from breadcrumbs
+    const breadcrumbs = doc.querySelectorAll('.breadcrumbs a, .breadcrumb a, nav a');
+    for (const el of breadcrumbs) {
+      const text = el.textContent?.trim() || "";
+      const category = mapCategory(text);
+      if (category && !result.categories.includes(category)) {
+        result.categories.push(category);
+      }
+    }
+
+    // Fallback: extract category from URL path
+    if (result.categories.length === 0) {
+      const urlLower = url.toLowerCase();
+      if (urlLower.includes('/patike/') || urlLower.includes('-patike-')) result.categories.push('obuca/patike');
+      else if (urlLower.includes('/cipele/') || urlLower.includes('-cipele-')) result.categories.push('obuca/cipele');
+      else if (urlLower.includes('/cizme/') || urlLower.includes('-cizme-')) result.categories.push('obuca/cizme');
+      else if (urlLower.includes('/papuce/') || urlLower.includes('-papuce-')) result.categories.push('obuca/papuce');
+      else if (urlLower.includes('/jakne/') || urlLower.includes('-jakna-') || urlLower.includes('-jakne-')) result.categories.push('odeca/jakne');
+      else if (urlLower.includes('/duksevi/') || urlLower.includes('-duks-')) result.categories.push('odeca/duksevi');
+      else if (urlLower.includes('/majice/') || urlLower.includes('-majica-')) result.categories.push('odeca/majice');
+      else if (urlLower.includes('/pantalone/') || urlLower.includes('-pantalone-') || urlLower.includes('ski-pantalone')) result.categories.push('odeca/pantalone');
+      else if (urlLower.includes('/trenerke/') || urlLower.includes('-trenerka-')) result.categories.push('odeca/trenerke');
+      else if (urlLower.includes('/sortevi/') || urlLower.includes('-sorc-')) result.categories.push('odeca/sortevi');
+    }
+
     // Extract description from product declaration
-    const descMatch = html.match(/<div[^>]*id="product-declaration"[^>]*>[\s\S]*?<p>([\s\S]*?)<\/p>/);
-    if (descMatch) {
-      result.description = descMatch[1]
-        .replace(/<br\s*\/?>/gi, '\n')
-        .replace(/<[^>]+>/g, '')
-        .trim()
-        .substring(0, 500);
+    const descEl = doc.querySelector('#product-declaration p');
+    if (descEl) {
+      result.description = descEl.textContent?.trim().substring(0, 500) || null;
     }
 
   } catch (err) {
@@ -85,13 +151,14 @@ async function scrapeIntersportDetails(): Promise<void> {
     try {
       const details = await fetchProductDetails(deal.url);
 
-      if (details.sizes.length > 0 || details.description) {
+      if (details.sizes.length > 0 || details.description || details.categories.length > 0) {
         await updateDealDetails(deal.url, {
           sizes: details.sizes,
           description: details.description,
+          ...(details.categories.length > 0 && { categories: details.categories }),
         });
         updated++;
-        console.log(`${progress} ✓ ${deal.name.substring(0, 40)}... | sizes: ${details.sizes.join(", ") || "none"}`);
+        console.log(`${progress} ✓ ${deal.name.substring(0, 40)}... | sizes: ${details.sizes.join(", ") || "none"} | cat: ${details.categories.join(", ") || "none"}`);
       } else {
         console.log(`${progress} - ${deal.name.substring(0, 40)}... | no details found`);
       }
