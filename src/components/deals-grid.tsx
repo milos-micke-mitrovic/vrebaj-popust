@@ -1243,7 +1243,7 @@ export function DealsGrid({
                   </button>
                 ))}
                 {filteredBrands.length === 0 && (
-                  <p className="text-sm text-gray-400 dark:text-gray-500 p-2">Nema rezultata</p>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 p-2">Nema rezultata</p>
                 )}
               </div>
             </ScrollFade>
@@ -1523,7 +1523,7 @@ export function DealsGrid({
           ) : deals.length === 0 ? (
             <div className="min-h-[400px] flex flex-col items-center justify-center text-center px-4">
               <div className="w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
-                <SearchX className="w-10 h-10 text-gray-400 dark:text-gray-500" />
+                <SearchX className="w-10 h-10 text-gray-500 dark:text-gray-400" />
               </div>
               <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
                 Nema rezultata

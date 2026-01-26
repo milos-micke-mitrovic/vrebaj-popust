@@ -114,7 +114,7 @@ function CarouselCard({ deal }: { deal: Deal }) {
             <span className="text-lg font-bold text-red-600 dark:text-red-500">
               {formatPrice(deal.salePrice)}
             </span>
-            <span className="text-sm text-gray-400 dark:text-gray-500 line-through">
+            <span className="text-sm text-gray-500 dark:text-gray-400 line-through">
               {formatPrice(deal.originalPrice)}
             </span>
           </div>

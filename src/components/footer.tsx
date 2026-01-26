@@ -19,7 +19,7 @@ export function Footer() {
           {/* Logo and description */}
           <div className="w-full sm:w-auto sm:max-w-[280px]">
             <Link href="/" className="flex items-center gap-1.5">
-              <Image src="/logos/logo.png" alt="VrebajPopust" width={40} height={40} className="h-10 w-10" />
+              <Image src="/logos/logo.png" alt="" width={40} height={40} className="h-10 w-10" />
               <span className="text-xl font-bold text-gray-900 dark:text-white">
                 Vrebaj<span className="text-red-500">Popust</span>
               </span>
@@ -132,7 +132,7 @@ export function Footer() {
               </Link>
             </div>
           </div>
-          <p className="mt-4 text-xs text-gray-400 dark:text-gray-500 text-center">
+          <p className="mt-4 text-xs text-gray-500 dark:text-gray-400 text-center">
             Cene se ažuriraju automatski. VrebajPopust nije odgovoran za tačnost cena na sajtovima prodavaca.
           </p>
         </div>

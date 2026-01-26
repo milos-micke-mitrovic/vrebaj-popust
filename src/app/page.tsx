@@ -197,8 +197,9 @@ export default async function Home() {
       <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-950">
         <Header />
 
-        {/* Hero Section */}
-        <HeroBanner>
+        <main>
+          {/* Hero Section */}
+          <HeroBanner>
           <div className="text-center text-white">
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
               Sportski popusti
@@ -240,7 +241,7 @@ export default async function Home() {
               <h2 className="text-2xl font-bold text-white sm:text-3xl">
                 Spreman da uštediš?
               </h2>
-              <p className="mx-auto mt-4 max-w-xl text-gray-400">
+              <p className="mx-auto mt-4 max-w-xl text-gray-300">
                 Pregledaj sve aktivne ponude i pronađi savršen proizvod po
                 sniženoj ceni.
               </p>
@@ -253,6 +254,7 @@ export default async function Home() {
             </div>
           </ScrollReveal>
         </section>
+        </main>
 
         <Footer />
       </div>

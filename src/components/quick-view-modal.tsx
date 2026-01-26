@@ -221,7 +221,7 @@ export function QuickViewModal({ deal, onClose }: QuickViewModalProps) {
                 <span className="text-2xl font-bold text-red-600 dark:text-red-500">
                   {formatPrice(deal.salePrice)}
                 </span>
-                <span className="text-lg text-gray-400 dark:text-gray-500 line-through">
+                <span className="text-lg text-gray-500 dark:text-gray-400 line-through">
                   {formatPrice(deal.originalPrice)}
                 </span>
               </div>

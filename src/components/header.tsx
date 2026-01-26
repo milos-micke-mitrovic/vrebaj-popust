@@ -27,7 +27,7 @@ export function Header() {
             href="/"
             className="flex items-center gap-1.5 hover:opacity-80 transition-opacity"
           >
-            <Image src="/logos/logo.png" alt="VrebajPopust" width={48} height={48} className="h-10 w-10 sm:h-12 sm:w-12" priority />
+            <Image src="/logos/logo.png" alt="" width={48} height={48} className="h-10 w-10 sm:h-12 sm:w-12" priority />
             <span className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
               Vrebaj<span className="text-red-500">Popust</span>
             </span>

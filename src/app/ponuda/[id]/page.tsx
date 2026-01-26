@@ -416,7 +416,7 @@ export default async function DealPage({ params }: Props) {
           {/* Unavailable Message */}
           <div className="mx-auto max-w-2xl text-center mb-12">
             <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
-              <svg className="h-10 w-10 text-gray-400 dark:text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="h-10 w-10 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </div>
@@ -590,7 +590,7 @@ export default async function DealPage({ params }: Props) {
                     alt={`${deal.name} - ${deal.brand || ""} ${categoryText}`}
                   />
                 ) : (
-                  <div className="flex h-full items-center justify-center text-gray-400 dark:text-gray-500">
+                  <div className="flex h-full items-center justify-center text-gray-500 dark:text-gray-400">
                     Nema slike
                   </div>
                 )}
@@ -736,7 +736,7 @@ export default async function DealPage({ params }: Props) {
                     >
                       {formatPrice(deal.salePrice)}
                     </span>
-                    <span className="text-xl text-gray-400 dark:text-gray-500 line-through">
+                    <span className="text-xl text-gray-500 dark:text-gray-400 line-through">
                       {formatPrice(deal.originalPrice)}
                     </span>
                   </div>

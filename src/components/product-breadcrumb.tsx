@@ -68,7 +68,7 @@ export function ProductBreadcrumb({ items }: ProductBreadcrumbProps) {
                 <li key={index} className={`flex items-center ${isLast ? 'min-w-0 flex-1' : 'flex-none'}`}>
                   {index > 0 && (
                     <svg
-                      className="w-4 h-4 mx-0.5 sm:mx-1 text-gray-400 dark:text-gray-500 flex-none"
+                      className="w-4 h-4 mx-0.5 sm:mx-1 text-gray-500 dark:text-gray-400 flex-none"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
