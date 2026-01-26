@@ -10,7 +10,8 @@ import { formatPrice, getProxiedImageUrl } from "@/lib/utils";
 import { WishlistButton } from "@/components/wishlist-button";
 import { Tooltip } from "@/components/ui/tooltip";
 import { useQuickView } from "@/context/quick-view-context";
-import { Eye } from "lucide-react";
+import { useRecentlyViewedContext } from "@/context/recently-viewed-context";
+import { Eye, Clock } from "lucide-react";
 
 const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
 
@@ -70,6 +71,10 @@ export function DealCard({ deal }: DealCardProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { openQuickView } = useQuickView();
+  const { recentlyViewed, isLoaded: recentlyViewedLoaded } = useRecentlyViewedContext();
+
+  // Check if this product was recently viewed
+  const isRecentlyViewed = recentlyViewedLoaded && recentlyViewed.some((d) => d.id === deal.id);
 
   // Save current URL with filters and scroll position when clicking a product
   // Only save when on /ponude pages, not on product detail pages
@@ -88,6 +93,10 @@ export function DealCard({ deal }: DealCardProps) {
     <Link href={`/ponuda/${deal.id}`} onClick={handleClick} scroll={true}>
       <Card className="group h-full overflow-hidden transition-shadow hover:shadow-lg dark:bg-gray-800 dark:border-gray-700 !p-0 card-glow">
         <div className="relative aspect-square overflow-hidden bg-gray-100 dark:bg-gray-700">
+          {/* Pulsing placeholder while loading */}
+          {!imgLoaded && !imgError && (
+            <div className="absolute inset-0 bg-gradient-to-r from-gray-200 via-gray-100 to-gray-200 dark:from-gray-700 dark:via-gray-600 dark:to-gray-700 animate-pulse" />
+          )}
           <Image
             src={!imgError ? getProxiedImageUrl(deal.imageUrl) : "/images/placeholder.png"}
             alt={deal.name}
@@ -110,19 +119,19 @@ export function DealCard({ deal }: DealCardProps) {
                 alt={storeInfo.name}
                 width={60}
                 height={20}
-                className="h-5 w-auto rounded bg-white/90 p-0.5"
+                className="h-5 w-auto rounded bg-white/95 p-0.5 shadow-sm ring-1 ring-black/5"
                 onError={() => setLogoError(true)}
               />
             ) : (
               <div
-                className={`${storeInfo.fallbackColor} rounded px-2 py-0.5 text-[10px] font-bold text-white`}
+                className={`${storeInfo.fallbackColor} rounded px-2 py-0.5 text-[10px] font-bold text-white shadow-sm`}
               >
                 {storeInfo.name}
               </div>
             )}
           </div>
-          {/* Bottom right buttons */}
-          <div className="absolute right-2 bottom-2 flex items-center gap-1.5">
+          {/* Bottom right buttons - appear on hover (desktop) */}
+          <div className="absolute right-2 bottom-2 flex items-center gap-1.5 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity duration-200">
             {/* Quick view button */}
             <Tooltip content="Brzi pregled">
               <button
@@ -139,29 +148,38 @@ export function DealCard({ deal }: DealCardProps) {
             {/* Wishlist button */}
             <WishlistButton deal={deal} size="sm" />
           </div>
-          {/* New badge */}
-          {isNewDeal(deal.createdAt) && (
-            <div className="absolute left-2 bottom-2.5">
+          {/* Bottom left badges */}
+          <div className="absolute left-2 bottom-2 flex items-center gap-1.5">
+            {/* Recently viewed badge */}
+            {isRecentlyViewed && !isNewDeal(deal.createdAt) && (
+              <Tooltip content="Nedavno pregledano">
+                <div className="flex items-center gap-1 rounded bg-blue-500 px-1.5 py-0.5 text-[10px] font-medium text-white shadow-sm cursor-help">
+                  <Clock className="w-3 h-3" />
+                </div>
+              </Tooltip>
+            )}
+            {/* New badge */}
+            {isNewDeal(deal.createdAt) && (
               <Tooltip content="Dodato u poslednjih 24h">
                 <div className="rounded bg-green-500 px-2 py-1 text-[10px] font-bold text-white shadow-sm cursor-help">
                   SVEŽE
                 </div>
               </Tooltip>
-            </div>
-          )}
+            )}
+          </div>
         </div>
         <CardContent className="p-3">
           {deal.brand && (
-            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase">
+            <p className="text-xs font-medium text-gray-500 dark:text-gray-400 uppercase truncate">
               {deal.brand}
             </p>
           )}
           <h3 className="mt-1 line-clamp-2 text-sm font-medium dark:text-white">{deal.name}</h3>
           <div className="mt-2 flex flex-wrap items-baseline gap-x-2">
-            <span className="text-lg font-bold text-red-600 dark:text-red-500">
+            <span className="text-base sm:text-lg font-bold text-red-600 dark:text-red-500">
               {formatPrice(deal.salePrice)}
             </span>
-            <span className="text-sm text-gray-400 dark:text-gray-500 line-through">
+            <span className="text-xs sm:text-sm text-gray-400 dark:text-gray-500 line-through">
               {formatPrice(deal.originalPrice)}
             </span>
           </div>
