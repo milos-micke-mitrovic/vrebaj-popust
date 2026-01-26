@@ -11,7 +11,7 @@ import { WishlistButton } from "@/components/wishlist-button";
 import { Tooltip } from "@/components/ui/tooltip";
 import { useQuickView } from "@/context/quick-view-context";
 import { useRecentlyViewedContext } from "@/context/recently-viewed-context";
-import { Eye, Clock } from "lucide-react";
+import { Eye } from "lucide-react";
 
 const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
 
@@ -71,10 +71,7 @@ export function DealCard({ deal }: DealCardProps) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { openQuickView } = useQuickView();
-  const { recentlyViewed, isLoaded: recentlyViewedLoaded } = useRecentlyViewedContext();
-
-  // Check if this product was recently viewed
-  const isRecentlyViewed = recentlyViewedLoaded && recentlyViewed.some((d) => d.id === deal.id);
+  const { addToRecentlyViewed } = useRecentlyViewedContext();
 
   // Save current URL with filters and scroll position when clicking a product
   // Only save when on /ponude pages, not on product detail pages
@@ -138,6 +135,7 @@ export function DealCard({ deal }: DealCardProps) {
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
+                  addToRecentlyViewed(deal);
                   openQuickView(deal);
                 }}
                 className="p-1.5 rounded-full bg-white/90 shadow-lg hover:bg-white transition-all cursor-pointer"
@@ -148,25 +146,15 @@ export function DealCard({ deal }: DealCardProps) {
             {/* Wishlist button */}
             <WishlistButton deal={deal} size="sm" />
           </div>
-          {/* Bottom left badges */}
-          <div className="absolute left-2 bottom-2 flex items-center gap-1.5">
-            {/* Recently viewed badge */}
-            {isRecentlyViewed && !isNewDeal(deal.createdAt) && (
-              <Tooltip content="Nedavno pregledano">
-                <div className="flex items-center gap-1 rounded bg-blue-500 px-1.5 py-0.5 text-[10px] font-medium text-white shadow-sm cursor-help">
-                  <Clock className="w-3 h-3" />
-                </div>
-              </Tooltip>
-            )}
-            {/* New badge */}
-            {isNewDeal(deal.createdAt) && (
-              <Tooltip content="Dodato u poslednjih 24h">
-                <div className="rounded bg-green-500 px-2 py-1 text-[10px] font-bold text-white shadow-sm cursor-help">
-                  SVEŽE
-                </div>
-              </Tooltip>
-            )}
-          </div>
+          {/* New badge */}
+          {isNewDeal(deal.createdAt) && (
+            <div className="absolute left-2 bottom-2">
+              <span className="inline-flex items-center gap-1 rounded bg-green-500 px-1.5 py-0.5 text-[9px] font-bold text-white shadow">
+                <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                Novo
+              </span>
+            </div>
+          )}
         </div>
         <CardContent className="p-3">
           {deal.brand && (
