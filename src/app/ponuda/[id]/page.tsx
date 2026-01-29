@@ -487,7 +487,7 @@ export default async function DealPage({ params }: Props) {
     : deal.imageUrl;
 
   // Fallback image for structured data (required by Google)
-  const schemaImageUrl = imageUrl || "https://vrebajpopust.rs/opengraph-image.png";
+  const schemaImageUrl = imageUrl || "https://vrebajpopust.rs/opengraph-image.jpeg";
 
   // Generate a short SKU from deal ID (Google requires max ~50 chars)
   // Use hash of full ID to ensure uniqueness while keeping it short

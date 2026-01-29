@@ -20,7 +20,7 @@ export function Footer() {
           {/* Logo and description */}
           <div className="w-full sm:w-auto sm:max-w-[280px]">
             <Link href="/" className="flex items-center gap-1.5">
-              <Image src="/logos/logo.png" alt="" width={40} height={40} className="h-10 w-10" />
+              <Image src="/logos/logo-v2.png" alt="" width={40} height={40} className="h-10 w-10" />
               <span className="text-xl font-bold text-gray-900 dark:text-white">
                 Vrebaj<span className="text-red-500">Popust</span>
               </span>

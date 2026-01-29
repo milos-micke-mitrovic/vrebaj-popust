@@ -67,7 +67,7 @@ export const metadata: Metadata = {
       "Pronađi najveće popuste, akcije i sniženja preko 50% na sportsku opremu u Srbiji. Ažurirano svakodnevno.",
     images: [
       {
-        url: "/opengraph-image.png",
+        url: "/opengraph-image.jpeg",
         width: 1200,
         height: 630,
         alt: "VrebajPopust - Najveći popusti u Srbiji",
@@ -78,7 +78,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "VrebajPopust | Najveći popusti preko 50% u Srbiji",
     description: "Pronađi najveće popuste preko 50% u Srbiji.",
-    images: ["/opengraph-image.png"],
+    images: ["/opengraph-image.jpeg"],
   },
   robots: {
     index: true,
@@ -108,7 +108,7 @@ const organizationSchema = {
   "@type": "Organization",
   name: "VrebajPopust",
   url: "https://vrebajpopust.rs",
-  logo: "https://vrebajpopust.rs/logos/logo.png",
+  logo: "https://vrebajpopust.rs/logos/logo-v2.png",
   description: "Pronađi najveće popuste preko 50% u Srbiji",
   foundingDate: "2024",
   areaServed: {
