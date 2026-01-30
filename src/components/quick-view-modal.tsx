@@ -157,7 +157,7 @@ export function QuickViewModal({ deal, onClose }: QuickViewModalProps) {
         {/* Close button */}
         <button
           onClick={handleClose}
-          className="absolute right-3 top-3 z-10 p-2 rounded-full bg-white/90 dark:bg-gray-800/90 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors cursor-pointer shadow-sm"
+          className="absolute right-3 top-6 md:top-3 z-10 p-2 rounded-full bg-white/90 dark:bg-gray-800/90 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors cursor-pointer shadow-sm"
         >
           <X className="w-5 h-5" />
         </button>
@@ -183,7 +183,7 @@ export function QuickViewModal({ deal, onClose }: QuickViewModalProps) {
               -{deal.discountPercent}%
             </div>
             {/* Store logo */}
-            <div className="absolute right-3 top-3">
+            <div className="absolute right-3 bottom-3 md:bottom-auto md:top-3">
               <Image
                 src={storeInfo.logo}
                 alt={storeInfo.name}

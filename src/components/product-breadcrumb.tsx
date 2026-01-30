@@ -40,7 +40,7 @@ export function ProductBreadcrumb({ items }: ProductBreadcrumbProps) {
   };
 
   return (
-    <nav className="sticky top-[57px] z-40 border-b bg-gray-50 dark:bg-gray-900 dark:border-gray-800">
+    <nav className="sticky top-[65px] sm:top-[73px] z-40 border-b bg-gray-50 dark:bg-gray-900 dark:border-gray-800">
       <div className="mx-auto max-w-7xl px-4">
         <div className="flex items-center gap-2 py-2 text-sm">
           {/* Back button - only show if user came from another page */}

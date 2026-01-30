@@ -142,7 +142,7 @@ export function Header() {
 
       {/* Mobile menu overlay */}
       {mobileMenuOpen && (
-        <div className="sm:hidden fixed inset-0 top-[57px] z-40">
+        <div className="sm:hidden fixed inset-0 top-[65px] z-40">
           {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/30 animate-[fadeIn_0.15s_ease-out]"

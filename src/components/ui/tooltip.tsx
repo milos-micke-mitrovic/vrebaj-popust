@@ -60,6 +60,10 @@ export function Tooltip({ children, content }: TooltipProps) {
     if (isVisible && mounted) {
       // Small delay to let the tooltip render first
       requestAnimationFrame(updatePosition);
+
+      // Hide tooltip on scroll (capture: true to catch scroll on any container)
+      window.addEventListener("scroll", hideTooltip, true);
+      return () => window.removeEventListener("scroll", hideTooltip, true);
     }
   }, [isVisible, mounted, updatePosition]);
 
