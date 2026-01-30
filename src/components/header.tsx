@@ -27,7 +27,7 @@ export function Header() {
             href="/"
             className="flex items-center gap-1.5 hover:opacity-80 transition-opacity"
           >
-            <Image src="/logos/logo-v2.png" alt="" width={48} height={48} className="h-10 w-10 sm:h-12 sm:w-12" priority />
+            <Image src="/logos/logo-v2.png" alt="" width={64} height={64} className="h-14 w-14 sm:h-16 sm:w-16" priority />
             <span className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
               Vrebaj<span className="text-red-500">Popust</span>
             </span>
@@ -142,7 +142,7 @@ export function Header() {
 
       {/* Mobile menu overlay */}
       {mobileMenuOpen && (
-        <div className="sm:hidden fixed inset-0 top-[65px] z-40">
+        <div className="sm:hidden fixed inset-0 top-[81px] z-40">
           {/* Backdrop */}
           <div
             className="absolute inset-0 bg-black/30 animate-[fadeIn_0.15s_ease-out]"
