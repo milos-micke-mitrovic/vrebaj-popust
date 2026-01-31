@@ -36,11 +36,12 @@ async function extractProductDetails(page: Page): Promise<ProductDetails> {
       };
 
       // Extract sizes from Buzz size selector
-      // Buzz uses: <li data-productsize-name="36.5" class="ease">36.5</li>
+      // Buzz uses: <li data-productsize-name="5-" class="ease">38 2/3</li>
+      // data-productsize-name has US sizes, text content has EU sizes — we want EU
       // Out of stock sizes have class "disabled"
       var sizeElements = document.querySelectorAll('li[data-productsize-name]:not(.disabled)');
       sizeElements.forEach(function(el) {
-        var size = el.getAttribute('data-productsize-name') || el.textContent.trim() || '';
+        var size = el.textContent.trim() || '';
         if (size && !result.sizes.includes(size)) {
           result.sizes.push(size);
         }

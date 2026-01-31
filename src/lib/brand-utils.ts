@@ -38,13 +38,26 @@ export const KNOWN_BRANDS: string[] = [
   "IPANEMA",
   "HAVAIANAS",
   "CROCS",
+  "STEVE MADDEN",
+  "LOVE MOSCHINO",
+  "JORDAN",
+  "REEBOK",
 ];
 
 // Brand aliases - map variants to canonical name
 // Key = canonical name (uppercase, spaces), Value = variants to merge
 export const BRAND_ALIASES: Record<string, string[]> = {
   "NIKE": [
-    "AIR",  // Air Max, Air Force, Air Jordan - all Nike
+    "AIR",  // Air Max, Air Force - all Nike
+    "AIR MAX",
+    "AIR FORCE",
+  ],
+  "JORDAN": [
+    "AIR JORDAN",
+  ],
+  "LOVE MOSCHINO": [
+    "LOVE",
+    "MOSCHINO",
   ],
   "CALVIN KLEIN": [
     "CALVIN",
@@ -73,6 +86,7 @@ export const BRAND_ALIASES: Record<string, string[]> = {
     "TOMMY_HILFIGER",
     "TOMMY_JEANS",
     "TOMMY JEANS",
+    "TOMMY HILFINGER",
   ],
   "UNDER ARMOUR": [
     "UNDER_ARMOUR",
@@ -84,6 +98,23 @@ export const BRAND_ALIASES: Record<string, string[]> = {
   ],
   "SKECHERS": [
     "SKECHERS_BLUE",
+    "SKETCHERS",
+    "SKEECHERS",
+  ],
+  "ADIDAS": [
+    "ADDIDAS",
+  ],
+  "REEBOK": [
+    "REBOK",
+    "REBOCK",
+  ],
+  "STEVE MADDEN": [
+    "STEVE_MADDEN",
+  ],
+  "POLO RALPH LAUREN": [
+    "POLO_RALPH_LAUREN",
+    "RALPH_LAUREN",
+    "RALPH LAUREN",
   ],
   "THE NORTH FACE": [
     "THE",
