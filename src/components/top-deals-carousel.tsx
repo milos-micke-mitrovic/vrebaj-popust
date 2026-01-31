@@ -9,6 +9,7 @@ import { Deal, Store } from "@/types/deal";
 import { formatPrice, getProxiedImageUrl } from "@/lib/utils";
 import { WishlistButton } from "@/components/wishlist-button";
 import { Tooltip } from "@/components/ui/tooltip";
+import { useDragScroll } from "@/hooks/use-drag-scroll";
 
 const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1000;
 
@@ -33,14 +34,17 @@ const STORE_INFO: Record<Store, { name: string; logo: string; fallbackColor: str
   trefsport: { name: "Tref Sport", logo: "/logos/trefsport.png", fallbackColor: "bg-teal-600" },
 };
 
-function CarouselCard({ deal }: { deal: Deal }) {
+function CarouselCard({ deal, shouldPreventClick }: { deal: Deal; shouldPreventClick: () => boolean }) {
   const [imgError, setImgError] = useState(false);
   const [imgLoaded, setImgLoaded] = useState(false);
   const [logoError, setLogoError] = useState(false);
   const storeInfo = STORE_INFO[deal.store];
 
-  const handleClick = () => {
-    // Set origin as home page with anchor to scroll to carousel
+  const handleClick = (e: React.MouseEvent) => {
+    if (shouldPreventClick()) {
+      e.preventDefault();
+      return;
+    }
     sessionStorage.setItem("dealsReturnUrl", "/#top-deals");
   };
 
@@ -127,9 +131,9 @@ function CarouselCard({ deal }: { deal: Deal }) {
 }
 
 export function TopDealsCarousel({ deals }: TopDealsCarouselProps) {
-  const [isPaused, setIsPaused] = useState(false);
+  const { containerRef, shouldPreventClick } = useDragScroll({ speed: 0.7 });
 
-  // Duplicate deals for seamless infinite scroll
+  // Duplicate deals for infinite scroll
   const duplicatedDeals = [...deals, ...deals];
 
   if (deals.length === 0) return null;
@@ -153,16 +157,13 @@ export function TopDealsCarousel({ deals }: TopDealsCarouselProps) {
         <div className="absolute left-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-r from-gray-50 dark:from-gray-900 to-transparent z-10 pointer-events-none" />
         <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-gray-50 dark:from-gray-900 to-transparent z-10 pointer-events-none" />
 
-        {/* Scrolling track - CSS animation like StoresCarousel */}
+        {/* Scrolling track */}
         <div
-          className={`flex gap-4 animate-scroll-deals ${isPaused ? "pause-animation" : ""}`}
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
-          onTouchStart={() => setIsPaused(true)}
-          onTouchEnd={() => setIsPaused(false)}
+          ref={containerRef}
+          className="flex gap-4 overflow-x-scroll scrollbar-hide select-none"
         >
           {duplicatedDeals.map((deal, index) => (
-            <CarouselCard key={`${deal.id}-${index}`} deal={deal} />
+            <CarouselCard key={`${deal.id}-${index}`} deal={deal} shouldPreventClick={shouldPreventClick} />
           ))}
         </div>
       </div>
