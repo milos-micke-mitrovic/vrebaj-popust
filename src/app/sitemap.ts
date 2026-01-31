@@ -54,6 +54,7 @@ const FILTER_PAGES = [
   "n-sport",
   "buzz",
   "office-shoes",
+  "tref-sport",
   // Combined filters (brand + gender, brand + category, category + gender)
   "nike-muski",
   "nike-zenski",

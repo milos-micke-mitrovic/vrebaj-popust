@@ -24,6 +24,7 @@ const STORE_INFO: Record<Store, { name: string; logo: string; url: string }> = {
   buzz: { name: "Buzz", logo: "/logos/buzz.png", url: "https://www.buzzsneakers.rs" },
   officeshoes: { name: "Office Shoes", logo: "/logos/officeshoes.png", url: "https://www.officeshoes.rs" },
   intersport: { name: "Intersport", logo: "/logos/intersport.jpg", url: "https://www.intersport.rs" },
+  trefsport: { name: "Tref Sport", logo: "/logos/trefsport.png", url: "https://trefsport.com" },
 };
 
 interface QuickViewModalProps {

@@ -58,7 +58,7 @@ export interface Deal extends Omit<RawDeal, "category"> {
   categories?: CategoryPath[];
 }
 
-export type Store = "djaksport" | "planeta" | "sportvision" | "nsport" | "buzz" | "officeshoes" | "intersport";
+export type Store = "djaksport" | "planeta" | "sportvision" | "nsport" | "buzz" | "officeshoes" | "intersport" | "trefsport";
 
 export interface ScrapeResult {
   store: Store;

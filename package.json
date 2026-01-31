@@ -17,7 +17,8 @@
     "scrape:planeta": "npx tsx src/scraper/stores/planeta.ts",
     "scrape:details": "npx tsx src/scraper/detail-scraper.ts",
     "scrape:details:djak": "npx tsx src/scraper/detail-scraper.ts djaksport",
-    "scrape:intersport": "npx tsx src/scraper/stores/intersport.ts"
+    "scrape:intersport": "npx tsx src/scraper/stores/intersport.ts",
+    "scrape:trefsport": "npx tsx src/scraper/stores/trefsport.ts"
   },
   "dependencies": {
     "@next/third-parties": "^16.1.1",

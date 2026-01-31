@@ -15,6 +15,7 @@ enum Store {
   buzz
   officeshoes
   intersport
+  trefsport
 }
 
 enum Gender {

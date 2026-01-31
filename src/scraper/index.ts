@@ -10,6 +10,8 @@ import { scrapeNSportDetails } from "./stores/nsport-details";
 import { scrapeSportVisionDetails } from "./stores/sportvision-details";
 import { scrapeBuzzDetails } from "./stores/buzz-details";
 import { scrapeOfficeShoeDetails } from "./stores/officeshoes-details";
+import { scrapeTrefSport } from "./stores/trefsport";
+import { scrapeTrefSportDetails } from "./stores/trefsport-details";
 
 interface ScraperDef {
   name: string;
@@ -50,6 +52,7 @@ async function runAllScrapers(): Promise<void> {
     { name: "Buzz Sneakers", fn: scrapeBuzz },
     { name: "Office Shoes", fn: scrapeOfficeShoes },
     { name: "Intersport", fn: scrapeIntersport },
+    { name: "Tref Sport", fn: scrapeTrefSport },
     { name: "DjakSport", fn: scrapeDjakSport },
   ];
 
@@ -64,6 +67,7 @@ async function runAllScrapers(): Promise<void> {
     { name: "SportVision Details", fn: scrapeSportVisionDetails },
     { name: "Buzz Details", fn: scrapeBuzzDetails },
     { name: "OfficeShoes Details", fn: scrapeOfficeShoeDetails },
+    { name: "Tref Sport Details", fn: scrapeTrefSportDetails },
   ];
 
   console.log("\n=== Detail Scrapers (one by one) ===");

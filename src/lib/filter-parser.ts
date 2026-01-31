@@ -36,6 +36,7 @@ const MULTI_WORD_STORES: Record<string, Store> = {
   "sport-vision": "sportvision",
   "office-shoes": "officeshoes",
   "n-sport": "nsport",
+  "tref-sport": "trefsport",
 };
 
 // Known multi-word brands (URL slug → brand name for API)
@@ -80,6 +81,7 @@ const STORE_DISPLAY: Record<Store, string> = {
   buzz: "Buzz",
   officeshoes: "Office Shoes",
   intersport: "Intersport",
+  trefsport: "Tref Sport",
 };
 
 export interface ParsedFilter {

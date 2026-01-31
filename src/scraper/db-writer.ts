@@ -140,6 +140,7 @@ const MIN_PRODUCTS_THRESHOLD: Record<Store, number> = {
   buzz: 10,
   officeshoes: 10,
   intersport: 10,
+  trefsport: 5,
 };
 
 /**

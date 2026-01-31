@@ -352,6 +352,11 @@ export const STORE_INFO: Record<
     logo: "/logos/intersport.jpg",
     url: "https://www.intersport.rs",
   },
+  trefsport: {
+    name: "Tref Sport",
+    logo: "/logos/trefsport.png",
+    url: "https://trefsport.com",
+  },
 };
 
 // Convert Prisma deal to app Deal type

@@ -8,7 +8,7 @@ import { StoresCarousel } from "@/components/stores-carousel";
 import { FAQSection } from "@/components/faq-section";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { WaveText } from "@/components/wave-text";
-import { getAllDealsAsync } from "@/lib/deals";
+import { getAllDealsAsync, STORE_INFO } from "@/lib/deals";
 import { Store } from "@/types/deal";
 
 // Revalidate every 5 minutes
@@ -17,7 +17,7 @@ export const revalidate = 300;
 export const metadata: Metadata = {
   title: "VrebajPopust | Najveći sportski popusti preko 50% u Srbiji",
   description:
-    "Pronađi najveće popuste i akcije preko 50% na sportsku opremu, patike i odeću. Pratimo DjakSport, Planeta Sport, Sport Vision, N Sport, Buzz i Office Shoes. Ažurirano svakodnevno.",
+    "Pronađi najveće popuste i akcije preko 50% na sportsku opremu, patike i odeću. Pratimo DjakSport, Planeta Sport, Sport Vision, N Sport, Buzz, Office Shoes i Tref Sport. Ažurirano svakodnevno.",
   keywords: [
     "popusti",
     "akcije",
@@ -57,7 +57,7 @@ function getPonudaForm(n: number): string {
 
 export default async function Home() {
   const deals = await getAllDealsAsync();
-  const stores = [...new Set(deals.map((d) => d.store))] as Store[];
+  const stores = Object.keys(STORE_INFO) as Store[];
   const totalDeals = deals.length;
   const displayCount = roundToThousand(totalDeals);
 
@@ -93,7 +93,7 @@ export default async function Home() {
         name: "Gde mogu da pronađem najveće popuste na patike u Srbiji?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Na VrebajPopust.rs možete pronaći patike sa popustom preko 50% iz svih velikih sportskih prodavnica u Srbiji. Pratimo Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz Sneakers, Office Shoes i Intersport. Sve ponude se ažuriraju svakodnevno.",
+          text: "Na VrebajPopust.rs možete pronaći patike sa popustom preko 50% iz svih velikih sportskih prodavnica u Srbiji. Pratimo Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz Sneakers, Office Shoes, Intersport i Tref Sport. Sve ponude se ažuriraju svakodnevno.",
         },
       },
       {
@@ -101,7 +101,7 @@ export default async function Home() {
         name: "Koje sportske prodavnice VrebajPopust prati?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "VrebajPopust prati 7 najvećih sportskih prodavnica u Srbiji: Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz Sneakers, Office Shoes i Intersport. Skeniramo njihove sajtove svakodnevno i prikazujemo samo proizvode sa popustom preko 50%.",
+          text: "VrebajPopust prati 8 najvećih sportskih prodavnica u Srbiji: Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz Sneakers, Office Shoes, Intersport i Tref Sport. Skeniramo njihove sajtove svakodnevno i prikazujemo samo proizvode sa popustom preko 50%.",
         },
       },
       {
@@ -125,7 +125,7 @@ export default async function Home() {
         name: "Da li je kupovina preko VrebajPopust sigurna?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "VrebajPopust je agregator ponuda - mi samo prikazujemo proizvode na popustu. Kupovina se vrši direktno na sajtu prodavnice (Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz ili Office Shoes) koje su proverene i pouzdane kompanije sa dugogodišnjim iskustvom na srpskom tržištu.",
+          text: "VrebajPopust je agregator ponuda - mi samo prikazujemo proizvode na popustu. Kupovina se vrši direktno na sajtu prodavnice (Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz, Office Shoes ili Tref Sport) koje su proverene i pouzdane kompanije sa dugogodišnjim iskustvom na srpskom tržištu.",
         },
       },
       {
