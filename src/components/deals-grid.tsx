@@ -1317,7 +1317,7 @@ export function DealsGrid({
       <div className="lg:grid lg:grid-cols-[260px_1fr] lg:gap-6">
         {/* Desktop Sidebar - hidden on mobile/tablet */}
         <aside className="hidden lg:block">
-          <div className="sticky top-20 rounded-xl bg-white dark:bg-gray-900 shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col max-h-[calc(100vh-6rem)]">
+          <div className="sticky top-[7rem] rounded-xl bg-white dark:bg-gray-900 shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col max-h-[calc(100vh-8rem)]">
             <div className="flex-1 overflow-y-auto scrollbar-thin p-5">
               {filterContentJSX}
             </div>
