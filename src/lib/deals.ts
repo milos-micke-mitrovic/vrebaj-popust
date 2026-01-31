@@ -1,111 +1,8 @@
 import { prisma } from "./db";
 import type { Deal as PrismaDeal } from "@prisma/client";
 import { Deal, Store, Gender, Category } from "@/types/deal";
-
-// Normalize Serbian characters to ASCII equivalents
-function normalizeSerbianChars(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/š/g, "s")
-    .replace(/ž/g, "z")
-    .replace(/č/g, "c")
-    .replace(/ć/g, "c")
-    .replace(/đ/g, "dj");
-}
-
-// Extract gender from product name and URL (fallback if not in DB)
-function extractGender(name: string, url?: string): Gender {
-  const text = normalizeSerbianChars(`${name} ${url || ""}`);
-
-  // Kids patterns - check first as it's most specific
-  if (
-    text.includes("decij") ||
-    text.includes("decak") ||    // dečak, dečake (boys) - normalized
-    text.includes("decac") ||    // dečaci (boys) - normalized
-    text.includes("devojc") ||   // devojčica (girls) - normalized
-    text.includes("devoj") ||    // devojke, devojka (girls)
-    text.includes("deca") ||     // deca (children) - also catches "dečak" after normalization
-    text.includes("/deca/") ||
-    text.includes("-deca-") ||
-    text.includes(" kid") ||
-    text.includes(" kids") ||
-    text.includes("-kid-") ||
-    text.includes(" bp") ||      // Boys preschool
-    text.includes(" bg") ||      // Boys grade school
-    text.includes(" ps") ||      // Preschool
-    text.includes(" gs") ||      // Grade school
-    text.includes(" td") ||      // Toddler
-    text.includes(" junior") ||
-    text.includes(" jr") ||
-    text.includes("-jr-") ||
-    text.includes(" youth") ||
-    text.includes("/decije-") ||
-    text.includes("/decija-") ||
-    text.includes("beba") ||     // beba (baby)
-    text.includes("bebe") ||     // bebe (babies)
-    text.includes("infant") ||
-    text.includes("toddler") ||
-    text.includes("child") ||
-    text.includes("children")
-  ) {
-    return "deciji";
-  }
-
-  // Women patterns
-  if (
-    text.includes("zenski") ||
-    text.includes("zensk") ||
-    text.includes("za zene") ||
-    text.includes(" zene") ||
-    text.includes(" zena") ||
-    text.includes("/zene/") ||
-    text.includes("/zena/") ||
-    text.includes("/zenske-") ||
-    text.includes("/zenska-") ||
-    text.includes("-zenske-") ||
-    text.includes(" w ") ||
-    text.endsWith(" w") ||
-    text.includes("-w-") ||
-    text.includes(" wmns") ||
-    text.includes(" women") ||
-    text.includes("woman") ||
-    text.includes("/women/") ||
-    text.includes("-women-") ||
-    text.includes(" lady") ||
-    text.includes(" ladies") ||
-    text.includes("female") ||
-    text.includes(" girl") ||
-    text.includes("/girl/")
-  ) {
-    return "zenski";
-  }
-
-  // Men patterns
-  if (
-    text.includes("muski") ||
-    text.includes("musk") ||
-    text.includes("muskarc") ||
-    text.includes("za muskarce") ||
-    text.includes("/muskarci/") ||
-    text.includes("/muskarac/") ||
-    text.includes("/muske-") ||
-    text.includes("/muska-") ||
-    text.includes("-muske-") ||
-    text.includes(" m ") ||
-    text.endsWith(" m") ||
-    text.includes("-m-") ||
-    text.includes(" men ") ||
-    text.includes(" men's") ||
-    text.includes("/men/") ||
-    text.includes("-men-") ||
-    text.includes("male") ||
-    text.includes(" guy")
-  ) {
-    return "muski";
-  }
-
-  return "unisex";
-}
+import { mapCategory } from "./category-mapper";
+import { extractGenderFromNameUrl } from "./gender-mapper";
 
 // Map CategoryPath (e.g., "obuca/patike") to legacy Category type
 function mapCategoryPathToCategory(categoryPath: string): Category {
@@ -118,7 +15,7 @@ function mapCategoryPathToCategory(categoryPath: string): Category {
   if (path.includes("obuca/sandale") || path.includes("obuca/papuce")) return "patike"; // Group with patike for now
 
   // Odeca mappings
-  if (path.includes("odeca/jakne") || path.includes("odeca/prsluci")) return "jakna";
+  if (path.includes("odeca/jakne")) return "jakna";
   if (path.includes("odeca/majice") || path.includes("odeca/dres")) return "majica";
   if (path.includes("odeca/duksevi") || path.includes("odeca/dukserice")) return "duks";
   if (path.includes("odeca/trenerke") || path.includes("odeca/pantalone")) return "trenerka";
@@ -126,7 +23,7 @@ function mapCategoryPathToCategory(categoryPath: string): Category {
   if (path.includes("odeca/helanke")) return "helanke";
 
   // Oprema mappings
-  if (path.includes("oprema/torbe") || path.includes("oprema/rancevi")) return "ranac";
+  if (path.includes("oprema/torbe")) return "ranac";
 
   return "ostalo";
 }
@@ -137,119 +34,13 @@ function extractCategoryFromName(name: string, url?: string): Category {
   let urlPath = "";
   if (url) {
     try {
-      const urlObj = new URL(url);
-      urlPath = urlObj.pathname;
+      urlPath = new URL(url).pathname;
     } catch {
-      // If URL parsing fails, extract path manually
       urlPath = url.replace(/https?:\/\/[^/]+/i, "");
     }
   }
-  const text = normalizeSerbianChars(`${name} ${urlPath}`);
-
-  // Cizme - boots (check before cipele since "boot" shouldn't match cipele)
-  if (
-    text.includes("cizm") ||
-    text.includes("boot") ||
-    text.includes("gumenjak")
-  ) return "cizme";
-
-  // Patike - sneakers, trainers
-  if (
-    text.includes("patik") ||
-    text.includes("sneaker") ||
-    text.includes("kopack") ||
-    text.includes("tenisic") ||
-    text.includes("trainer") ||
-    text.includes("running") ||
-    text.includes("lifestyle-patike") ||
-    text.includes("patike-za-") ||
-    text.includes("/patike/")
-  ) return "patike";
-
-  // Cipele - shoes (but not boots or sneakers)
-  if (
-    text.includes("cipel") ||
-    text.includes("/cipele/") ||
-    (text.includes("shoe") && !text.includes("sneaker"))
-  ) return "cipele";
-
-  // Jakne - jackets, vests
-  if (
-    text.includes("jakn") ||
-    text.includes("jacket") ||
-    text.includes("prslu") ||
-    text.includes("vest") ||
-    text.includes("vetrovk") ||
-    text.includes("windbreak") ||
-    text.includes("zimsk") ||
-    text.includes("puffer") ||
-    text.includes("/jakne/")
-  ) return "jakna";
-
-  // Majice - t-shirts, jerseys
-  if (
-    text.includes("majic") ||
-    text.includes("t-shirt") ||
-    text.includes("tshirt") ||
-    text.includes(" tee ") ||
-    text.includes("dres") ||
-    text.includes("jersey") ||
-    text.includes("polo") ||
-    text.includes("tank top") ||
-    text.includes("/majice/")
-  ) return "majica";
-
-  // Duksevi - hoodies, sweatshirts
-  if (
-    text.includes("duks") ||
-    text.includes("hoodie") ||
-    text.includes("sweat") ||
-    text.includes("hudica") ||
-    text.includes("pulover") ||
-    text.includes("/duksevi/")
-  ) return "duks";
-
-  // Trenerke - tracksuits, pants
-  if (
-    text.includes("trenerk") ||
-    text.includes("tracksuit") ||
-    text.includes("donji deo") ||
-    text.includes("pantalon") ||
-    text.includes("jogger") ||
-    text.includes("sweatpant") ||
-    text.includes("/trenerka/") ||
-    text.includes("/trenerke/")
-  ) return "trenerka";
-
-  // Sorcevi - shorts
-  if (
-    text.includes("sorc") ||
-    text.includes("short") ||
-    text.includes("bermud") ||
-    text.includes("/sorcevi/")
-  ) return "sorc";
-
-  // Helanke - leggings
-  if (
-    text.includes("helank") ||
-    text.includes("legging") ||
-    text.includes("tight") ||
-    text.includes("tajic") ||
-    text.includes("/helanke/")
-  ) return "helanke";
-
-  // Ranci i torbe - backpacks, bags
-  if (
-    text.includes("ranac") ||
-    text.includes("backpack") ||
-    text.includes("torb") ||
-    text.includes("ruksak") ||
-    text.includes("duffel") ||
-    text.includes("gym bag") ||
-    text.includes("/torbe/") ||
-    text.includes("/rancevi/")
-  ) return "ranac";
-
+  const cat = mapCategory(`${name} ${urlPath}`);
+  if (cat) return mapCategoryPathToCategory(cat);
   return "ostalo";
 }
 
@@ -371,7 +162,7 @@ function convertDeal(prismaDeal: PrismaDeal): Deal {
     discountPercent: prismaDeal.discountPercent,
     url: prismaDeal.url,
     imageUrl: prismaDeal.imageUrl,
-    gender: (prismaDeal.gender as Gender) || extractGender(prismaDeal.name, prismaDeal.url),
+    gender: (prismaDeal.gender as Gender) || extractGenderFromNameUrl(prismaDeal.name, prismaDeal.url),
     category: getCategory(prismaDeal.categories, prismaDeal.name, prismaDeal.url),
     scrapedAt: prismaDeal.scrapedAt,
     createdAt: prismaDeal.createdAt,

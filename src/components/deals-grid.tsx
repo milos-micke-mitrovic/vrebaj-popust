@@ -58,7 +58,7 @@ const CATEGORY_NAMES: Record<Category, string> = {
   trenerka: "Trenerke",
   sorc: "Šorcevi",
   helanke: "Helanke",
-  ranac: "Ranci/Torbe",
+  ranac: "Torbe",
   ostalo: "Ostalo",
 };
 
@@ -94,19 +94,16 @@ const SUBCATEGORY_NAMES: Record<Subcategory, string> = {
   kombinezoni: "Kombinezoni",
   // Oprema
   torbe: "Torbe",
-  rancevi: "Rančevi",
-  kacketi: "Kačketi",
   carape: "Čarape",
   kape: "Kape",
   salovi: "Šalovi",
   rukavice: "Rukavice",
-  vrece: "Vreće",
 };
 
 const CATEGORY_HIERARCHY: Record<MainCategory, Subcategory[]> = {
   obuca: ["patike", "cipele", "baletanke", "cizme", "papuce", "sandale", "kopacke"],
   odeca: ["jakne", "prsluci", "duksevi", "majice", "topovi", "pantalone", "trenerke", "helanke", "sortevi", "kupaci", "haljine", "kosulje", "kombinezoni"],
-  oprema: ["torbe", "rancevi", "kacketi", "carape", "kape", "salovi", "rukavice", "vrece"],
+  oprema: ["torbe", "carape", "kape", "salovi", "rukavice"],
 };
 
 export function DealsGrid({

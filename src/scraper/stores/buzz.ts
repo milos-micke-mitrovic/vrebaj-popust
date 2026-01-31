@@ -2,6 +2,7 @@ import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
 import { upsertDeal, logScrapeRun, disconnect, cleanupStaleProducts, Store, Gender } from "../db-writer";
+import { mapCategory } from "../../lib/category-mapper";
 
 puppeteer.use(StealthPlugin());
 
@@ -56,118 +57,6 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-// Extract categories from Buzz URL and product name
-function extractCategories(url: string, name: string): string[] {
-  const urlLower = url.toLowerCase();
-  const nameLower = name.toLowerCase();
-  const categories: string[] = [];
-
-  // Check URL patterns first (more reliable)
-  // Buzz URLs: /patike/, /odeca/, /polo-majica/, /majica/, /duks/, etc.
-
-  // Obuća
-  if (urlLower.includes("/patike/") || urlLower.includes("/sneakers/")) {
-    categories.push("obuca/patike");
-  } else if (urlLower.includes("/baletanke/")) {
-    categories.push("obuca/baletanke");
-  } else if (urlLower.includes("/cipele/")) {
-    categories.push("obuca/cipele");
-  } else if (urlLower.includes("/cizme/") || urlLower.includes("/boots/")) {
-    categories.push("obuca/cizme");
-  } else if (urlLower.includes("/sandale/")) {
-    categories.push("obuca/sandale");
-  } else if (urlLower.includes("/japanke/") || urlLower.includes("/papuce/")) {
-    categories.push("obuca/papuce");
-  }
-
-  // Odeća - Buzz uses various URL patterns
-  if (urlLower.includes("/majica/") || urlLower.includes("/polo-majica/") || urlLower.includes("/t-shirt/")) {
-    categories.push("odeca/majice");
-  } else if (urlLower.includes("/duks/") || urlLower.includes("/hoodie/") || urlLower.includes("/dukserica/")) {
-    categories.push("odeca/duksevi");
-  } else if (urlLower.includes("/jakna/") || urlLower.includes("/jacket/") || urlLower.includes("/prsluci/") || urlLower.includes("/vest/")) {
-    categories.push("odeca/jakne");
-  } else if (urlLower.includes("/trenerka/") || urlLower.includes("/donji-deo-trenerke/") || urlLower.includes("/gornji-deo-trenerke/")) {
-    categories.push("odeca/trenerke");
-  } else if (urlLower.includes("/pantalone/") || urlLower.includes("/pants/")) {
-    categories.push("odeca/pantalone");
-  } else if (urlLower.includes("/sorc/") || urlLower.includes("/shorts/")) {
-    categories.push("odeca/sortevi");
-  } else if (urlLower.includes("/helanke/") || urlLower.includes("/leggings/") || urlLower.includes("/tajice/")) {
-    categories.push("odeca/helanke");
-  } else if (urlLower.includes("/haljina/") || urlLower.includes("/dress/") || urlLower.includes("/suknja/")) {
-    categories.push("odeca/haljine");
-  } else if (urlLower.includes("/kosulja/") || urlLower.includes("/shirt/") || urlLower.includes("/kosulj")) {
-    categories.push("odeca/kosulje");
-  } else if (urlLower.includes("/kupaci/") || urlLower.includes("/kupace/") || urlLower.includes("/swimwear/") || urlLower.includes("/swimming/") || urlLower.includes("/bikini/")) {
-    categories.push("odeca/kupaci");
-  } else if (urlLower.includes("/kombinezon/") || urlLower.includes("/jumpsuit/") || urlLower.includes("/overall/")) {
-    categories.push("odeca/kombinezoni");
-  }
-
-  // Oprema/Accessories
-  if (urlLower.includes("/ranac/") || urlLower.includes("/backpack/") || urlLower.includes("/torba/") || urlLower.includes("/bag/")) {
-    categories.push("oprema/torbe");
-  } else if (urlLower.includes("/kapa/") || urlLower.includes("/kacket/") || urlLower.includes("/sesir/") || urlLower.includes("/hat/")) {
-    categories.push("oprema/kape");
-  } else if (urlLower.includes("/carape/") || urlLower.includes("/socks/")) {
-    categories.push("oprema/carape");
-  } else if (urlLower.includes("/rukavice/") || urlLower.includes("/gloves/")) {
-    categories.push("oprema/rukavice");
-  }
-
-  // Fallback: extract from product name if no URL match
-  if (categories.length === 0) {
-    // Obuća - shoes first (most common)
-    if (nameLower.includes("patike") || nameLower.includes("sneaker") || nameLower.includes("tenisice")) {
-      categories.push("obuca/patike");
-    } else if (nameLower.includes("baletank")) {
-      categories.push("obuca/baletanke");
-    } else if (nameLower.includes("cipele") || nameLower.includes("shoes")) {
-      categories.push("obuca/cipele");
-    } else if (nameLower.includes("čizme") || nameLower.includes("cizme") || nameLower.includes("boot") || nameLower.includes("gležnjač") || nameLower.includes("gleznjac")) {
-      categories.push("obuca/cizme");
-    } else if (nameLower.includes("sandale")) {
-      categories.push("obuca/sandale");
-    } else if (nameLower.includes("japanke") || nameLower.includes("papuče") || nameLower.includes("papuce") || nameLower.includes("natikač") || nameLower.includes("natikac")) {
-      categories.push("obuca/papuce");
-    // Odeća - clothing
-    } else if (nameLower.startsWith("top ") || nameLower.includes(" top ") || nameLower.includes("sports bra") || nameLower.includes("tank top") || nameLower.includes("crop top") || nameLower.includes(" bra ") || nameLower.endsWith(" bra") || nameLower.startsWith("bra ")) {
-      categories.push("odeca/topovi");
-    } else if (nameLower.includes("polo") || (nameLower.includes("majica") && !nameLower.includes("patike"))) {
-      categories.push("odeca/majice");
-    } else if (nameLower.includes("t-shirt") || nameLower.includes("tshirt")) {
-      categories.push("odeca/majice");
-    } else if (nameLower.includes("duks") || nameLower.includes("hoodie") || nameLower.includes("dukserica") || nameLower.includes("sweatshirt")) {
-      categories.push("odeca/duksevi");
-    } else if (nameLower.includes("jakna") || nameLower.includes("jacket") || nameLower.includes("prslu") || nameLower.includes("vest") || nameLower.includes("windbreaker")) {
-      categories.push("odeca/jakne");
-    } else if (nameLower.includes("kupaći") || nameLower.includes("kupaci") || nameLower.includes("kupaće") || nameLower.includes("kupace") || nameLower.includes("bikini") || nameLower.includes("swimwear") || nameLower.includes("swimming")) {
-      categories.push("odeca/kupaci");
-    } else if (nameLower.includes("trenerka") || nameLower.includes("jogger") || nameLower.includes("donji deo") || nameLower.includes("gornji deo")) {
-      categories.push("odeca/trenerke");
-    } else if (nameLower.includes("pantalone") || nameLower.includes("pants")) {
-      categories.push("odeca/pantalone");
-    } else if (nameLower.includes("šorc") || nameLower.includes("sorc") || nameLower.includes("shorts") || nameLower.includes("bermude")) {
-      categories.push("odeca/sortevi");
-    } else if (nameLower.includes("helanke") || nameLower.includes("leggings") || nameLower.includes("tajice") || nameLower.includes("tight")) {
-      categories.push("odeca/helanke");
-    } else if (nameLower.includes("košulj") || nameLower.includes("kosulj") || nameLower.includes("shirt")) {
-      categories.push("odeca/kosulje");
-    } else if (nameLower.includes("kombinezon") || nameLower.includes("jumpsuit") || nameLower.includes("overall")) {
-      categories.push("odeca/kombinezoni");
-    // Oprema - accessories
-    } else if (nameLower.includes("ranac") || nameLower.includes("backpack") || nameLower.includes("torba") || nameLower.includes("bag") || nameLower.includes("torbica")) {
-      categories.push("oprema/torbe");
-    } else if (nameLower.includes("kapa") || nameLower.includes("kačket") || nameLower.includes("kacket") || nameLower.includes("cap") || nameLower.includes("šešir") || nameLower.includes("sesir") || nameLower.includes("beanie")) {
-      categories.push("oprema/kape");
-    } else if (nameLower.includes("čarape") || nameLower.includes("carape") || nameLower.includes("socks")) {
-      categories.push("oprema/carape");
-    }
-  }
-
-  return categories;
-}
 
 async function launchBrowser(): Promise<Browser> {
   return puppeteer.launch({
@@ -411,7 +300,8 @@ async function scrapeBuzz(): Promise<void> {
             product.discountPercent || calcDiscount(originalPrice, salePrice);
 
           if (discountPercent >= MIN_DISCOUNT) {
-            const categories = extractCategories(product.url, product.name);
+            const cat = mapCategory(product.name + " " + product.url);
+            const categories = cat ? [cat] : [];
 
             // Debug: log clothing items
             if (categories.some(c => c.startsWith("odeca/")) || product.name.toLowerCase().includes("majic") || product.name.toLowerCase().includes("duks") || product.name.toLowerCase().includes("jakn")) {

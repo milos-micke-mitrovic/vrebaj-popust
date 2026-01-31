@@ -1,4 +1,6 @@
 import { getDealsWithoutDetails, updateDealDetails, disconnect } from "../db-writer";
+import { mapCategory } from "../../lib/category-mapper";
+import { mapGender } from "../../lib/gender-mapper";
 
 const STORE = "nsport" as const;
 
@@ -86,12 +88,18 @@ async function scrapeNSportDetails(): Promise<void> {
     try {
       const details = await fetchProductDetails(deal.url);
 
-      if (details.sizes.length > 0) {
+      // Extract category and gender from product name
+      const cat = mapCategory(deal.name);
+      const gender = mapGender(deal.name);
+
+      if (details.sizes.length > 0 || cat || gender) {
         await updateDealDetails(deal.url, {
-          sizes: details.sizes,
+          ...(details.sizes.length > 0 && { sizes: details.sizes }),
+          ...(cat && { categories: [cat] }),
+          ...(gender && { gender }),
         });
         updated++;
-        console.log(`${progress} ✓ ${deal.name.substring(0, 40)}... | sizes: ${details.sizes.join(", ")}`);
+        console.log(`${progress} ✓ ${deal.name.substring(0, 40)}... | sizes: ${details.sizes.join(", ") || "none"} | cat: ${cat || "none"} | gender: ${gender || "unknown"}`);
       } else {
         console.log(`${progress} - ${deal.name.substring(0, 40)}... | no sizes found`);
       }

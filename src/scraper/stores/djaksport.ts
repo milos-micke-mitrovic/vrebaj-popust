@@ -3,6 +3,7 @@ import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
 import { upsertDeal, logScrapeRun, disconnect, cleanupStaleProducts, Store, Gender } from "../db-writer";
 import { extractBrandFromName } from "../../lib/brand-utils";
+import { mapCategory } from "../../lib/category-mapper";
 
 puppeteer.use(StealthPlugin());
 
@@ -119,7 +120,8 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
           categories.push("odeca/" + subCat.replace("decija-", "").replace("muska-", "").replace("zenska-", ""));
         }
       } else if (mainCat === "oprema") {
-        categories.push("oprema/" + subCat);
+        const mappedSubCat = subCat === "rancevi" ? "torbe" : subCat;
+        categories.push("oprema/" + mappedSubCat);
       } else {
         categories.push(mainCat + "/" + subCat);
       }
@@ -138,50 +140,9 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
       gender = "deciji";
     }
 
-    // Try to detect category from product name
-    if (nameLower.includes("kopacke")) {
-      categories.push("obuca/kopacke");
-    } else if (nameLower.includes("patike")) {
-      categories.push("obuca/patike");
-    } else if (urlLower.includes("-baletank") || nameLower.includes("baletank")) {
-      categories.push("obuca/baletanke");
-    } else if (nameLower.includes("cipele")) {
-      categories.push("obuca/cipele");
-    } else if (nameLower.includes("cizme") || nameLower.includes("čizme")) {
-      categories.push("obuca/cizme");
-    } else if (nameLower.includes("sandale")) {
-      categories.push("obuca/sandale");
-    } else if (nameLower.includes("japanke") || nameLower.includes("papuce") || nameLower.includes("papuče")) {
-      categories.push("obuca/papuce");
-    } else if (nameLower.includes("jakna") || nameLower.includes("prslu")) {
-      categories.push("odeca/jakne");
-    } else if (nameLower.includes("duks")) {
-      categories.push("odeca/duksevi");
-    } else if (urlLower.includes("/top-") || urlLower.includes("-top-") || nameLower.startsWith("top ") || nameLower.includes(" top ") || nameLower.includes(" bra ") || nameLower.includes(" bra") || nameLower.startsWith("bra ")) {
-      categories.push("odeca/topovi");
-    } else if (nameLower.includes("majica") || nameLower.includes("dres")) {
-      categories.push("odeca/majice");
-    } else if (urlLower.includes("-kupa-") || urlLower.includes("/kupaci") || urlLower.includes("-kupaci") || nameLower.includes("kupaći") || nameLower.includes("kupaci") || nameLower.includes("kupaće") || nameLower.includes("kupace") || nameLower.includes("bikini") || nameLower.includes("swimwear") || nameLower.includes("swimming")) {
-      categories.push("odeca/kupaci");
-    } else if (nameLower.includes("trenerka") || nameLower.includes("donji deo")) {
-      categories.push("odeca/trenerke");
-    } else if (nameLower.includes("pantalon")) {
-      categories.push("odeca/pantalone");
-    } else if (nameLower.includes("šorc") || nameLower.includes("sorc") || nameLower.includes("bermude")) {
-      categories.push("odeca/sortevi");
-    } else if (urlLower.includes("/halj") || urlLower.includes("-halj") || nameLower.includes("halj") || nameLower.includes("dress")) {
-      categories.push("odeca/haljine");
-    } else if (nameLower.includes("košulj") || nameLower.includes("kosulj")) {
-      categories.push("odeca/kosulje");
-    } else if (nameLower.includes("kombinezon") || nameLower.includes("jumpsuit") || nameLower.includes("overall")) {
-      categories.push("odeca/kombinezoni");
-    } else if (nameLower.includes("ranac") || nameLower.includes("torba") || nameLower.includes("ruksak")) {
-      categories.push("oprema/torbe");
-    } else if (nameLower.includes("kapa") || nameLower.includes("šal") || nameLower.includes("rukavic")) {
-      categories.push("oprema/aksesori");
-    } else if (nameLower.includes("lopta")) {
-      categories.push("oprema/lopte");
-    }
+    // Try to detect category from product name using shared mapper
+    const cat = mapCategory(name);
+    if (cat) categories.push(cat);
   }
 
   return { gender, categories };

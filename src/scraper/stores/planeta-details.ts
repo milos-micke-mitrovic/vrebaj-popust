@@ -1,71 +1,9 @@
 import { JSDOM } from "jsdom";
 import { getDealsWithoutDetails, updateDealDetails, disconnect, Gender } from "../db-writer";
+import { mapCategory } from "../../lib/category-mapper";
+import { mapGender } from "../../lib/gender-mapper";
 
 const STORE = "planeta" as const;
-
-// Map Planeta's Pol values to our Gender type
-const GENDER_MAP: Record<string, Gender> = {
-  "MUSKARCI": "muski",
-  "MUŠKARCI": "muski",
-  "ZENE": "zenski",
-  "ŽENE": "zenski",
-  "DEČACI": "deciji",
-  "DECACI": "deciji",
-  "DEVOJČICE": "deciji",
-  "DEVOJCICE": "deciji",
-  "DECA": "deciji",
-  "UNISEX": "unisex",
-};
-
-function mapCategory(vrsta: string): string | null {
-  const upper = vrsta.toUpperCase().trim();
-
-  // Footwear - check for keywords
-  if (upper.includes("PATIKE") || upper.includes("PATIKA")) return "obuca/patike";
-  if (upper.includes("BALETANK")) return "obuca/baletanke";
-  if (upper.includes("CIPELE") || upper.includes("CIPELA")) return "obuca/cipele";
-  if (upper.includes("ČIZME") || upper.includes("CIZME") || upper.includes("ČIZMA") || upper.includes("CIZMA")) return "obuca/cizme";
-  if (upper.includes("PAPUČE") || upper.includes("PAPUCE") || upper.includes("PAPUČA") || upper.includes("PAPUCA")) return "obuca/papuce";
-  if (upper.includes("SANDALE") || upper.includes("SANDALA")) return "obuca/sandale";
-  if (upper.includes("JAPANKE") || upper.includes("JAPANKA")) return "obuca/papuce";
-  if (upper.includes("KLOMPE") || upper.includes("KLOMPA")) return "obuca/klompe";
-  if (upper.includes("KOPAČKE") || upper.includes("KOPACKE")) return "obuca/kopacke";
-
-  // Tops
-  if (upper.includes(" TOP") || upper.startsWith("TOP ") || upper.includes("SPORTS BRA") || upper.includes("TANK TOP") || upper.includes("CROP TOP") || upper.includes(" BRA ") || upper.endsWith(" BRA") || upper.startsWith("BRA ")) return "odeca/topovi";
-  if (upper.includes("MAJIC")) return "odeca/majice";
-  if (upper.includes("DUKS")) return "odeca/duksevi";
-  if (upper.includes("JAKN")) return "odeca/jakne";
-  if (upper.includes("PRSLUK") || upper.includes("PRSLUC")) return "odeca/prsluci";
-  if (upper.includes("VETROVK")) return "odeca/vetrovke";
-
-  // Bottoms
-  if (upper.includes("TRENERKA") || upper.includes("TRENERKE")) return "odeca/trenerke";
-  if (upper.includes("DONJI DEL")) return "odeca/trenerke";
-  if (upper.includes("GORNJI DEL")) return "odeca/duksevi";
-  if (upper.includes("PANTALON")) return "odeca/pantalone";
-  if (upper.includes("HELANKE") || upper.includes("HELANKI")) return "odeca/helanke";
-  if (upper.includes("HALJ")) return "odeca/haljine";
-  if (upper.includes("KOŠULJ") || upper.includes("KOSULJ")) return "odeca/kosulje";
-  if (upper.includes("ŠORC") || upper.includes("SORC") || upper.includes("BERMUD")) return "odeca/sortevi";
-
-  // Swimwear
-  if (upper.includes("KUPAĆI") || upper.includes("KUPACI") || upper.includes("KUPAĆE") || upper.includes("KUPACE") || upper.includes("BIKINI")) return "odeca/kupaci";
-
-  // Jumpsuits
-  if (upper.includes("KOMBINEZON") || upper.includes("JUMPSUIT") || upper.includes("OVERALL")) return "odeca/kombinezoni";
-
-  // Accessories
-  if (upper.includes("KAPA") || upper.includes("KAPE")) return "oprema/kape";
-  if (upper.includes("KAČKET") || upper.includes("KACKET")) return "oprema/kacketi";
-  if (upper.includes("ČARAP") || upper.includes("CARAP")) return "oprema/carape";
-  if (upper.includes("TORB")) return "oprema/torbe";
-  if (upper.includes("RANČ") || upper.includes("RANC")) return "oprema/rancevi";
-  if (upper.includes("RUKAVIC")) return "oprema/rukavice";
-  if (upper.includes("ŠAL") || upper.includes("SAL")) return "oprema/salovi";
-
-  return null;
-}
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -128,7 +66,7 @@ function extractProductDetails(html: string): ProductDetails {
           result.brand = brandLink ? brandLink.textContent?.trim() || null : valueText || null;
         } else if (labelText === 'POL') {
           const genderKey = valueText.toUpperCase();
-          result.gender = GENDER_MAP[genderKey] || null;
+          result.gender = mapGender(genderKey) || null;
         } else if (labelText === 'VRSTA') {
           const category = mapCategory(valueText);
           if (category && !result.categories.includes(category)) {

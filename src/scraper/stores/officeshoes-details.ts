@@ -2,43 +2,12 @@ import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
 import { getDealsWithoutDetails, updateDealDetails, disconnect, Gender } from "../db-writer";
+import { mapCategory } from "../../lib/category-mapper";
+import { mapGender } from "../../lib/gender-mapper";
 
 puppeteer.use(StealthPlugin());
 
 const STORE = "officeshoes" as const;
-
-// Map product type prefixes to gender
-const GENDER_MAP: Record<string, Gender> = {
-  "ŽENSKE": "zenski",
-  "ZENSKE": "zenski",
-  "MUŠKE": "muski",
-  "MUSKE": "muski",
-  "DEČIJE": "deciji",
-  "DECIJE": "deciji",
-  "DEČJE": "deciji",
-  "DECJE": "deciji",
-  "UNISEX": "unisex",
-};
-
-// Map product types to categories
-const CATEGORY_MAP: Record<string, string> = {
-  "PATIKE": "obuca/patike",
-  "CIPELE": "obuca/cipele",
-  "ČIZME": "obuca/cizme",
-  "CIZME": "obuca/cizme",
-  "SANDALE": "obuca/sandale",
-  "PAPUČE": "obuca/papuce",
-  "PAPUCE": "obuca/papuce",
-  "JAPANKE": "obuca/papuce",
-  "MOKASINE": "obuca/cipele",
-  "GLEŽNJAČE": "obuca/cizme",
-  "GLEZNJACE": "obuca/cizme",
-  "BALETANKE": "obuca/baletanke",
-  "KLOMPE": "obuca/papuce",
-  "ESPADRILE": "obuca/cipele",
-  "KOPAČKE": "obuca/kopacke",
-  "KOPACKE": "obuca/kopacke",
-};
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -131,25 +100,8 @@ async function extractProductDetails(page: Page): Promise<ProductDetails> {
 function parseProductType(productType: string): { gender: Gender | null; category: string | null } {
   if (!productType) return { gender: null, category: null };
 
-  const normalized = productType.toUpperCase();
-  let gender: Gender | null = null;
-  let category: string | null = null;
-
-  // Find gender
-  for (const [prefix, g] of Object.entries(GENDER_MAP)) {
-    if (normalized.includes(prefix)) {
-      gender = g;
-      break;
-    }
-  }
-
-  // Find category
-  for (const [type, cat] of Object.entries(CATEGORY_MAP)) {
-    if (normalized.includes(type)) {
-      category = cat;
-      break;
-    }
-  }
+  const gender = mapGender(productType);
+  const category = mapCategory(productType);
 
   return { gender, category };
 }
@@ -204,11 +156,9 @@ async function scrapeOfficeShoeDetails(): Promise<void> {
         }
         // Add relevant tags as categories
         for (const tag of details.tags) {
-          if (tag === "patike" || tag === "cipele" || tag === "cizme") {
-            const mapped = CATEGORY_MAP[tag.toUpperCase()];
-            if (mapped && !categories.includes(mapped)) {
-              categories.push(mapped);
-            }
+          const mapped = mapCategory(tag);
+          if (mapped && !categories.includes(mapped)) {
+            categories.push(mapped);
           }
         }
 

@@ -37,7 +37,7 @@ const CATEGORY_NAMES: Record<string, string> = {
   trenerka: "Trenerke",
   sorc: "Šorcevi",
   helanke: "Helanke",
-  ranac: "Ranci i Torbe",
+  ranac: "Torbe",
   ostalo: "Ostalo",
 };
 
@@ -67,13 +67,10 @@ const CATEGORY_PATH_NAMES: Record<string, string> = {
   "odeca/kombinezoni": "Kombinezoni",
   // Oprema
   "oprema/torbe": "Torbe",
-  "oprema/rancevi": "Rančevi",
-  "oprema/kacketi": "Kačketi",
   "oprema/carape": "Čarape",
   "oprema/kape": "Kape",
   "oprema/salovi": "Šalovi",
   "oprema/rukavice": "Rukavice",
-  "oprema/vrece": "Vreće",
 };
 
 // Helper to get category display name from deal (prefers new categories array)
@@ -195,7 +192,7 @@ const CATEGORY_DISPLAY_EXPIRED: Record<string, {
   "trenerka": { singular: "trenerka", plural: "trenerke", filterSlug: "trenerke", catPath: "odeca/trenerke", grammaticalGender: "f" },
   "sorc": { singular: "šorc", plural: "šorcevi", filterSlug: "sortevi", catPath: "odeca/sortevi", grammaticalGender: "m" },
   "helanke": { singular: "helanke", plural: "helanke", filterSlug: "helanke", catPath: "odeca/helanke", grammaticalGender: "f" },
-  "ranac": { singular: "ranac", plural: "ranci", filterSlug: "ranac", catPath: "oprema/torbe", grammaticalGender: "m" },
+  "ranac": { singular: "torba", plural: "torbe", filterSlug: "ranac", catPath: "oprema/torbe", grammaticalGender: "f" },
 };
 
 interface UrlExtractedInfo {

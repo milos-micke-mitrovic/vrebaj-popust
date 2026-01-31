@@ -1,6 +1,8 @@
 import { JSDOM } from "jsdom";
 import { getDealsWithoutDetails, updateDealDetails, deleteDealByUrl, disconnect } from "../db-writer";
 import type { Gender } from "@prisma/client";
+import { mapCategory } from "../../lib/category-mapper";
+import { mapGender } from "../../lib/gender-mapper";
 
 const STORE = "trefsport" as const;
 
@@ -13,59 +15,6 @@ interface ProductDetails {
   description: string | null;
   categories: string[];
   gender: Gender | null;
-}
-
-function mapCategory(text: string): string | null {
-  const lower = text.toLowerCase();
-
-  // Footwear
-  if (lower.includes("kopack") || lower.includes("kopačk")) return "obuca/kopacke";
-  if (lower.includes("baletank")) return "obuca/baletanke";
-  if (lower.includes("patike") || lower.includes("sneaker")) return "obuca/patike";
-  if (lower.includes("cipele")) return "obuca/cipele";
-  if (lower.includes("čizme") || lower.includes("cizme") || lower.includes("boots") || lower.includes("čizm")) return "obuca/cizme";
-  if (lower.includes("sandale")) return "obuca/sandale";
-  if (lower.includes("papuč") || lower.includes("papuc")) return "obuca/papuce";
-
-  // Clothing
-  if (lower.includes("kupaći") || lower.includes("kupaci") || lower.includes("kupać") || lower.includes("bikini")) return "odeca/kupaci";
-  if (lower.includes("ski jakn") || lower.includes("jakn") || lower.includes("jacket")) return "odeca/jakne";
-  if (lower.includes("prsluk") || lower.includes("prsluci") || lower.includes("vest")) return "odeca/prsluci";
-  if (lower.includes("duks") || lower.includes("hoodie") || lower.includes("sweatshirt")) return "odeca/duksevi";
-  if (lower.includes("majic") || lower.includes("t-shirt")) return "odeca/majice";
-  if (lower.includes("helank") || lower.includes("tajice") || lower.includes("legging")) return "odeca/helanke";
-  if (lower.includes("šorc") || lower.includes("sorc") || lower.includes("shorts") || lower.includes("bermude")) return "odeca/sortevi";
-  if (lower.includes("pantalon") || lower.includes("ski pantalon") || lower.includes("pants")) return "odeca/pantalone";
-  if (lower.includes("trenerk") || lower.includes("tracksuit")) return "odeca/trenerke";
-  if (lower.includes("halj") || lower.includes("dress")) return "odeca/haljine";
-  if (lower.includes("kombinezon") || lower.includes("overall")) return "odeca/kombinezoni";
-
-  // Accessories
-  if (lower.includes("ranac") || lower.includes("ruksak") || lower.includes("backpack")) return "oprema/rancevi";
-  if (lower.includes("torb")) return "oprema/torbe";
-  if (lower.includes("kapa") || lower.includes("kačket") || lower.includes("kacket") || lower.includes("šešir")) return "oprema/kape";
-  if (lower.includes("rukavic") || lower.includes("gloves")) return "oprema/rukavice";
-  if (lower.includes("čarap") || lower.includes("carap") || lower.includes("socks")) return "oprema/carape";
-  if (lower.includes("šal") || lower.includes("scarf")) return "oprema/salovi";
-
-  return null;
-}
-
-function mapGender(polValue: string): Gender {
-  const lower = polValue.toLowerCase();
-
-  if (lower.includes("dečij") || lower.includes("decij") || lower.includes("deč") || lower.includes("dec") ||
-      lower.includes("kid") || lower.includes("junior") || lower.includes("beb")) {
-    return "deciji";
-  }
-  if (lower.includes("žen") || lower.includes("zen") || lower.includes("women") || lower.includes("dame")) {
-    return "zenski";
-  }
-  if (lower.includes("muš") || lower.includes("mus") || lower.includes("men") || lower.includes("muški") || lower.includes("muski")) {
-    return "muski";
-  }
-
-  return "unisex";
 }
 
 async function fetchProductDetails(url: string, productName: string): Promise<ProductDetails> {
@@ -149,14 +98,7 @@ async function fetchProductDetails(url: string, productName: string): Promise<Pr
 
     // Fallback: infer gender from product name if not found in properties
     if (!result.gender && productName) {
-      const nameLower = productName.toLowerCase();
-      if (nameLower.includes("žensk") || nameLower.includes("zensk") || nameLower.includes("women")) {
-        result.gender = "zenski";
-      } else if (nameLower.includes("mušk") || nameLower.includes("musk") || nameLower.includes("men")) {
-        result.gender = "muski";
-      } else if (nameLower.includes("dečij") || nameLower.includes("decij") || nameLower.includes("kid") || nameLower.includes("junior")) {
-        result.gender = "deciji";
-      }
+      result.gender = mapGender(productName);
     }
 
     // Extract description

@@ -68,7 +68,7 @@ const CATEGORY_DISPLAY: Record<Category, string> = {
   trenerka: "trenerke",
   sorc: "šorcevi",
   helanke: "helanke",
-  ranac: "rančevi",
+  ranac: "torbe",
   ostalo: "ostalo",
 };
 

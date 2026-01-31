@@ -1,5 +1,7 @@
 import { JSDOM } from "jsdom";
 import { getDealsWithoutDetails, updateDealDetails, deleteDealByUrl, disconnect } from "../db-writer";
+import { mapCategory } from "../../lib/category-mapper";
+import { mapGender } from "../../lib/gender-mapper";
 
 const STORE = "intersport" as const;
 
@@ -11,44 +13,6 @@ interface ProductDetails {
   sizes: string[];
   description: string | null;
   categories: string[];
-}
-
-function mapCategory(text: string): string | null {
-  const lower = text.toLowerCase();
-
-  // Footwear
-  if (lower.includes("kopack") || lower.includes("kopačk")) return "obuca/kopacke";
-  if (lower.includes("baletank")) return "obuca/baletanke";
-  if (lower.includes("patike")) return "obuca/patike";
-  if (lower.includes("cipele")) return "obuca/cipele";
-  if (lower.includes("čizme") || lower.includes("cizme")) return "obuca/cizme";
-  if (lower.includes("sandale")) return "obuca/sandale";
-  if (lower.includes("papuč") || lower.includes("papuc")) return "obuca/papuce";
-
-  // Clothing - specific first
-  if (lower.includes("kupaći") || lower.includes("kupaci") || lower.includes("kupaće") || lower.includes("kupace") || lower.includes("bikini")) return "odeca/kupaci";
-  if (lower.includes(" top") || lower.startsWith("top ") || lower.includes("sports bra") || lower.includes("tank top") || lower.includes("crop top")) return "odeca/topovi";
-  if (lower.includes("jakn")) return "odeca/jakne";
-  if (lower.includes("prsluk") || lower.includes("prsluci")) return "odeca/prsluci";
-  if (lower.includes("duks")) return "odeca/duksevi";
-  if (lower.includes("majic")) return "odeca/majice";
-  if (lower.includes("helan") || lower.includes("tajice")) return "odeca/helanke";
-  if (lower.includes("šorc") || lower.includes("sorc") || lower.includes("bermude")) return "odeca/sortevi";
-  if (lower.includes("pantalone") || lower.includes("ski pantalone")) return "odeca/pantalone";
-  if (lower.includes("trenerka") || lower.includes("trenerke")) return "odeca/trenerke";
-  if (lower.includes("halj")) return "odeca/haljine";
-  if (lower.includes("košulj") || lower.includes("kosulj")) return "odeca/kosulje";
-  if (lower.includes("kombinezon") || lower.includes("jumpsuit") || lower.includes("overall")) return "odeca/kombinezoni";
-
-  // Accessories
-  if (lower.includes("ranac") || lower.includes("ruksak") || lower.includes("rančev")) return "oprema/rancevi";
-  if (lower.includes("torb")) return "oprema/torbe";
-  if (lower.includes("kapa") || lower.includes("kačket") || lower.includes("kacket") || lower.includes("šešir")) return "oprema/kape";
-  if (lower.includes("rukavic")) return "oprema/rukavice";
-  if (lower.includes("čarap") || lower.includes("carap")) return "oprema/carape";
-  if (lower.includes("novčanik") || lower.includes("novcanik")) return "oprema/novcanici";
-
-  return null;
 }
 
 async function fetchProductDetails(url: string, productName: string): Promise<ProductDetails> {

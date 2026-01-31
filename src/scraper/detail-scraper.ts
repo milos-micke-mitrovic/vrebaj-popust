@@ -4,6 +4,8 @@ import type { Browser, Page } from "puppeteer";
 import type { RawDeal, Store, ScrapeResult, CategoryPath, Gender } from "../types/deal";
 import * as fs from "fs";
 import * as path from "path";
+import { mapCategory, normalizeSerbianText } from "../lib/category-mapper";
+import { mapGender } from "../lib/gender-mapper";
 
 puppeteer.use(StealthPlugin());
 
@@ -15,127 +17,6 @@ interface ProductDetails {
   detailImageUrl: string | null;
   categories: CategoryPath[];
   gender: Gender | null;
-}
-
-// ============================================
-// Serbian Character Normalization
-// ============================================
-function normalizeSerbianText(text: string): string {
-  return text
-    .toLowerCase()
-    .replace(/š/g, "s")
-    .replace(/č/g, "c")
-    .replace(/ć/g, "c")
-    .replace(/ž/g, "z")
-    .replace(/đ/g, "dj")
-    .trim();
-}
-
-// ============================================
-// Category Mappers
-// ============================================
-interface CategoryMapping {
-  keywords: string[];
-  category: CategoryPath;
-}
-
-const CATEGORY_MAPPINGS: CategoryMapping[] = [
-  // Obuca (footwear)
-  { keywords: ["patik", "sneaker", "tenisic"], category: "obuca/patike" },
-  { keywords: ["cipel"], category: "obuca/cipele" },
-  { keywords: ["cizm", "cizma", "boots", " boot "], category: "obuca/cizme" },
-  { keywords: ["papuc"], category: "obuca/papuce" },
-  { keywords: ["sandal"], category: "obuca/sandale" },
-  { keywords: ["japank", "flip flop"], category: "obuca/papuce" },
-  { keywords: ["patofn", "slipper"], category: "obuca/papuce" },
-
-  // Odeca (clothing)
-  // Note: "donji deo trenerke" must be checked before generic "donji deo"
-  { keywords: ["donji deo trenerke", "trenerk", "tracksuit"], category: "odeca/trenerke" },
-  { keywords: ["jakn", "jacket", "suskav"], category: "odeca/jakne" },
-  { keywords: ["prsluk", "prsluci", "vest"], category: "odeca/prsluci" },
-  { keywords: ["duks", "hoodie", "sweatshirt", "dukseric"], category: "odeca/duksevi" },
-  { keywords: ["majic", "t-shirt", "tshirt", "top "], category: "odeca/majice" },
-  { keywords: ["pantalon", "pants", "trousers", "donji deo"], category: "odeca/pantalone" },
-  { keywords: ["helank", "leggings", "tajice"], category: "odeca/helanke" },
-  { keywords: ["sortev", "sorc", "shorts"], category: "odeca/sortevi" },
-  { keywords: ["kupac", "swim", "kupaon"], category: "odeca/kupaci" },
-  { keywords: ["haljin", "dress"], category: "odeca/haljine" },
-  { keywords: ["sukn", "skirt"], category: "odeca/haljine" },
-
-  // Oprema (equipment/accessories)
-  { keywords: ["torb", "torbic"], category: "oprema/torbe" },
-  { keywords: ["ranac", "ranca", "backpack", "ruksak", "rancev"], category: "oprema/rancevi" },
-  { keywords: ["kacket", "silterica"], category: "oprema/kacketi" },
-  { keywords: ["carap", "carape", "socks"], category: "oprema/carape" },
-  { keywords: ["kapa ", " kapa", "beanie"], category: "oprema/kape" },
-  { keywords: ["salo", "scarf"], category: "oprema/salovi" },
-  { keywords: ["rukavic", "gloves"], category: "oprema/rukavice" },
-  { keywords: ["vrec", "gymsack", "vrecic"], category: "oprema/vrece" },
-];
-
-function mapToCategories(productType: string, productName: string = ""): CategoryPath[] {
-  const normalizedType = normalizeSerbianText(productType);
-  const normalizedName = normalizeSerbianText(productName);
-  const combined = `${normalizedType} ${normalizedName}`;
-
-  const categories: CategoryPath[] = [];
-
-  for (const mapping of CATEGORY_MAPPINGS) {
-    for (const keyword of mapping.keywords) {
-      if (combined.includes(keyword)) {
-        if (!categories.includes(mapping.category)) {
-          categories.push(mapping.category);
-        }
-        break;
-      }
-    }
-  }
-
-  return categories;
-}
-
-// ============================================
-// Gender Mapper
-// ============================================
-function mapToGender(polValue: string): Gender {
-  const normalized = normalizeSerbianText(polValue);
-
-  // Kids detection - check first as it's more specific
-  if (
-    normalized.includes("dec") ||
-    normalized.includes("djec") ||
-    normalized.includes("kid") ||
-    normalized.includes("junior") ||
-    normalized.includes("beb") ||
-    normalized.includes("za decake") ||
-    normalized.includes("za devojcice")
-  ) {
-    return "deciji";
-  }
-
-  // Men detection
-  if (
-    normalized.includes("musk") ||
-    normalized.includes("men") ||
-    normalized.includes("muski") ||
-    normalized.includes("za muskarce")
-  ) {
-    return "muski";
-  }
-
-  // Women detection
-  if (
-    normalized.includes("zensk") ||
-    normalized.includes("women") ||
-    normalized.includes("zenski") ||
-    normalized.includes("dame") ||
-    normalized.includes("za zene")
-  ) {
-    return "zenski";
-  }
-
-  return "unisex";
 }
 
 function sleep(ms: number): Promise<void> {
@@ -258,8 +139,9 @@ async function extractDjakSportDetails(page: Page, dealName: string = ""): Promi
   }
 
   // Map the extracted values to our category/gender system
-  const categories = mapToCategories(rawData.proizvodValue, dealName);
-  const gender = rawData.polValue ? mapToGender(rawData.polValue) : null;
+  const cat = mapCategory(rawData.proizvodValue + " " + dealName);
+  const categories = cat ? [cat] : [];
+  const gender = rawData.polValue ? mapGender(rawData.polValue) || "unisex" : null;
 
   return {
     sizes: rawData.sizes,
@@ -363,7 +245,8 @@ async function extractSportVisionDetails(page: Page, dealName: string = ""): Pro
   });
 
   // Map the extracted values to our category/gender system
-  const categories = mapToCategories(rawData.kategorijaValue, dealName);
+  const cat = mapCategory(rawData.kategorijaValue + " " + dealName);
+  const categories = cat ? [cat] : [];
 
   // Determine gender - check uzrast first for kids detection
   let gender: Gender | null = null;
@@ -371,7 +254,7 @@ async function extractSportVisionDetails(page: Page, dealName: string = ""): Pro
   if (uzrastNorm.includes("beb") || uzrastNorm.includes("mal") || uzrastNorm.includes("dec") || uzrastNorm.includes("tinejdzer")) {
     gender = "deciji";
   } else if (rawData.polValue) {
-    gender = mapToGender(rawData.polValue);
+    gender = mapGender(rawData.polValue) || "unisex";
   }
 
   return {
@@ -428,12 +311,13 @@ async function extractNSportDetails(page: Page, dealName: string = ""): Promise<
   });
 
   // Map category from "Naziv proizvoda" (e.g., "Muške japanke", "Ženska jakna", "Dečiji šorc")
-  const categories = mapToCategories(rawData.nazivProizvoda, dealName);
+  const cat = mapCategory(rawData.nazivProizvoda + " " + dealName);
+  const categories = cat ? [cat] : [];
 
   // Determine gender from "Naziv proizvoda"
   let gender: Gender | null = null;
   if (rawData.nazivProizvoda) {
-    gender = mapToGender(rawData.nazivProizvoda);
+    gender = mapGender(rawData.nazivProizvoda) || "unisex";
   }
 
   return {
@@ -526,7 +410,8 @@ async function extractBuzzDetails(page: Page, dealName: string = ""): Promise<Pr
   });
 
   // Map the extracted values to our category/gender system
-  const categories = mapToCategories(rawData.kategorijaValue, dealName);
+  const cat = mapCategory(rawData.kategorijaValue + " " + dealName);
+  const categories = cat ? [cat] : [];
 
   // Determine gender - check uzrast first for kids detection
   let gender: Gender | null = null;
@@ -534,7 +419,7 @@ async function extractBuzzDetails(page: Page, dealName: string = ""): Promise<Pr
   if (uzrastNorm.includes("tinejdzer") || uzrastNorm.includes("dec") || uzrastNorm.includes("beb")) {
     gender = "deciji";
   } else if (rawData.polValue) {
-    gender = mapToGender(rawData.polValue);
+    gender = mapGender(rawData.polValue) || "unisex";
   }
 
   return {

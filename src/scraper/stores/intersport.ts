@@ -1,5 +1,6 @@
 import { JSDOM } from "jsdom";
 import { upsertDeal, logScrapeRun, disconnect, cleanupStaleProducts, Store, Gender } from "../db-writer";
+import { mapCategory } from "../../lib/category-mapper";
 
 const STORE: Store = "intersport";
 const BASE_URL = "https://www.intersport.rs";
@@ -52,63 +53,6 @@ function generateId(url: string): string {
 
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
-}
-
-function parseCategory(url: string, name: string): string[] {
-  const urlLower = url.toLowerCase();
-  const nameLower = name.toLowerCase();
-  const categories: string[] = [];
-
-  // Check footwear first (more specific checks first)
-  if (nameLower.includes("kopacke") || nameLower.includes("kopačke")) {
-    categories.push("obuca/kopacke");
-  } else if (nameLower.includes("baletank")) {
-    categories.push("obuca/baletanke");
-  } else if (urlLower.includes("/patike/") || nameLower.includes("patike")) {
-    categories.push("obuca/patike");
-  } else if (urlLower.includes("/cipele/") || nameLower.includes("cipele")) {
-    categories.push("obuca/cipele");
-  } else if (urlLower.includes("/cizme/") || nameLower.includes("čizme") || nameLower.includes("cizme")) {
-    categories.push("obuca/cizme");
-  } else if (urlLower.includes("/sandale/") || nameLower.includes("sandale")) {
-    categories.push("obuca/sandale");
-  } else if (urlLower.includes("/papuce/") || nameLower.includes("papuče") || nameLower.includes("papuce")) {
-    categories.push("obuca/papuce");
-  }
-  // Clothing - check specific items before generic ones
-  else if (nameLower.includes("kupaći") || nameLower.includes("kupaci") || nameLower.includes("bikini")) {
-    categories.push("odeca/kupaci");
-  } else if (nameLower.includes("jakna") || nameLower.includes("jakne")) {
-    categories.push("odeca/jakne");
-  } else if (nameLower.includes("prsluk") || nameLower.includes("prsluci")) {
-    categories.push("odeca/prsluci");
-  } else if (nameLower.includes("duks")) {
-    categories.push("odeca/duksevi");
-  } else if (nameLower.includes("majica") || nameLower.includes("dres")) {
-    categories.push("odeca/majice");
-  } else if (nameLower.includes("helanke") || nameLower.includes("tajice")) {
-    categories.push("odeca/helanke");
-  } else if (nameLower.includes("šorc") || nameLower.includes("sorc") || nameLower.includes("bermude")) {
-    categories.push("odeca/sortevi");
-  } else if (nameLower.includes("pantalone") || nameLower.includes("ski pantalone")) {
-    categories.push("odeca/pantalone");
-  } else if (nameLower.includes("trenerka") || nameLower.includes("donji deo")) {
-    categories.push("odeca/trenerke");
-  } else if (nameLower.includes("haljin")) {
-    categories.push("odeca/haljine");
-  }
-  // Accessories
-  else if (nameLower.includes("ranac") || nameLower.includes("ruksak")) {
-    categories.push("oprema/rancevi");
-  } else if (nameLower.includes("torba")) {
-    categories.push("oprema/torbe");
-  } else if (nameLower.includes("kapa") || nameLower.includes("kačket") || nameLower.includes("kacket")) {
-    categories.push("oprema/kape");
-  } else if (nameLower.includes("rukavic")) {
-    categories.push("oprema/rukavice");
-  }
-
-  return categories;
 }
 
 async function fetchPage(url: string): Promise<string> {
@@ -245,7 +189,8 @@ async function scrapeIntersport(): Promise<void> {
             break;
           }
 
-          const categories = parseCategory(product.url, product.name);
+          const cat = mapCategory(product.name + " " + product.url);
+          const categories = cat ? [cat] : [];
 
           if (totalDeals < 5) {
             console.log(`Saving: ${product.name.substring(0, 40)}... | ${discountPercent}% | gender=${gender}`);

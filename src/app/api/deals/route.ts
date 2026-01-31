@@ -75,7 +75,7 @@ export async function GET(request: NextRequest) {
     trenerka: ["odeca/trenerke"],
     sorc: ["odeca/sorcevi"],
     helanke: ["odeca/helanke"],
-    ranac: ["oprema/torbe", "oprema/rancevi"],
+    ranac: ["oprema/torbe"],
   };
 
   // Category path aliases - treat these as equivalent
