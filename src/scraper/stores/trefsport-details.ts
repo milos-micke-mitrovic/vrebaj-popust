@@ -32,7 +32,7 @@ function mapCategory(text: string): string | null {
   if (lower.includes("ski jakn") || lower.includes("jakn") || lower.includes("jacket")) return "odeca/jakne";
   if (lower.includes("prsluk") || lower.includes("prsluci") || lower.includes("vest")) return "odeca/prsluci";
   if (lower.includes("duks") || lower.includes("hoodie") || lower.includes("sweatshirt")) return "odeca/duksevi";
-  if (lower.includes("majic") || lower.includes("t-shirt") || lower.includes("top")) return "odeca/majice";
+  if (lower.includes("majic") || lower.includes("t-shirt")) return "odeca/majice";
   if (lower.includes("helank") || lower.includes("tajice") || lower.includes("legging")) return "odeca/helanke";
   if (lower.includes("šorc") || lower.includes("sorc") || lower.includes("shorts") || lower.includes("bermude")) return "odeca/sortevi";
   if (lower.includes("pantalon") || lower.includes("ski pantalon") || lower.includes("pants")) return "odeca/pantalone";
@@ -89,11 +89,15 @@ async function fetchProductDetails(url: string, productName: string): Promise<Pr
     const doc = dom.window.document;
 
     // Extract sizes from configurator options
-    // Selector: .product-detail-configurator-option label
-    const sizeLabels = doc.querySelectorAll(".product-detail-configurator-option label");
+    // Only select sizes where the input has is-combinable class (in stock)
+    // Inputs without is-combinable are disabled/out of stock
+    const sizeOptions = doc.querySelectorAll(".product-detail-configurator-option");
     const seenSizes = new Set<string>();
-    for (const label of sizeLabels) {
-      const size = label.textContent?.trim();
+    for (const option of sizeOptions) {
+      const input = option.querySelector("input.product-detail-configurator-option-input");
+      if (!input || !input.classList.contains("is-combinable")) continue;
+      const label = option.querySelector("label");
+      const size = label?.textContent?.trim();
       if (size && !seenSizes.has(size)) {
         seenSizes.add(size);
         result.sizes.push(size);
