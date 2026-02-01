@@ -391,53 +391,12 @@ export function DealsGrid({
     );
   }, [apiBrands, brandSearch]);
 
-  // Valid clothing sizes (in display order)
-  const CLOTHING_SIZES = ["XS", "S", "M", "L", "XL", "XXL", "2XL", "3XL", "4XL", "5XL"];
-
-  // Check if a size is a valid shoe size (18-50 range, including half sizes and fractions)
-  const isShoeSize = (size: string): boolean => {
-    // Skip range sizes like "23-26" or "S/M"
-    if (size.includes("-") || size.includes("/")) return false;
-    const num = parseFloat(size);
-    if (isNaN(num)) return false;
-    // Shoe sizes are typically 35-50 for adults, 18-34 for kids
-    return num >= 18 && num <= 50;
-  };
-
-  // Extract unique sizes from all deals, separated by type
-  const { shoeSizes, clothingSizes } = useMemo(() => {
-    const shoes = new Set<string>();
-    const clothes = new Set<string>();
-
-    deals.forEach((deal) => {
-      if (deal.sizes) {
-        deal.sizes.forEach((size) => {
-          // Check if it's a clothing size
-          if (CLOTHING_SIZES.includes(size.toUpperCase())) {
-            clothes.add(size);
-          }
-          // Check if it's a shoe size
-          else if (isShoeSize(size)) {
-            shoes.add(size);
-          }
-          // Skip invalid sizes like "ADULT", "BV", single digits, kids height sizes (128, 140, etc.)
-        });
-      }
-    });
-
-    // Sort shoe sizes numerically
-    const sortedShoes = Array.from(shoes).sort((a, b) => parseFloat(a) - parseFloat(b));
-
-    // Sort clothing sizes by predefined order
-    const sortedClothes = Array.from(clothes).sort((a, b) => {
-      const aIndex = CLOTHING_SIZES.indexOf(a.toUpperCase());
-      const bIndex = CLOTHING_SIZES.indexOf(b.toUpperCase());
-      return aIndex - bIndex;
-    });
-
-    return { shoeSizes: sortedShoes, clothingSizes: sortedClothes };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [deals]); // CLOTHING_SIZES is a constant, no need to include in deps
+  // Predefined sizes - always visible regardless of current filter results
+  const SHOE_SIZES = [
+    "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39",
+    "40", "41", "42", "43", "44", "45", "46",
+  ];
+  const CLOTHING_SIZES = ["XS", "S", "M", "L", "XL", "XXL", "2XL", "3XL"];
 
   // Filtering and pagination now happen on the server via useDealsApi
   // deals, total, and totalPages come from the API response
@@ -1040,8 +999,8 @@ export function DealsGrid({
       </div>
 
       {/* Shoe Size */}
-      {shoeSizes.length > 0 && (() => {
-        const selectedShoeCount = selectedSizes.filter(s => shoeSizes.includes(s)).length;
+      {(() => {
+        const selectedShoeCount = selectedSizes.filter(s => SHOE_SIZES.includes(s)).length;
         return (
         <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
           <button
@@ -1061,7 +1020,7 @@ export function DealsGrid({
                   onClick={(e) => {
                     e.stopPropagation();
                     hasUserInteracted.current = true;
-                    setSelectedSizes(prev => prev.filter(s => !shoeSizes.includes(s)));
+                    setSelectedSizes(prev => prev.filter(s => !SHOE_SIZES.includes(s)));
                     setCurrentPage(1);
                   }}
                   className="text-xs text-red-500 hover:text-red-600"
@@ -1083,7 +1042,7 @@ export function DealsGrid({
             <div className="overflow-hidden">
               <ScrollFade maxHeight="120px" fadeColor="gray">
                 <div className="flex flex-wrap gap-1.5 pr-1">
-                  {shoeSizes.map((size) => (
+                  {SHOE_SIZES.map((size) => (
                     <button
                       key={size}
                       onClick={() => toggleSize(size)}
@@ -1105,8 +1064,8 @@ export function DealsGrid({
       })()}
 
       {/* Clothing Size */}
-      {clothingSizes.length > 0 && (() => {
-        const selectedClothingCount = selectedSizes.filter(s => clothingSizes.includes(s)).length;
+      {(() => {
+        const selectedClothingCount = selectedSizes.filter(s => CLOTHING_SIZES.includes(s)).length;
         return (
         <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
           <button
@@ -1126,7 +1085,7 @@ export function DealsGrid({
                   onClick={(e) => {
                     e.stopPropagation();
                     hasUserInteracted.current = true;
-                    setSelectedSizes(prev => prev.filter(s => !clothingSizes.includes(s)));
+                    setSelectedSizes(prev => prev.filter(s => !CLOTHING_SIZES.includes(s)));
                     setCurrentPage(1);
                   }}
                   className="text-xs text-red-500 hover:text-red-600"
@@ -1147,7 +1106,7 @@ export function DealsGrid({
           <div className={`grid transition-[grid-template-rows] duration-200 ease-out ${isSectionCollapsed("clothingSize") ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}>
             <div className="overflow-hidden">
               <div className="flex flex-wrap gap-1.5">
-                {clothingSizes.map((size) => (
+                {CLOTHING_SIZES.map((size) => (
                   <button
                     key={size}
                     onClick={() => toggleSize(size)}
@@ -1257,10 +1216,10 @@ export function DealsGrid({
       {/* Fixed Filter Tab Button - Left Side Top (mobile/tablet only) */}
       <button
         onClick={() => setShowMobileFilters(true)}
-        className="cursor-pointer fixed left-0 top-20 z-40 flex items-center gap-1 rounded-r-lg bg-red-500 px-2 py-3 text-white shadow-lg transition-all hover:bg-red-600 hover:pl-3 lg:hidden"
+        className="cursor-pointer fixed left-0 top-24 z-40 flex items-center gap-1.5 rounded-r-lg bg-red-500 px-3 py-2.5 text-white shadow-lg transition-all hover:bg-red-600 hover:pl-4 lg:hidden"
         aria-label="Otvori filtere"
       >
-        <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -1268,6 +1227,7 @@ export function DealsGrid({
             d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
           />
         </svg>
+        <span className="text-sm font-medium">Filteri</span>
         {activeFilterCount > 0 && (
           <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-xs font-bold text-red-500">
             {activeFilterCount}
@@ -1339,8 +1299,8 @@ export function DealsGrid({
         {/* Main Content */}
         <div className="min-w-0">
           {/* Top Bar: Sort and count */}
-          <div className="mb-4 flex items-center justify-end gap-4">
-            <p className="text-sm text-gray-600 dark:text-gray-400">
+          <div className="mb-4 flex flex-wrap items-center justify-end gap-2 sm:gap-4">
+            <p className="order-2 w-full text-right text-sm text-gray-600 dark:text-gray-400 sm:order-none sm:w-auto sm:text-left">
               {isLoading || isInitialLoad ? "..." : `${total} ${total === 1 ? "proizvod" : "proizvoda"}`}
             </p>
             <select
