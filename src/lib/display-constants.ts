@@ -63,6 +63,7 @@ export const SUBCATEGORY_NAMES: Record<Subcategory, string> = {
   haljine: "Haljine",
   kosulje: "Košulje",
   kombinezoni: "Kombinezoni",
+  "donji-ves": "Donji veš",
   // Oprema
   torbe: "Torbe",
   carape: "Čarape",
@@ -73,7 +74,7 @@ export const SUBCATEGORY_NAMES: Record<Subcategory, string> = {
 
 export const CATEGORY_HIERARCHY: Record<MainCategory, Subcategory[]> = {
   obuca: ["patike", "cipele", "baletanke", "cizme", "papuce", "sandale", "kopacke"],
-  odeca: ["jakne", "prsluci", "duksevi", "majice", "topovi", "pantalone", "trenerke", "helanke", "sortevi", "kupaci", "haljine", "kosulje", "kombinezoni"],
+  odeca: ["jakne", "prsluci", "duksevi", "majice", "topovi", "pantalone", "trenerke", "helanke", "sortevi", "kupaci", "haljine", "kosulje", "kombinezoni", "donji-ves"],
   oprema: ["torbe", "carape", "kape", "salovi", "rukavice"],
 };
 

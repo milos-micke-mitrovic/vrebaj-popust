@@ -154,9 +154,12 @@ export function mapCategory(text: string): CategoryPath | null {
   ) return "odeca/pantalone";
 
   if (
+    t.includes("donj") && t.includes("ves")
+  ) return "odeca/donji-ves";
+
+  if (
     t.includes("trenerk") ||
-    t.includes("tracksuit") ||
-    t.includes("donji deo")
+    t.includes("tracksuit")
   ) return "odeca/trenerke";
 
   if (
@@ -198,7 +201,7 @@ export function mapCategory(text: string): CategoryPath | null {
   if (
     t.includes("carap") ||
     t.includes("stucn") ||
-    t.includes("socks")
+    t.includes("sock")
   ) return "oprema/carape";
 
   if (

@@ -3,6 +3,56 @@ import { PrismaClient, Store, Gender } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+/**
+ * Expand compound sizes so exact-match filtering works.
+ * "43-45" → ["43","44","45"], "38 2/3" → ["38","39"], "S/M" → ["S","M"], etc.
+ */
+function normalizeSizes(sizes: string[]): string[] {
+  const result = new Set<string>();
+
+  for (const raw of sizes) {
+    const s = raw.trim();
+    if (!s) continue;
+
+    // Range: "36-37", "43-45"
+    const rangeMatch = s.match(/^(\d+)\s*-\s*(\d+)$/);
+    if (rangeMatch) {
+      const lo = parseInt(rangeMatch[1]);
+      const hi = parseInt(rangeMatch[2]);
+      for (let i = lo; i <= hi; i++) result.add(String(i));
+      continue;
+    }
+
+    // Fractional: "38 2/3", "44 1/3"
+    const fracMatch = s.match(/^(\d+)\s+(\d+)\/(\d+)$/);
+    if (fracMatch) {
+      const whole = parseInt(fracMatch[1]);
+      result.add(String(whole));
+      result.add(String(whole + 1));
+      continue;
+    }
+
+    // Decimal: "42.5"
+    const decMatch = s.match(/^(\d+)\.(\d+)$/);
+    if (decMatch) {
+      const num = parseFloat(s);
+      result.add(String(Math.floor(num)));
+      result.add(String(Math.ceil(num)));
+      continue;
+    }
+
+    // Compound letter: "S/M", "M/L"
+    if (/^[A-Za-z0-9]+\/[A-Za-z0-9]+$/.test(s)) {
+      for (const part of s.split("/")) result.add(part.toUpperCase());
+      continue;
+    }
+
+    result.add(s);
+  }
+
+  return [...result];
+}
+
 export interface DealInput {
   id: string;
   store: Store;
@@ -21,6 +71,7 @@ export interface DealInput {
 }
 
 export async function upsertDeal(deal: DealInput): Promise<void> {
+  const sizes = deal.sizes ? normalizeSizes(deal.sizes) : undefined;
   await prisma.deal.upsert({
     where: { url: deal.url },
     update: {
@@ -34,7 +85,7 @@ export async function upsertDeal(deal: DealInput): Promise<void> {
       gender: deal.gender || "unisex",
       scrapedAt: new Date(),
       // Only overwrite detail-scraper fields if explicitly provided
-      ...(deal.sizes && deal.sizes.length > 0 && { sizes: deal.sizes }),
+      ...(sizes && sizes.length > 0 && { sizes }),
       ...(deal.description != null && { description: deal.description }),
       ...(deal.detailImageUrl != null && { detailImageUrl: deal.detailImageUrl }),
     },
@@ -48,7 +99,7 @@ export async function upsertDeal(deal: DealInput): Promise<void> {
       discountPercent: deal.discountPercent,
       url: deal.url,
       imageUrl: deal.imageUrl,
-      sizes: deal.sizes || [],
+      sizes: sizes || [],
       description: deal.description || null,
       detailImageUrl: deal.detailImageUrl || null,
       categories: deal.categories || [],
@@ -101,7 +152,7 @@ export async function updateDealDetails(
   await prisma.deal.update({
     where: { url },
     data: {
-      sizes: details.sizes,
+      sizes: details.sizes ? normalizeSizes(details.sizes) : details.sizes,
       description: details.description,
       detailImageUrl: details.detailImageUrl,
       categories: details.categories,
