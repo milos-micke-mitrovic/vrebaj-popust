@@ -205,9 +205,12 @@ export function mapCategory(text: string): CategoryPath | null {
   ) return "oprema/carape";
 
   if (
-    t.includes("sal") ||
+    /\bsal\b/.test(t) ||
+    t.includes("salov") ||
     t.includes("scarf")
   ) return "oprema/salovi";
+
+  if (/\blopt/.test(t)) return "oprema/lopte";
 
   return null;
 }

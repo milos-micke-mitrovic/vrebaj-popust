@@ -70,12 +70,13 @@ export const SUBCATEGORY_NAMES: Record<Subcategory, string> = {
   kape: "Kape",
   salovi: "Šalovi",
   rukavice: "Rukavice",
+  lopte: "Lopte",
 };
 
 export const CATEGORY_HIERARCHY: Record<MainCategory, Subcategory[]> = {
   obuca: ["patike", "cipele", "baletanke", "cizme", "papuce", "sandale", "kopacke"],
   odeca: ["jakne", "prsluci", "duksevi", "majice", "topovi", "pantalone", "trenerke", "helanke", "sortevi", "kupaci", "haljine", "kosulje", "kombinezoni", "donji-ves"],
-  oprema: ["torbe", "carape", "kape", "salovi", "rukavice"],
+  oprema: ["torbe", "carape", "kape", "salovi", "rukavice", "lopte"],
 };
 
 // Build category path display names from hierarchy + subcategory names

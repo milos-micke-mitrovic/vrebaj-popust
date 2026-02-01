@@ -304,10 +304,10 @@ export function DealsGrid({
   // ── Shared sidebar props ──
   const filterSidebarProps = {
     search, selectedStores, selectedBrands, selectedGenders,
-    selectedCategoryPaths, selectedSizes, minDiscount, minPrice, maxPrice,
+    selectedCategories, selectedCategoryPaths, selectedSizes, minDiscount, minPrice, maxPrice,
     brandSearch, expandedCategories, filteredBrands,
     setSearch, setSelectedStores, setSelectedBrands, setSelectedGenders,
-    setSelectedCategoryPaths, setSelectedSizes, setMinDiscount, setMinPrice,
+    setSelectedCategories, setSelectedCategoryPaths, setSelectedSizes, setMinDiscount, setMinPrice,
     setMaxPrice, setBrandSearch, setCurrentPage, setExpandedCategories,
     collapsedSections, toggleSection, onInteraction, scrollToTop,
   };

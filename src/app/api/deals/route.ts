@@ -108,10 +108,18 @@ export async function GET(request: NextRequest) {
   });
 
   // Category paths filter (e.g., "obuca/patike")
-  if (expandedCategoryPaths.length > 0) {
+  if (expandedCategoryPaths.length > 0 && filterOstalo) {
+    // Both: show products matching selected categories OR uncategorized
+    where.AND = [
+      ...(where.AND as Prisma.DealWhereInput[] || []),
+      { OR: [
+        { categories: { hasSome: expandedCategoryPaths } },
+        { categories: { isEmpty: true } },
+      ]},
+    ];
+  } else if (expandedCategoryPaths.length > 0) {
     where.categories = { hasSome: expandedCategoryPaths };
   } else if (filterOstalo) {
-    // "ostalo" means products with empty categories array
     where.categories = { isEmpty: true };
   }
 

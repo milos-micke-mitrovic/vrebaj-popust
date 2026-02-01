@@ -25,6 +25,7 @@ export interface DealsFilterSidebarProps {
   selectedStores: Store[];
   selectedBrands: string[];
   selectedGenders: Gender[];
+  selectedCategories: Category[];
   selectedCategoryPaths: CategoryPath[];
   selectedSizes: string[];
   minDiscount: number;
@@ -39,6 +40,7 @@ export interface DealsFilterSidebarProps {
   setSelectedStores: Dispatch<SetStateAction<Store[]>>;
   setSelectedBrands: Dispatch<SetStateAction<string[]>>;
   setSelectedGenders: Dispatch<SetStateAction<Gender[]>>;
+  setSelectedCategories: Dispatch<SetStateAction<Category[]>>;
   setSelectedCategoryPaths: Dispatch<SetStateAction<CategoryPath[]>>;
   setSelectedSizes: Dispatch<SetStateAction<string[]>>;
   setMinDiscount: Dispatch<SetStateAction<number>>;
@@ -62,6 +64,7 @@ export function DealsFilterSidebar({
   selectedStores,
   selectedBrands,
   selectedGenders,
+  selectedCategories,
   selectedCategoryPaths,
   selectedSizes,
   minDiscount,
@@ -74,6 +77,7 @@ export function DealsFilterSidebar({
   setSelectedStores,
   setSelectedBrands,
   setSelectedGenders,
+  setSelectedCategories,
   setSelectedCategoryPaths,
   setSelectedSizes,
   setMinDiscount,
@@ -307,8 +311,8 @@ export function DealsFilterSidebar({
       <FilterSection
         icon={<Grid3X3 className="w-4 h-4" />}
         title="Kategorija"
-        activeCount={selectedCategoryPaths.length}
-        onClear={() => { interact(); setSelectedCategoryPaths([]); setCurrentPage(1); }}
+        activeCount={selectedCategoryPaths.length + (selectedCategories.includes("ostalo") ? 1 : 0)}
+        onClear={() => { interact(); setSelectedCategoryPaths([]); setSelectedCategories((prev) => prev.filter((c) => c !== "ostalo")); setCurrentPage(1); }}
         collapsed={isCollapsed("category")}
         onToggle={() => toggleSection("category")}
       >
@@ -400,6 +404,36 @@ export function DealsFilterSidebar({
               </div>
             );
           })}
+          {/* Bez kategorije */}
+          <button
+            type="button"
+            onClick={() => {
+              interact();
+              setSelectedCategories((prev) =>
+                prev.includes("ostalo") ? prev.filter((c) => c !== "ostalo") : [...prev, "ostalo" as Category]
+              );
+              setCurrentPage(1);
+              scrollToTop();
+            }}
+            className={`w-full flex items-center gap-2 p-2 rounded text-left transition-colors cursor-pointer mt-2 border border-gray-200 dark:border-gray-700 ${
+              selectedCategories.includes("ostalo")
+                ? "bg-red-50 dark:bg-red-900/20"
+                : "hover:bg-gray-50 dark:hover:bg-gray-800"
+            }`}
+          >
+            <div className={`w-3.5 h-3.5 rounded border-2 flex items-center justify-center shrink-0 ${
+              selectedCategories.includes("ostalo")
+                ? "bg-red-500 border-red-500"
+                : "border-gray-300 dark:border-gray-600"
+            }`}>
+              {selectedCategories.includes("ostalo") && (
+                <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                </svg>
+              )}
+            </div>
+            <span className="text-sm text-gray-700 dark:text-gray-300">Bez kategorije</span>
+          </button>
         </div>
       </FilterSection>
 
