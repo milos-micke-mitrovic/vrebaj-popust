@@ -17,6 +17,7 @@ import { ProductBreadcrumb } from "@/components/product-breadcrumb";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { TrackProductView } from "@/components/track-product-view";
 import { Deal } from "@/types/deal";
+import { CATEGORY_NAMES, CATEGORY_PATH_NAMES, GENDER_NAMES } from "@/lib/display-constants";
 
 // Calculate price valid date at build time (7 days from build)
 const priceValidUntilDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
@@ -26,52 +27,6 @@ const priceValidUntilDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
 interface Props {
   params: Promise<{ id: string }>;
 }
-
-const CATEGORY_NAMES: Record<string, string> = {
-  patike: "Patike",
-  cipele: "Cipele",
-  cizme: "Čizme",
-  jakna: "Jakne",
-  majica: "Majice",
-  duks: "Duksevi",
-  trenerka: "Trenerke",
-  sorc: "Šorcevi",
-  helanke: "Helanke",
-  ranac: "Torbe",
-  ostalo: "Ostalo",
-};
-
-// New category path display names (matches deals-grid.tsx SUBCATEGORY_NAMES)
-const CATEGORY_PATH_NAMES: Record<string, string> = {
-  // Obuca
-  "obuca/patike": "Patike",
-  "obuca/cipele": "Cipele",
-  "obuca/baletanke": "Baletanke",
-  "obuca/cizme": "Čizme",
-  "obuca/papuce": "Papuče",
-  "obuca/sandale": "Sandale",
-  "obuca/kopacke": "Kopačke",
-  // Odeca
-  "odeca/jakne": "Jakne",
-  "odeca/prsluci": "Prsluci",
-  "odeca/duksevi": "Duksevi",
-  "odeca/majice": "Majice",
-  "odeca/topovi": "Topovi",
-  "odeca/pantalone": "Pantalone",
-  "odeca/trenerke": "Trenerke",
-  "odeca/helanke": "Helanke",
-  "odeca/sortevi": "Šorcevi",
-  "odeca/kupaci": "Kupaći",
-  "odeca/haljine": "Haljine",
-  "odeca/kosulje": "Košulje",
-  "odeca/kombinezoni": "Kombinezoni",
-  // Oprema
-  "oprema/torbe": "Torbe",
-  "oprema/carape": "Čarape",
-  "oprema/kape": "Kape",
-  "oprema/salovi": "Šalovi",
-  "oprema/rukavice": "Rukavice",
-};
 
 // Helper to get category display name from deal (prefers new categories array)
 function getCategoryDisplayName(deal: { category: string; categories?: string[] }): string {
@@ -83,7 +38,7 @@ function getCategoryDisplayName(deal: { category: string; categories?: string[] 
     }
   }
   // Fall back to legacy category
-  return CATEGORY_NAMES[deal.category] || "Proizvod";
+  return CATEGORY_NAMES[deal.category as keyof typeof CATEGORY_NAMES] || "Proizvod";
 }
 
 // Helper to get category filter URL (prefers new categories array)

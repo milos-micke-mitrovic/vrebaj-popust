@@ -4,107 +4,32 @@ import { useState, useMemo, useEffect, useRef } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { Store, Gender, Category, CategoryPath, MainCategory, Subcategory } from "@/types/deal";
 import { DealCard, DealCardSkeleton } from "./deal-card";
-import { ScrollFade } from "./scroll-fade";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { SearchX, Percent, Banknote, Users, ShoppingBag, Grid3X3, Footprints, Shirt, Tag } from "lucide-react";
+import { SearchX } from "lucide-react";
 import { useDealsApi } from "@/hooks/use-deals-api";
+import { DealsFilterSidebar, type FilterSectionId } from "./filters/deals-filter-sidebar";
+import {
+  ITEMS_PER_PAGE,
+  STORE_NAMES,
+  GENDER_NAMES,
+  CATEGORY_NAMES,
+  SUBCATEGORY_NAMES,
+} from "@/lib/display-constants";
 
 interface DealsGridProps {
-  // Initial filter from URL path (e.g., /ponude/patike sets initialCategoryPath)
   initialSearch?: string;
   initialStores?: Store[];
   initialBrands?: string[];
   initialGenders?: Gender[];
   initialCategories?: Category[];
   initialCategoryPaths?: CategoryPath[];
-  // SEO heading for filter pages (only shown on clean landing, before user interaction)
   seoTitle?: string;
   seoSubtitle?: string;
-  // Filter page slug - when set, changing filters redirects to /ponude with query params
   filterPageSlug?: string;
 }
 
 type SortOption = "discount" | "price-low" | "price-high" | "newest";
-
-const ITEMS_PER_PAGE = 32;
-
-const STORE_NAMES: Record<Store, string> = {
-  djaksport: "Djak Sport",
-  planeta: "Planeta Sport",
-  sportvision: "Sport Vision",
-  nsport: "N Sport",
-  buzz: "Buzz Sneakers",
-  officeshoes: "Office Shoes",
-  intersport: "Intersport",
-  trefsport: "Tref Sport",
-};
-
-const GENDER_NAMES: Record<Gender, string> = {
-  muski: "Muškarci",
-  zenski: "Žene",
-  deciji: "Deca",
-  unisex: "Unisex",
-};
-
-const CATEGORY_NAMES: Record<Category, string> = {
-  patike: "Patike",
-  cipele: "Cipele",
-  cizme: "Čizme",
-  jakna: "Jakne",
-  majica: "Majice",
-  duks: "Duksevi",
-  trenerka: "Trenerke",
-  sorc: "Šorcevi",
-  helanke: "Helanke",
-  ranac: "Torbe",
-  ostalo: "Ostalo",
-};
-
-// Hierarchical category structure
-const MAIN_CATEGORY_NAMES: Record<MainCategory, string> = {
-  obuca: "Obuća",
-  odeca: "Odeća",
-  oprema: "Ostalo",
-};
-
-const SUBCATEGORY_NAMES: Record<Subcategory, string> = {
-  // Obuca
-  patike: "Patike",
-  cipele: "Cipele",
-  baletanke: "Baletanke",
-  cizme: "Čizme",
-  papuce: "Papuče",
-  sandale: "Sandale",
-  kopacke: "Kopačke",
-  // Odeca
-  jakne: "Jakne",
-  prsluci: "Prsluci",
-  duksevi: "Duksevi",
-  majice: "Majice",
-  topovi: "Topovi",
-  pantalone: "Pantalone",
-  trenerke: "Trenerke",
-  helanke: "Helanke",
-  sortevi: "Šorcevi",
-  kupaci: "Kupaći",
-  haljine: "Haljine",
-  kosulje: "Košulje",
-  kombinezoni: "Kombinezoni",
-  // Oprema
-  torbe: "Torbe",
-  carape: "Čarape",
-  kape: "Kape",
-  salovi: "Šalovi",
-  rukavice: "Rukavice",
-};
-
-const CATEGORY_HIERARCHY: Record<MainCategory, Subcategory[]> = {
-  obuca: ["patike", "cipele", "baletanke", "cizme", "papuce", "sandale", "kopacke"],
-  odeca: ["jakne", "prsluci", "duksevi", "majice", "topovi", "pantalone", "trenerke", "helanke", "sortevi", "kupaci", "haljine", "kosulje", "kombinezoni"],
-  oprema: ["torbe", "carape", "kape", "salovi", "rukavice"],
-};
 
 export function DealsGrid({
   initialSearch = "",
@@ -121,7 +46,7 @@ export function DealsGrid({
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  // Initialize state from URL params (with initial values as fallback)
+  // ── State ──
   const [search, setSearch] = useState(searchParams.get("q") || initialSearch);
   const [selectedStores, setSelectedStores] = useState<Store[]>(
     (searchParams.get("stores")?.split(",").filter(Boolean) as Store[]) || initialStores
@@ -153,7 +78,6 @@ export function DealsGrid({
     searchParams.get("sizes")?.split(",").filter(Boolean) || []
   );
   const [sortBy, setSortBy] = useState<SortOption>(() => {
-    // First check URL, then localStorage, then default
     const urlSort = searchParams.get("sort") as SortOption;
     if (urlSort) return urlSort;
     if (typeof window !== "undefined") {
@@ -170,22 +94,17 @@ export function DealsGrid({
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
   // Collapsible filter sections - persist to localStorage
-  type FilterSection = "discount" | "price" | "gender" | "store" | "category" | "shoeSize" | "clothingSize" | "brand";
-  const [collapsedSections, setCollapsedSections] = useState<FilterSection[]>(() => {
+  const [collapsedSections, setCollapsedSections] = useState<FilterSectionId[]>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("collapsedFilterSections");
       if (saved) {
-        try {
-          return JSON.parse(saved);
-        } catch {
-          return [];
-        }
+        try { return JSON.parse(saved); } catch { return []; }
       }
     }
     return [];
   });
 
-  const toggleSection = (section: FilterSection) => {
+  const toggleSection = (section: FilterSectionId) => {
     setCollapsedSections((prev) => {
       const newState = prev.includes(section)
         ? prev.filter((s) => s !== section)
@@ -195,69 +114,38 @@ export function DealsGrid({
     });
   };
 
-  const isSectionCollapsed = (section: FilterSection) => collapsedSections.includes(section);
-
-  // Fetch deals from API
+  // ── Data fetching ──
   const {
-    deals,
-    total,
-    totalPages,
-    isLoading,
-    isInitialLoad,
-    error,
+    deals, total, totalPages, isLoading, isInitialLoad, error,
     availableBrands: apiBrands,
   } = useDealsApi({
-    search,
-    stores: selectedStores,
-    brands: selectedBrands,
-    genders: selectedGenders,
-    categories: selectedCategories,
-    categoryPaths: selectedCategoryPaths,
-    sizes: selectedSizes,
-    minDiscount,
-    minPrice,
-    maxPrice,
-    sortBy,
-    page: currentPage,
+    search, stores: selectedStores, brands: selectedBrands,
+    genders: selectedGenders, categories: selectedCategories,
+    categoryPaths: selectedCategoryPaths, sizes: selectedSizes,
+    minDiscount, minPrice, maxPrice, sortBy, page: currentPage,
   });
 
-  // Lock body scroll when mobile filters are open
+  // ── Side effects ──
   useEffect(() => {
-    if (showMobileFilters) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
-    };
+    if (showMobileFilters) { document.body.style.overflow = "hidden"; }
+    else { document.body.style.overflow = ""; }
+    return () => { document.body.style.overflow = ""; };
   }, [showMobileFilters]);
 
-  // Track if we've already restored scroll position
   const scrollRestored = useRef(false);
-
-  // Restore scroll position when returning from product page - wait for data to load
   useEffect(() => {
-    // Only run once, after data is loaded
     if (scrollRestored.current || isLoading || isInitialLoad) return;
-
     const savedScrollPosition = sessionStorage.getItem("dealsScrollPosition");
     const clickedProductId = sessionStorage.getItem("dealsClickedProductId");
-
-    // Clear sessionStorage immediately to prevent issues on other pages
     sessionStorage.removeItem("dealsScrollPosition");
     sessionStorage.removeItem("dealsClickedProductId");
-
     if (savedScrollPosition || clickedProductId) {
       scrollRestored.current = true;
-
-      // Small delay to ensure DOM is rendered after data loads
       const timer = setTimeout(() => {
         if (clickedProductId) {
           const productCard = document.querySelector(`[href="/ponuda/${clickedProductId}"]`);
           if (productCard) {
             productCard.scrollIntoView({ behavior: "instant", block: "center" });
-            // Add highlight glow animation
             const cardElement = productCard.querySelector('.group');
             if (cardElement) {
               cardElement.classList.add('highlight-glow');
@@ -270,40 +158,23 @@ export function DealsGrid({
           window.scrollTo({ top: parseInt(savedScrollPosition || "0", 10), behavior: "instant" });
         }
       }, 50);
-
       return () => clearTimeout(timer);
     }
   }, [isLoading, isInitialLoad, deals.length]);
 
-  // Save sort preference to localStorage
   useEffect(() => {
     localStorage.setItem("sortPreference", sortBy);
   }, [sortBy]);
 
-  // Track if we're updating from URL to prevent sync loops
+  // ── URL sync ──
   const isUpdatingFromUrl = useRef(false);
   const urlUpdateTimeout = useRef<NodeJS.Timeout | null>(null);
-  // Track initial mount to skip the first URL sync (preserve initial values from props)
   const isFirstSyncMount = useRef(true);
-  // Track if user has interacted with filters (for SEO pages - only redirect after interaction)
   const hasUserInteracted = useRef(false);
 
-  // Sync state from URL params when URL changes externally (e.g., clicking logo to go home)
-  // This is ONLY for /ponude page (not filter pages like /ponude/patike)
   useEffect(() => {
-    // Skip the first mount - we want to preserve initialCategories, initialBrands, etc.
-    if (isFirstSyncMount.current) {
-      isFirstSyncMount.current = false;
-      return;
-    }
-
-    // On filter pages (e.g., /ponude/patike), filters come from URL path via props, not query params.
-    // Don't sync from URL on filter pages - only sync on the main /ponude page.
-    if (filterPageSlug) {
-      return;
-    }
-
-    // Build current state as URL params to compare
+    if (isFirstSyncMount.current) { isFirstSyncMount.current = false; return; }
+    if (filterPageSlug) return;
     const currentParams = new URLSearchParams();
     if (search) currentParams.set("q", search);
     if (selectedStores.length) currentParams.set("stores", selectedStores.join(","));
@@ -317,8 +188,6 @@ export function DealsGrid({
     if (maxPrice !== null) currentParams.set("maxPrice", String(maxPrice));
     if (sortBy !== "discount") currentParams.set("sort", sortBy);
     if (currentPage > 1) currentParams.set("page", String(currentPage));
-
-    // Only sync if URL differs from current state (external navigation)
     if (currentParams.toString() !== searchParams.toString()) {
       isUpdatingFromUrl.current = true;
       setSearch(searchParams.get("q") || "");
@@ -338,22 +207,10 @@ export function DealsGrid({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchParams, filterPageSlug]);
 
-  // Debounced URL update
-  // On filter pages: redirect to /ponude with query params ONLY after user interaction
-  // On /ponude: just update query params
   useEffect(() => {
     if (isUpdatingFromUrl.current) return;
-
-    // On filter pages (SEO landing), only update URL after user has interacted
-    // This prevents redirect on initial page load which would break SEO
-    if (filterPageSlug && !hasUserInteracted.current) {
-      return;
-    }
-
-    if (urlUpdateTimeout.current) {
-      clearTimeout(urlUpdateTimeout.current);
-    }
-
+    if (filterPageSlug && !hasUserInteracted.current) return;
+    if (urlUpdateTimeout.current) clearTimeout(urlUpdateTimeout.current);
     urlUpdateTimeout.current = setTimeout(() => {
       const params = new URLSearchParams();
       if (search) params.set("q", search);
@@ -368,864 +225,104 @@ export function DealsGrid({
       if (maxPrice !== null) params.set("maxPrice", String(maxPrice));
       if (sortBy !== "discount") params.set("sort", sortBy);
       if (currentPage > 1) params.set("page", String(currentPage));
-
-      // If on a filter page (SEO landing), always redirect to /ponude when filters change
       const basePath = filterPageSlug ? "/ponude" : pathname;
       const newUrl = params.toString() ? `${basePath}?${params}` : basePath;
       router.replace(newUrl, { scroll: false });
     }, 300);
-
-    return () => {
-      if (urlUpdateTimeout.current) {
-        clearTimeout(urlUpdateTimeout.current);
-      }
-    };
+    return () => { if (urlUpdateTimeout.current) clearTimeout(urlUpdateTimeout.current); };
   }, [search, selectedStores, selectedBrands, selectedGenders, selectedCategories, selectedCategoryPaths, selectedSizes, minDiscount, minPrice, maxPrice, sortBy, currentPage, pathname, router, filterPageSlug]);
 
+  // ── Derived values ──
   const filteredBrands = useMemo(() => {
-    // Sort alphabetically and filter by search
     const sorted = [...apiBrands].sort((a, b) => a.localeCompare(b, "sr"));
     if (!brandSearch) return sorted;
-    return sorted.filter((b) =>
-      b.toLowerCase().includes(brandSearch.toLowerCase())
-    );
+    return sorted.filter((b) => b.toLowerCase().includes(brandSearch.toLowerCase()));
   }, [apiBrands, brandSearch]);
 
-  // Predefined sizes - always visible regardless of current filter results
-  const SHOE_SIZES = [
-    "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39",
-    "40", "41", "42", "43", "44", "45", "46",
-  ];
-  const CLOTHING_SIZES = ["XS", "S", "M", "L", "XL", "XXL", "2XL", "3XL"];
-
-  // Filtering and pagination now happen on the server via useDealsApi
-  // deals, total, and totalPages come from the API response
-
-  // Scroll to top of results when filters change
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
+  // ── Handlers ──
+  const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+  const onInteraction = () => { hasUserInteracted.current = true; };
 
   const resetFilters = () => {
-    hasUserInteracted.current = true;
-    setSelectedStores([]);
-    setSelectedBrands([]);
-    setSelectedGenders([]);
-    setSelectedCategories([]);
-    setSelectedCategoryPaths([]);
-    setSelectedSizes([]);
-    setMinDiscount(50);
-    setMinPrice(null);
-    setMaxPrice(null);
-    setSearch("");
-    setBrandSearch("");
-    setCurrentPage(1);
+    onInteraction();
+    setSelectedStores([]); setSelectedBrands([]); setSelectedGenders([]);
+    setSelectedCategories([]); setSelectedCategoryPaths([]); setSelectedSizes([]);
+    setMinDiscount(50); setMinPrice(null); setMaxPrice(null);
+    setSearch(""); setBrandSearch(""); setCurrentPage(1);
     scrollToTop();
   };
 
+  // Toggle handlers for active filter badges
   const toggleStore = (store: Store) => {
-    hasUserInteracted.current = true;
-    setSelectedStores((prev) =>
-      prev.includes(store) ? prev.filter((s) => s !== store) : [...prev, store]
-    );
-    setCurrentPage(1);
-    scrollToTop();
+    onInteraction();
+    setSelectedStores((prev) => prev.includes(store) ? prev.filter((s) => s !== store) : [...prev, store]);
+    setCurrentPage(1); scrollToTop();
   };
-
   const toggleGender = (gender: Gender) => {
-    hasUserInteracted.current = true;
-    setSelectedGenders((prev) =>
-      prev.includes(gender)
-        ? prev.filter((g) => g !== gender)
-        : [...prev, gender]
-    );
-    setCurrentPage(1);
-    scrollToTop();
+    onInteraction();
+    setSelectedGenders((prev) => prev.includes(gender) ? prev.filter((g) => g !== gender) : [...prev, gender]);
+    setCurrentPage(1); scrollToTop();
   };
-
   const toggleCategory = (category: Category) => {
-    hasUserInteracted.current = true;
-    setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category]
-    );
-    setCurrentPage(1);
-    scrollToTop();
+    onInteraction();
+    setSelectedCategories((prev) => prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]);
+    setCurrentPage(1); scrollToTop();
   };
-
   const toggleBrand = (brand: string) => {
-    hasUserInteracted.current = true;
-    setSelectedBrands((prev) =>
-      prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]
-    );
-    setCurrentPage(1);
-    scrollToTop();
+    onInteraction();
+    setSelectedBrands((prev) => prev.includes(brand) ? prev.filter((b) => b !== brand) : [...prev, brand]);
+    setCurrentPage(1); scrollToTop();
   };
-
   const toggleSize = (size: string) => {
-    hasUserInteracted.current = true;
-    setSelectedSizes((prev) =>
-      prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
-    );
-    setCurrentPage(1);
-    scrollToTop();
+    onInteraction();
+    setSelectedSizes((prev) => prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]);
+    setCurrentPage(1); scrollToTop();
   };
-
   const toggleCategoryPath = (path: CategoryPath) => {
-    hasUserInteracted.current = true;
-    setSelectedCategoryPaths((prev) =>
-      prev.includes(path) ? prev.filter((p) => p !== path) : [...prev, path]
-    );
-    setCurrentPage(1);
-    scrollToTop();
+    onInteraction();
+    setSelectedCategoryPaths((prev) => prev.includes(path) ? prev.filter((p) => p !== path) : [...prev, path]);
+    setCurrentPage(1); scrollToTop();
   };
 
-  const toggleExpandedCategory = (cat: MainCategory) => {
-    setExpandedCategories((prev) =>
-      prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]
-    );
-  };
-
-  const toggleMainCategory = (mainCat: MainCategory) => {
-    hasUserInteracted.current = true;
-    const subcats = CATEGORY_HIERARCHY[mainCat];
-    const paths = subcats.map((sub) => `${mainCat}/${sub}` as CategoryPath);
-    const allSelected = paths.every((p) => selectedCategoryPaths.includes(p));
-
-    if (allSelected) {
-      // Deselect all subcategories of this main category
-      setSelectedCategoryPaths((prev) => prev.filter((p) => !paths.includes(p)));
-    } else {
-      // Select all subcategories of this main category
-      setSelectedCategoryPaths((prev) => [...new Set([...prev, ...paths])]);
-    }
-    setCurrentPage(1);
-    scrollToTop();
-  };
-
-  // Handle page change with scroll to top
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const hasActiveFilters =
-    search.length > 0 ||
-    selectedStores.length > 0 ||
-    selectedGenders.length > 0 ||
-    selectedCategories.length > 0 ||
-    selectedCategoryPaths.length > 0 ||
-    selectedBrands.length > 0 ||
-    selectedSizes.length > 0 ||
-    minDiscount > 50 ||
-    minPrice !== null ||
-    maxPrice !== null;
+    search.length > 0 || selectedStores.length > 0 || selectedGenders.length > 0 ||
+    selectedCategories.length > 0 || selectedCategoryPaths.length > 0 ||
+    selectedBrands.length > 0 || selectedSizes.length > 0 ||
+    minDiscount > 50 || minPrice !== null || maxPrice !== null;
 
   const activeFilterCount =
-    (search.length > 0 ? 1 : 0) +
-    selectedStores.length +
-    selectedGenders.length +
-    selectedCategories.length +
-    selectedCategoryPaths.length +
-    selectedBrands.length +
-    selectedSizes.length +
-    (minDiscount > 50 ? 1 : 0) +
-    (minPrice !== null ? 1 : 0) +
-    (maxPrice !== null ? 1 : 0);
+    (search.length > 0 ? 1 : 0) + selectedStores.length + selectedGenders.length +
+    selectedCategories.length + selectedCategoryPaths.length + selectedBrands.length +
+    selectedSizes.length + (minDiscount > 50 ? 1 : 0) +
+    (minPrice !== null ? 1 : 0) + (maxPrice !== null ? 1 : 0);
 
-  // Discount level options
-  const discountLevels = [
-    { value: 50, label: "50%+" },
-    { value: 60, label: "60%+" },
-    { value: 70, label: "70%+" },
-    { value: 80, label: "80%+" },
-  ];
+  // ── Shared sidebar props ──
+  const filterSidebarProps = {
+    search, selectedStores, selectedBrands, selectedGenders,
+    selectedCategoryPaths, selectedSizes, minDiscount, minPrice, maxPrice,
+    brandSearch, expandedCategories, filteredBrands,
+    setSearch, setSelectedStores, setSelectedBrands, setSelectedGenders,
+    setSelectedCategoryPaths, setSelectedSizes, setMinDiscount, setMinPrice,
+    setMaxPrice, setBrandSearch, setCurrentPage, setExpandedCategories,
+    collapsedSections, toggleSection, onInteraction, scrollToTop,
+  };
 
-  // Price range options - "from"
-  const priceFromOptions = [
-    { value: null, label: "0" },
-    { value: 2000, label: "2.000" },
-    { value: 5000, label: "5.000" },
-    { value: 10000, label: "10.000" },
-  ];
-
-  // Price range options - "to"
-  const priceToOptions = [
-    { value: 3000, label: "3.000" },
-    { value: 5000, label: "5.000" },
-    { value: 10000, label: "10.000" },
-    { value: 15000, label: "15.000" },
-    { value: null, label: "Max" },
-  ];
-
-  // Filter content JSX - rendered directly to avoid re-creating on each render
-  const filterContentJSX = (
-    <div className="space-y-3">
-      {/* Search */}
-      <div>
-        <Input
-          type="search"
-          placeholder="Pretraži proizvode..."
-          value={search}
-          onChange={(e) => {
-            hasUserInteracted.current = true;
-            setSearch(e.target.value);
-            setCurrentPage(1);
-          }}
-          className="bg-gray-50 border-gray-200 focus:bg-white dark:bg-gray-800 dark:border-gray-700 dark:focus:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-        />
-      </div>
-
-      {/* Discount Level */}
-      <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
-        <button
-          onClick={() => toggleSection("discount")}
-          className={`w-full flex items-center justify-between cursor-pointer ${!isSectionCollapsed("discount") ? "mb-3" : ""}`}
-        >
-          <span className="flex items-center gap-2">
-            <Percent className="w-4 h-4 text-gray-500" />
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Popust</h3>
-            {minDiscount > 50 && (
-              <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">1</span>
-            )}
-          </span>
-          <span className="flex items-center gap-2">
-            {minDiscount > 50 && (
-              <span
-                onClick={(e) => {
-                  e.stopPropagation();
-                  hasUserInteracted.current = true;
-                  setMinDiscount(50);
-                  setCurrentPage(1);
-                }}
-                className="text-xs text-red-500 hover:text-red-600"
-              >
-                Obriši
-              </span>
-            )}
-            <svg
-              className={`w-4 h-4 text-gray-500 transition-transform ${isSectionCollapsed("discount") ? "" : "rotate-180"}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </span>
-        </button>
-        <div className={`grid transition-[grid-template-rows] duration-200 ease-out ${isSectionCollapsed("discount") ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}>
-          <div className="overflow-hidden">
-            <div className="flex flex-wrap gap-2">
-              {discountLevels.map((level) => (
-                <button
-                  key={level.value}
-                  onClick={() => {
-                    hasUserInteracted.current = true;
-                    setMinDiscount(minDiscount === level.value ? 50 : level.value);
-                    setCurrentPage(1);
-                    scrollToTop();
-                  }}
-                  className={`cursor-pointer px-3 py-1.5 text-sm rounded-full transition-colors ${
-                    minDiscount === level.value
-                      ? "bg-red-500 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-                  }`}
-                >
-                  {level.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Price Range */}
-      <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
-        <button
-          onClick={() => toggleSection("price")}
-          className={`w-full flex items-center justify-between cursor-pointer ${!isSectionCollapsed("price") ? "mb-3" : ""}`}
-        >
-          <span className="flex items-center gap-2">
-            <Banknote className="w-4 h-4 text-gray-500" />
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Cena (RSD)</h3>
-            {(minPrice !== null || maxPrice !== null) && (
-              <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">
-                {(minPrice !== null ? 1 : 0) + (maxPrice !== null ? 1 : 0)}
-              </span>
-            )}
-          </span>
-          <span className="flex items-center gap-2">
-            {(minPrice !== null || maxPrice !== null) && (
-              <span
-                onClick={(e) => {
-                  e.stopPropagation();
-                  hasUserInteracted.current = true;
-                  setMinPrice(null);
-                  setMaxPrice(null);
-                  setCurrentPage(1);
-                }}
-                className="text-xs text-red-500 hover:text-red-600"
-              >
-                Obriši
-              </span>
-            )}
-            <svg
-              className={`w-4 h-4 text-gray-500 transition-transform ${isSectionCollapsed("price") ? "" : "rotate-180"}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </span>
-        </button>
-        <div className={`grid transition-[grid-template-rows] duration-200 ease-out ${isSectionCollapsed("price") ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}>
-          <div className="overflow-hidden">
-            <div className="space-y-3">
-              <div>
-                <span className="text-xs text-gray-500 dark:text-gray-400 block mb-1.5">Od</span>
-                <div className="flex flex-wrap gap-1.5">
-                  {priceFromOptions.map((option) => (
-                    <button
-                      key={`from-${option.label}`}
-                      onClick={() => {
-                        hasUserInteracted.current = true;
-                        setMinPrice(option.value);
-                        setCurrentPage(1);
-                        scrollToTop();
-                      }}
-                      className={`cursor-pointer px-2.5 py-1 text-xs rounded-full transition-colors ${
-                        minPrice === option.value
-                          ? "bg-red-500 text-white"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-                      }`}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-              <div>
-                <span className="text-xs text-gray-500 dark:text-gray-400 block mb-1.5">Do</span>
-                <div className="flex flex-wrap gap-1.5">
-                  {priceToOptions.map((option) => (
-                    <button
-                      key={`to-${option.label}`}
-                      onClick={() => {
-                        hasUserInteracted.current = true;
-                        setMaxPrice(option.value);
-                        setCurrentPage(1);
-                        scrollToTop();
-                      }}
-                      className={`cursor-pointer px-2.5 py-1 text-xs rounded-full transition-colors ${
-                        maxPrice === option.value
-                          ? "bg-red-500 text-white"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-                      }`}
-                    >
-                      {option.label}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Gender */}
-      <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
-        <button
-          onClick={() => toggleSection("gender")}
-          className={`w-full flex items-center justify-between cursor-pointer ${!isSectionCollapsed("gender") ? "mb-3" : ""}`}
-        >
-          <span className="flex items-center gap-2">
-            <Users className="w-4 h-4 text-gray-500" />
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Pol</h3>
-            {selectedGenders.length > 0 && (
-              <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">{selectedGenders.length}</span>
-            )}
-          </span>
-          <span className="flex items-center gap-2">
-            {selectedGenders.length > 0 && (
-              <span
-                onClick={(e) => {
-                  e.stopPropagation();
-                  hasUserInteracted.current = true;
-                  setSelectedGenders([]);
-                  setCurrentPage(1);
-                }}
-                className="text-xs text-red-500 hover:text-red-600"
-              >
-                Obriši
-              </span>
-            )}
-            <svg
-              className={`w-4 h-4 text-gray-500 transition-transform ${isSectionCollapsed("gender") ? "" : "rotate-180"}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </span>
-        </button>
-        <div className={`grid transition-[grid-template-rows] duration-200 ease-out ${isSectionCollapsed("gender") ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}>
-          <div className="overflow-hidden">
-            <div className="flex flex-wrap gap-2">
-              {(["muski", "zenski", "deciji", "unisex"] as Gender[]).map((gender) => (
-                <button
-                  key={gender}
-                  onClick={() => toggleGender(gender)}
-                  className={`cursor-pointer px-3 py-1.5 text-sm rounded-full transition-colors ${
-                    selectedGenders.includes(gender)
-                      ? "bg-red-500 text-white"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-                  }`}
-                >
-                  {GENDER_NAMES[gender]}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Store */}
-      <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
-        <button
-          onClick={() => toggleSection("store")}
-          className={`w-full flex items-center justify-between cursor-pointer ${!isSectionCollapsed("store") ? "mb-3" : ""}`}
-        >
-          <span className="flex items-center gap-2">
-            <ShoppingBag className="w-4 h-4 text-gray-500" />
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Prodavnica</h3>
-            {selectedStores.length > 0 && (
-              <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">{selectedStores.length}</span>
-            )}
-          </span>
-          <span className="flex items-center gap-2">
-            {selectedStores.length > 0 && (
-              <span
-                onClick={(e) => {
-                  e.stopPropagation();
-                  hasUserInteracted.current = true;
-                  setSelectedStores([]);
-                  setCurrentPage(1);
-                }}
-                className="text-xs text-red-500 hover:text-red-600"
-              >
-                Obriši
-              </span>
-            )}
-            <svg
-              className={`w-4 h-4 text-gray-500 transition-transform ${isSectionCollapsed("store") ? "" : "rotate-180"}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </span>
-        </button>
-        <div className={`grid transition-[grid-template-rows] duration-200 ease-out ${isSectionCollapsed("store") ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}>
-          <div className="overflow-hidden">
-            <div className="space-y-1">
-              {(Object.keys(STORE_NAMES) as Store[]).map((store) => (
-                <button
-                  key={store}
-                  type="button"
-                  onClick={() => toggleStore(store)}
-                  className={`flex w-full cursor-pointer items-center gap-2 p-1.5 rounded-lg transition-colors text-left ${
-                    selectedStores.includes(store)
-                      ? "bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800"
-                      : "hover:bg-gray-50 dark:hover:bg-gray-800"
-                  }`}
-                >
-                  <div className={`w-4 h-4 rounded border-2 flex items-center justify-center flex-shrink-0 ${
-                    selectedStores.includes(store)
-                      ? "bg-red-500 border-red-500"
-                      : "border-gray-300 dark:border-gray-600"
-                  }`}>
-                    {selectedStores.includes(store) && (
-                      <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                    )}
-                  </div>
-                  <span className="text-sm text-gray-700 dark:text-gray-300">{STORE_NAMES[store]}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Category - Hierarchical */}
-      <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
-        <button
-          onClick={() => toggleSection("category")}
-          className={`w-full flex items-center justify-between cursor-pointer ${!isSectionCollapsed("category") ? "mb-3" : ""}`}
-        >
-          <span className="flex items-center gap-2">
-            <Grid3X3 className="w-4 h-4 text-gray-500" />
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Kategorija</h3>
-            {selectedCategoryPaths.length > 0 && (
-              <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">{selectedCategoryPaths.length}</span>
-            )}
-          </span>
-          <span className="flex items-center gap-2">
-            {selectedCategoryPaths.length > 0 && (
-              <span
-                onClick={(e) => {
-                  e.stopPropagation();
-                  hasUserInteracted.current = true;
-                  setSelectedCategoryPaths([]);
-                  setCurrentPage(1);
-                }}
-                className="text-xs text-red-500 hover:text-red-600"
-              >
-                Obriši
-              </span>
-            )}
-            <svg
-              className={`w-4 h-4 text-gray-500 transition-transform ${isSectionCollapsed("category") ? "" : "rotate-180"}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </span>
-        </button>
-        <div className={`grid transition-[grid-template-rows] duration-200 ease-out ${isSectionCollapsed("category") ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}>
-          <div className="overflow-hidden">
-            <div className="space-y-2">
-              {(Object.keys(CATEGORY_HIERARCHY) as MainCategory[]).map((mainCat) => {
-                const subcats = CATEGORY_HIERARCHY[mainCat];
-                const paths = subcats.map((sub) => `${mainCat}/${sub}` as CategoryPath);
-                const selectedCount = paths.filter((p) => selectedCategoryPaths.includes(p)).length;
-                const allSelected = selectedCount === paths.length;
-                const someSelected = selectedCount > 0 && selectedCount < paths.length;
-                const isExpanded = expandedCategories.includes(mainCat);
-
-                return (
-                  <div key={mainCat} className="rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-                    {/* Main category header */}
-                    <div className="flex items-center gap-2 p-2 bg-gray-50 dark:bg-gray-800">
-                      <button
-                        type="button"
-                        onClick={() => toggleMainCategory(mainCat)}
-                        className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 cursor-pointer ${
-                          allSelected
-                            ? "bg-red-500 border-red-500"
-                            : someSelected
-                            ? "bg-red-200 border-red-500"
-                            : "border-gray-300 dark:border-gray-600"
-                        }`}
-                      >
-                        {(allSelected || someSelected) && (
-                          <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                        )}
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => toggleExpandedCategory(mainCat)}
-                        className="flex-1 flex items-center justify-between cursor-pointer text-left"
-                      >
-                        <span className="text-sm font-medium text-gray-900 dark:text-white">
-                          {MAIN_CATEGORY_NAMES[mainCat]}
-                          {selectedCount > 0 && (
-                            <span className="ml-2 text-xs text-red-500">({selectedCount})</span>
-                          )}
-                        </span>
-                        <svg
-                          className={`w-4 h-4 text-gray-500 transition-transform ${isExpanded ? "rotate-180" : ""}`}
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                        </svg>
-                      </button>
-                    </div>
-
-                    {/* Subcategories */}
-                    <div className={`grid transition-[grid-template-rows] duration-200 ease-out ${isExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
-                      <div className="overflow-hidden">
-                        <div className="p-2 space-y-1 bg-white dark:bg-gray-900">
-                          {subcats.map((subcat) => {
-                            const path = `${mainCat}/${subcat}` as CategoryPath;
-                            const isSelected = selectedCategoryPaths.includes(path);
-
-                            return (
-                              <button
-                                key={subcat}
-                                type="button"
-                                onClick={() => toggleCategoryPath(path)}
-                                className={`w-full flex items-center gap-2 p-1.5 rounded text-left transition-colors cursor-pointer ${
-                                  isSelected
-                                    ? "bg-red-50 dark:bg-red-900/20"
-                                    : "hover:bg-gray-50 dark:hover:bg-gray-800"
-                                }`}
-                              >
-                                <div className={`w-3.5 h-3.5 rounded border-2 flex items-center justify-center shrink-0 ${
-                                  isSelected
-                                    ? "bg-red-500 border-red-500"
-                                    : "border-gray-300 dark:border-gray-600"
-                                }`}>
-                                  {isSelected && (
-                                    <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                      <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                                    </svg>
-                                  )}
-                                </div>
-                                <span className="text-sm text-gray-700 dark:text-gray-300">{SUBCATEGORY_NAMES[subcat]}</span>
-                              </button>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Shoe Size */}
-      {(() => {
-        const selectedShoeCount = selectedSizes.filter(s => SHOE_SIZES.includes(s)).length;
-        return (
-        <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
-          <button
-            onClick={() => toggleSection("shoeSize")}
-            className={`w-full flex items-center justify-between cursor-pointer ${!isSectionCollapsed("shoeSize") ? "mb-3" : ""}`}
-          >
-            <span className="flex items-center gap-2">
-              <Footprints className="w-4 h-4 text-gray-500" />
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Veličina obuće</h3>
-              {selectedShoeCount > 0 && (
-                <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">{selectedShoeCount}</span>
-              )}
-            </span>
-            <span className="flex items-center gap-2">
-              {selectedShoeCount > 0 && (
-                <span
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    hasUserInteracted.current = true;
-                    setSelectedSizes(prev => prev.filter(s => !SHOE_SIZES.includes(s)));
-                    setCurrentPage(1);
-                  }}
-                  className="text-xs text-red-500 hover:text-red-600"
-                >
-                  Obriši
-                </span>
-              )}
-              <svg
-                className={`w-4 h-4 text-gray-500 transition-transform ${isSectionCollapsed("shoeSize") ? "" : "rotate-180"}`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </span>
-          </button>
-          <div className={`grid transition-[grid-template-rows] duration-200 ease-out ${isSectionCollapsed("shoeSize") ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}>
-            <div className="overflow-hidden">
-              <ScrollFade maxHeight="120px" fadeColor="gray">
-                <div className="flex flex-wrap gap-1.5 pr-1">
-                  {SHOE_SIZES.map((size) => (
-                    <button
-                      key={size}
-                      onClick={() => toggleSize(size)}
-                      className={`cursor-pointer px-2.5 py-1 text-xs rounded-full transition-colors ${
-                        selectedSizes.includes(size)
-                          ? "bg-red-500 text-white"
-                          : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-                      }`}
-                    >
-                      {size}
-                    </button>
-                  ))}
-                </div>
-              </ScrollFade>
-            </div>
-          </div>
-        </div>
-        );
-      })()}
-
-      {/* Clothing Size */}
-      {(() => {
-        const selectedClothingCount = selectedSizes.filter(s => CLOTHING_SIZES.includes(s)).length;
-        return (
-        <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
-          <button
-            onClick={() => toggleSection("clothingSize")}
-            className={`w-full flex items-center justify-between cursor-pointer ${!isSectionCollapsed("clothingSize") ? "mb-3" : ""}`}
-          >
-            <span className="flex items-center gap-2">
-              <Shirt className="w-4 h-4 text-gray-500" />
-              <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Veličina odeće</h3>
-              {selectedClothingCount > 0 && (
-                <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">{selectedClothingCount}</span>
-              )}
-            </span>
-            <span className="flex items-center gap-2">
-              {selectedClothingCount > 0 && (
-                <span
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    hasUserInteracted.current = true;
-                    setSelectedSizes(prev => prev.filter(s => !CLOTHING_SIZES.includes(s)));
-                    setCurrentPage(1);
-                  }}
-                  className="text-xs text-red-500 hover:text-red-600"
-                >
-                  Obriši
-                </span>
-              )}
-              <svg
-                className={`w-4 h-4 text-gray-500 transition-transform ${isSectionCollapsed("clothingSize") ? "" : "rotate-180"}`}
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </span>
-          </button>
-          <div className={`grid transition-[grid-template-rows] duration-200 ease-out ${isSectionCollapsed("clothingSize") ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}>
-            <div className="overflow-hidden">
-              <div className="flex flex-wrap gap-1.5">
-                {CLOTHING_SIZES.map((size) => (
-                  <button
-                    key={size}
-                    onClick={() => toggleSize(size)}
-                    className={`cursor-pointer px-2.5 py-1 text-xs rounded-full transition-colors ${
-                      selectedSizes.includes(size)
-                        ? "bg-red-500 text-white"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600"
-                    }`}
-                  >
-                    {size}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-        );
-      })()}
-
-      {/* Brand */}
-      <div className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-3">
-        <button
-          onClick={() => toggleSection("brand")}
-          className={`w-full flex items-center justify-between cursor-pointer ${!isSectionCollapsed("brand") ? "mb-3" : ""}`}
-        >
-          <span className="flex items-center gap-2">
-            <Tag className="w-4 h-4 text-gray-500" />
-            <h3 className="text-sm font-semibold text-gray-900 dark:text-white">Brend</h3>
-            {selectedBrands.length > 0 && (
-              <span className="px-1.5 py-0.5 text-xs font-medium bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded">{selectedBrands.length}</span>
-            )}
-          </span>
-          <span className="flex items-center gap-2">
-            {selectedBrands.length > 0 && (
-              <span
-                onClick={(e) => {
-                  e.stopPropagation();
-                  hasUserInteracted.current = true;
-                  setSelectedBrands([]);
-                  setBrandSearch("");
-                  setCurrentPage(1);
-                }}
-                className="text-xs text-red-500 hover:text-red-600"
-              >
-                Obriši
-              </span>
-            )}
-            <svg
-              className={`w-4 h-4 text-gray-500 transition-transform ${isSectionCollapsed("brand") ? "" : "rotate-180"}`}
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-            </svg>
-          </span>
-        </button>
-        <div className={`grid transition-[grid-template-rows] duration-200 ease-out ${isSectionCollapsed("brand") ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}>
-          <div className="overflow-hidden">
-            <Input
-              type="search"
-              placeholder="Pretraži brendove..."
-              value={brandSearch}
-              onChange={(e) => setBrandSearch(e.target.value)}
-              className="mb-3 h-9 text-sm bg-gray-50 border-gray-200 focus:bg-white dark:bg-gray-800 dark:border-gray-700 dark:focus:bg-gray-700 dark:text-white dark:placeholder-gray-400"
-            />
-            <ScrollFade maxHeight="200px" fadeColor="gray">
-              <div className="space-y-0.5 pr-1">
-                {filteredBrands.map((brand) => (
-                  <button
-                    key={brand}
-                    type="button"
-                    onClick={() => toggleBrand(brand)}
-                    className={`flex w-full cursor-pointer items-center gap-2 p-1.5 rounded-lg transition-colors text-left ${
-                      selectedBrands.includes(brand)
-                        ? "bg-red-50 border border-red-200 dark:bg-red-900/20 dark:border-red-800"
-                        : "hover:bg-gray-50 dark:hover:bg-gray-800"
-                    }`}
-                  >
-                    <div className={`w-4 h-4 rounded border-2 flex items-center justify-center shrink-0 ${
-                      selectedBrands.includes(brand)
-                        ? "bg-red-500 border-red-500"
-                        : "border-gray-300 dark:border-gray-600"
-                    }`}>
-                      {selectedBrands.includes(brand) && (
-                        <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                        </svg>
-                      )}
-                    </div>
-                    <span className="text-sm text-gray-700 dark:text-gray-300 truncate">{brand}</span>
-                  </button>
-                ))}
-                {filteredBrands.length === 0 && (
-                  <p className="text-sm text-gray-500 dark:text-gray-400 p-2">Nema rezultata</p>
-                )}
-              </div>
-            </ScrollFade>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-
+  // ── Render ──
   return (
     <div>
-      {/* Fixed Filter Tab Button - Left Side Top (mobile/tablet only) */}
+      {/* Fixed Filter Tab Button (mobile/tablet only) */}
       <button
         onClick={() => setShowMobileFilters(true)}
         className="cursor-pointer fixed left-0 top-24 z-40 flex items-center gap-1.5 rounded-r-lg bg-red-500 px-3 py-2.5 text-white shadow-lg transition-all hover:bg-red-600 hover:pl-4 lg:hidden"
         aria-label="Otvori filtere"
       >
         <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"
-          />
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
         </svg>
         <span className="text-sm font-medium">Filteri</span>
         {activeFilterCount > 0 && (
@@ -1235,13 +332,10 @@ export function DealsGrid({
         )}
       </button>
 
-      {/* Mobile Filter Drawer - Left Side */}
+      {/* Mobile Filter Drawer */}
       {showMobileFilters && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div
-            className="absolute inset-0 bg-black/50 animate-[fadeIn_0.2s_ease-out]"
-            onClick={() => setShowMobileFilters(false)}
-          />
+          <div className="absolute inset-0 bg-black/50 animate-[fadeIn_0.2s_ease-out]" onClick={() => setShowMobileFilters(false)} />
           <div className="absolute top-0 left-0 bottom-0 w-72 max-w-[80vw] bg-white dark:bg-gray-900 shadow-xl rounded-r-2xl animate-[slideInLeft_0.25s_ease-out] flex flex-col overflow-hidden">
             <div className="flex items-center justify-between border-b dark:border-gray-800 bg-white dark:bg-gray-900 p-4 flex-shrink-0">
               <h2 className="text-lg font-semibold dark:text-white">Filteri</h2>
@@ -1255,16 +349,11 @@ export function DealsGrid({
               </button>
             </div>
             <div className="flex-1 overflow-y-auto overscroll-contain p-4 pb-4">
-              {filterContentJSX}
+              <DealsFilterSidebar {...filterSidebarProps} />
             </div>
             {hasActiveFilters && (
               <div className="flex-shrink-0 p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={resetFilters}
-                  className="w-full border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/30"
-                >
+                <Button variant="outline" size="sm" onClick={resetFilters} className="w-full border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/30">
                   Resetuj filtere ✕
                 </Button>
               </div>
@@ -1275,20 +364,15 @@ export function DealsGrid({
 
       {/* Desktop Layout */}
       <div className="lg:grid lg:grid-cols-[260px_1fr] lg:gap-6">
-        {/* Desktop Sidebar - hidden on mobile/tablet */}
+        {/* Desktop Sidebar */}
         <aside className="hidden lg:block">
           <div className="sticky top-[7rem] rounded-xl bg-white dark:bg-gray-900 shadow-sm border border-gray-100 dark:border-gray-800 flex flex-col max-h-[calc(100vh-8rem)]">
             <div className="flex-1 overflow-y-auto scrollbar-thin p-3">
-              {filterContentJSX}
+              <DealsFilterSidebar {...filterSidebarProps} />
             </div>
             {hasActiveFilters && (
               <div className="flex-shrink-0 p-4 border-t border-gray-200 dark:border-gray-700">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={resetFilters}
-                  className="w-full border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/30"
-                >
+                <Button variant="outline" size="sm" onClick={resetFilters} className="w-full border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/30">
                   Resetuj filtere ✕
                 </Button>
               </div>
@@ -1305,12 +389,7 @@ export function DealsGrid({
             </p>
             <select
               value={sortBy}
-              onChange={(e) => {
-                hasUserInteracted.current = true;
-                setSortBy(e.target.value as SortOption);
-                setCurrentPage(1);
-                scrollToTop();
-              }}
+              onChange={(e) => { onInteraction(); setSortBy(e.target.value as SortOption); setCurrentPage(1); scrollToTop(); }}
               className="appearance-none rounded border border-gray-200 bg-white pl-3 pr-8 py-1.5 text-sm dark:bg-gray-800 dark:border-gray-700 dark:text-white cursor-pointer bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Cpath%20fill%3D%22%236b7280%22%20d%3D%22M6%208L1%203h10z%22%2F%3E%3C%2Fsvg%3E')] bg-no-repeat bg-[right_0.5rem_center]"
             >
               <option value="discount">Sortiraj: Popust ↓</option>
@@ -1320,139 +399,68 @@ export function DealsGrid({
             </select>
           </div>
 
-          {/* Active Filters Row with SEO Title on right */}
+          {/* Active Filters Row with SEO Title */}
           {(hasActiveFilters || (seoTitle && searchParams.toString() === "")) && (
             <div className="mb-4 flex items-start justify-between gap-4">
-              {/* Active filter tags on left */}
               <div className="flex flex-wrap gap-2 flex-1">
-              {search && (
-                <Badge
-                  variant="secondary"
-                  className="cursor-pointer px-3 py-1.5 text-sm"
-                  onClick={() => {
-                    hasUserInteracted.current = true;
-                    setSearch("");
-                    setCurrentPage(1);
-                  }}
-                >
-                  Pretraga: &quot;{search}&quot; ✕
-                </Badge>
-              )}
-              {selectedStores.map((store) => (
-                <Badge
-                  key={store}
-                  variant="secondary"
-                  className="cursor-pointer px-3 py-1.5 text-sm"
-                  onClick={() => toggleStore(store)}
-                >
-                  {STORE_NAMES[store]} ✕
-                </Badge>
-              ))}
-              {selectedGenders.map((gender) => (
-                <Badge
-                  key={gender}
-                  variant="secondary"
-                  className="cursor-pointer px-3 py-1.5 text-sm"
-                  onClick={() => toggleGender(gender)}
-                >
-                  {GENDER_NAMES[gender]} ✕
-                </Badge>
-              ))}
-              {selectedCategories.map((category) => (
-                <Badge
-                  key={category}
-                  variant="secondary"
-                  className="cursor-pointer px-3 py-1.5 text-sm"
-                  onClick={() => toggleCategory(category)}
-                >
-                  {CATEGORY_NAMES[category]} ✕
-                </Badge>
-              ))}
-              {selectedCategoryPaths.map((path) => {
-                const [, sub] = path.split("/") as [MainCategory, Subcategory];
-                return (
-                  <Badge
-                    key={path}
-                    variant="secondary"
-                    className="cursor-pointer px-3 py-1.5 text-sm"
-                    onClick={() => toggleCategoryPath(path)}
-                  >
-                    {SUBCATEGORY_NAMES[sub]} ✕
+                {search && (
+                  <Badge variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => { onInteraction(); setSearch(""); setCurrentPage(1); }}>
+                    Pretraga: &quot;{search}&quot; ✕
                   </Badge>
-                );
-              })}
-              {selectedBrands.map((brand) => (
-                <Badge
-                  key={brand}
-                  variant="secondary"
-                  className="cursor-pointer px-3 py-1.5 text-sm"
-                  onClick={() => toggleBrand(brand)}
-                >
-                  {brand} ✕
-                </Badge>
-              ))}
-              {selectedSizes.map((size) => (
-                <Badge
-                  key={size}
-                  variant="secondary"
-                  className="cursor-pointer px-3 py-1.5 text-sm"
-                  onClick={() => toggleSize(size)}
-                >
-                  Vel. {size} ✕
-                </Badge>
-              ))}
-              {minDiscount > 50 && (
-                <Badge
-                  variant="secondary"
-                  className="cursor-pointer px-3 py-1.5 text-sm"
-                  onClick={() => {
-                    hasUserInteracted.current = true;
-                    setMinDiscount(50);
-                    setCurrentPage(1);
-                  }}
-                >
-                  Min {minDiscount}% ✕
-                </Badge>
-              )}
-              {minPrice !== null && (
-                <Badge
-                  variant="secondary"
-                  className="cursor-pointer px-3 py-1.5 text-sm"
-                  onClick={() => {
-                    hasUserInteracted.current = true;
-                    setMinPrice(null);
-                    setCurrentPage(1);
-                  }}
-                >
-                  Od {minPrice.toLocaleString()} RSD ✕
-                </Badge>
-              )}
-              {maxPrice !== null && (
-                <Badge
-                  variant="secondary"
-                  className="cursor-pointer px-3 py-1.5 text-sm"
-                  onClick={() => {
-                    hasUserInteracted.current = true;
-                    setMaxPrice(null);
-                    setCurrentPage(1);
-                  }}
-                >
-                  Do {maxPrice.toLocaleString()} RSD ✕
-                </Badge>
-              )}
+                )}
+                {selectedStores.map((store) => (
+                  <Badge key={store} variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => toggleStore(store)}>
+                    {STORE_NAMES[store]} ✕
+                  </Badge>
+                ))}
+                {selectedGenders.map((gender) => (
+                  <Badge key={gender} variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => toggleGender(gender)}>
+                    {GENDER_NAMES[gender]} ✕
+                  </Badge>
+                ))}
+                {selectedCategories.map((category) => (
+                  <Badge key={category} variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => toggleCategory(category)}>
+                    {CATEGORY_NAMES[category]} ✕
+                  </Badge>
+                ))}
+                {selectedCategoryPaths.map((path) => {
+                  const [, sub] = path.split("/") as [MainCategory, Subcategory];
+                  return (
+                    <Badge key={path} variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => toggleCategoryPath(path)}>
+                      {SUBCATEGORY_NAMES[sub]} ✕
+                    </Badge>
+                  );
+                })}
+                {selectedBrands.map((brand) => (
+                  <Badge key={brand} variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => toggleBrand(brand)}>
+                    {brand} ✕
+                  </Badge>
+                ))}
+                {selectedSizes.map((size) => (
+                  <Badge key={size} variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => toggleSize(size)}>
+                    Vel. {size} ✕
+                  </Badge>
+                ))}
+                {minDiscount > 50 && (
+                  <Badge variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => { onInteraction(); setMinDiscount(50); setCurrentPage(1); }}>
+                    Min {minDiscount}% ✕
+                  </Badge>
+                )}
+                {minPrice !== null && (
+                  <Badge variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => { onInteraction(); setMinPrice(null); setCurrentPage(1); }}>
+                    Od {minPrice.toLocaleString()} RSD ✕
+                  </Badge>
+                )}
+                {maxPrice !== null && (
+                  <Badge variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => { onInteraction(); setMaxPrice(null); setCurrentPage(1); }}>
+                    Do {maxPrice.toLocaleString()} RSD ✕
+                  </Badge>
+                )}
               </div>
-
-              {/* SEO Title on right - only shown on clean SEO landing (no query params) */}
               {seoTitle && searchParams.toString() === "" && (
                 <div className="flex-shrink-0 text-right">
-                  <h1 className="text-lg font-bold text-gray-900 dark:text-white">
-                    {seoTitle}
-                  </h1>
-                  {seoSubtitle && (
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      {seoSubtitle}
-                    </p>
-                  )}
+                  <h1 className="text-lg font-bold text-gray-900 dark:text-white">{seoTitle}</h1>
+                  {seoSubtitle && <p className="text-sm text-gray-500 dark:text-gray-400">{seoSubtitle}</p>}
                 </div>
               )}
             </div>
@@ -1462,9 +470,7 @@ export function DealsGrid({
           {isLoading || isInitialLoad ? (
             <div className="flex flex-wrap gap-3">
               {Array.from({ length: 16 }).map((_, i) => (
-                <div key={i} className="w-[calc(50%-6px)] sm:w-[calc(25%-9px)]">
-                  <DealCardSkeleton />
-                </div>
+                <div key={i} className="w-[calc(50%-6px)] sm:w-[calc(25%-9px)]"><DealCardSkeleton /></div>
               ))}
             </div>
           ) : error ? (
@@ -1472,30 +478,18 @@ export function DealsGrid({
               <div className="w-20 h-20 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mb-4">
                 <SearchX className="w-10 h-10 text-red-500" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                Greška
-              </h3>
-              <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-sm">
-                {error}
-              </p>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Greška</h3>
+              <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-sm">{error}</p>
             </div>
           ) : deals.length === 0 ? (
             <div className="min-h-[400px] flex flex-col items-center justify-center text-center px-4">
               <div className="w-20 h-20 rounded-full bg-gray-100 dark:bg-gray-800 flex items-center justify-center mb-4">
                 <SearchX className="w-10 h-10 text-gray-500 dark:text-gray-400" />
               </div>
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                Nema rezultata
-              </h3>
-              <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-sm">
-                Nismo pronašli proizvode koji odgovaraju tvojim filterima. Probaj da prilagodiš pretragu.
-              </p>
+              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">Nema rezultata</h3>
+              <p className="text-gray-500 dark:text-gray-400 mb-6 max-w-sm">Nismo pronašli proizvode koji odgovaraju tvojim filterima. Probaj da prilagodiš pretragu.</p>
               {hasActiveFilters && (
-                <Button
-                  variant="outline"
-                  onClick={resetFilters}
-                  className="border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/30"
-                >
+                <Button variant="outline" onClick={resetFilters} className="border-red-200 text-red-600 hover:bg-red-50 dark:border-red-800 dark:text-red-400 dark:hover:bg-red-900/30">
                   Resetuj filtere
                 </Button>
               )}
@@ -1503,9 +497,7 @@ export function DealsGrid({
           ) : (
             <div className="flex flex-wrap gap-3">
               {deals.map((deal) => (
-                <div key={deal.id} className="w-[calc(50%-6px)] sm:w-[calc(25%-9px)]">
-                  <DealCard deal={deal} />
-                </div>
+                <div key={deal.id} className="w-[calc(50%-6px)] sm:w-[calc(25%-9px)]"><DealCard deal={deal} /></div>
               ))}
             </div>
           )}
@@ -1514,65 +506,30 @@ export function DealsGrid({
           {!isLoading && totalPages > 1 && (
             <div className="mt-8 flex flex-col items-center gap-4">
               <div className="flex items-center gap-1">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={currentPage === 1}
-                  onClick={() => handlePageChange(1)}
-                  className="hidden sm:inline-flex"
-                >
+                <Button variant="outline" size="sm" disabled={currentPage === 1} onClick={() => handlePageChange(1)} className="hidden sm:inline-flex">
                   ««
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={currentPage === 1}
-                  onClick={() => handlePageChange(currentPage - 1)}
-                >
+                <Button variant="outline" size="sm" disabled={currentPage === 1} onClick={() => handlePageChange(currentPage - 1)}>
                   ‹ Nazad
                 </Button>
-
                 <div className="flex items-center gap-1 mx-2">
                   {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                     let pageNum: number;
-                    if (totalPages <= 5) {
-                      pageNum = i + 1;
-                    } else if (currentPage <= 3) {
-                      pageNum = i + 1;
-                    } else if (currentPage >= totalPages - 2) {
-                      pageNum = totalPages - 4 + i;
-                    } else {
-                      pageNum = currentPage - 2 + i;
-                    }
+                    if (totalPages <= 5) pageNum = i + 1;
+                    else if (currentPage <= 3) pageNum = i + 1;
+                    else if (currentPage >= totalPages - 2) pageNum = totalPages - 4 + i;
+                    else pageNum = currentPage - 2 + i;
                     return (
-                      <Button
-                        key={pageNum}
-                        variant={currentPage === pageNum ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => handlePageChange(pageNum)}
-                        className="w-9 h-9"
-                      >
+                      <Button key={pageNum} variant={currentPage === pageNum ? "default" : "outline"} size="sm" onClick={() => handlePageChange(pageNum)} className="w-9 h-9">
                         {pageNum}
                       </Button>
                     );
                   })}
                 </div>
-
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={currentPage === totalPages}
-                  onClick={() => handlePageChange(currentPage + 1)}
-                >
+                <Button variant="outline" size="sm" disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)}>
                   Dalje ›
                 </Button>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={currentPage === totalPages}
-                  onClick={() => handlePageChange(totalPages)}
-                  className="hidden sm:inline-flex"
-                >
+                <Button variant="outline" size="sm" disabled={currentPage === totalPages} onClick={() => handlePageChange(totalPages)} className="hidden sm:inline-flex">
                   »»
                 </Button>
               </div>
