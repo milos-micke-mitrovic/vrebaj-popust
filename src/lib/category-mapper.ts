@@ -31,11 +31,20 @@ export function mapCategory(text: string): CategoryPath | null {
   if (t.includes("kopack")) return "obuca/kopacke";
   if (t.includes("baletank")) return "obuca/baletanke";
 
+  // "sneaker"/"trainer" appear in clothing names (e.g. "Sneaker Tee", "Trainer Hoodie")
+  // so skip the footwear match when clothing keywords are also present
+  const clothingContext = [
+    "majic", "t-shirt", "tshirt", " tee", "duks", "hoodie", "sweatshirt",
+    "jakn", "jacket", "sorc", "short", "pantalon", "pants", "helank",
+    "trenerk", "prslu", "vest", "kosulj", "halj", "dress",
+  ];
+  const hasClothingKeyword = clothingContext.some((k) => t.includes(k));
+
   if (
     t.includes("patik") ||
-    t.includes("sneaker") ||
+    (t.includes("sneaker") && !hasClothingKeyword) ||
     t.includes("tenisic") ||
-    t.includes("trainer") ||
+    (t.includes("trainer") && !hasClothingKeyword) ||
     t.includes("running") ||
     t.includes("patofn")
   ) return "obuca/patike";
