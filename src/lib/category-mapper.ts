@@ -22,7 +22,9 @@ export function normalizeSerbianText(text: string): string {
  * Order matters: more specific patterns come before general ones.
  */
 export function mapCategory(text: string): CategoryPath | null {
-  const t = normalizeSerbianText(text);
+  // Strip domains from URLs to avoid false matches
+  // (e.g., "buzzsneakers" matching "sneaker", "officeshoes" matching "shoe")
+  const t = normalizeSerbianText(text.replace(/https?:\/\/[^\s\/]+/g, ""));
 
   // ── Footwear (specific before general) ──
 

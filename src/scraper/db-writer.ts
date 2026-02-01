@@ -30,12 +30,13 @@ export async function upsertDeal(deal: DealInput): Promise<void> {
       salePrice: deal.salePrice,
       discountPercent: deal.discountPercent,
       imageUrl: deal.imageUrl,
-      sizes: deal.sizes || [],
-      description: deal.description || null,
-      detailImageUrl: deal.detailImageUrl || null,
       categories: deal.categories || [],
       gender: deal.gender || "unisex",
       scrapedAt: new Date(),
+      // Only overwrite detail-scraper fields if explicitly provided
+      ...(deal.sizes && deal.sizes.length > 0 && { sizes: deal.sizes }),
+      ...(deal.description != null && { description: deal.description }),
+      ...(deal.detailImageUrl != null && { detailImageUrl: deal.detailImageUrl }),
     },
     create: {
       id: deal.id,
