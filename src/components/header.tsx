@@ -25,11 +25,12 @@ export function Header() {
         <div className="flex items-center justify-between">
           <Link
             href="/"
-            className="flex items-center gap-1.5 hover:opacity-80 transition-opacity"
+            className="group flex items-center gap-1.5"
           >
             <Image src="/logos/logo.png" alt="" width={64} height={64} className="h-14 w-14 sm:h-16 sm:w-16" priority />
-            <span className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
-              Vrebaj<span className="text-red-500">Popust</span>
+            <span className="text-xl sm:text-2xl font-bold">
+              <span className="text-gray-900 dark:text-white group-hover:text-red-500 dark:group-hover:text-red-500 transition-colors duration-300">Vrebaj</span>
+              <span className="text-red-500 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300">Popust</span>
             </span>
           </Link>
 

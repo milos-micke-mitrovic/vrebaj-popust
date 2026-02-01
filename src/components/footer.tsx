@@ -20,10 +20,11 @@ export function Footer() {
         <div className="flex flex-wrap justify-between gap-8">
           {/* Logo and description */}
           <div className="w-full sm:w-auto sm:max-w-[280px]">
-            <Link href="/" className="flex items-center gap-1.5">
+            <Link href="/" className="group flex items-center gap-1.5">
               <Image src="/logos/logo.png" alt="" width={40} height={40} className="h-10 w-10" />
-              <span className="text-xl font-bold text-gray-900 dark:text-white">
-                Vrebaj<span className="text-red-500">Popust</span>
+              <span className="text-xl font-bold">
+                <span className="text-gray-900 dark:text-white group-hover:text-red-500 dark:group-hover:text-red-500 transition-colors duration-300">Vrebaj</span>
+                <span className="text-red-500 group-hover:text-gray-900 dark:group-hover:text-white transition-colors duration-300">Popust</span>
               </span>
             </Link>
             <p className="mt-3 text-sm text-gray-600 dark:text-gray-400">
