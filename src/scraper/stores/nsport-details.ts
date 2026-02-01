@@ -1,4 +1,4 @@
-import { getDealsWithoutDetails, updateDealDetails, disconnect } from "../db-writer";
+import { getDealsWithoutDetails, updateDealDetails, deleteDealByUrl, disconnect } from "../db-writer";
 import { mapCategory } from "../../lib/category-mapper";
 import { mapGender } from "../../lib/gender-mapper";
 
@@ -92,17 +92,21 @@ async function scrapeNSportDetails(): Promise<void> {
       const cat = mapCategory(deal.name);
       const gender = mapGender(deal.name);
 
-      if (details.sizes.length > 0 || cat || gender) {
-        await updateDealDetails(deal.url, {
-          ...(details.sizes.length > 0 && { sizes: details.sizes }),
-          ...(cat && { categories: [cat] }),
-          ...(gender && { gender }),
-        });
-        updated++;
-        console.log(`${progress} ✓ ${deal.name.substring(0, 40)}... | sizes: ${details.sizes.join(", ") || "none"} | cat: ${cat || "none"} | gender: ${gender || "unknown"}`);
-      } else {
-        console.log(`${progress} - ${deal.name.substring(0, 40)}... | no sizes found`);
+      if (details.sizes.length === 0) {
+        if (cat && (cat.startsWith("obuca/") || cat.startsWith("odeca/"))) {
+          await deleteDealByUrl(deal.url);
+          console.log(`${progress} ✗ ${deal.name.substring(0, 40)}... | Deleted (no sizes available)`);
+          continue;
+        }
       }
+
+      await updateDealDetails(deal.url, {
+        sizes: details.sizes,
+        ...(cat && { categories: [cat] }),
+        ...(gender && { gender }),
+      });
+      updated++;
+      console.log(`${progress} ✓ ${deal.name.substring(0, 40)}... | sizes: ${details.sizes.join(", ")} | cat: ${cat || "none"} | gender: ${gender || "unknown"}`);
 
       processed++;
 

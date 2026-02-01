@@ -17,7 +17,7 @@ export function Footer() {
     <footer className="border-t bg-white dark:bg-gray-900 dark:border-gray-800">
       <div className="mx-auto max-w-7xl px-4 py-10">
         {/* Main footer content */}
-        <div className="flex flex-wrap gap-8 lg:gap-16">
+        <div className="flex flex-wrap justify-between gap-8">
           {/* Logo and description */}
           <div className="w-full sm:w-auto sm:max-w-[280px]">
             <Link href="/" className="flex items-center gap-1.5">

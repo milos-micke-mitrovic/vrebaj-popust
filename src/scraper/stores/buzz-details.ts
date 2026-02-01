@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
-import { getDealsWithoutDetails, updateDealDetails, disconnect } from "../db-writer";
+import { getDealsWithoutDetails, updateDealDetails, deleteDealByUrl, disconnect } from "../db-writer";
 import { mapCategory } from "../../lib/category-mapper";
 
 puppeteer.use(StealthPlugin());
@@ -92,6 +92,14 @@ async function scrapeBuzzDetails(): Promise<void> {
 
         console.log(`  Sizes: ${details.sizes.length > 0 ? details.sizes.join(", ") : "none"}`);
         console.log(`  Categories: ${categories.join(", ") || "none (keeping existing)"}`);
+
+        if (details.sizes.length === 0) {
+          if (cat && (cat.startsWith("obuca/") || cat.startsWith("odeca/"))) {
+            await deleteDealByUrl(deal.url);
+            console.log(`  ✗ Deleted (no sizes available)`);
+            continue;
+          }
+        }
 
         // Only update sizes and categories (don't overwrite gender - it's set correctly by list scraper)
         // Only update categories if we extracted some

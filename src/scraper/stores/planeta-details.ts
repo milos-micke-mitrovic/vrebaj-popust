@@ -1,5 +1,5 @@
 import { JSDOM } from "jsdom";
-import { getDealsWithoutDetails, updateDealDetails, disconnect, Gender } from "../db-writer";
+import { getDealsWithoutDetails, updateDealDetails, deleteDealByUrl, disconnect, Gender } from "../db-writer";
 import { mapCategory } from "../../lib/category-mapper";
 import { mapGender } from "../../lib/gender-mapper";
 
@@ -153,6 +153,15 @@ async function scrapePlanetaDetails(): Promise<void> {
       console.log(`  Gender: ${details.gender || "not detected"}`);
       console.log(`  Categories: ${details.categories.join(", ") || "none"}`);
       console.log(`  Sizes: ${details.sizes.length > 0 ? details.sizes.join(", ") : "none"}`);
+
+      if (details.sizes.length === 0) {
+        const cat = mapCategory(deal.name + " " + deal.url);
+        if (cat && (cat.startsWith("obuca/") || cat.startsWith("odeca/"))) {
+          await deleteDealByUrl(deal.url);
+          console.log(`  ✗ Deleted (no sizes available)`);
+          continue;
+        }
+      }
 
       // Update deal in database
       await updateDealDetails(deal.url, {

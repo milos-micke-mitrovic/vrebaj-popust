@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
-import { getDealsWithoutDetails, updateDealDetails, disconnect, Gender } from "../db-writer";
+import { getDealsWithoutDetails, updateDealDetails, deleteDealByUrl, disconnect, Gender } from "../db-writer";
 import { mapCategory } from "../../lib/category-mapper";
 import { mapGender } from "../../lib/gender-mapper";
 
@@ -148,6 +148,15 @@ async function scrapeOfficeShoeDetails(): Promise<void> {
         const { gender, category } = parseProductType(details.productType || "");
         console.log(`  Parsed gender: ${gender || "unknown"}`);
         console.log(`  Parsed category: ${category || "unknown"}`);
+
+        if (details.sizes.length === 0) {
+          const cat = mapCategory(deal.name + " " + deal.url);
+          if (cat && (cat.startsWith("obuca/") || cat.startsWith("odeca/"))) {
+            await deleteDealByUrl(deal.url);
+            console.log(`  ✗ Deleted (no sizes available)`);
+            continue;
+          }
+        }
 
         // Build categories array
         const categories: string[] = [];

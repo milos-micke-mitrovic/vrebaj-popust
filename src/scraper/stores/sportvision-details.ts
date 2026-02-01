@@ -1,5 +1,5 @@
 import { JSDOM } from "jsdom";
-import { getDealsWithoutDetails, updateDealDetails, disconnect, Gender } from "../db-writer";
+import { getDealsWithoutDetails, updateDealDetails, deleteDealByUrl, disconnect, Gender } from "../db-writer";
 import { mapCategory } from "../../lib/category-mapper";
 import { mapGender } from "../../lib/gender-mapper";
 
@@ -186,6 +186,15 @@ async function scrapeSportVisionDetails(): Promise<void> {
       console.log(`  Sizes: ${details.sizes.length > 0 ? details.sizes.join(", ") : "none"}`);
       console.log(`  Categories: ${details.categories.join(", ") || "none"}`);
       console.log(`  Gender: ${details.gender || "not detected"}`);
+
+      if (details.sizes.length === 0) {
+        const cat = mapCategory(deal.name + " " + deal.url);
+        if (cat && (cat.startsWith("obuca/") || cat.startsWith("odeca/"))) {
+          await deleteDealByUrl(deal.url);
+          console.log(`  ✗ Deleted (no sizes available)`);
+          continue;
+        }
+      }
 
       // Only update categories/gender if we found values (don't overwrite existing)
       await updateDealDetails(deal.url, {

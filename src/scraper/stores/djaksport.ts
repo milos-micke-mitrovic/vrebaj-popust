@@ -344,6 +344,14 @@ async function scrapeDjakSport(): Promise<void> {
         if (product.discountPercent >= MIN_DISCOUNT) {
           const { gender, categories } = parseUrlInfo(product.url, product.name);
 
+          if (!product.sizes || product.sizes.length === 0) {
+            // Only skip footwear/clothing with no sizes (out of stock)
+            if (categories.some(c => c.startsWith("obuca/") || c.startsWith("odeca/"))) {
+              console.log(`Skipping (no sizes): ${product.name.substring(0, 60)}`);
+              continue;
+            }
+          }
+
           // Extract brand using server-side logic (handles multi-word brands, aliases, filters genders/categories)
           const brand = extractBrandFromName(product.name);
 

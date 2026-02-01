@@ -132,11 +132,14 @@ async function scrapeIntersportDetails(): Promise<void> {
     try {
       const details = await fetchProductDetails(deal.url, deal.name);
 
-      // If no sizes found, product is out of stock - delete it
+      // If no sizes found and product is footwear/clothing, delete it
       if (details.sizes.length === 0) {
-        await deleteDealByUrl(deal.url);
-        deleted++;
-        console.log(`${progress} ✗ ${deal.name.substring(0, 40)}... | no sizes - DELETED`);
+        const cat = mapCategory(deal.name + " " + deal.url);
+        if (cat && (cat.startsWith("obuca/") || cat.startsWith("odeca/"))) {
+          await deleteDealByUrl(deal.url);
+          deleted++;
+          console.log(`${progress} ✗ ${deal.name.substring(0, 40)}... | no sizes - DELETED`);
+        }
       } else {
         await updateDealDetails(deal.url, {
           sizes: details.sizes,
