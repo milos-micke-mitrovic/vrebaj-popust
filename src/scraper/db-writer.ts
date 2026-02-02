@@ -162,13 +162,24 @@ export async function updateDealDetails(
   });
 }
 
-export async function getDealsWithoutDetails(store: Store): Promise<{ id: string; url: string; name: string }[]> {
+/**
+ * Get deals that need detail scraping:
+ * - Never scraped (detailsScrapedAt is null)
+ * - Empty sizes (retry in case store restocked)
+ * - Stale details (older than maxAge, default 24h — picks up size changes and mapper fixes)
+ */
+export async function getDealsWithoutDetails(
+  store: Store,
+  maxAgeHours = 24
+): Promise<{ id: string; url: string; name: string }[]> {
+  const staleThreshold = new Date(Date.now() - maxAgeHours * 60 * 60 * 1000);
   return prisma.deal.findMany({
     where: {
       store,
       OR: [
         { detailsScrapedAt: null },
         { sizes: { isEmpty: true } },
+        { detailsScrapedAt: { lt: staleThreshold } },
       ],
     },
     select: { id: true, url: true, name: true },
