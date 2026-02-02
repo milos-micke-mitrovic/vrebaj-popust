@@ -1,5 +1,5 @@
 import { JSDOM } from "jsdom";
-import { getDealsWithoutDetails, updateDealDetails, deleteDealByUrl, disconnect } from "../db-writer";
+import { getDealsForDetailScraping, updateDealDetails, deleteDealByUrl, disconnect } from "../db-writer";
 import type { Gender } from "@prisma/client";
 import { mapCategory } from "../../lib/category-mapper";
 import { mapGender } from "../../lib/gender-mapper";
@@ -124,7 +124,7 @@ async function fetchProductDetails(url: string, productName: string): Promise<Pr
 async function scrapeTrefSportDetails(): Promise<void> {
   console.log("Starting Tref Sport detail scraper...");
 
-  const deals = await getDealsWithoutDetails(STORE);
+  const deals = await getDealsForDetailScraping(STORE);
   console.log(`Found ${deals.length} deals without details`);
 
   if (deals.length === 0) {

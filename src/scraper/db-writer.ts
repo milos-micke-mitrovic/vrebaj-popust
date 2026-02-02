@@ -162,15 +162,9 @@ export async function updateDealDetails(
   });
 }
 
-export async function getDealsWithoutDetails(store: Store): Promise<{ id: string; url: string; name: string }[]> {
+export async function getDealsForDetailScraping(store: Store): Promise<{ id: string; url: string; name: string }[]> {
   return prisma.deal.findMany({
-    where: {
-      store,
-      OR: [
-        { detailsScrapedAt: null },
-        { sizes: { isEmpty: true } },
-      ],
-    },
+    where: { store },
     select: { id: true, url: true, name: true },
   });
 }

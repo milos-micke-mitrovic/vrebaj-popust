@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
-import { getDealsWithoutDetails, updateDealDetails, deleteDealByUrl, disconnect } from "../db-writer";
+import { getDealsForDetailScraping, updateDealDetails, deleteDealByUrl, disconnect } from "../db-writer";
 import { mapCategory } from "../../lib/category-mapper";
 
 puppeteer.use(StealthPlugin());
@@ -55,7 +55,7 @@ async function extractProductDetails(page: Page): Promise<ProductDetails> {
 async function scrapeBuzzDetails(): Promise<void> {
   console.log("Starting Buzz Sneakers detail scraper...");
 
-  const deals = await getDealsWithoutDetails(STORE);
+  const deals = await getDealsForDetailScraping(STORE);
   console.log(`Found ${deals.length} deals without details`);
 
   if (deals.length === 0) {

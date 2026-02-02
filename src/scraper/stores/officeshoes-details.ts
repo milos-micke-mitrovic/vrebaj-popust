@@ -1,7 +1,7 @@
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
-import { getDealsWithoutDetails, updateDealDetails, deleteDealByUrl, disconnect, Gender } from "../db-writer";
+import { getDealsForDetailScraping, updateDealDetails, deleteDealByUrl, disconnect, Gender } from "../db-writer";
 import { mapCategory } from "../../lib/category-mapper";
 import { mapGender } from "../../lib/gender-mapper";
 
@@ -110,7 +110,7 @@ async function scrapeOfficeShoeDetails(): Promise<void> {
   console.log("Starting Office Shoes detail scraper...");
 
   // Get deals that need details
-  const deals = await getDealsWithoutDetails(STORE);
+  const deals = await getDealsForDetailScraping(STORE);
   console.log(`Found ${deals.length} deals without details`);
 
   if (deals.length === 0) {

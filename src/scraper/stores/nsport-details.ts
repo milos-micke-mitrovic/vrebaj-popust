@@ -1,4 +1,4 @@
-import { getDealsWithoutDetails, updateDealDetails, deleteDealByUrl, disconnect } from "../db-writer";
+import { getDealsForDetailScraping, updateDealDetails, deleteDealByUrl, disconnect } from "../db-writer";
 import { mapCategory } from "../../lib/category-mapper";
 import { mapGender } from "../../lib/gender-mapper";
 
@@ -68,7 +68,7 @@ async function fetchProductDetails(url: string): Promise<ProductDetails> {
 async function scrapeNSportDetails(): Promise<void> {
   console.log("Starting N-Sport detail scraper (fast HTTP mode)...");
 
-  const deals = await getDealsWithoutDetails(STORE);
+  const deals = await getDealsForDetailScraping(STORE);
   console.log(`Found ${deals.length} deals without details`);
 
   if (deals.length === 0) {
