@@ -204,13 +204,13 @@ export function mapCategory(text: string): CategoryPath | null {
     t.includes("sock")
   ) return "oprema/carape";
 
+  if (/\blopt/.test(t)) return "oprema/lopte";
+
   if (
     /\bsal\b/.test(t) ||
     t.includes("salov") ||
     t.includes("scarf")
   ) return "oprema/salovi";
-
-  if (/\blopt/.test(t)) return "oprema/lopte";
 
   return null;
 }

@@ -108,19 +108,24 @@ export async function GET(request: NextRequest) {
   });
 
   // Category paths filter (e.g., "obuca/patike")
+  // "ostalo" = detail-scraped but uncategorized (excludes products not yet scraped)
+  const ostaloCondition = { categories: { isEmpty: true }, detailsScrapedAt: { not: null } };
   if (expandedCategoryPaths.length > 0 && filterOstalo) {
     // Both: show products matching selected categories OR uncategorized
     where.AND = [
       ...(where.AND as Prisma.DealWhereInput[] || []),
       { OR: [
         { categories: { hasSome: expandedCategoryPaths } },
-        { categories: { isEmpty: true } },
+        ostaloCondition,
       ]},
     ];
   } else if (expandedCategoryPaths.length > 0) {
     where.categories = { hasSome: expandedCategoryPaths };
   } else if (filterOstalo) {
-    where.categories = { isEmpty: true };
+    where.AND = [
+      ...(where.AND as Prisma.DealWhereInput[] || []),
+      ostaloCondition,
+    ];
   }
 
   // Size filter - match exact or range (e.g., "36" matches "36" and "36-37")

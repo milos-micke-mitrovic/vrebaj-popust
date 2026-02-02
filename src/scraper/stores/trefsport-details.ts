@@ -80,17 +80,12 @@ async function fetchProductDetails(url: string, productName: string): Promise<Pr
       }
     }
 
-    // Map category from Kategorije property value
-    if (kategorijaValue) {
-      const category = mapCategory(kategorijaValue);
-      if (category) {
-        result.categories.push(category);
-      }
-    }
-
-    // Fallback: map category from product name
-    if (result.categories.length === 0 && productName) {
-      const category = mapCategory(productName);
+    // Map category from store category + product name combined
+    // Combining ensures product-specific keywords (e.g. "pantalone") take priority
+    // over the store's broad category (e.g. "Trenerke")
+    const categoryText = [kategorijaValue, productName].filter(Boolean).join(" ");
+    if (categoryText) {
+      const category = mapCategory(categoryText);
       if (category) {
         result.categories.push(category);
       }
