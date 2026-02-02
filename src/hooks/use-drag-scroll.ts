@@ -3,58 +3,82 @@
 import { useRef, useEffect, useCallback } from "react";
 
 interface UseDragScrollOptions {
-  speed?: number; // pixels per frame for auto-scroll
+  speed?: number; // pixels per 16ms frame
   pauseOnHover?: boolean;
 }
 
+/**
+ * Auto-scrolling carousel hook using GPU-composited transforms.
+ *
+ * The container ref should be placed on an inner "track" element with
+ * `w-max` (width: max-content), wrapped in an `overflow-hidden` parent.
+ * Content should be duplicated for seamless infinite looping.
+ */
 export function useDragScroll({ speed = 0.5, pauseOnHover = true }: UseDragScrollOptions = {}) {
   const containerRef = useRef<HTMLDivElement>(null);
   const isDragging = useRef(false);
   const wasDragged = useRef(false);
   const startX = useRef(0);
-  const scrollStart = useRef(0);
+  const startY = useRef(0);
+  const dragStartOffset = useRef(0);
   const isPaused = useRef(false);
   const animationRef = useRef<number>(undefined);
+  const offsetRef = useRef(0);
+  const lastTimeRef = useRef(0);
+  const touchDirectionRef = useRef<"none" | "horizontal" | "vertical">("none");
 
-  // Auto-scroll loop
-  const autoScroll = useCallback(() => {
+  const applyTransform = useCallback(() => {
     const el = containerRef.current;
-    if (!el || isPaused.current || isDragging.current) {
-      animationRef.current = requestAnimationFrame(autoScroll);
-      return;
+    if (el) el.style.transform = `translateX(${-offsetRef.current}px)`;
+  }, []);
+
+  const getHalfWidth = useCallback(() => {
+    const el = containerRef.current;
+    if (!el) return Infinity;
+    // Track has w-max so offsetWidth = total content width; content is duplicated
+    return el.offsetWidth / 2;
+  }, []);
+
+  const wrapOffset = useCallback(() => {
+    const hw = getHalfWidth();
+    if (hw === Infinity || hw <= 0) return;
+    while (offsetRef.current >= hw) offsetRef.current -= hw;
+    while (offsetRef.current < 0) offsetRef.current += hw;
+  }, [getHalfWidth]);
+
+  // Time-based auto-scroll for consistent speed across frame rates
+  const autoScroll = useCallback((timestamp: number) => {
+    if (!isPaused.current && !isDragging.current && containerRef.current) {
+      const delta = lastTimeRef.current ? timestamp - lastTimeRef.current : 16;
+      // Cap delta to avoid large jumps after tab regains focus
+      offsetRef.current += speed * (Math.min(delta, 100) / 16);
+      wrapOffset();
+      applyTransform();
     }
-
-    el.scrollLeft += speed;
-
-    // Reset to beginning for infinite loop (content is duplicated)
-    const halfScroll = el.scrollWidth / 2;
-    if (el.scrollLeft >= halfScroll) {
-      el.scrollLeft -= halfScroll;
-    }
-
+    lastTimeRef.current = timestamp;
     animationRef.current = requestAnimationFrame(autoScroll);
-  }, [speed]);
+  }, [speed, applyTransform, wrapOffset]);
 
-  // Mouse handlers
+  // ── Mouse handlers ──
+
   const onMouseDown = useCallback((e: MouseEvent) => {
-    const el = containerRef.current;
-    if (!el) return;
     isDragging.current = true;
     wasDragged.current = false;
     startX.current = e.pageX;
-    scrollStart.current = el.scrollLeft;
-    el.style.cursor = "grabbing";
+    dragStartOffset.current = offsetRef.current;
+    const el = containerRef.current;
+    if (el) el.style.cursor = "grabbing";
   }, []);
 
   const onMouseMove = useCallback((e: MouseEvent) => {
     if (!isDragging.current) return;
-    const el = containerRef.current;
-    if (!el) return;
     e.preventDefault();
     const dx = e.pageX - startX.current;
     if (Math.abs(dx) > 3) wasDragged.current = true;
-    el.scrollLeft = scrollStart.current - dx;
-  }, []);
+    offsetRef.current = dragStartOffset.current - dx;
+    wrapOffset();
+    applyTransform();
+  }, [applyTransform, wrapOffset]);
 
   const onMouseUp = useCallback(() => {
     isDragging.current = false;
@@ -62,30 +86,51 @@ export function useDragScroll({ speed = 0.5, pauseOnHover = true }: UseDragScrol
     if (el) el.style.cursor = "grab";
   }, []);
 
-  // Touch handlers
+  // ── Touch handlers with direction lock ──
+  // Detects if the user is scrolling vertically (page scroll) or
+  // horizontally (carousel swipe) and only drags on horizontal movement.
+
   const onTouchStart = useCallback((e: TouchEvent) => {
-    const el = containerRef.current;
-    if (!el) return;
-    isDragging.current = true;
-    wasDragged.current = false;
     startX.current = e.touches[0].pageX;
-    scrollStart.current = el.scrollLeft;
+    startY.current = e.touches[0].pageY;
+    dragStartOffset.current = offsetRef.current;
+    touchDirectionRef.current = "none";
+    wasDragged.current = false;
   }, []);
 
   const onTouchMove = useCallback((e: TouchEvent) => {
-    if (!isDragging.current) return;
-    const el = containerRef.current;
-    if (!el) return;
+    if (touchDirectionRef.current === "vertical") return;
+
     const dx = e.touches[0].pageX - startX.current;
-    if (Math.abs(dx) > 3) wasDragged.current = true;
-    el.scrollLeft = scrollStart.current - dx;
-  }, []);
+    const dy = e.touches[0].pageY - startY.current;
+
+    // Lock direction on first significant movement
+    if (touchDirectionRef.current === "none") {
+      if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > 5) {
+        touchDirectionRef.current = "vertical";
+        return;
+      }
+      if (Math.abs(dx) > 5) {
+        touchDirectionRef.current = "horizontal";
+        isDragging.current = true;
+      } else {
+        return;
+      }
+    }
+
+    wasDragged.current = true;
+    offsetRef.current = dragStartOffset.current - dx;
+    wrapOffset();
+    applyTransform();
+  }, [applyTransform, wrapOffset]);
 
   const onTouchEnd = useCallback(() => {
     isDragging.current = false;
+    touchDirectionRef.current = "none";
   }, []);
 
-  // Hover pause
+  // ── Hover pause (desktop) ──
+
   const onMouseEnter = useCallback(() => {
     if (pauseOnHover) isPaused.current = true;
   }, [pauseOnHover]);
@@ -102,6 +147,7 @@ export function useDragScroll({ speed = 0.5, pauseOnHover = true }: UseDragScrol
     if (!el) return;
 
     el.style.cursor = "grab";
+    el.style.willChange = "transform";
 
     el.addEventListener("mousedown", onMouseDown);
     window.addEventListener("mousemove", onMouseMove);
@@ -112,7 +158,10 @@ export function useDragScroll({ speed = 0.5, pauseOnHover = true }: UseDragScrol
     el.addEventListener("mouseenter", onMouseEnter);
     el.addEventListener("mouseleave", onMouseLeave);
 
-    // Start auto-scroll
+    // Reset timestamp when tab becomes visible to avoid large jumps
+    const onVisibility = () => { lastTimeRef.current = 0; };
+    document.addEventListener("visibilitychange", onVisibility);
+
     animationRef.current = requestAnimationFrame(autoScroll);
 
     return () => {
@@ -124,11 +173,12 @@ export function useDragScroll({ speed = 0.5, pauseOnHover = true }: UseDragScrol
       window.removeEventListener("touchend", onTouchEnd);
       el.removeEventListener("mouseenter", onMouseEnter);
       el.removeEventListener("mouseleave", onMouseLeave);
+      document.removeEventListener("visibilitychange", onVisibility);
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
   }, [autoScroll, onMouseDown, onMouseMove, onMouseUp, onTouchStart, onTouchMove, onTouchEnd, onMouseEnter, onMouseLeave]);
 
-  // Check if a click should be prevented (was a drag)
+  // Check if a click should be prevented (was actually a drag)
   const shouldPreventClick = useCallback(() => wasDragged.current, []);
 
   return { containerRef, shouldPreventClick };

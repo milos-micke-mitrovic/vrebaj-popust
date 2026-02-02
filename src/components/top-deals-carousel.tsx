@@ -158,13 +158,15 @@ export function TopDealsCarousel({ deals }: TopDealsCarouselProps) {
         <div className="absolute right-0 top-0 bottom-0 w-8 sm:w-16 bg-gradient-to-l from-gray-50 dark:from-gray-900 to-transparent z-10 pointer-events-none" />
 
         {/* Scrolling track */}
-        <div
-          ref={containerRef}
-          className="flex gap-4 overflow-x-scroll scrollbar-hide select-none"
-        >
-          {duplicatedDeals.map((deal, index) => (
-            <CarouselCard key={`${deal.id}-${index}`} deal={deal} shouldPreventClick={shouldPreventClick} />
-          ))}
+        <div className="overflow-hidden">
+          <div
+            ref={containerRef}
+            className="flex gap-4 w-max select-none"
+          >
+            {duplicatedDeals.map((deal, index) => (
+              <CarouselCard key={`${deal.id}-${index}`} deal={deal} shouldPreventClick={shouldPreventClick} />
+            ))}
+          </div>
         </div>
       </div>
 

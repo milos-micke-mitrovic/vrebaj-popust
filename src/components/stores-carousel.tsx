@@ -30,10 +30,11 @@ export function StoresCarousel({ stores }: StoresCarouselProps) {
         <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white dark:from-gray-800 to-transparent z-10 pointer-events-none" />
 
         {/* Scrolling track */}
-        <div
-          ref={containerRef}
-          className="flex overflow-x-scroll scrollbar-hide select-none"
-        >
+        <div className="overflow-hidden">
+          <div
+            ref={containerRef}
+            className="flex w-max select-none"
+          >
           {duplicatedStores.map((store, index) => {
             const info = STORE_INFO[store];
             return (
@@ -59,6 +60,7 @@ export function StoresCarousel({ stores }: StoresCarouselProps) {
               </div>
             );
           })}
+          </div>
         </div>
       </div>
     </section>
