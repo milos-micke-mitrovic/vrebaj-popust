@@ -53,6 +53,15 @@ async function fetchProductDetails(url: string, productName: string): Promise<Pr
       }
     }
 
+    // Extract breadcrumb text (e.g. "Muškarci > Odeća > Duksevi")
+    const breadcrumbItems = doc.querySelectorAll("ol.breadcrumb .breadcrumb-title");
+    const breadcrumbParts: string[] = [];
+    for (const el of breadcrumbItems) {
+      const text = el.textContent?.trim();
+      if (text) breadcrumbParts.push(text);
+    }
+    const breadcrumbText = breadcrumbParts.join(" ");
+
     // Extract properties from the table (Pol, Kategorije, Namena, etc.)
     const propRows = doc.querySelectorAll(".product-detail-properties-table tr.properties-row");
     let kategorijaValue = "";
@@ -80,10 +89,9 @@ async function fetchProductDetails(url: string, productName: string): Promise<Pr
       }
     }
 
-    // Map category from store category + product name combined
-    // Combining ensures product-specific keywords (e.g. "pantalone") take priority
-    // over the store's broad category (e.g. "Trenerke")
-    const categoryText = [kategorijaValue, productName].filter(Boolean).join(" ");
+    // Map category: combine breadcrumb + store category + product name
+    // Breadcrumb has the most reliable info (e.g. "Duksevi", "Patike")
+    const categoryText = [breadcrumbText, kategorijaValue, productName].filter(Boolean).join(" ");
     if (categoryText) {
       const category = mapCategory(categoryText);
       if (category) {
@@ -91,7 +99,10 @@ async function fetchProductDetails(url: string, productName: string): Promise<Pr
       }
     }
 
-    // Fallback: infer gender from product name if not found in properties
+    // Gender: prefer properties table, fallback to breadcrumb, then product name
+    if (!result.gender && breadcrumbText) {
+      result.gender = mapGender(breadcrumbText);
+    }
     if (!result.gender && productName) {
       result.gender = mapGender(productName);
     }

@@ -39,7 +39,7 @@ async function fetchProductPage(url: string): Promise<string | null> {
   }
 }
 
-function extractProductDetails(html: string): ProductDetails {
+function extractProductDetails(html: string, productName: string, productUrl: string): ProductDetails {
   const dom = new JSDOM(html);
   const doc = dom.window.document;
 
@@ -100,21 +100,11 @@ function extractProductDetails(html: string): ProductDetails {
     }
   }
 
-  // Fallback: extract from URL if no category found (e.g., /patike-xyz.html)
+  // Fallback: use mapCategory on URL + product name
   if (result.categories.length === 0) {
-    const urlMatch = html.match(/og:url[^>]*content="([^"]+)"/i);
-    if (urlMatch) {
-      const url = urlMatch[1].toLowerCase();
-      if (url.includes('/patike-') || url.includes('/patike/')) result.categories.push('obuca/patike');
-      else if (url.includes('/baletank')) result.categories.push('obuca/baletanke');
-      else if (url.includes('/cipele-') || url.includes('/cipele/')) result.categories.push('obuca/cipele');
-      else if (url.includes('/jakn')) result.categories.push('odeca/jakne');
-      else if (url.includes('/duks')) result.categories.push('odeca/duksevi');
-      else if (url.includes('/top-') || url.includes('-top-')) result.categories.push('odeca/topovi');
-      else if (url.includes('/majic')) result.categories.push('odeca/majice');
-      else if (url.includes('/kosulj')) result.categories.push('odeca/kosulje');
-      else if (url.includes('/kupaci') || url.includes('/kupace') || url.includes('/swimwear') || url.includes('/swimming') || url.includes('/bikini')) result.categories.push('odeca/kupaci');
-      else if (url.includes('/kombinezon') || url.includes('/jumpsuit') || url.includes('/overall')) result.categories.push('odeca/kombinezoni');
+    const category = mapCategory(productUrl + " " + productName);
+    if (category) {
+      result.categories.push(category);
     }
   }
 
@@ -149,7 +139,7 @@ async function scrapePlanetaDetails(): Promise<void> {
         continue;
       }
 
-      const details = extractProductDetails(html);
+      const details = extractProductDetails(html, deal.name, deal.url);
       console.log(`  Gender: ${details.gender || "not detected"}`);
       console.log(`  Categories: ${details.categories.join(", ") || "none"}`);
       console.log(`  Sizes: ${details.sizes.length > 0 ? details.sizes.join(", ") : "none"}`);

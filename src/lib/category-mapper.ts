@@ -84,6 +84,7 @@ export function mapCategory(text: string): CategoryPath | null {
 
   if (
     t.includes("kombinezon") ||
+    t.includes("skafander") ||
     t.includes("jumpsuit") ||
     t.includes("overall")
   ) return "odeca/kombinezoni";
@@ -118,9 +119,17 @@ export function mapCategory(text: string): CategoryPath | null {
     t.includes("duks") ||
     t.includes("hoodie") ||
     t.includes("sweatshirt") ||
-    t.includes("hudica") ||
-    t.includes("pulover")
+    t.includes("hudica")
   ) return "odeca/duksevi";
+
+  if (
+    t.includes("dzemp") ||
+    t.includes("bluz") ||
+    t.includes("pulover") ||
+    t.includes("sweater") ||
+    t.includes("cardigan") ||
+    t.includes("kardigan")
+  ) return "odeca/bluze";
 
   if (
     t.includes("majic") ||
@@ -143,6 +152,7 @@ export function mapCategory(text: string): CategoryPath | null {
 
   if (
     t.includes("sorc") ||
+    t.includes("sorts") ||
     t.includes("short") ||
     t.includes("bermud")
   ) return "odeca/sortevi";
