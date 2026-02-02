@@ -26,6 +26,10 @@ export function mapCategory(text: string): CategoryPath | null {
   // (e.g., "buzzsneakers" matching "sneaker", "officeshoes" matching "shoe")
   const t = normalizeSerbianText(text.replace(/https?:\/\/[^\s\/]+/g, ""));
 
+  // ── Early exclusions: catch items that would false-match other categories ──
+  // e.g. "sock holder znojnica" would match carape via "sock"
+  if (t.includes("znojnic") || t.includes("headband")) return null;
+
   // ── Footwear (specific before general) ──
 
   if (t.includes("kopack")) return "obuca/kopacke";
@@ -128,7 +132,8 @@ export function mapCategory(text: string): CategoryPath | null {
     t.includes("pulover") ||
     t.includes("sweater") ||
     t.includes("cardigan") ||
-    t.includes("kardigan")
+    t.includes("kardigan") ||
+    t.includes("sako")
   ) return "odeca/bluze";
 
   if (
@@ -164,7 +169,8 @@ export function mapCategory(text: string): CategoryPath | null {
   ) return "odeca/pantalone";
 
   if (
-    t.includes("donj") && t.includes("ves")
+    t.includes("bokseric") ||
+    (t.includes("donj") && (t.includes("ves") || t.includes("deo")))
   ) return "odeca/donji-ves";
 
   if (
@@ -180,6 +186,11 @@ export function mapCategory(text: string): CategoryPath | null {
   ) return "odeca/haljine";
 
   // ── Accessories (rancevi merged into torbe) ──
+
+  if (
+    t.includes("novcanik") ||
+    t.includes("wallet")
+  ) return "oprema/novcanici";
 
   if (
     t.includes("ranac") ||

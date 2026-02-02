@@ -6,7 +6,7 @@ export type MainCategory = "obuca" | "odeca" | "oprema";
 // Subcategories by main category
 export type ObucaSubcategory = "patike" | "cipele" | "baletanke" | "cizme" | "papuce" | "sandale" | "kopacke";
 export type OdecaSubcategory = "jakne" | "prsluci" | "duksevi" | "bluze" | "majice" | "topovi" | "pantalone" | "trenerke" | "helanke" | "sortevi" | "kupaci" | "haljine" | "kosulje" | "kombinezoni" | "donji-ves";
-export type OpremaSubcategory = "torbe" | "carape" | "kape" | "salovi" | "rukavice" | "lopte";
+export type OpremaSubcategory = "torbe" | "novcanici" | "carape" | "kape" | "salovi" | "rukavice" | "lopte";
 
 export type Subcategory = ObucaSubcategory | OdecaSubcategory | OpremaSubcategory;
 
