@@ -82,6 +82,8 @@ export async function POST(request: NextRequest) {
 
     if (!message) {
       errors.push("Poruka je obavezna.");
+    } else if (message.length < 10) {
+      errors.push("Poruka mora imati najmanje 10 karaktera.");
     }
 
     if (errors.length > 0) {
