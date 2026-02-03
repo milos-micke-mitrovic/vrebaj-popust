@@ -108,6 +108,7 @@ export function ContactForm() {
       setFieldErrors({});
       setTouched({});
       setSubmitted(false);
+      setTimeout(() => setStatus("idle"), 5000);
     } catch {
       setStatus("error");
       setServerError("Došlo je do greške. Proverite internet konekciju.");

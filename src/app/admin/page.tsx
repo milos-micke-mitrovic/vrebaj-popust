@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useSearchParams, notFound } from "next/navigation";
+import { ConfirmDialog } from "@/components/confirm-dialog";
 
 interface Message {
   id: string;
@@ -19,6 +20,13 @@ interface Pagination {
   totalPages: number;
 }
 
+interface ConfirmState {
+  isOpen: boolean;
+  title: string;
+  message: string;
+  onConfirm: () => void;
+}
+
 export default function AdminPage() {
   const searchParams = useSearchParams();
   const key = searchParams.get("key");
@@ -31,6 +39,12 @@ export default function AdminPage() {
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [expanded, setExpanded] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
+  const [confirm, setConfirm] = useState<ConfirmState>({
+    isOpen: false,
+    title: "",
+    message: "",
+    onConfirm: () => {},
+  });
 
   const fetchMessages = useCallback(async (p: number) => {
     if (!key) {
@@ -78,8 +92,40 @@ export default function AdminPage() {
   };
 
   const markRead = (ids: string[], read: boolean) => apiCall("PATCH", { ids, read });
-  const deleteMessages = (ids: string[]) => apiCall("DELETE", { ids });
-  const deleteAll = () => apiCall("DELETE", { all: true });
+
+  const doDelete = (ids: string[]) => {
+    apiCall("DELETE", { ids });
+    setExpanded(null);
+  };
+
+  const doDeleteAll = () => {
+    apiCall("DELETE", { all: true });
+    setExpanded(null);
+  };
+
+  const confirmDelete = (ids: string[], label: string) => {
+    setConfirm({
+      isOpen: true,
+      title: "Brisanje poruka",
+      message: `Da li ste sigurni da želite da obrišete ${label}?`,
+      onConfirm: () => {
+        setConfirm((prev) => ({ ...prev, isOpen: false }));
+        doDelete(ids);
+      },
+    });
+  };
+
+  const confirmDeleteAll = () => {
+    setConfirm({
+      isOpen: true,
+      title: "Brisanje svih poruka",
+      message: `Da li ste sigurni da želite da obrišete sve poruke (${pagination?.total ?? 0})?`,
+      onConfirm: () => {
+        setConfirm((prev) => ({ ...prev, isOpen: false }));
+        doDeleteAll();
+      },
+    });
+  };
 
   const toggleSelect = (id: string) => {
     setSelected((prev) => {
@@ -151,7 +197,14 @@ export default function AdminPage() {
                     Nepročitano ({selected.size})
                   </button>
                   <button
-                    onClick={() => deleteMessages(selectedIds)}
+                    onClick={() =>
+                      confirmDelete(
+                        selectedIds,
+                        selected.size === 1
+                          ? "ovu poruku"
+                          : `${selected.size} poruka/e`
+                      )
+                    }
                     disabled={actionLoading}
                     className="rounded-lg bg-red-600 px-2.5 py-1 text-xs text-white hover:bg-red-700 disabled:opacity-50 cursor-pointer"
                   >
@@ -160,7 +213,7 @@ export default function AdminPage() {
                 </>
               )}
               <button
-                onClick={deleteAll}
+                onClick={confirmDeleteAll}
                 disabled={actionLoading}
                 className="rounded-lg border border-red-300 dark:border-red-800 px-2.5 py-1 text-xs text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 disabled:opacity-50 cursor-pointer"
               >
@@ -276,8 +329,7 @@ export default function AdminPage() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            deleteMessages([msg.id]);
-                            setExpanded(null);
+                            confirmDelete([msg.id], "ovu poruku");
                           }}
                           disabled={actionLoading}
                           className="text-xs text-red-400 hover:text-red-600 disabled:opacity-50 cursor-pointer"
@@ -316,6 +368,16 @@ export default function AdminPage() {
           </>
         )}
       </div>
+
+      <ConfirmDialog
+        isOpen={confirm.isOpen}
+        title={confirm.title}
+        message={confirm.message}
+        confirmText="Obriši"
+        cancelText="Otkaži"
+        onConfirm={confirm.onConfirm}
+        onCancel={() => setConfirm((prev) => ({ ...prev, isOpen: false }))}
+      />
     </div>
   );
 }
