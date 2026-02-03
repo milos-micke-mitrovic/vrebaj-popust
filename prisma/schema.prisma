@@ -64,3 +64,11 @@ model ScrapeRun {
   startedAt     DateTime @default(now())
   completedAt   DateTime?
 }
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  message   String
+  createdAt DateTime @default(now())
+}

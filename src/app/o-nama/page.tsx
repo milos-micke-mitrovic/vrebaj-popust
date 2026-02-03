@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { ContactForm } from "@/components/contact-form";
 import { getAllDeals, getUniqueStores } from "@/lib/deals";
 import { safeJsonLd } from "@/lib/json-ld";
 
@@ -156,9 +157,7 @@ export default function AboutPage() {
             <h2 className="text-xl font-semibold text-gray-900 dark:text-white mt-8 mb-4">
               Kontakt
             </h2>
-            <p className="text-gray-600 dark:text-gray-300">
-              Kontakt email je trenutno u pripremi. Uskoro ćemo omogućiti direktnu komunikaciju.
-            </p>
+            <ContactForm />
           </div>
         </article>
       </main>
