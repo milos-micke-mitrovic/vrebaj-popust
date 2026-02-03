@@ -54,7 +54,8 @@ async function fetchProductDetails(url: string, productName: string): Promise<Pr
     }
 
     // Extract breadcrumb text (e.g. "Muškarci > Odeća > Duksevi")
-    const breadcrumbItems = doc.querySelectorAll("ol.breadcrumb .breadcrumb-title");
+    // Some pages use <span class="breadcrumb-title">, others use plain <li><a>
+    const breadcrumbItems = doc.querySelectorAll("ol.breadcrumb li");
     const breadcrumbParts: string[] = [];
     for (const el of breadcrumbItems) {
       const text = el.textContent?.trim();
