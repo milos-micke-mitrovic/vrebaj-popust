@@ -70,5 +70,6 @@ model ContactMessage {
   name      String
   email     String
   message   String
+  read      Boolean  @default(false)
   createdAt DateTime @default(now())
 }

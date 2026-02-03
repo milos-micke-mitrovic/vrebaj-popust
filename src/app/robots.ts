@@ -8,6 +8,7 @@ export default function robots(): MetadataRoute.Robots {
         allow: ["/", "/ponuda/"], // Allow product pages for indexing
         disallow: [
           "/api/",
+          "/admin",
           "/_next/",
         ],
       },
