@@ -223,9 +223,12 @@ export function generateKeywords(parsed: ParsedFilter): string[] {
   const keywords: string[] = [];
 
   if (parsed.brand) {
-    keywords.push(`${parsed.brand.toLowerCase()} popust`);
-    keywords.push(`${parsed.brand.toLowerCase()} akcija`);
-    keywords.push(`${parsed.brand.toLowerCase()} srbija`);
+    const b = parsed.brand.toLowerCase();
+    keywords.push(`${b} popust`);
+    keywords.push(`${b} akcija`);
+    keywords.push(`${b} srbija`);
+    keywords.push(`${b} online kupovina`);
+    keywords.push(`${b} sniženje`);
   }
 
   if (parsed.category) {
@@ -233,18 +236,74 @@ export function generateKeywords(parsed: ParsedFilter): string[] {
     keywords.push(`${cat} popust`);
     keywords.push(`${cat} akcija`);
     keywords.push(`${cat} sniženje`);
+    keywords.push(`${cat} rasprodaja`);
+    keywords.push(`jeftino ${cat}`);
   }
 
   if (parsed.gender) {
     const g = parsed.gender === "muski" ? "muški" : parsed.gender === "zenski" ? "ženski" : "dečiji";
     keywords.push(`${g} sportska oprema`);
+    keywords.push(`${g} sportska odeća`);
+  }
+
+  if (parsed.store) {
+    const s = STORE_DISPLAY[parsed.store];
+    keywords.push(`${s} popust`);
+    keywords.push(`${s} akcija`);
   }
 
   if (parsed.brand && parsed.category) {
     keywords.push(`${parsed.brand.toLowerCase()} ${CATEGORY_DISPLAY[parsed.category]} popust`);
+    keywords.push(`${parsed.brand.toLowerCase()} ${CATEGORY_DISPLAY[parsed.category]} akcija`);
   }
 
+  if (parsed.store && parsed.brand) {
+    keywords.push(`${parsed.brand.toLowerCase()} ${STORE_DISPLAY[parsed.store]} popust`);
+  }
+
+  keywords.push("online kupovina", "srbija", "beograd", "novi sad");
+
   return keywords;
+}
+
+/**
+ * Generate intro text for filter pages (visible SEO content)
+ */
+export function generateIntroText(parsed: ParsedFilter): string {
+  const parts: string[] = [];
+
+  if (parsed.brand && parsed.category) {
+    const cat = CATEGORY_DISPLAY[parsed.category];
+    parts.push(`Pogledajte ${parsed.brand} ${cat} sa popustom preko 50%.`);
+    parts.push(`Pronađite ${cat} od brenda ${parsed.brand} po sniženim cenama u sportskim prodavnicama u Srbiji.`);
+  } else if (parsed.brand) {
+    parts.push(`Pogledajte ${parsed.brand} proizvode sa popustom preko 50%.`);
+    parts.push(`Pronađite sportsku opremu, obuću i odeću od brenda ${parsed.brand} po sniženim cenama u Srbiji.`);
+  } else if (parsed.category) {
+    const cat = CATEGORY_DISPLAY[parsed.category];
+    parts.push(`Pronađite ${cat} na popustu preko 50%.`);
+    parts.push(`Pregledajte ${cat} iz najvećih sportskih prodavnica u Srbiji po sniženim cenama.`);
+  } else if (parsed.store) {
+    const store = STORE_DISPLAY[parsed.store];
+    parts.push(`Pogledajte sve ponude iz prodavnice ${store} sa popustom preko 50%.`);
+    parts.push(`Pronađite sportsku opremu, obuću i odeću iz ${store} po sniženim cenama.`);
+  } else if (parsed.gender) {
+    const g = GENDER_DISPLAY[parsed.gender];
+    parts.push(`Pronađite sportsku opremu za ${g} sa popustom preko 50%.`);
+    parts.push(`Pregledajte ponude iz najvećih sportskih prodavnica u Srbiji.`);
+  }
+
+  if (parsed.gender && (parsed.brand || parsed.category)) {
+    const g = GENDER_DISPLAY[parsed.gender];
+    parts.push(`Filtrirana ponuda za ${g}.`);
+  }
+
+  if (parsed.store && (parsed.brand || parsed.category)) {
+    const store = STORE_DISPLAY[parsed.store];
+    parts.push(`Dostupno u prodavnici ${store}.`);
+  }
+
+  return parts.join(" ");
 }
 
 // Export constants for use elsewhere

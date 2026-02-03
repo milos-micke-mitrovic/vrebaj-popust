@@ -5,11 +5,13 @@ import { prisma } from "@/lib/db";
 import { DealsGrid } from "@/components/deals-grid";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { safeJsonLd } from "@/lib/json-ld";
 import {
   parseFilterSlug,
   generateSeoTitle,
   generateSeoDescription,
   generateKeywords,
+  generateIntroText,
   ParsedFilter,
 } from "@/lib/filter-parser";
 
@@ -25,6 +27,7 @@ export async function generateStaticParams() {
   const brands = ["nike", "adidas", "puma", "new-balance", "under-armour", "reebok", "converse", "fila", "champion", "vans", "skechers", "asics", "jordan", "the-north-face", "columbia", "hoka", "timberland", "lacoste", "tommy-hilfiger", "calvin-klein", "hummel", "umbro", "kappa", "ellesse", "diadora", "mizuno", "salomon", "crocs"];
   const categories = ["patike", "cipele", "cizme", "jakne", "trenerke", "majice", "duksevi", "sorcevi", "helanke"];
   const genders = ["muski", "zenski", "deciji"];
+  const stores = ["djak-sport", "planeta-sport", "sport-vision", "n-sport", "buzz", "office-shoes", "intersport", "tref-sport"];
 
   const params: { filter: string }[] = [];
 
@@ -32,6 +35,7 @@ export async function generateStaticParams() {
   brands.forEach(b => params.push({ filter: b }));
   categories.forEach(c => params.push({ filter: c }));
   genders.forEach(g => params.push({ filter: g }));
+  stores.forEach(s => params.push({ filter: s }));
 
   // Popular combinations: brand + category
   ["nike", "adidas", "puma"].forEach(brand => {
@@ -98,7 +102,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       },
     },
     alternates: {
-      canonical: `https://vrebajpopust.rs/ponude/${filter}`,
+      canonical: `https://www.vrebajpopust.rs/ponude/${filter}`,
     },
   };
 }
@@ -151,6 +155,7 @@ export default async function FilterPage({ params }: Props) {
 
   const title = generateSeoTitle(parsed);
   const description = generateSeoDescription(parsed);
+  const introText = generateIntroText(parsed);
 
   // Get just count and top deals for SEO schema
   const where = buildWhereClause(parsed);
@@ -224,17 +229,22 @@ export default async function FilterPage({ params }: Props) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(schema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }}
       />
 
       <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-950">
         <Header />
 
         <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6">
+          {introText && (
+            <p className="mb-4 text-sm text-gray-600 dark:text-gray-400 max-w-3xl">
+              {introText}
+            </p>
+          )}
           <Suspense
             fallback={
               <div className="py-12 text-center text-gray-500 dark:text-gray-400">Učitavanje...</div>

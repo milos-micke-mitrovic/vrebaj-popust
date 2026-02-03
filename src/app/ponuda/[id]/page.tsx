@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { getDealByIdAsync, getAllDealsAsync, STORE_INFO } from "@/lib/deals";
 import { getBrandInfo } from "@/lib/brand-descriptions";
+import { safeJsonLd } from "@/lib/json-ld";
 
 // Revalidate every 5 minutes
 export const revalidate = 300;
@@ -256,7 +257,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = `${deal.brand || ""} ${categoryText} ${genderText} na akciji u ${storeInfo.name}. Stara cena: ${formatPrice(deal.originalPrice)}, nova cena: ${formatPrice(deal.salePrice)}. Uštedi ${formatPrice(savings)}! Pronađi najveće sportske popuste u Srbiji.`.trim();
 
   const imageUrl = deal.imageUrl?.startsWith("/")
-    ? `https://vrebajpopust.rs${deal.imageUrl}`
+    ? `https://www.vrebajpopust.rs${deal.imageUrl}`
     : deal.imageUrl;
 
   return {
@@ -279,7 +280,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title: `${deal.name} - ${deal.discountPercent}% POPUST | VrebajPopust`,
       description,
-      url: `https://vrebajpopust.rs/ponuda/${id}`,
+      url: `https://www.vrebajpopust.rs/ponuda/${id}`,
       siteName: "VrebajPopust",
       images: imageUrl
         ? [
@@ -301,7 +302,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       images: imageUrl ? [imageUrl] : [],
     },
     alternates: {
-      canonical: `https://vrebajpopust.rs/ponuda/${id}`,
+      canonical: `https://www.vrebajpopust.rs/ponuda/${id}`,
     },
     robots: {
       index: true,  // Index product pages for long-tail SEO traffic
@@ -435,11 +436,11 @@ export default async function DealPage({ params }: Props) {
   const storeUrl = addUtmParams(storeInfo.url);
 
   const imageUrl = deal.imageUrl?.startsWith("/")
-    ? `https://vrebajpopust.rs${deal.imageUrl}`
+    ? `https://www.vrebajpopust.rs${deal.imageUrl}`
     : deal.imageUrl;
 
   // Fallback image for structured data (required by Google)
-  const schemaImageUrl = imageUrl || "https://vrebajpopust.rs/opengraph-image.jpeg";
+  const schemaImageUrl = imageUrl || "https://www.vrebajpopust.rs/logos/logo.png";
 
   // Generate a short SKU from deal ID (Google requires max ~50 chars)
   // Use hash of full ID to ensure uniqueness while keeping it short
@@ -465,7 +466,7 @@ export default async function DealPage({ params }: Props) {
     itemCondition: "https://schema.org/NewCondition",
     offers: {
       "@type": "Offer",
-      url: `https://vrebajpopust.rs/ponuda/${deal.id}`,
+      url: `https://www.vrebajpopust.rs/ponuda/${deal.id}`,
       price: deal.salePrice,
       priceCurrency: "RSD",
       availability: "https://schema.org/InStock",
@@ -476,6 +477,19 @@ export default async function DealPage({ params }: Props) {
         name: storeInfo.name,
         url: storeInfo.url,
       },
+      priceSpecification: [
+        {
+          "@type": "PriceSpecification",
+          price: deal.salePrice,
+          priceCurrency: "RSD",
+        },
+        {
+          "@type": "UnitPriceSpecification",
+          price: deal.originalPrice,
+          priceCurrency: "RSD",
+          priceType: "https://schema.org/ListPrice",
+        },
+      ],
     },
   };
 
@@ -488,19 +502,19 @@ export default async function DealPage({ params }: Props) {
         "@type": "ListItem",
         position: 1,
         name: "Ponude",
-        item: "https://vrebajpopust.rs/ponude",
+        item: "https://www.vrebajpopust.rs/ponude",
       },
       {
         "@type": "ListItem",
         position: 2,
         name: categoryText,
-        item: `https://vrebajpopust.rs${getCategoryFilterUrl(deal)}`,
+        item: `https://www.vrebajpopust.rs${getCategoryFilterUrl(deal)}`,
       },
       {
         "@type": "ListItem",
         position: 3,
         name: deal.name,
-        item: `https://vrebajpopust.rs/ponuda/${deal.id}`,
+        item: `https://www.vrebajpopust.rs/ponuda/${deal.id}`,
       },
     ],
   };
@@ -509,11 +523,11 @@ export default async function DealPage({ params }: Props) {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(productSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }}
       />
       <TrackProductView deal={deal} />
       <ScrollToTop />
@@ -733,7 +747,7 @@ export default async function DealPage({ params }: Props) {
                   <ProductWishlistButton deal={deal} />
                   <ShareButton
                     title={`${deal.name} - ${deal.discountPercent}% popust`}
-                    url={`https://vrebajpopust.rs/ponuda/${deal.id}`}
+                    url={`https://www.vrebajpopust.rs/ponuda/${deal.id}`}
                   />
                 </div>
               </div>

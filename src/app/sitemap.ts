@@ -13,6 +13,9 @@ const FILTER_PAGES = [
   "duksevi",
   "sorcevi",
   "helanke",
+  "pantalone",
+  "kosulje",
+  "kupaci",
   // Top Brands
   "nike",
   "adidas",
@@ -54,14 +57,19 @@ const FILTER_PAGES = [
   "n-sport",
   "buzz",
   "office-shoes",
+  "intersport",
   "tref-sport",
   // Combined filters (brand + gender, brand + category, category + gender)
   "nike-muski",
   "nike-zenski",
   "nike-patike",
+  "nike-duksevi",
+  "nike-jakne",
   "adidas-muski",
   "adidas-zenski",
   "adidas-patike",
+  "adidas-duksevi",
+  "adidas-jakne",
   "puma-muski",
   "puma-zenski",
   "puma-patike",
@@ -77,6 +85,13 @@ const FILTER_PAGES = [
   "helanke-zenski",
   "majice-muski",
   "majice-zenski",
+  // Store + brand combos
+  "djak-sport-nike",
+  "djak-sport-adidas",
+  "planeta-sport-nike",
+  "planeta-sport-adidas",
+  "sport-vision-nike",
+  "sport-vision-adidas",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -88,7 +103,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     {
       url: baseUrl,
       lastModified: now,
-      changeFrequency: "weekly",
+      changeFrequency: "daily",
       priority: 1.0,
     },
     {

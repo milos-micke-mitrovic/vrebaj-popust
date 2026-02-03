@@ -4,6 +4,7 @@ import { prisma } from "@/lib/db";
 import { DealsGrid } from "@/components/deals-grid";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
+import { safeJsonLd } from "@/lib/json-ld";
 
 // Revalidate every 5 minutes - pages auto-refresh with new data
 export const revalidate = 300;
@@ -151,15 +152,15 @@ export default async function PonudePage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(itemListSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionPageSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(collectionPageSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }}
       />
 
       <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-950">

@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { getAllDeals, getUniqueStores } from "@/lib/deals";
+import { safeJsonLd } from "@/lib/json-ld";
 
 export const metadata: Metadata = {
   title: "O nama | VrebajPopust",
@@ -43,6 +44,38 @@ export default function AboutPage() {
     },
   };
 
+  // FAQ structured data
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: [
+      {
+        "@type": "Question",
+        name: "Kako funkcioniše VrebajPopust?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: `Naš sistem svakodnevno automatski pretražuje ${stores.length} najvećih sportskih prodavnica u Srbiji i pronalazi proizvode sa popustima preko 50%. Trenutno pratimo preko ${deals.length} aktivnih ponuda.`,
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Zašto VrebajPopust?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "Ušteda vremena - sve ponude na jednom mestu. Samo pravi popusti - minimum 50% sniženja. Svakodnevno ažuriranje - uvek sveže ponude. Besplatno - bez registracije i skrivenih troškova.",
+        },
+      },
+      {
+        "@type": "Question",
+        name: "Da li je VrebajPopust prodavnica?",
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: "VrebajPopust nije prodavnica - mi samo prikupljamo i prikazujemo ponude iz drugih prodavnica. Sve kupovine se obavljaju direktno na sajtovima prodavnica. Cene i dostupnost proizvoda mogu se promeniti bez prethodne najave.",
+        },
+      },
+    ],
+  };
+
   // Breadcrumb structured data
   const breadcrumbSchema = {
     "@context": "https://schema.org",
@@ -67,11 +100,15 @@ export default function AboutPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(aboutSchema) }}
       />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(faqSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }}
       />
       <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-950">
         <Header />

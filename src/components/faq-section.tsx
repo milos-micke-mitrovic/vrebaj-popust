@@ -16,7 +16,7 @@ const FAQ_ITEMS: FAQItem[] = [
   {
     question: "Koje prodavnice pratite?",
     answer:
-      "Pratimo 7 najvećih sportskih prodavnica: Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz Sneakers, Office Shoes i Intersport. Svi proizvodi se ažuriraju svakodnevno.",
+      "Pratimo 8 najvećih sportskih prodavnica: Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz Sneakers, Office Shoes, Intersport i Tref Sport. Svi proizvodi se ažuriraju svakodnevno.",
   },
   {
     question: "Kako da kupim proizvod?",

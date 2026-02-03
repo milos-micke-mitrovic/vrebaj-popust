@@ -2,6 +2,7 @@ import { Metadata } from "next";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { CookiePreferences } from "@/components/cookie-preferences";
+import { safeJsonLd } from "@/lib/json-ld";
 
 export const metadata: Metadata = {
   title: "Politika privatnosti | VrebajPopust",
@@ -46,7 +47,7 @@ export default function PrivacyPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(breadcrumbSchema) }}
       />
       <div className="flex min-h-screen flex-col bg-gray-50 dark:bg-gray-950">
         <Header />

@@ -4,6 +4,7 @@ import { getAllDealsAsync } from "@/lib/deals";
 import { AppProviders } from "@/components/app-providers";
 import { DisableScrollRestoration } from "@/components/scroll-to-top";
 import { ServiceWorkerCleanup } from "@/components/sw-cleanup";
+import { safeJsonLd } from "@/lib/json-ld";
 import "./globals.css";
 import "@/styles/effects.css";
 
@@ -23,7 +24,7 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://vrebajpopust.rs"),
+  metadataBase: new URL("https://www.vrebajpopust.rs"),
   title: {
     default: "VrebajPopust | Najveći popusti preko 50% u Srbiji",
     template: "%s | VrebajPopust",
@@ -60,7 +61,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "sr_RS",
-    url: "https://vrebajpopust.rs",
+    url: "https://www.vrebajpopust.rs",
     siteName: "VrebajPopust",
     title: "VrebajPopust | Najveći popusti preko 50% u Srbiji",
     description:
@@ -92,7 +93,7 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://vrebajpopust.rs",
+    canonical: "https://www.vrebajpopust.rs",
   },
   category: "shopping",
   // Verification - add your codes when you have them
@@ -107,8 +108,8 @@ const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "VrebajPopust",
-  url: "https://vrebajpopust.rs",
-  logo: "https://vrebajpopust.rs/logos/logo.png",
+  url: "https://www.vrebajpopust.rs",
+  logo: "https://www.vrebajpopust.rs/logos/logo.png",
   description: "Pronađi najveće popuste preko 50% u Srbiji",
   foundingDate: "2024",
   areaServed: {
@@ -131,10 +132,11 @@ export default async function RootLayout({
   const availableDealIds = deals.map((deal) => deal.id);
 
   return (
-    <html lang="sr" dir="ltr" suppressHydrationWarning>
+    <html lang="sr-Latn" dir="ltr" suppressHydrationWarning>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
         {/* Preload hero image for faster LCP */}
         <link
           rel="preload"
@@ -159,11 +161,11 @@ export default async function RootLayout({
         {/* AI Search Optimization */}
         <meta name="ai-content-declaration" content="This website aggregates sports discounts from Serbian retailers. Content is factual and updated daily." />
         <meta name="ai-summary" content="VrebajPopust - Serbian sports discount aggregator. Find Nike, Adidas, Puma and more with 50%+ discounts from Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz, Office Shoes." />
-        <link rel="author" href="https://vrebajpopust.rs/o-nama" />
+        <link rel="author" href="https://www.vrebajpopust.rs/o-nama" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(organizationSchema),
+            __html: safeJsonLd(organizationSchema),
           }}
         />
       </head>

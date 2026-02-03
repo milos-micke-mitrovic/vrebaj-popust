@@ -20,7 +20,7 @@ const STORE_INFO: Record<Store, { name: string; logo: string; url: string }> = {
   djaksport: { name: "Djak Sport", logo: "/logos/djaksport.png", url: "https://www.djaksport.com" },
   planeta: { name: "Planeta Sport", logo: "/logos/planeta.png", url: "https://www.planetasport.rs" },
   sportvision: { name: "Sport Vision", logo: "/logos/sportvision.png", url: "https://www.sportvision.rs" },
-  nsport: { name: "N Sport", logo: "/logos/nsport.jpg", url: "https://www.n-sport.rs" },
+  nsport: { name: "N Sport", logo: "/logos/nsport.jpg", url: "https://www.n-sport.net" },
   buzz: { name: "Buzz", logo: "/logos/buzz.png", url: "https://www.buzzsneakers.rs" },
   officeshoes: { name: "Office Shoes", logo: "/logos/officeshoes.png", url: "https://www.officeshoes.rs" },
   intersport: { name: "Intersport", logo: "/logos/intersport.jpg", url: "https://www.intersport.rs" },
@@ -108,7 +108,7 @@ export function QuickViewModal({ deal, onClose }: QuickViewModalProps) {
 
   // Share functionality
   const handleShare = async () => {
-    const shareUrl = `https://vrebajpopust.rs/ponuda/${deal?.id}`;
+    const shareUrl = `https://www.vrebajpopust.rs/ponuda/${deal?.id}`;
     const shareTitle = `${deal?.name} - ${deal?.discountPercent}% popust`;
 
     if (navigator.share) {

@@ -1,0 +1,219 @@
+# VrebajPopust - Kompletna dokumentacija
+
+> VrebajPopust (https://www.vrebajpopust.rs) je besplatan sajt koji svakodnevno pretrazuje najvece sportske prodavnice u Srbiji i prikazuje samo proizvode sa popustom preko 50%.
+
+## Prodavnice koje pratimo (8 prodavnica)
+
+1. **Djak Sport** - djaksport.com - Jedna od najvecih sportskih prodavnica u Srbiji
+2. **Planeta Sport** - planetasport.rs - Velika sportska maloprodajna mreza
+3. **Sport Vision** - sportvision.rs - Regionalni lider u sportskoj maloprodaji
+4. **N Sport** - n-sport.net - Online sportska prodavnica
+5. **Buzz Sneakers** - buzzsneakers.rs - Specijalizovana prodavnica patika
+6. **Office Shoes** - officeshoes.rs - Prodavnica obuce
+7. **Intersport** - intersport.rs - Medjunarodna sportska maloprodaja
+8. **Tref Sport** - trefsport.rs - Sportska prodavnica sa fokusom na opremu
+
+## Kompletna lista brendova
+
+### Sportski brendovi
+Nike, Adidas, Puma, New Balance, Under Armour, Reebok, ASICS, Mizuno, Hoka, On Running, Skechers, Salomon, Merrell, Hummel, Umbro, Kappa, Lotto, Diadora
+
+### Lifestyle brendovi
+Converse, Vans, Fila, Champion, Ellesse, Jordan, Crocs, Birkenstock, Havaianas
+
+### Outdoor brendovi
+The North Face, Columbia, Salomon, Timberland, Merrell
+
+### Modni brendovi
+Tommy Hilfiger, Calvin Klein, Lacoste, Levi's, Guess, Superdry, G-Star RAW, Diesel, Replay, Jack & Jones, Wrangler
+
+### Teniski/specijalizovani brendovi
+Wilson, HEAD, Le Coq Sportif, Sergio Tacchini
+
+## Kompletna struktura kategorija
+
+### Obuca (obuca/)
+- patike - Sportske i lifestyle patike (Nike Air Max, Adidas Superstar, Puma RS-X...)
+- cipele - Cipele za svakodnevnu upotrebu
+- cizme - Zimske i jesenje cizme
+- baletanke - Baletanke za zene
+- papuce - Papuce za kucu i plazu
+- sandale - Letnje sandale
+- kopacke - Fudbalske kopacke
+
+### Odeca (odeca/)
+- jakne - Zimske, prolecne i jesenje jakne
+- prsluci - Sportski i lifestyle prsluci
+- duksevi - Duksevi sa kapuljacom i bez
+- bluze - Bluze i sako
+- majice - Kratke i duge majice, polo majice
+- topovi - Zenski topovi
+- pantalone - Sportske i casual pantalone
+- trenerke - Kompletne trenerke i donji delovi
+- helanke - Sportske helanke i tajice
+- sortevi - Sportski sorcevi
+- kupaci - Kupaci kostimi i sortevi
+- haljine - Sportske haljine
+- kosulje - Kosulje i bluze
+- kombinezoni - Sportski kombinezoni
+- donji-ves - Donji ves, bokserice
+
+### Oprema (oprema/)
+- torbe - Sportske torbe i ranci
+- novcanici - Novcanici
+- carape - Sportske carape
+- kape - Kape i kacketi
+- salovi - Salovi
+- rukavice - Sportske rukavice
+- lopte - Fudbalske, kosarkaske i teniske lopte
+
+## URL struktura i filteri
+
+### Osnovna navigacija
+- https://www.vrebajpopust.rs - Pocetna (top 10 ponuda, prodavnice, FAQ)
+- https://www.vrebajpopust.rs/ponude - Sve ponude (filtrirajte po brendu, kategoriji, polu, velicini, ceni)
+- https://www.vrebajpopust.rs/o-nama - O sajtu
+
+### SEO filter stranice (primeri)
+Format: /ponude/{filter}
+Moze se kombinovati: /ponude/{brend}-{kategorija}, /ponude/{pol}-{brend}, itd.
+
+#### Po brendu
+- /ponude/nike - Nike proizvodi na popustu
+- /ponude/adidas - Adidas proizvodi na popustu
+- /ponude/puma - Puma proizvodi na popustu
+- /ponude/new-balance - New Balance proizvodi na popustu
+- /ponude/under-armour - Under Armour proizvodi na popustu
+- /ponude/jordan - Jordan proizvodi na popustu
+- /ponude/the-north-face - The North Face proizvodi na popustu
+- /ponude/converse - Converse proizvodi na popustu
+- /ponude/vans - Vans proizvodi na popustu
+- /ponude/fila - Fila proizvodi na popustu
+- /ponude/champion - Champion proizvodi na popustu
+- /ponude/skechers - Skechers proizvodi na popustu
+- /ponude/asics - ASICS proizvodi na popustu
+- /ponude/columbia - Columbia proizvodi na popustu
+- /ponude/hoka - Hoka proizvodi na popustu
+- /ponude/timberland - Timberland proizvodi na popustu
+- /ponude/tommy-hilfiger - Tommy Hilfiger proizvodi na popustu
+- /ponude/calvin-klein - Calvin Klein proizvodi na popustu
+- /ponude/lacoste - Lacoste proizvodi na popustu
+- /ponude/levis - Levi's proizvodi na popustu
+- /ponude/hummel - Hummel proizvodi na popustu
+- /ponude/crocs - Crocs proizvodi na popustu
+- /ponude/salomon - Salomon proizvodi na popustu
+- /ponude/mizuno - Mizuno proizvodi na popustu
+
+#### Po kategoriji
+- /ponude/patike - Patike na popustu
+- /ponude/cipele - Cipele na popustu
+- /ponude/cizme - Cizme na popustu
+- /ponude/jakne - Jakne na popustu
+- /ponude/duksevi - Duksevi na popustu
+- /ponude/majice - Majice na popustu
+- /ponude/trenerke - Trenerke na popustu
+- /ponude/sorcevi - Sorcevi na popustu
+- /ponude/helanke - Helanke na popustu
+- /ponude/pantalone - Pantalone na popustu
+
+#### Po polu
+- /ponude/muski - Muska oprema na popustu
+- /ponude/zenski - Zenska oprema na popustu
+- /ponude/deciji - Decija oprema na popustu
+
+#### Po prodavnici
+- /ponude/djak-sport - Djak Sport ponude
+- /ponude/planeta-sport - Planeta Sport ponude
+- /ponude/sport-vision - Sport Vision ponude
+- /ponude/n-sport - N Sport ponude
+- /ponude/buzz - Buzz ponude
+- /ponude/office-shoes - Office Shoes ponude
+- /ponude/intersport - Intersport ponude
+- /ponude/tref-sport - Tref Sport ponude
+
+#### Kombinovani filteri (primeri)
+- /ponude/nike-patike - Nike patike na popustu
+- /ponude/adidas-patike - Adidas patike na popustu
+- /ponude/nike-jakne - Nike jakne na popustu
+- /ponude/nike-duksevi - Nike duksevi na popustu
+- /ponude/nike-muski - Nike muska oprema
+- /ponude/nike-zenski - Nike zenska oprema
+- /ponude/adidas-muski - Adidas muska oprema
+- /ponude/patike-muski - Muske patike na popustu
+- /ponude/patike-zenski - Zenske patike na popustu
+- /ponude/patike-deciji - Decije patike na popustu
+- /ponude/jakne-muski - Muske jakne na popustu
+- /ponude/helanke-zenski - Zenske helanke na popustu
+- /ponude/djak-sport-nike - Nike u Djak Sport prodavnici
+
+### Stranice proizvoda
+Format: /ponuda/{id}
+Primer: /ponuda/djaksport-nike-air-max-90-muski-patike-12345
+
+Svaka stranica proizvoda sadrzi:
+- Ime proizvoda
+- Brend
+- Originalnu cenu i cenu na popustu
+- Procenat popusta
+- Dostupne velicine
+- Sliku proizvoda
+- Link ka prodavnici za kupovinu
+- Opis brenda
+- Slicne ponude
+
+## Filteri na stranici /ponude
+
+Korisnici mogu filtrirati po:
+- **Kategorija** - Obuca, Odeca, Oprema (sa podkategorijama)
+- **Brend** - 80+ brendova
+- **Pol** - Muski, Zenski, Deciji
+- **Velicina** - Obuca (28-46), Odeca (XS-3XL)
+- **Cena** - Od/do u RSD
+- **Popust** - 50%+, 60%+, 70%+, 80%+
+- **Prodavnica** - 8 prodavnica
+
+## Cesto postavljana pitanja
+
+### Sta je VrebajPopust?
+VrebajPopust je besplatan sajt koji prati cene u najvecim sportskim prodavnicama u Srbiji i prikazuje samo proizvode sa popustom preko 50%. Pomaze kupcima da pronadju najvece ponude bez pretrage vise sajtova.
+
+### Gde mogu da nadjem najvece popuste na patike u Srbiji?
+Na VrebajPopust.rs mozete pronaci patike sa popustom preko 50% iz 8 sportskih prodavnica: Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz Sneakers, Office Shoes, Intersport i Tref Sport.
+
+### Koliko cesto se azuriraju ponude?
+Ponude se azuriraju svakodnevno. Automatski skeneri pretrazuju prodavnice svakih 24 sata.
+
+### Koje brendove pratite?
+Pratimo preko 80 sportskih brendova ukljucujuci Nike, Adidas, Puma, New Balance, Reebok, Converse, Vans, ASICS, Under Armour, Fila, Champion, The North Face, Skechers, Jordan, Columbia, Hoka, Timberland, Lacoste, Tommy Hilfiger, Calvin Klein i mnoge druge.
+
+### Koje prodavnice pratite?
+8 najvecih sportskih prodavnica u Srbiji: Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz Sneakers, Office Shoes, Intersport i Tref Sport.
+
+### Da li je kupovina sigurna?
+VrebajPopust samo prikazuje ponude. Kupovina se vrsi direktno na sajtu prodavnice. Sve prodavnice su proverene i pouzdane kompanije sa dugogodisnjim iskustvom na srpskom trzistu.
+
+### Koji je minimalni popust?
+Prikazujemo samo proizvode sa popustom od 50% ili vise. Svaki proizvod na sajtu ima bar duplo nizu cenu od originalne. Prosecni popust je oko 60%.
+
+### Da li VrebajPopust ima mobilnu aplikaciju?
+VrebajPopust je progresivna web aplikacija (PWA) koju mozete instalirati na telefon direktno iz pretrazivaca. Radi kao nativna aplikacija bez potrebe za preuzimanjem iz prodavnice aplikacija.
+
+### Kako da sacuvam omiljene ponude?
+Kliknite na ikonu srca na bilo kom proizvodu da ga dodate u omiljene. Omiljene ponude se cuvaju lokalno u pretrazivacu.
+
+### Kako mogu da pretrazim proizvode?
+Koristite filtere na stranici /ponude. Mozete filtrirati po kategoriji, brendu, polu, velicini, ceni i prodavnici. Takodje mozete koristiti SEO filtere (npr. /ponude/nike-patike).
+
+### Da li su cene pouzdane?
+Da, cene se automatski azuriraju svakodnevno direktno sa sajtova prodavnica. Prikazujemo originalnu cenu, cenu na popustu i procenat ustede.
+
+## Tehnicke informacije
+
+- Sajt: https://www.vrebajpopust.rs
+- Sitemap: https://www.vrebajpopust.rs/sitemap.xml
+- Jezik: Srpski latinica (sr-Latn)
+- Valuta: RSD (Srpski dinar)
+- Trziste: Srbija
+- Lokacija: Srbija
+- Osnovan: 2024
+- Azuriranje: Svakodnevno (automatski skeneri)
