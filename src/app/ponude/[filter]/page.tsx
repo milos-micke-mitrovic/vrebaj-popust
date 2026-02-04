@@ -11,7 +11,6 @@ import {
   generateSeoTitle,
   generateSeoDescription,
   generateKeywords,
-  generateIntroText,
   ParsedFilter,
 } from "@/lib/filter-parser";
 
@@ -155,7 +154,6 @@ export default async function FilterPage({ params }: Props) {
 
   const title = generateSeoTitle(parsed);
   const description = generateSeoDescription(parsed);
-  const introText = generateIntroText(parsed);
 
   // Get just count and top deals for SEO schema
   const where = buildWhereClause(parsed);
@@ -240,11 +238,6 @@ export default async function FilterPage({ params }: Props) {
         <Header />
 
         <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6">
-          {introText && (
-            <p className="mb-4 text-sm text-gray-600 dark:text-gray-400 max-w-3xl">
-              {introText}
-            </p>
-          )}
           <Suspense
             fallback={
               <div className="py-12 text-center text-gray-500 dark:text-gray-400">Učitavanje...</div>
@@ -256,7 +249,7 @@ export default async function FilterPage({ params }: Props) {
               initialGenders={parsed.gender ? [parsed.gender] : undefined}
               initialStores={parsed.store ? [parsed.store] : undefined}
               seoTitle={title}
-              seoSubtitle="Proizvodi sa popustima preko 50%"
+              seoSubtitle={description}
               filterPageSlug={filter}
             />
           </Suspense>
