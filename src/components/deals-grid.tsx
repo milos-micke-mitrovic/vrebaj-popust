@@ -458,9 +458,9 @@ export function DealsGrid({
                 )}
               </div>
               {seoTitle && searchParams.toString() === "" && (
-                <div className="flex-shrink-0 text-right">
-                  <h1 className="text-lg font-bold text-gray-900 dark:text-white">{seoTitle}</h1>
-                  {seoSubtitle && <p className="text-sm text-gray-500 dark:text-gray-400">{seoSubtitle}</p>}
+                <div className="flex-shrink min-w-0 text-right max-w-xs sm:max-w-md lg:max-w-lg">
+                  <h1 className="text-lg font-bold text-gray-900 dark:text-white truncate">{seoTitle}</h1>
+                  {seoSubtitle && <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">{seoSubtitle}</p>}
                 </div>
               )}
             </div>
