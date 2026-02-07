@@ -28,7 +28,8 @@ export function mapCategory(text: string): CategoryPath | null {
 
   // ── Early exclusions: catch items that would false-match other categories ──
   // e.g. "sock holder znojnica" would match carape via "sock"
-  if (t.includes("znojnic") || t.includes("headband")) return null;
+  // e.g. "ulosci za patike" would match patike via "patik"
+  if (t.includes("znojnic") || t.includes("headband") || t.includes("ulosc")) return null;
 
   // ── Footwear (specific before general) ──
 
