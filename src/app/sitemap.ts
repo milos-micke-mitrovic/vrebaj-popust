@@ -92,6 +92,19 @@ const FILTER_PAGES = [
   "planeta-sport-adidas",
   "sport-vision-nike",
   "sport-vision-adidas",
+  // Additional brand + category combos (based on search trends)
+  "new-balance-patike",
+  "jordan-patike",
+  "the-north-face-jakne",
+  "columbia-jakne",
+  "puma-duksevi",
+  "under-armour-majice",
+  "reebok-patike",
+  "converse-patike",
+  "vans-patike",
+  "skechers-patike",
+  "hoka-patike",
+  "asics-patike",
 ];
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {

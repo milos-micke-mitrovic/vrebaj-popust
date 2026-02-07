@@ -208,12 +208,27 @@ export function generateSeoTitle(parsed: ParsedFilter): string {
  * Generate SEO description from parsed filter
  */
 export function generateSeoDescription(parsed: ParsedFilter): string {
-  const brandText = parsed.brand || "Sportski proizvodi";
-  const categoryText = parsed.category ? CATEGORY_DISPLAY[parsed.category] : "oprema";
-  const genderText = parsed.gender ? ` za ${GENDER_DISPLAY[parsed.gender]}` : "";
-  const storeText = parsed.store ? ` u prodavnici ${STORE_DISPLAY[parsed.store]}` : "";
+  // Build the main subject
+  const brandText = parsed.brand || "";
+  const categoryText = parsed.category ? CATEGORY_DISPLAY[parsed.category] : "";
+  const genderText = parsed.gender ? `za ${GENDER_DISPLAY[parsed.gender]}` : "";
+  const storeText = parsed.store ? `u ${STORE_DISPLAY[parsed.store]}` : "";
 
-  return `${brandText} ${categoryText}${genderText}${storeText} sa popustima i akcijama preko 50%. Pronađi najbolje ponude na sportsku opremu u Srbiji.`;
+  // Combine parts intelligently
+  const parts: string[] = [];
+  if (brandText) parts.push(brandText);
+  if (categoryText) parts.push(categoryText);
+  if (genderText) parts.push(genderText);
+  if (storeText) parts.push(storeText);
+
+  const subject = parts.length > 0 ? parts.join(" ") : "Sportska oprema";
+
+  // For brand-only pages, mention stores to improve CTR
+  const storesMention = parsed.brand && !parsed.store
+    ? " Pratimo Djak Sport, Planeta Sport, Sport Vision i druge prodavnice."
+    : "";
+
+  return `${subject} sa sniženjima preko 50%. Uporedi cene i pronađi najveće popuste u Srbiji.${storesMention}`;
 }
 
 /**
