@@ -399,69 +399,69 @@ export function DealsGrid({
             </select>
           </div>
 
-          {/* Active Filters Row with SEO Title */}
-          {(hasActiveFilters || (seoTitle && searchParams.toString() === "")) && (
-            <div className="mb-4 flex items-start justify-between gap-4">
-              <div className="flex flex-wrap gap-2 flex-1">
-                {search && (
-                  <Badge variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => { onInteraction(); setSearch(""); setCurrentPage(1); }}>
-                    Pretraga: &quot;{search}&quot; ✕
+          {/* SEO Title Block */}
+          {seoTitle && searchParams.toString() === "" && (
+            <div className="mb-4">
+              <h1 className="text-xl font-bold text-gray-900 dark:text-white">{seoTitle}</h1>
+              {seoSubtitle && <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{seoSubtitle}</p>}
+            </div>
+          )}
+
+          {/* Active Filters Row */}
+          {hasActiveFilters && (
+            <div className="mb-4 flex flex-wrap gap-2">
+              {search && (
+                <Badge variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => { onInteraction(); setSearch(""); setCurrentPage(1); }}>
+                  Pretraga: &quot;{search}&quot; ✕
+                </Badge>
+              )}
+              {selectedStores.map((store) => (
+                <Badge key={store} variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => toggleStore(store)}>
+                  {STORE_NAMES[store]} ✕
+                </Badge>
+              ))}
+              {selectedGenders.map((gender) => (
+                <Badge key={gender} variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => toggleGender(gender)}>
+                  {GENDER_NAMES[gender]} ✕
+                </Badge>
+              ))}
+              {selectedCategories.map((category) => (
+                <Badge key={category} variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => toggleCategory(category)}>
+                  {CATEGORY_NAMES[category]} ✕
+                </Badge>
+              ))}
+              {selectedCategoryPaths.map((path) => {
+                const [, sub] = path.split("/") as [MainCategory, Subcategory];
+                return (
+                  <Badge key={path} variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => toggleCategoryPath(path)}>
+                    {SUBCATEGORY_NAMES[sub]} ✕
                   </Badge>
-                )}
-                {selectedStores.map((store) => (
-                  <Badge key={store} variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => toggleStore(store)}>
-                    {STORE_NAMES[store]} ✕
-                  </Badge>
-                ))}
-                {selectedGenders.map((gender) => (
-                  <Badge key={gender} variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => toggleGender(gender)}>
-                    {GENDER_NAMES[gender]} ✕
-                  </Badge>
-                ))}
-                {selectedCategories.map((category) => (
-                  <Badge key={category} variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => toggleCategory(category)}>
-                    {CATEGORY_NAMES[category]} ✕
-                  </Badge>
-                ))}
-                {selectedCategoryPaths.map((path) => {
-                  const [, sub] = path.split("/") as [MainCategory, Subcategory];
-                  return (
-                    <Badge key={path} variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => toggleCategoryPath(path)}>
-                      {SUBCATEGORY_NAMES[sub]} ✕
-                    </Badge>
-                  );
-                })}
-                {selectedBrands.map((brand) => (
-                  <Badge key={brand} variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => toggleBrand(brand)}>
-                    {brand} ✕
-                  </Badge>
-                ))}
-                {selectedSizes.map((size) => (
-                  <Badge key={size} variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => toggleSize(size)}>
-                    Vel. {size} ✕
-                  </Badge>
-                ))}
-                {minDiscount > 50 && (
-                  <Badge variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => { onInteraction(); setMinDiscount(50); setCurrentPage(1); }}>
-                    Min {minDiscount}% ✕
-                  </Badge>
-                )}
-                {minPrice !== null && (
-                  <Badge variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => { onInteraction(); setMinPrice(null); setCurrentPage(1); }}>
-                    Od {minPrice.toLocaleString()} RSD ✕
-                  </Badge>
-                )}
-                {maxPrice !== null && (
-                  <Badge variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => { onInteraction(); setMaxPrice(null); setCurrentPage(1); }}>
-                    Do {maxPrice.toLocaleString()} RSD ✕
-                  </Badge>
-                )}
-              </div>
-              {seoTitle && searchParams.toString() === "" && (
-                <div className="flex-shrink min-w-0 text-right max-w-xs sm:max-w-md lg:max-w-lg">
-                  <h1 className="text-lg font-bold text-gray-900 dark:text-white truncate">{seoTitle}</h1>
-                  {seoSubtitle && <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2">{seoSubtitle}</p>}
-                </div>
+                );
+              })}
+              {selectedBrands.map((brand) => (
+                <Badge key={brand} variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => toggleBrand(brand)}>
+                  {brand} ✕
+                </Badge>
+              ))}
+              {selectedSizes.map((size) => (
+                <Badge key={size} variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => toggleSize(size)}>
+                  Vel. {size} ✕
+                </Badge>
+              ))}
+              {minDiscount > 50 && (
+                <Badge variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => { onInteraction(); setMinDiscount(50); setCurrentPage(1); }}>
+                  Min {minDiscount}% ✕
+                </Badge>
+              )}
+              {minPrice !== null && (
+                <Badge variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => { onInteraction(); setMinPrice(null); setCurrentPage(1); }}>
+                  Od {minPrice.toLocaleString()} RSD ✕
+                </Badge>
+              )}
+              {maxPrice !== null && (
+                <Badge variant="secondary" className="cursor-pointer px-3 py-1.5 text-sm" onClick={() => { onInteraction(); setMaxPrice(null); setCurrentPage(1); }}>
+                  Do {maxPrice.toLocaleString()} RSD ✕
+                </Badge>
               )}
             </div>
           )}
