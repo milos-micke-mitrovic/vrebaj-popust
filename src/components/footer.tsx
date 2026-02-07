@@ -17,9 +17,9 @@ export function Footer() {
     <footer className="border-t bg-white dark:bg-gray-900 dark:border-gray-800">
       <div className="mx-auto max-w-7xl px-4 py-10">
         {/* Main footer content */}
-        <div className="flex flex-wrap justify-between gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Logo and description */}
-          <div className="w-full sm:w-auto sm:max-w-[280px]">
+          <div>
             <Link href="/" className="group flex items-center gap-1.5">
               <Image src="/logos/logo.png" alt="" width={40} height={40} className="h-10 w-10" />
               <span className="text-xl font-bold">
@@ -28,20 +28,14 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-3 text-sm text-gray-600 dark:text-gray-400">
-              Pronađi najveće sportske popuste preko 50% u Srbiji.
-              Ažuriramo ponude svakodnevno.
+              Pronađi najveće sportske popuste preko 50% u Srbiji. Pratimo cene u 8 prodavnica i ažuriramo ponude svakodnevno.
             </p>
           </div>
 
           {/* Quick links */}
           <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white">Linkovi</h3>
+            <h3 className="font-semibold text-gray-900 dark:text-white">Informacije</h3>
             <ul className="mt-3 space-y-2 text-sm">
-              <li>
-                <Link href="/" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
-                  Početna
-                </Link>
-              </li>
               <li>
                 <Link href="/ponude" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
                   Sve ponude
@@ -52,67 +46,36 @@ export function Footer() {
                   O nama
                 </Link>
               </li>
+              <li>
+                <Link href="/privatnost" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
+                  Politika privatnosti
+                </Link>
+              </li>
+              <li>
+                <Link href="/uslovi" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
+                  Uslovi korišćenja
+                </Link>
+              </li>
             </ul>
-          </div>
-
-          {/* Categories */}
-          <div>
-            <h3 className="font-semibold text-gray-900 dark:text-white">Kategorije</h3>
-            <div className="mt-3 flex gap-4 text-sm">
-              <ul className="space-y-2">
-                <li>
-                  <Link href="/ponude/patike" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
-                    Patike
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/ponude/cipele" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
-                    Cipele
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/ponude/jakne" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
-                    Jakne
-                  </Link>
-                </li>
-              </ul>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="/ponude/duksevi" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
-                    Duksevi
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/ponude/trenerke" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
-                    Trenerke
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/ponude/majice" className="text-gray-600 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
-                    Majice
-                  </Link>
-                </li>
-              </ul>
-            </div>
           </div>
 
           {/* Stores we track */}
           <div>
             <h3 className="font-semibold text-gray-900 dark:text-white">Pratimo prodavnice</h3>
-            <div className="mt-3 flex flex-wrap gap-3 max-w-[200px]">
+            <div className="mt-3 flex flex-wrap gap-3">
               {STORES.map((store) => (
                 <Link
                   key={store.name}
                   href={`/ponude/${store.slug}`}
-                  title={`Pogledaj ponude - ${store.name}`}
+                  title={store.name}
                 >
                   <Image
                     src={store.logo}
                     alt={store.name}
-                    width={60}
-                    height={24}
-                    style={{ height: '24px', width: 'auto' }}
-                    className="grayscale hover:grayscale-0 transition-all dark:brightness-90 dark:hover:brightness-100"
+                    width={56}
+                    height={22}
+                    style={{ height: '22px', width: 'auto' }}
+                    className="grayscale hover:grayscale-0 opacity-60 hover:opacity-100 transition-all dark:brightness-90 dark:hover:brightness-100"
                   />
                 </Link>
               ))}
@@ -126,18 +89,10 @@ export function Footer() {
             <p className="text-xs text-gray-500 dark:text-gray-400">
               © {new Date().getFullYear()} VrebajPopust. Sva prava zadržana.
             </p>
-            <div className="flex items-center gap-4 text-xs">
-              <Link href="/privatnost" className="text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
-                Privatnost
-              </Link>
-              <Link href="/uslovi" className="text-gray-500 hover:text-red-500 dark:text-gray-400 dark:hover:text-red-400">
-                Uslovi korišćenja
-              </Link>
-            </div>
+            <p className="text-xs text-gray-500 dark:text-gray-400 text-center sm:text-right">
+              Cene se ažuriraju automatski. VrebajPopust nije odgovoran za tačnost cena na sajtovima prodavaca.
+            </p>
           </div>
-          <p className="mt-4 text-xs text-gray-500 dark:text-gray-400 text-center">
-            Cene se ažuriraju automatski. VrebajPopust nije odgovoran za tačnost cena na sajtovima prodavaca.
-          </p>
         </div>
       </div>
     </footer>
