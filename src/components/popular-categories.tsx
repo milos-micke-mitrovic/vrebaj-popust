@@ -1,10 +1,11 @@
 import Link from "next/link";
+import Image from "next/image";
 
 const FEATURED_BRANDS = [
-  { slug: "nike", label: "Nike", color: "from-orange-500 to-red-600" },
-  { slug: "adidas", label: "Adidas", color: "from-blue-600 to-indigo-700" },
-  { slug: "puma", label: "Puma", color: "from-red-500 to-pink-600" },
-  { slug: "new-balance", label: "New Balance", color: "from-gray-600 to-gray-800" },
+  { slug: "nike", label: "Nike", logo: "/logos/nike.svg", color: "from-gray-900 to-gray-700" },
+  { slug: "adidas", label: "Adidas", logo: "/logos/adidas.svg", color: "from-blue-900 to-blue-700" },
+  { slug: "puma", label: "Puma", logo: "/logos/puma.svg", color: "from-red-900 to-red-700" },
+  { slug: "new-balance", label: "New Balance", logo: "/logos/new-balance.svg", color: "from-gray-800 to-gray-600" },
 ];
 
 const OTHER_BRANDS = [
@@ -19,12 +20,12 @@ const OTHER_BRANDS = [
 ];
 
 const CATEGORIES = [
-  { slug: "patike", label: "Patike", icon: "👟" },
-  { slug: "jakne", label: "Jakne", icon: "🧥" },
-  { slug: "duksevi", label: "Duksevi", icon: "👕" },
-  { slug: "trenerke", label: "Trenerke", icon: "🩳" },
-  { slug: "majice", label: "Majice", icon: "👔" },
-  { slug: "cizme", label: "Čizme", icon: "👢" },
+  { slug: "patike", label: "Patike", image: "/images/categories/sneakers.png" },
+  { slug: "jakne", label: "Jakne", image: "/images/categories/jacket.png" },
+  { slug: "duksevi", label: "Duksevi", image: "/images/categories/hoodie.png" },
+  { slug: "trenerke", label: "Trenerke", image: "/images/categories/tracksuit.png" },
+  { slug: "majice", label: "Majice", image: "/images/categories/tshirt.png" },
+  { slug: "cizme", label: "Čizme", image: "/images/categories/boots.png" },
 ];
 
 const POPULAR_SEARCHES = [
@@ -50,22 +51,32 @@ export function PopularCategories() {
           </p>
         </div>
 
-        {/* Featured Brands - Large Cards */}
+        {/* Featured Brands - Large Cards with Logos */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           {FEATURED_BRANDS.map((brand) => (
             <Link
               key={brand.slug}
               href={`/ponude/${brand.slug}`}
-              className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${brand.color} p-6 md:p-8 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]`}
+              className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${brand.color} p-6 md:p-8 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]`}
             >
-              <div className="relative z-10">
-                <span className="text-xl md:text-2xl font-bold">{brand.label}</span>
-                <span className="block mt-1 text-sm text-white/80 group-hover:text-white transition-colors">
+              {/* Logo */}
+              <div className="flex items-center justify-center h-16 md:h-20 mb-4">
+                <Image
+                  src={brand.logo}
+                  alt={brand.label}
+                  width={140}
+                  height={70}
+                  className="object-contain w-[100px] md:w-[120px] h-auto opacity-90 group-hover:opacity-100 transition-opacity"
+                />
+              </div>
+              {/* CTA */}
+              <div className="text-center">
+                <span className="text-sm text-white/70 group-hover:text-white transition-colors">
                   Pogledaj ponude →
                 </span>
               </div>
               {/* Decorative circle */}
-              <div className="absolute -right-4 -bottom-4 w-24 h-24 rounded-full bg-white/10" />
+              <div className="absolute -right-8 -bottom-8 w-32 h-32 rounded-full bg-white/5" />
             </Link>
           ))}
         </div>
@@ -83,16 +94,24 @@ export function PopularCategories() {
           ))}
         </div>
 
-        {/* Categories - Icon Cards */}
+        {/* Categories - Image Cards */}
         <div className="grid grid-cols-3 md:grid-cols-6 gap-3 mb-10">
           {CATEGORIES.map((cat) => (
             <Link
               key={cat.slug}
               href={`/ponude/${cat.slug}`}
-              className="flex flex-col items-center gap-2 p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-red-300 hover:bg-red-50 dark:hover:border-red-800 dark:hover:bg-red-900/20 transition-colors group"
+              className="group relative overflow-hidden rounded-xl aspect-square shadow-md hover:shadow-lg transition-all duration-300"
             >
-              <span className="text-2xl group-hover:scale-110 transition-transform">{cat.icon}</span>
-              <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{cat.label}</span>
+              <Image
+                src={cat.image}
+                alt={cat.label}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
+              />
+              <div className="absolute inset-0 bg-black/40 group-hover:bg-black/50 transition-all duration-300" />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-sm md:text-base font-semibold text-white drop-shadow-lg">{cat.label}</span>
+              </div>
             </Link>
           ))}
         </div>

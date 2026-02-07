@@ -44,7 +44,7 @@ export function StoresCarousel({ stores }: StoresCarouselProps) {
               <Link
                 key={store}
                 href={`/ponude/${slug}`}
-                className="group flex flex-col items-center justify-center p-6 bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 hover:border-red-200 dark:hover:border-red-800 hover:shadow-lg transition-all duration-300"
+                className="group flex flex-col items-center justify-center p-6 bg-gray-100 dark:bg-gray-700 rounded-2xl border border-gray-200 dark:border-gray-600 hover:border-red-300 dark:hover:border-red-700 hover:shadow-lg transition-all duration-300"
               >
                 <div className="w-full h-10 relative flex items-center justify-center mb-3">
                   <Image
