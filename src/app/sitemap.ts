@@ -155,13 +155,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Product pages - all active deals for long-tail SEO
   // These capture searches like "Nike Air Max 90 popust" etc.
+  // Exclude legacy URL format products (old scraper used full URL in ID)
   const deals = await getAllDealsAsync();
-  const productPages: MetadataRoute.Sitemap = deals.map((deal) => ({
-    url: `${baseUrl}/ponuda/${deal.id}`,
-    lastModified: deal.scrapedAt ? new Date(deal.scrapedAt) : now,
-    changeFrequency: "daily" as const,
-    priority: 0.6,
-  }));
+  const productPages: MetadataRoute.Sitemap = deals
+    .filter((deal) => !deal.id.includes("-www-") && !deal.id.includes("-com-") && !deal.id.includes("-rs-"))
+    .map((deal) => ({
+      url: `${baseUrl}/ponuda/${deal.id}`,
+      lastModified: deal.scrapedAt ? new Date(deal.scrapedAt) : now,
+      changeFrequency: "daily" as const,
+      priority: 0.6,
+    }));
 
   return [...mainPages, ...filterPages, ...productPages];
 }

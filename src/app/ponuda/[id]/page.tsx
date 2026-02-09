@@ -226,9 +226,31 @@ async function getRelevantDealsFromUrl(productId: string, limit: number = 8): Pr
 // This speeds up builds significantly since we have 4000-10000 products
 // Pages are still indexed via sitemap, just rendered dynamically on first visit
 
+// Detect legacy URL format (old scraper used full URL including domain in ID)
+// These should return 410 Gone to tell Google to remove them from index
+function isLegacyUrlFormat(id: string): boolean {
+  // Old format: djaksport-www-djaksport-com-... (includes domain in ID)
+  // New format: djaksport-12345 (just store + numeric product ID)
+  return id.includes("-www-") || id.includes("-com-") || id.includes("-rs-");
+}
+
 // Generate metadata for SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
+
+  // Legacy URL format - these are old scraper URLs that should not be indexed
+  // Return noindex to tell Google to remove them from search results
+  if (isLegacyUrlFormat(id)) {
+    return {
+      title: "Stranica nije dostupna | VrebajPopust",
+      description: "Ova stranica više nije dostupna.",
+      robots: {
+        index: false,
+        follow: false,
+      },
+    };
+  }
+
   const deal = await getDealByIdAsync(id);
 
   if (!deal) {
@@ -313,6 +335,42 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function DealPage({ params }: Props) {
   const { id } = await params;
+
+  // Legacy URL format - show simple redirect page
+  // These are old scraper URLs with full domain in ID (e.g., djaksport-www-djaksport-com-...)
+  if (isLegacyUrlFormat(id)) {
+    return (
+      <>
+        <ScrollToTop />
+        <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
+          <Header />
+          <main className="mx-auto max-w-2xl px-4 py-24 text-center">
+            <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gray-100 dark:bg-gray-800">
+              <svg className="h-10 w-10 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
+              Ova stranica više ne postoji
+            </h1>
+            <p className="mt-4 text-gray-600 dark:text-gray-400">
+              Link koji ste pratili je zastareo. Pregledajte naše aktuelne ponude.
+            </p>
+            <div className="mt-8">
+              <Link
+                href="/ponude"
+                className="rounded-lg bg-red-500 px-6 py-3 font-medium text-white hover:bg-red-600 transition-colors"
+              >
+                Pogledaj sve ponude →
+              </Link>
+            </div>
+          </main>
+          <Footer />
+        </div>
+      </>
+    );
+  }
+
   const deal = await getDealByIdAsync(id);
 
   // Product not available - show friendly page with relevant alternatives
