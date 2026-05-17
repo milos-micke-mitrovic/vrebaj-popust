@@ -1,6 +1,11 @@
 import { MetadataRoute } from "next";
 import { getAllDealsAsync } from "@/lib/deals";
 
+// Regenerate sitemap hourly so lastmod reflects fresh DB state.
+// Without this, Next.js statically generates at build time and freezes lastmod
+// timestamps, which signals to Google that the catalog never changes.
+export const revalidate = 3600;
+
 // SEO filter pages - categories, brands, genders, stores, and combined filters
 const FILTER_PAGES = [
   // Categories
