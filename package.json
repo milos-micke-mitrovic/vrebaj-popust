@@ -18,7 +18,8 @@
     "scrape:details": "npx tsx src/scraper/detail-scraper.ts",
     "scrape:details:djak": "npx tsx src/scraper/detail-scraper.ts djaksport",
     "scrape:intersport": "npx tsx src/scraper/stores/intersport.ts",
-    "scrape:trefsport": "npx tsx src/scraper/stores/trefsport.ts"
+    "scrape:trefsport": "npx tsx src/scraper/stores/trefsport.ts",
+    "scrape:health-check": "npx tsx src/scraper/health-check.ts"
   },
   "dependencies": {
     "@next/third-parties": "^16.1.1",
