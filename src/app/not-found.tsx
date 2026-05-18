@@ -1,5 +1,11 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Header } from "@/components/header";
+
+export const metadata: Metadata = {
+  title: "Stranica nije pronađena",
+  robots: { index: false, follow: true },
+};
 
 export default function NotFound() {
   return (
