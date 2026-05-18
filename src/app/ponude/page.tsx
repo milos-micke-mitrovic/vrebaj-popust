@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Link from "next/link";
 import { Suspense } from "react";
 import { prisma } from "@/lib/db";
 import { DealsGrid } from "@/components/deals-grid";
@@ -22,7 +23,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   // SEO landing pages are at /ponude/[filter] instead
   if (hasFilters) {
     return {
-      title: "Sve ponude | VrebajPopust - Popusti preko 50%",
+      title: "Sve ponude - Popusti preko 50%",
       description:
         "Pregledaj sve aktivne popuste i akcije preko 50% na DjakSport, Planeta Sport, Sport Vision i drugim prodavnicama u Srbiji.",
       robots: {
@@ -168,6 +169,20 @@ export default async function PonudePage() {
 
         {/* Main content */}
         <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6">
+          {/* Crawlable links to top deals — DealsGrid below is client-rendered
+              so non-JS crawlers and link equity see nothing without this. */}
+          <nav aria-label="Najpopularnije ponude" className="sr-only">
+            <ul>
+              {topDeals.map((deal) => (
+                <li key={deal.id}>
+                  <Link href={`/ponuda/${deal.id}`}>
+                    {[deal.brand, deal.name].filter(Boolean).join(" ")}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
           <Suspense
             fallback={
               <div className="py-12 text-center text-gray-500 dark:text-gray-400">Učitavanje...</div>

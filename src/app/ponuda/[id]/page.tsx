@@ -1,5 +1,6 @@
 import { Metadata } from "next";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { getDealByIdAsync, getAllDealsAsync, STORE_INFO } from "@/lib/deals";
 import { getBrandInfo } from "@/lib/brand-descriptions";
 import { safeJsonLd } from "@/lib/json-ld";
@@ -238,12 +239,30 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const foundBrand = brands.find(b => idLower.includes(b));
     const brandText = foundBrand ? `${foundBrand.charAt(0).toUpperCase() + foundBrand.slice(1)} ` : "";
 
+    // Legacy djaksport URL format (old scraper embedded full domain in the id).
+    // GSC data shows these drive most search traffic — keep indexable and serve
+    // the helpful alternatives page on a stable, self-canonical URL.
+    const isLegacyDjaksportUrl =
+      id.includes("-www-") || id.includes("-com-") || id.includes("-rs-");
+
+    if (isLegacyDjaksportUrl) {
+      return {
+        title: `${brandText}Ponuda više nije dostupna`,
+        description: `Ova ${brandText.toLowerCase()}ponuda više nije dostupna. Pogledajte druge aktuelne ${brandText.toLowerCase()}popuste preko 50% na sportsku opremu u Srbiji.`,
+        alternates: {
+          canonical: `https://www.vrebajpopust.rs/ponuda/${id}`,
+        },
+      };
+    }
+
+    // Non-legacy unknown id → DealPage will call notFound(); set noindex defensively
+    // so transient crawls never index a 404.
     return {
-      title: `${brandText}Ponuda više nije dostupna | VrebajPopust`,
+      title: `${brandText}Ponuda više nije dostupna`,
       description: `Ova ${brandText.toLowerCase()}ponuda više nije dostupna. Pogledajte druge aktuelne ${brandText.toLowerCase()}popuste preko 50% na sportsku opremu u Srbiji.`,
       robots: {
-        index: false,  // Don't index unavailable products
-        follow: true,  // But follow links to alternatives
+        index: false,
+        follow: true,
       },
     };
   }
@@ -253,7 +272,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const categoryText = getCategoryDisplayName(deal);
 
   const savings = deal.originalPrice - deal.salePrice;
-  const title = `${deal.name} - ${deal.discountPercent}% popust | VrebajPopust`;
+  const title = `${deal.name} - ${deal.discountPercent}% popust`;
   const description = `${deal.brand || ""} ${categoryText} ${genderText} na akciji u ${storeInfo.name}. Stara cena: ${formatPrice(deal.originalPrice)}, nova cena: ${formatPrice(deal.salePrice)}. Uštedi ${formatPrice(savings)}! Pronađi najveće sportske popuste u Srbiji.`.trim();
 
   const imageUrl = deal.imageUrl?.startsWith("/")
@@ -317,6 +336,15 @@ export default async function DealPage({ params }: Props) {
 
   // Product not available - show friendly page with relevant alternatives
   if (!deal) {
+    // Truly unknown IDs (not the legacy djaksport format that still drives traffic)
+    // → real 404. Returning 200 with "alternatives" content for these creates a
+    // soft-404 trap that pollutes GSC and wastes crawl budget.
+    const isLegacyDjaksportUrl =
+      id.includes("-www-") || id.includes("-com-") || id.includes("-rs-");
+    if (!isLegacyDjaksportUrl) {
+      notFound();
+    }
+
     // Extract brand/category/gender info from URL for personalized messaging
     const urlInfo = extractInfoFromUrl(id);
     const relevantDeals = await getRelevantDealsFromUrl(id, 8);
@@ -439,8 +467,9 @@ export default async function DealPage({ params }: Props) {
     ? `https://www.vrebajpopust.rs${deal.imageUrl}`
     : deal.imageUrl;
 
-  // Fallback image for structured data (required by Google)
-  const schemaImageUrl = imageUrl || "https://www.vrebajpopust.rs/logos/logo.png";
+  // Strip cache-busting query strings for Google Shopping schema — Google prefers stable URLs.
+  const stableImageUrl = imageUrl ? imageUrl.split("?")[0] : null;
+  const schemaImageUrl = stableImageUrl || "https://www.vrebajpopust.rs/logos/logo.png";
 
   // Generate a short SKU from deal ID (Google requires max ~50 chars)
   // Use hash of full ID to ensure uniqueness while keeping it short

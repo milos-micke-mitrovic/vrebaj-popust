@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { prisma } from "@/lib/db";
@@ -71,7 +72,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   if (!parsed.isValid) {
     return {
-      title: "Stranica nije pronađena | VrebajPopust",
+      title: "Stranica nije pronađena",
     };
   }
 
@@ -80,7 +81,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const keywords = generateKeywords(parsed);
 
   return {
-    title: `${title} | VrebajPopust`,
+    title,
     description,
     keywords,
     openGraph: {
@@ -238,6 +239,23 @@ export default async function FilterPage({ params }: Props) {
         <Header />
 
         <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6">
+          {/* Server-rendered h1 — DealsGrid (client) renders its own visible heading;
+              this one is hidden but guarantees the h1 is in initial HTML for crawlers. */}
+          <h1 className="sr-only">{title}</h1>
+
+          {/* Crawlable links to top deals — DealsGrid below is client-rendered. */}
+          <nav aria-label="Najpopularnije ponude" className="sr-only">
+            <ul>
+              {topDeals.map((deal) => (
+                <li key={deal.id}>
+                  <Link href={`/ponuda/${deal.id}`}>
+                    {[deal.brand, deal.name].filter(Boolean).join(" ")}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </nav>
+
           <Suspense
             fallback={
               <div className="py-12 text-center text-gray-500 dark:text-gray-400">Učitavanje...</div>
