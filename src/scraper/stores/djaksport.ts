@@ -9,7 +9,12 @@ puppeteer.use(StealthPlugin());
 
 const STORE: Store = "djaksport";
 const BASE_URL = "https://www.djaksport.com";
-const SALE_URL = `${BASE_URL}/najveci-popusti`;
+// Combined men+women on-sale listing — Djak removed the dedicated /najveci-popusti
+// landing in early 2026, and AJAX pagination via ?shopbyAjax=1 is now blocked by
+// Cloudflare (initial page.goto solves the JS challenge but XHR from within doesn't
+// carry cf_clearance). Full page.goto per page keeps the clearance intact.
+const SALE_URL = `${BASE_URL}/muskarci/ds_muskarci-ds_zene`;
+const SALE_QUERY = "am_on_sale=1";
 const MIN_DISCOUNT = 50;
 const MAX_PAGES = 150;
 
@@ -126,7 +131,10 @@ function parseUrlInfo(url: string, name: string): UrlInfo {
         categories.push(mainCat + "/" + subCat);
       }
     } else if (mainCat) {
-      categories.push(mainCat);
+      // New (post-Feb-2026) URL structure is flat — /muskarci/PRODUCT-SLUG with no
+      // category subpath. Fall back to extracting category from the product name.
+      const cat = mapCategory(name);
+      if (cat) categories.push(cat);
     }
   } else {
     // Fallback: detect gender from product name
@@ -161,41 +169,20 @@ async function launchBrowser(): Promise<Browser> {
 }
 
 async function fetchPageProducts(page: Page, pageNum: number): Promise<FetchResult> {
-  const url = `${SALE_URL}?shopbyAjax=1&p=${pageNum}`;
+  const url = `${SALE_URL}?${SALE_QUERY}&p=${pageNum}`;
+  await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
+  // Wait for the product grid to render; bail quickly if there is none.
+  try {
+    await page.waitForSelector(".item.product.product-item", { timeout: 8000 });
+  } catch {
+    return { products: [], hasMore: false };
+  }
 
   return page.evaluate(`
     (async function() {
       try {
-        const response = await fetch('${url}', {
-          method: 'GET',
-          credentials: 'include',
-          headers: {
-            'Accept': 'application/json, text/html, */*',
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        });
-
-        if (!response.ok) {
-          return { products: [], hasMore: false };
-        }
-
-        var text = await response.text();
-
-        // Parse JSON response to get HTML
-        var html = text;
-        try {
-          var jsonData = JSON.parse(text);
-          html = jsonData.categoryProducts || text;
-        } catch (e) {
-          // Not JSON, use as HTML
-        }
-
-        // Parse the HTML
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, 'text/html');
-
         var results = [];
-        var items = doc.querySelectorAll('.item.product.product-item');
+        var items = document.querySelectorAll('.item.product.product-item');
 
         items.forEach(function(el) {
           // Get product ID
@@ -300,9 +287,10 @@ async function scrapeDjakSport(): Promise<void> {
     const page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
 
-    // Navigate to page to establish cookies
-    console.log("Loading main page to establish session...");
-    await page.goto(SALE_URL, {
+    // Warm-up navigation: gives Cloudflare's JS challenge time to mint a
+    // cf_clearance cookie that subsequent fast page.goto calls can reuse.
+    console.log("Warming up Cloudflare session...");
+    await page.goto(`${SALE_URL}?${SALE_QUERY}`, {
       waitUntil: "networkidle2",
       timeout: 60000,
     });
