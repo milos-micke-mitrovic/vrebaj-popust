@@ -332,13 +332,10 @@ async function scrapeDjakSport(): Promise<void> {
         if (product.discountPercent >= MIN_DISCOUNT) {
           const { gender, categories } = parseUrlInfo(product.url, product.name);
 
-          if (!product.sizes || product.sizes.length === 0) {
-            // Only skip footwear/clothing with no sizes (out of stock)
-            if (categories.some(c => c.startsWith("obuca/") || c.startsWith("odeca/"))) {
-              console.log(`Skipping (no sizes): ${product.name.substring(0, 60)}`);
-              continue;
-            }
-          }
+          // Don't filter by sizes here — post-Feb-2026 Djak template doesn't expose
+          // sizes in the listing markup, so checking would drop real deals. The
+          // detail scraper visits each product and deletes items that are genuinely
+          // out of stock (footwear/clothing with no sizes after detail check).
 
           // Extract brand using server-side logic (handles multi-word brands, aliases, filters genders/categories)
           const brand = extractBrandFromName(product.name);

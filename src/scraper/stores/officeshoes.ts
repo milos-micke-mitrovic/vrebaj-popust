@@ -7,9 +7,13 @@ puppeteer.use(StealthPlugin());
 
 const STORE: Store = "officeshoes";
 const BASE_URL = "https://www.officeshoes.rs";
+// URL path now includes the sort segment, but the site no longer actually
+// sorts by discount when discount_desc is set. We keep the URL for stability
+// and iterate every page, filtering by computed discount instead of relying
+// on the early-exit-on-low-discount optimization that used to work.
 const SALE_PATH = "/sale/0/48/discount_desc/";
 const MIN_DISCOUNT = 50;
-const MAX_PAGES = 15; // Safety limit
+const MAX_PAGES = 80;
 
 interface RawProduct {
   name: string;
@@ -152,9 +156,9 @@ async function scrapeOfficeShoes(): Promise<void> {
     await page.setViewport({ width: 1920, height: 1080 });
 
     let currentPage = 0;
-    let foundBelowMinDiscount = false;
+    let consecutiveEmpty = 0;
 
-    while (currentPage < MAX_PAGES && !foundBelowMinDiscount) {
+    while (currentPage < MAX_PAGES && consecutiveEmpty < 2) {
       const pageNum = currentPage + 1;
       const pageUrl = `${BASE_URL}${SALE_PATH}?page=${pageNum}`;
 
@@ -179,9 +183,15 @@ async function scrapeOfficeShoes(): Promise<void> {
       console.log(`Found ${products.length} products on page ${pageNum}`);
 
       if (products.length === 0) {
-        console.log("No products on page, stopping");
-        break;
+        consecutiveEmpty++;
+        if (consecutiveEmpty >= 2) {
+          console.log("Two empty pages in a row, stopping");
+          break;
+        }
+        currentPage++;
+        continue;
       }
+      consecutiveEmpty = 0;
 
       if (currentPage === 0 && products.length > 0) {
         console.log("Sample product:", JSON.stringify(products[0], null, 2));
@@ -203,12 +213,9 @@ async function scrapeOfficeShoes(): Promise<void> {
         const discountPercent =
           product.discountPercent || calcDiscount(originalPrice, salePrice);
 
-        // Since sorted by discount desc, stop when we hit < MIN_DISCOUNT
-        if (discountPercent < MIN_DISCOUNT) {
-          console.log(`Reached product with ${discountPercent}% discount, stopping`);
-          foundBelowMinDiscount = true;
-          break;
-        }
+        // Skip individual products below threshold (sort is no longer reliable, so
+        // we filter per product rather than stopping the whole scan).
+        if (discountPercent < MIN_DISCOUNT) continue;
 
         await upsertDeal({
           id: generateId(product.url),
@@ -230,7 +237,7 @@ async function scrapeOfficeShoes(): Promise<void> {
       currentPage++;
 
       // Small delay between pages
-      if (!foundBelowMinDiscount && currentPage < MAX_PAGES) {
+      if (currentPage < MAX_PAGES) {
         await sleep(1500 + Math.random() * 1000);
       }
     }

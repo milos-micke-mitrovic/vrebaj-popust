@@ -304,6 +304,27 @@ jobs:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 180
 
+  scrape-djaksport-details:
+    runs-on: ubuntu-latest
+    needs: scrape-djaksport
+    if: always()
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 9
+      - run: pnpm install
+      - run: pnpm prisma generate
+      - run: npx puppeteer browsers install chrome
+      - name: Run DjakSport Details
+        run: pnpm tsx src/scraper/stores/djaksport-details.ts
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        timeout-minutes: 180
+
   # Fails the workflow (and triggers the standard GHA email) when any list-scraper
   # silently produces 0 deals or throws errors. Runs after the list jobs only —
   # we don't wait for details since this signal is most useful within the hour.
