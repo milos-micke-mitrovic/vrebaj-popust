@@ -60,13 +60,20 @@ async function extractDjakSportDetails(page: Page, dealName: string = ""): Promi
     }
 
     const sizes: string[] = [];
-    // Target only size swatches, not color swatches
-    const sizeElements = document.querySelectorAll(".swatch-attribute.size .swatch-option.text");
-    sizeElements.forEach((el) => {
-      const size = el.getAttribute("data-option-label") || el.textContent?.trim();
-      if (size && size.length <= 5 && /^[A-Za-z0-9.\/]+$/.test(size)) {
-        if (!sizes.includes(size)) sizes.push(size);
-      }
+    // Target size swatches only (skip color/material). Djak post-Feb-2026 dropped
+    // the `.swatch-attribute.size` wrapper; size containers are now identified by
+    // an aria-labelledby that references a "size" label id. Try both structures.
+    const sizeContainers = new Set<Element>();
+    document.querySelectorAll(".swatch-attribute.size").forEach((el) => sizeContainers.add(el));
+    document.querySelectorAll(".swatch-attribute-options[aria-labelledby*='size']").forEach((el) => sizeContainers.add(el));
+
+    sizeContainers.forEach((container) => {
+      container.querySelectorAll(".swatch-option.text").forEach((el) => {
+        const size = el.getAttribute("data-option-label") || el.textContent?.trim();
+        if (size && size.length <= 5 && /^[A-Za-z0-9.\/]+$/.test(size)) {
+          if (!sizes.includes(size)) sizes.push(size);
+        }
+      });
     });
 
     let description: string | null = null;
