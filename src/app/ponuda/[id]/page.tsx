@@ -233,36 +233,29 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const deal = await getDealByIdAsync(id);
 
   if (!deal) {
-    // Try to extract brand from URL for better SEO on unavailable pages
-    const idLower = id.toLowerCase();
-    const brands = ["nike", "adidas", "puma", "reebok", "converse", "jordan", "asics"];
-    const foundBrand = brands.find(b => idLower.includes(b));
-    const brandText = foundBrand ? `${foundBrand.charAt(0).toUpperCase() + foundBrand.slice(1)} ` : "";
-
     // Legacy djaksport URL format (old scraper embedded full domain in the id).
     // GSC data shows these drive most search traffic — keep indexable and serve
     // the helpful alternatives page on a stable, self-canonical URL.
     const isLegacyDjaksportUrl =
       id.includes("-www-") || id.includes("-com-") || id.includes("-rs-");
 
-    if (isLegacyDjaksportUrl) {
-      return {
-        title: `${brandText}Ponuda više nije dostupna`,
-        description: `Ova ${brandText.toLowerCase()}ponuda više nije dostupna. Pogledajte druge aktuelne ${brandText.toLowerCase()}popuste preko 50% na sportsku opremu u Srbiji.`,
-        alternates: {
-          canonical: `https://www.vrebajpopust.rs/ponuda/${id}`,
-        },
-      };
+    if (!isLegacyDjaksportUrl) {
+      // Truly unknown id → 404. Call notFound() here (not just in the page) so
+      // Next.js sets HTTP 404 status; calling only in the page leaves status 200.
+      notFound();
     }
 
-    // Non-legacy unknown id → DealPage will call notFound(); set noindex defensively
-    // so transient crawls never index a 404.
+    // Try to extract brand from URL for better SEO on unavailable pages
+    const idLower = id.toLowerCase();
+    const brands = ["nike", "adidas", "puma", "reebok", "converse", "jordan", "asics"];
+    const foundBrand = brands.find(b => idLower.includes(b));
+    const brandText = foundBrand ? `${foundBrand.charAt(0).toUpperCase() + foundBrand.slice(1)} ` : "";
+
     return {
       title: `${brandText}Ponuda više nije dostupna`,
       description: `Ova ${brandText.toLowerCase()}ponuda više nije dostupna. Pogledajte druge aktuelne ${brandText.toLowerCase()}popuste preko 50% na sportsku opremu u Srbiji.`,
-      robots: {
-        index: false,
-        follow: true,
+      alternates: {
+        canonical: `https://www.vrebajpopust.rs/ponuda/${id}`,
       },
     };
   }
