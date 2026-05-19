@@ -29,6 +29,7 @@ interface ProductDetails {
   sizes: string[];
   proizvod: string;
   pol: string;
+  detailImageUrl: string | null;
 }
 
 async function extractProductDetails(page: Page): Promise<ProductDetails> {
@@ -65,7 +66,13 @@ async function extractProductDetails(page: Page): Promise<ProductDetails> {
         }
       });
 
-      return { sizes: sizes, proizvod: proizvod, pol: pol };
+      // Detail image (high-res from gallery). Djak pages have no separate textual
+      // product description — the Specifikacija table is the only descriptive block.
+      var detailImageUrl = null;
+      var imgEl = document.querySelector('.gallery-placeholder img, .product.media img, main img.product-image-photo');
+      if (imgEl) detailImageUrl = imgEl.src || null;
+
+      return { sizes: sizes, proizvod: proizvod, pol: pol, detailImageUrl: detailImageUrl };
     })()
   `) as Promise<ProductDetails>;
 }
@@ -122,6 +129,7 @@ async function scrapeDjakSportDetails(): Promise<void> {
           sizes: details.sizes,
           ...(categories && { categories }),
           ...(gender && { gender }),
+          ...(details.detailImageUrl && { detailImageUrl: details.detailImageUrl }),
         });
 
         processed++;

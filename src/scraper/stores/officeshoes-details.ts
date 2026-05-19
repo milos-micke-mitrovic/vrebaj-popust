@@ -29,6 +29,8 @@ interface ProductDetails {
   productType: string | null; // e.g., "Ženske patike"
   tags: string[];
   sizes: string[];
+  description: string | null;
+  detailImageUrl: string | null;
 }
 
 async function extractProductDetails(page: Page): Promise<ProductDetails> {
@@ -37,7 +39,9 @@ async function extractProductDetails(page: Page): Promise<ProductDetails> {
       var result = {
         productType: null,
         tags: [],
-        sizes: []
+        sizes: [],
+        description: null,
+        detailImageUrl: null
       };
 
       // Extract from "Informacije o proizvodu" section
@@ -90,6 +94,23 @@ async function extractProductDetails(page: Page): Promise<ProductDetails> {
             result.sizes.push(size);
           }
         });
+      }
+
+      // Brand description (Officeshoes pages have a brand blurb in "O brendu", not a
+      // per-product description). Still useful as page content for SEO.
+      var descEl = document.querySelector('.content-about .brandinfo-text p');
+      if (descEl) {
+        var descText = (descEl.textContent || '').trim();
+        if (descText) result.description = descText;
+      }
+
+      // High-res product image from CDN. Avoid /brandlogos/ paths.
+      var imgEl = document.querySelector("img[src*='/big/']");
+      if (imgEl) {
+        var src = imgEl.src || '';
+        if (src && src.indexOf('brandlogo') === -1) {
+          result.detailImageUrl = src;
+        }
       }
 
       return result;
@@ -171,11 +192,13 @@ async function scrapeOfficeShoeDetails(): Promise<void> {
           }
         }
 
-        // Update deal in database (only update categories/gender if we found values)
+        // Update deal in database (only update fields where we found values)
         await updateDealDetails(deal.url, {
           sizes: details.sizes,
           ...(categories.length > 0 && { categories }),
           ...(gender && { gender }),
+          ...(details.description && { description: details.description }),
+          ...(details.detailImageUrl && { detailImageUrl: details.detailImageUrl }),
         });
 
         processed++;
