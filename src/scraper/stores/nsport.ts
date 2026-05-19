@@ -1,3 +1,4 @@
+import { createHash } from "crypto";
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
@@ -44,15 +45,20 @@ function calcDiscount(original: number, sale: number): number {
 }
 
 function generateId(url: string): string {
-  // Use URL path only (without domain) for deterministic IDs
+  // Use URL path only (without domain) for deterministic, human-readable IDs.
+  // Append a short hash of the full URL to guarantee uniqueness — n-sport has
+  // long product slugs (e.g. converse-chuck-taylor-...-crafted-laces.html vs
+  // ...-crafted-suede.html) that previously collided at the 80-char truncation
+  // and caused daily Prisma upsert errors on the unique-id constraint.
   const pathOnly = url
-    .replace(/https?:\/\/[^\/]+/, "")  // Remove domain completely
-    .replace(/\.html?$/i, "")  // Remove .html or .htm extension
+    .replace(/https?:\/\/[^\/]+/, "")
+    .replace(/\.html?$/i, "")
     .replace(/[^a-zA-Z0-9]/g, "-")
-    .replace(/-+/g, "-")  // Collapse multiple dashes
-    .replace(/^-|-$/g, "")  // Trim leading/trailing dashes
-    .slice(0, 80);
-  return `${STORE}-${pathOnly}`;
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 70);
+  const hash = createHash("md5").update(url).digest("hex").slice(0, 8);
+  return `${STORE}-${pathOnly}-${hash}`;
 }
 
 function sleep(ms: number): Promise<void> {
