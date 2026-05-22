@@ -284,9 +284,10 @@ async function scrapeNSport(): Promise<void> {
   console.log(`Scraping ${PROMO_PAGES.length} promo pages`);
   console.log(`Min discount: ${MIN_DISCOUNT}%`);
 
-  const browser = await launchBrowser();
+  let browser: Browser | null = null;
 
   try {
+    browser = await launchBrowser();
     const page = await browser.newPage();
     await page.setViewport({ width: 1920, height: 1080 });
 
@@ -403,24 +404,32 @@ async function scrapeNSport(): Promise<void> {
       }
     }
     } // end for promoPage
+  } catch (err) {
+    // Catches fatal errors like browser.launch() failing or unhandled exceptions
+    // outside the per-page try/catch — without this, the finally below could not
+    // run because the throw would propagate before logScrapeRun.
+    const message = err instanceof Error ? err.message : String(err);
+    errors.push(`fatal: ${message}`);
+    console.error("Fatal error:", message);
   } finally {
-    await browser.close();
+    if (browser) {
+      try { await browser.close(); } catch { /* ignore */ }
+    }
+    // Always log the run — even a totally failed run is signal for the health-check.
+    try {
+      await logScrapeRun(STORE, totalScraped, totalDeals, errors);
+      await cleanupStaleProducts(STORE, scrapeStartTime, totalDeals);
+    } catch (logErr) {
+      console.error("Failed to log scrape run:", logErr instanceof Error ? logErr.message : logErr);
+    }
+    console.log("\n=== Scraping Complete ===");
+    console.log(`Total scraped: ${totalScraped}`);
+    console.log(`Deals with ${MIN_DISCOUNT}%+ discount: ${totalDeals}`);
+    if (errors.length > 0) {
+      console.log(`Errors: ${errors.length}`);
+    }
+    await disconnect();
   }
-
-  // Log scrape run
-  await logScrapeRun(STORE, totalScraped, totalDeals, errors);
-
-  // Clean up stale products (only if we found enough products)
-  await cleanupStaleProducts(STORE, scrapeStartTime, totalDeals);
-
-  console.log("\n=== Scraping Complete ===");
-  console.log(`Total scraped: ${totalScraped}`);
-  console.log(`Deals with ${MIN_DISCOUNT}%+ discount: ${totalDeals}`);
-  if (errors.length > 0) {
-    console.log(`Errors: ${errors.length}`);
-  }
-
-  await disconnect();
 }
 
 // Run if executed directly

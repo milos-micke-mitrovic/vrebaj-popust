@@ -1,3 +1,4 @@
+import { createHash } from "crypto";
 import { JSDOM } from "jsdom";
 import { upsertDeal, logScrapeRun, disconnect, cleanupStaleProducts, Store, Gender } from "../db-writer";
 import { mapCategory } from "../../lib/category-mapper";
@@ -41,14 +42,17 @@ function calcDiscount(original: number, sale: number): number {
 }
 
 function generateId(url: string): string {
+  // Hash suffix prevents id-collision when two different URLs share the first
+  // ~70 chars of slug — same root cause that broke nsport upserts daily.
   const pathOnly = url
     .replace(/https?:\/\/[^\/]+/, "")
     .replace(/\.html?$/i, "")
     .replace(/[^a-zA-Z0-9]/g, "-")
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "")
-    .slice(0, 80);
-  return `${STORE}-${pathOnly}`;
+    .slice(0, 70);
+  const hash = createHash("md5").update(url).digest("hex").slice(0, 8);
+  return `${STORE}-${pathOnly}-${hash}`;
 }
 
 function sleep(ms: number): Promise<void> {
