@@ -1,3 +1,4 @@
+import { createHash } from "crypto";
 import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
@@ -36,9 +37,14 @@ interface FetchResult {
 }
 
 function generateId(productId: string, url: string): string {
-  // Use Magento product ID if available (deterministic)
+  // Always append a short hash of the full URL to guarantee uniqueness. The
+  // post-Feb-2026 Djak listing reuses the same Magento product-item-info id
+  // across colour/variant tiles that have distinct URLs, so keying on productId
+  // alone collided on the unique-id constraint and aborted the whole run with a
+  // Prisma P2002 upsert error (mirrors the fix applied to the other stores).
+  const hash = createHash("md5").update(url).digest("hex").slice(0, 8);
   if (productId) {
-    return `${STORE}-${productId}`;
+    return `${STORE}-${productId}-${hash}`;
   }
   // Fallback: use URL path only (without domain)
   const pathOnly = url
@@ -47,8 +53,8 @@ function generateId(productId: string, url: string): string {
     .replace(/[^a-zA-Z0-9]/g, "-")
     .replace(/-+/g, "-")  // Collapse multiple dashes
     .replace(/^-|-$/g, "")  // Trim leading/trailing dashes
-    .slice(0, 80);
-  return `${STORE}-${pathOnly}`;
+    .slice(0, 70);
+  return `${STORE}-${pathOnly}-${hash}`;
 }
 
 function sleep(ms: number): Promise<void> {
