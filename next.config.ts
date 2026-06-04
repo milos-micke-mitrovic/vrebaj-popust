@@ -143,6 +143,37 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "www.officeshoes.rs",
       },
+      // OfficeShoes actually serves product images from cdn.officeshoes.ws.
+      {
+        protocol: "https",
+        hostname: "cdn.officeshoes.ws",
+      },
+      {
+        protocol: "https",
+        hostname: "*.officeshoes.ws",
+      },
+      // Bare planetasport.rs apex — `*.planetasport.rs` does not match a host
+      // with no subdomain, which is the host Planeta stores on its deals.
+      {
+        protocol: "https",
+        hostname: "planetasport.rs",
+      },
+      {
+        protocol: "https",
+        hostname: "www.intersport.rs",
+      },
+      {
+        protocol: "https",
+        hostname: "*.intersport.rs",
+      },
+      {
+        protocol: "https",
+        hostname: "trefsport.com",
+      },
+      {
+        protocol: "https",
+        hostname: "*.trefsport.com",
+      },
     ],
   },
 };
