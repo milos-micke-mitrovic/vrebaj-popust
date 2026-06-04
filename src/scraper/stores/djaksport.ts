@@ -10,12 +10,14 @@ puppeteer.use(StealthPlugin());
 
 const STORE: Store = "djaksport";
 const BASE_URL = "https://www.djaksport.com";
-// Combined men+women on-sale listing — Djak removed the dedicated /najveci-popusti
-// landing in early 2026, and AJAX pagination via ?shopbyAjax=1 is now blocked by
-// Cloudflare (initial page.goto solves the JS challenge but XHR from within doesn't
-// carry cf_clearance). Full page.goto per page keeps the clearance intact.
-const SALE_URL = `${BASE_URL}/muskarci/ds_muskarci-ds_zene`;
-const SALE_QUERY = "am_on_sale=1";
+// Djak's discount catalogue lives under a ROTATING seasonal campaign slug. As of
+// mid-2026 it is /mid-season-sale (~4600 products); earlier it was /najveci-popusti,
+// then /muskarci/ds_muskarci-ds_zene?am_on_sale=1 (which Djak shrank to a ~250-item
+// stub, collapsing the scrape to near-zero). This slug WILL change again when Djak
+// rotates campaigns — the health-check catches it (deal count craters) when it does.
+// AJAX pagination (?shopbyAjax=1) is Cloudflare-blocked, so we do a full page.goto
+// per ?p=N page, which keeps the cf_clearance cookie intact.
+const SALE_URL = `${BASE_URL}/mid-season-sale`;
 const MIN_DISCOUNT = 50;
 const MAX_PAGES = 150;
 
@@ -175,7 +177,7 @@ async function launchBrowser(): Promise<Browser> {
 }
 
 async function fetchPageProducts(page: Page, pageNum: number): Promise<FetchResult> {
-  const url = `${SALE_URL}?${SALE_QUERY}&p=${pageNum}`;
+  const url = `${SALE_URL}?p=${pageNum}`;
   await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
   // Wait for the product grid to render; bail quickly if there is none.
   try {
@@ -296,7 +298,7 @@ async function scrapeDjakSport(): Promise<void> {
     // Warm-up navigation: gives Cloudflare's JS challenge time to mint a
     // cf_clearance cookie that subsequent fast page.goto calls can reuse.
     console.log("Warming up Cloudflare session...");
-    await page.goto(`${SALE_URL}?${SALE_QUERY}`, {
+    await page.goto(SALE_URL, {
       waitUntil: "networkidle2",
       timeout: 60000,
     });
