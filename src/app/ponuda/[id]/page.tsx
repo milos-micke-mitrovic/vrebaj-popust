@@ -7,7 +7,7 @@ import { safeJsonLd } from "@/lib/json-ld";
 
 // Revalidate every 5 minutes
 export const revalidate = 300;
-import { formatPrice, getProxiedImageUrl } from "@/lib/utils";
+import { formatPrice, getProxiedImageUrl, getAbsoluteImageUrl } from "@/lib/utils";
 import { StoreLogo } from "@/components/store-logo";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -268,9 +268,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const title = `${deal.name} - ${deal.discountPercent}% popust`;
   const description = `${deal.brand || ""} ${categoryText} ${genderText} na akciji u ${storeInfo.name}. Stara cena: ${formatPrice(deal.originalPrice)}, nova cena: ${formatPrice(deal.salePrice)}. Uštedi ${formatPrice(savings)}! Pronađi najveće sportske popuste u Srbiji.`.trim();
 
-  const imageUrl = deal.imageUrl?.startsWith("/")
-    ? `https://www.vrebajpopust.rs${deal.imageUrl}`
-    : deal.imageUrl;
+  // Use the proxied URL for hotlink-protected stores (djaksport) so social and
+  // search crawlers can actually fetch the preview image; direct URL otherwise.
+  const imageUrl = deal.imageUrl ? getAbsoluteImageUrl(deal.imageUrl) : null;
 
   return {
     title,
@@ -456,13 +456,16 @@ export default async function DealPage({ params }: Props) {
   const productUrl = addUtmParams(deal.url);
   const storeUrl = addUtmParams(storeInfo.url);
 
-  const imageUrl = deal.imageUrl?.startsWith("/")
-    ? `https://www.vrebajpopust.rs${deal.imageUrl}`
-    : deal.imageUrl;
-
-  // Strip cache-busting query strings for Google Shopping schema — Google prefers stable URLs.
-  const stableImageUrl = imageUrl ? imageUrl.split("?")[0] : null;
-  const schemaImageUrl = stableImageUrl || "https://www.vrebajpopust.rs/logos/logo.png";
+  // Proxy hotlink-protected stores (djaksport) so Google can fetch the schema
+  // image; other stores keep their direct, already-absolute URL.
+  const absoluteImageUrl = deal.imageUrl ? getAbsoluteImageUrl(deal.imageUrl) : null;
+  // Strip cache-busting query strings from direct store URLs (Google prefers
+  // stable URLs), but leave our proxy URL intact since its query carries the path.
+  const schemaImageUrl = absoluteImageUrl
+    ? absoluteImageUrl.includes("/api/image-proxy")
+      ? absoluteImageUrl
+      : absoluteImageUrl.split("?")[0]
+    : "https://www.vrebajpopust.rs/logos/logo.png";
 
   // Generate a short SKU from deal ID (Google requires max ~50 chars)
   // Use hash of full ID to ensure uniqueness while keeping it short

@@ -40,12 +40,17 @@ export async function GET(request: NextRequest) {
     return new NextResponse("Domain not allowed", { status: 403 });
   }
 
+  // Abort a slow upstream fetch so the serverless function never hangs.
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 10000);
+
   try {
     const response = await fetch(url, {
       headers: {
         // Don't send referer to bypass hotlink protection
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
       },
+      signal: controller.signal,
     });
 
     if (!response.ok) {
@@ -63,10 +68,15 @@ export async function GET(request: NextRequest) {
     return new NextResponse(buffer, {
       headers: {
         "Content-Type": contentType,
-        "Cache-Control": "public, max-age=86400", // Cache for 1 day
+        // Product images are effectively immutable, so cache aggressively. A long
+        // max-age plus stale-while-revalidate keeps the CDN serving instantly and
+        // gives Googlebot-Image fast, reliable fetches for image indexing.
+        "Cache-Control": "public, max-age=604800, stale-while-revalidate=86400",
       },
     });
   } catch {
     return new NextResponse("Error fetching image", { status: 500 });
+  } finally {
+    clearTimeout(timeout);
   }
 }
