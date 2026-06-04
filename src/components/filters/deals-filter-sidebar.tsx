@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from "react";
-import type { Store, Gender, Category, CategoryPath, MainCategory, Subcategory } from "@/types/deal";
+import type { Store, Gender, Category, CategoryPath, MainCategory } from "@/types/deal";
 import { Input } from "@/components/ui/input";
 import { ScrollFade } from "@/components/scroll-fade";
 import { FilterSection } from "./filter-section";

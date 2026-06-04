@@ -46,6 +46,10 @@ export function useDragScroll({ speed = 0.5, pauseOnHover = true }: UseDragScrol
     while (offsetRef.current < 0) offsetRef.current += hw;
   }, [getHalfWidth]);
 
+  // Holds the latest autoScroll so the rAF loop can recurse without referencing
+  // autoScroll inside its own initializer (which would be a use-before-declare).
+  const autoScrollRef = useRef<(timestamp: number) => void>(() => {});
+
   // Time-based auto-scroll for consistent speed across frame rates
   const autoScroll = useCallback((timestamp: number) => {
     if (!isPaused.current && !isDragging.current && containerRef.current) {
@@ -56,8 +60,13 @@ export function useDragScroll({ speed = 0.5, pauseOnHover = true }: UseDragScrol
       applyTransform();
     }
     lastTimeRef.current = timestamp;
-    animationRef.current = requestAnimationFrame(autoScroll);
+    animationRef.current = requestAnimationFrame(autoScrollRef.current);
   }, [speed, applyTransform, wrapOffset]);
+
+  // Keep the ref pointing at the latest autoScroll for the rAF self-recursion.
+  useEffect(() => {
+    autoScrollRef.current = autoScroll;
+  }, [autoScroll]);
 
   // ── Mouse handlers ──
 

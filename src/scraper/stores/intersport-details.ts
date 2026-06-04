@@ -1,7 +1,6 @@
 import { JSDOM } from "jsdom";
 import { getDealsForDetailScraping, updateDealDetails, deleteDealByUrl, disconnect } from "../db-writer";
 import { mapCategory } from "../../lib/category-mapper";
-import { mapGender } from "../../lib/gender-mapper";
 
 const STORE = "intersport" as const;
 

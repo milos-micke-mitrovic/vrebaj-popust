@@ -19,7 +19,7 @@ import { ProductBreadcrumb } from "@/components/product-breadcrumb";
 import { ScrollToTop } from "@/components/scroll-to-top";
 import { TrackProductView } from "@/components/track-product-view";
 import { Deal } from "@/types/deal";
-import { CATEGORY_NAMES, CATEGORY_PATH_NAMES, GENDER_NAMES } from "@/lib/display-constants";
+import { CATEGORY_NAMES, CATEGORY_PATH_NAMES } from "@/lib/display-constants";
 
 // Calculate price valid date at build time (7 days from build)
 const priceValidUntilDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)

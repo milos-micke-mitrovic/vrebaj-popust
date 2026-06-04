@@ -1,4 +1,4 @@
-import type { Store, Gender, Category, MainCategory, Subcategory, CategoryPath } from "@/types/deal";
+import type { Store, Gender, Category, MainCategory, Subcategory } from "@/types/deal";
 
 export const ITEMS_PER_PAGE = 32;
 

@@ -94,10 +94,8 @@ async function cleanup() {
 
     // Step 3a: Re-extract category
     const mapped = mapCategory(deal.name + " " + deal.url);
-    let categoryAdded = false;
     if (mapped !== null && !newCategories.includes(mapped)) {
       newCategories.push(mapped);
-      categoryAdded = true;
       categoriesUpdated++;
       changed = true;
     }
