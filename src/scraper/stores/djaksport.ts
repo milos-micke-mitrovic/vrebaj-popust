@@ -178,15 +178,24 @@ async function launchBrowser(): Promise<Browser> {
 
 async function fetchPageProducts(page: Page, pageNum: number): Promise<FetchResult> {
   const url = `${SALE_URL}?p=${pageNum}`;
-  await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
-  // Wait for the product grid to render; bail quickly if there is none.
-  try {
-    await page.waitForSelector(".item.product.product-item", { timeout: 8000 });
-  } catch {
-    return { products: [], hasMore: false };
-  }
 
-  return page.evaluate(`
+  // Retry transient empty renders. Djak intermittently serves the correct page
+  // (right <title>) but with the product grid not yet hydrated within the wait,
+  // so a one-shot fetch yields 0 items even mid-catalogue. A single empty page
+  // must NOT be mistaken for the end of pagination, so reload before giving up.
+  for (let attempt = 1; attempt <= 3; attempt++) {
+    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
+    try {
+      await page.waitForSelector(".item.product.product-item", { timeout: 12000 });
+    } catch {
+      if (attempt < 3) {
+        await sleep(1500);
+        continue;
+      }
+      return { products: [], hasMore: false };
+    }
+
+    const result = (await page.evaluate(`
     (async function() {
       try {
         var results = [];
@@ -275,7 +284,17 @@ async function fetchPageProducts(page: Page, pageNum: number): Promise<FetchResu
         return { products: [], hasMore: false };
       }
     })()
-  `) as Promise<FetchResult>;
+  `) as FetchResult);
+
+    // Got the grid but it was empty — retry once more before trusting it.
+    if (result.products.length === 0 && attempt < 3) {
+      await sleep(1500);
+      continue;
+    }
+    return result;
+  }
+
+  return { products: [], hasMore: false };
 }
 
 async function scrapeDjakSport(): Promise<void> {
@@ -312,7 +331,7 @@ async function scrapeDjakSport(): Promise<void> {
     while (currentPage <= MAX_PAGES && consecutiveEmpty < 2) {
       console.log(`\n=== Page ${currentPage} ===`);
 
-      const { products, hasMore } = await fetchPageProducts(page, currentPage);
+      const { products } = await fetchPageProducts(page, currentPage);
       console.log(`Found ${products.length} products`);
 
       if (products.length === 0) {
@@ -372,11 +391,6 @@ async function scrapeDjakSport(): Promise<void> {
       }
 
       console.log(`Running total: ${totalDeals} deals (${totalScraped} scraped)`);
-
-      if (!hasMore) {
-        console.log("No more pages indicated");
-        break;
-      }
 
       currentPage++;
       await sleep(500 + Math.random() * 500);
