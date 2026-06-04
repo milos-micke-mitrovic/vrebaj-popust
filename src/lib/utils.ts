@@ -80,3 +80,15 @@ export function getProxiedImageUrl(imageUrl: string | null | undefined): string 
 
   return imageUrl;
 }
+
+/**
+ * Absolute version of the on-page image URL, for use in the image sitemap and
+ * other metadata where Google requires a fully-qualified, crawlable location.
+ * Mirrors exactly what the product page renders (proxied for hotlink-protected
+ * stores, direct otherwise) so the sitemap declares the same image Google sees.
+ */
+export function getAbsoluteImageUrl(imageUrl: string | null | undefined): string {
+  const proxied = getProxiedImageUrl(imageUrl);
+  if (proxied.startsWith("http")) return proxied;
+  return `https://www.vrebajpopust.rs${proxied}`;
+}

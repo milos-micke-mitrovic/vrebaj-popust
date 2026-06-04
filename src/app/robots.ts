@@ -5,7 +5,10 @@ export default function robots(): MetadataRoute.Robots {
     rules: [
       {
         userAgent: "*",
-        allow: ["/", "/ponuda/"], // Allow product pages for indexing
+        // Allow product pages for indexing, and the image proxy so Googlebot-Image
+        // can fetch the (hotlink-protected) product images it serves. The more
+        // specific allow wins over the /api/ disallow in Google's matcher.
+        allow: ["/", "/ponuda/", "/api/image-proxy"],
         disallow: [
           "/api/",
           "/admin",

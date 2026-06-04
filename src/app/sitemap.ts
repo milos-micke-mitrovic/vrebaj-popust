@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { getAllDealsAsync } from "@/lib/deals";
+import { getAbsoluteImageUrl } from "@/lib/utils";
 
 // Always regenerate so lastmod reflects current DB state and removed deals
 // disappear immediately. Without this, Next.js statically generates the sitemap
@@ -168,6 +169,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: deal.scrapedAt ? new Date(deal.scrapedAt) : now,
       changeFrequency: "daily" as const,
       priority: 0.6,
+      // Declare the product image for Google Images via the <image:image>
+      // sitemap extension — without this the catalog's images go undiscovered.
+      ...(deal.imageUrl ? { images: [getAbsoluteImageUrl(deal.imageUrl)] } : {}),
     }));
 
   return [...mainPages, ...filterPages, ...productPages];
