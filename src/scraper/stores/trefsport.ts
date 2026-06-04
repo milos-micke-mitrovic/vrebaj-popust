@@ -1,3 +1,4 @@
+import { createHash } from "crypto";
 import { JSDOM } from "jsdom";
 import { upsertDeal, logScrapeRun, disconnect, cleanupStaleProducts, Store } from "../db-writer";
 
@@ -33,13 +34,17 @@ function calcDiscount(original: number, sale: number): number {
 }
 
 function generateId(url: string): string {
+  // Append a short hash of the full URL so long product slugs that collide at
+  // the truncation boundary stay unique — otherwise the unique-id constraint
+  // aborts the whole run (Prisma P2002).
   const pathOnly = url
     .replace(/https?:\/\/[^\/]+/, "")
     .replace(/[^a-zA-Z0-9]/g, "-")
     .replace(/-+/g, "-")
     .replace(/^-|-$/g, "")
-    .slice(0, 80);
-  return `${STORE}-${pathOnly}`;
+    .slice(0, 70);
+  const hash = createHash("md5").update(url).digest("hex").slice(0, 8);
+  return `${STORE}-${pathOnly}-${hash}`;
 }
 
 function sleep(ms: number): Promise<void> {
