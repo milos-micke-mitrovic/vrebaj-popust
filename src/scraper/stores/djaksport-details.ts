@@ -9,6 +9,11 @@ puppeteer.use(StealthPlugin());
 
 const STORE = "djaksport" as const;
 
+// Stop well before the 180-minute CI job cap so the run exits cleanly; any deals
+// not reached are picked up on the next run (they keep a null/stale
+// detailsScrapedAt, so getDealsForDetailScraping returns them again, oldest first).
+const MAX_RUNTIME_MS = 150 * 60 * 1000;
+
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -89,6 +94,7 @@ async function scrapeDjakSportDetails(): Promise<void> {
   }
 
   const browser = await launchBrowser();
+  const startTime = Date.now();
   let processed = 0;
   let deleted = 0;
   let errors = 0;
@@ -98,6 +104,11 @@ async function scrapeDjakSportDetails(): Promise<void> {
     await page.setViewport({ width: 1920, height: 1080 });
 
     for (const deal of deals) {
+      if (Date.now() - startTime > MAX_RUNTIME_MS) {
+        console.log(`\nTime budget reached after ${processed}/${deals.length}; remaining deals will be processed on the next run.`);
+        break;
+      }
+
       console.log(`\n[${processed + 1}/${deals.length}] ${deal.name}`);
 
       try {

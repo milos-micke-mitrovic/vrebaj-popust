@@ -162,10 +162,23 @@ export async function updateDealDetails(
   });
 }
 
-export async function getDealsForDetailScraping(store: Store): Promise<{ id: string; url: string; name: string }[]> {
+// Return only deals that still need detail scraping: never scraped, or last
+// scraped more than `staleDays` ago. Never-scraped deals come first so new
+// products are always prioritised. This keeps each run's workload bounded —
+// re-scraping the entire catalogue nightly overflowed the CI time limit once a
+// store (djaksport) grew back to ~1500 deals.
+export async function getDealsForDetailScraping(
+  store: Store,
+  staleDays = 7
+): Promise<{ id: string; url: string; name: string }[]> {
+  const staleBefore = new Date(Date.now() - staleDays * 24 * 60 * 60 * 1000);
   return prisma.deal.findMany({
-    where: { store },
+    where: {
+      store,
+      OR: [{ detailsScrapedAt: null }, { detailsScrapedAt: { lt: staleBefore } }],
+    },
     select: { id: true, url: true, name: true },
+    orderBy: { detailsScrapedAt: { sort: "asc", nulls: "first" } },
   });
 }
 
