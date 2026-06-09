@@ -237,19 +237,27 @@ async function scrapeSportVision(): Promise<void> {
           if (product.salePrice >= product.originalPrice) continue;
 
           if (product.discountPercent >= MIN_DISCOUNT) {
-            await upsertDeal({
-              id: generateId(product.url),
-              store: STORE,
-              name: product.name,
-              brand: product.brand,
-              originalPrice: product.originalPrice,
-              salePrice: product.salePrice,
-              discountPercent: product.discountPercent,
-              url: product.url,
-              imageUrl: product.imageUrl,
-              gender: "unisex",
-            });
-            totalDeals++;
+            // Per-deal guard: a single malformed product must not abort the run
+            // via the page-level catch, which would truncate the catalogue.
+            try {
+              await upsertDeal({
+                id: generateId(product.url),
+                store: STORE,
+                name: product.name,
+                brand: product.brand,
+                originalPrice: product.originalPrice,
+                salePrice: product.salePrice,
+                discountPercent: product.discountPercent,
+                url: product.url,
+                imageUrl: product.imageUrl,
+                gender: "unisex",
+              });
+              totalDeals++;
+            } catch (err) {
+              const message = err instanceof Error ? err.message : String(err);
+              errors.push(`upsert ${product.url}: ${message}`);
+              console.error(`Upsert failed for ${product.url}:`, message);
+            }
           }
         }
 

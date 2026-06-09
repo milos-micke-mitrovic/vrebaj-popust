@@ -359,20 +359,29 @@ async function scrapeNSport(): Promise<void> {
               console.log(`Saving: ${product.name.substring(0, 40)}... | gender=${gender} | categories=${JSON.stringify(categories)}`);
             }
 
-            await upsertDeal({
-              id: generateId(product.url),
-              store: STORE,
-              name: product.name,
-              brand: product.brand,
-              originalPrice,
-              salePrice,
-              discountPercent,
-              url: product.url,
-              imageUrl: product.imageUrl,
-              gender,
-              categories,
-            });
-            totalDeals++;
+            // Per-deal guard: a single malformed product (e.g. a price that
+            // overflows the Int column) must not abort the whole run via the
+            // page-level catch, which would truncate the catalogue.
+            try {
+              await upsertDeal({
+                id: generateId(product.url),
+                store: STORE,
+                name: product.name,
+                brand: product.brand,
+                originalPrice,
+                salePrice,
+                discountPercent,
+                url: product.url,
+                imageUrl: product.imageUrl,
+                gender,
+                categories,
+              });
+              totalDeals++;
+            } catch (err) {
+              const message = err instanceof Error ? err.message : String(err);
+              errors.push(`upsert ${product.url}: ${message}`);
+              console.error(`Upsert failed for ${product.url}:`, message);
+            }
           }
         }
 

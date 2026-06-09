@@ -82,7 +82,10 @@ jobs:
         run: pnpm tsx src/scraper/stores/djaksport.ts
         env:
           DATABASE_URL: ${{ secrets.DATABASE_URL }}
-        timeout-minutes: 30
+        # ~129 pages of full page.goto pagination (AJAX is Cloudflare-blocked) plus
+        # transient-empty retries runs longer than the old stub listing; 30 min was
+        # cut off mid-run, leaving no scrape logged. 60 gives headroom to complete.
+        timeout-minutes: 60
 
   scrape-nsport:
     runs-on: ubuntu-latest
