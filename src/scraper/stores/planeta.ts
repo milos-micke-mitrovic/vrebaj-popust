@@ -9,10 +9,14 @@ puppeteer.use(StealthPlugin());
 const STORE: Store = "planeta";
 const BASE_URL = "https://planetasport.rs";
 // Sale pages with lista parameter (may change - update as needed)
+// Planeta's sale filter. The old saved-list id (?lista=1369) was retired and now
+// returns 0 products; the current on-sale ("Hit cena") filter is ?akcija=162
+// (~1500 men's items). Like djaksport, Planeta rotates these ids, so the
+// health-check is the tripwire when this one goes empty.
 const SALE_PAGES = [
-  { url: `${BASE_URL}/muskarci.html?lista=1369`, gender: "muski" as Gender },
-  { url: `${BASE_URL}/zene.html?lista=1369`, gender: "zenski" as Gender },
-  { url: `${BASE_URL}/deca.html?lista=1369`, gender: "deciji" as Gender },
+  { url: `${BASE_URL}/muskarci.html?akcija=162`, gender: "muski" as Gender },
+  { url: `${BASE_URL}/zene.html?akcija=162`, gender: "zenski" as Gender },
+  { url: `${BASE_URL}/deca.html?akcija=162`, gender: "deciji" as Gender },
 ];
 const MIN_DISCOUNT = 50;
 const MAX_PAGES = 50;
