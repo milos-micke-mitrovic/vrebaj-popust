@@ -220,19 +220,26 @@ async function scrapeOfficeShoes(): Promise<void> {
         // we filter per product rather than stopping the whole scan).
         if (discountPercent < MIN_DISCOUNT) continue;
 
-        await upsertDeal({
-          id: generateId(product.url),
-          store: STORE,
-          name: product.name,
-          brand: product.brand,
-          originalPrice,
-          salePrice,
-          discountPercent,
-          url: product.url,
-          imageUrl: product.imageUrl,
-          gender: "unisex",
-        });
-        totalDeals++;
+        // Per-deal guard: one malformed product must not abort the run.
+        try {
+          await upsertDeal({
+            id: generateId(product.url),
+            store: STORE,
+            name: product.name,
+            brand: product.brand,
+            originalPrice,
+            salePrice,
+            discountPercent,
+            url: product.url,
+            imageUrl: product.imageUrl,
+            gender: "unisex",
+          });
+          totalDeals++;
+        } catch (err) {
+          const message = err instanceof Error ? err.message : String(err);
+          errors.push(`upsert ${product.url}: ${message}`);
+          console.error(`Upsert failed for ${product.url}:`, message);
+        }
       }
 
       console.log(`Running total: ${totalDeals} deals (${totalScraped} scraped)`);

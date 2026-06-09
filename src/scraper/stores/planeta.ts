@@ -225,20 +225,27 @@ async function scrapePlaneta(): Promise<void> {
               product.discountFromSite || calcDiscount(originalPrice, salePrice);
 
             if (discountPercent >= MIN_DISCOUNT) {
-              await upsertDeal({
-                id: generateId(product.url),
-                store: STORE,
-                name: product.name,
-                brand: product.brand,
-                originalPrice,
-                salePrice,
-                discountPercent,
-                url: product.url,
-                imageUrl: product.imageUrl,
-                gender: salePage.gender,
-              });
-              pageDeals++;
-              totalDeals++;
+              // Per-deal guard: one malformed product must not abort the run.
+              try {
+                await upsertDeal({
+                  id: generateId(product.url),
+                  store: STORE,
+                  name: product.name,
+                  brand: product.brand,
+                  originalPrice,
+                  salePrice,
+                  discountPercent,
+                  url: product.url,
+                  imageUrl: product.imageUrl,
+                  gender: salePage.gender,
+                });
+                pageDeals++;
+                totalDeals++;
+              } catch (err) {
+                const message = err instanceof Error ? err.message : String(err);
+                errors.push(`upsert ${product.url}: ${message}`);
+                console.error(`Upsert failed for ${product.url}:`, message);
+              }
             }
           }
 

@@ -372,21 +372,28 @@ async function scrapeDjakSport(): Promise<void> {
             console.log(`Saving: ${product.name.substring(0, 40)}... | brand=${brand} | gender=${gender} | categories=${JSON.stringify(categories)}`);
           }
 
-          await upsertDeal({
-            id: generateId(product.productId, product.url),
-            store: STORE,
-            name: product.name,
-            brand: brand,
-            originalPrice: product.originalPrice,
-            salePrice: product.salePrice,
-            discountPercent: product.discountPercent,
-            url: product.url,
-            imageUrl: product.imageUrl,
-            sizes: product.sizes,
-            categories: categories,
-            gender: gender,
-          });
-          totalDeals++;
+          // Per-deal guard: one malformed product must not abort the run.
+          try {
+            await upsertDeal({
+              id: generateId(product.productId, product.url),
+              store: STORE,
+              name: product.name,
+              brand: brand,
+              originalPrice: product.originalPrice,
+              salePrice: product.salePrice,
+              discountPercent: product.discountPercent,
+              url: product.url,
+              imageUrl: product.imageUrl,
+              sizes: product.sizes,
+              categories: categories,
+              gender: gender,
+            });
+            totalDeals++;
+          } catch (err) {
+            const message = err instanceof Error ? err.message : String(err);
+            errors.push(`upsert ${product.url}: ${message}`);
+            console.error(`Upsert failed for ${product.url}:`, message);
+          }
         }
       }
 
