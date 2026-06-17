@@ -10,14 +10,16 @@ puppeteer.use(StealthPlugin());
 
 const STORE: Store = "djaksport";
 const BASE_URL = "https://www.djaksport.com";
-// Djak's discount catalogue lives under a ROTATING seasonal campaign slug. As of
-// mid-2026 it is /mid-season-sale (~4600 products); earlier it was /najveci-popusti,
-// then /muskarci/ds_muskarci-ds_zene?am_on_sale=1 (which Djak shrank to a ~250-item
-// stub, collapsing the scrape to near-zero). This slug WILL change again when Djak
-// rotates campaigns — the health-check catches it (deal count craters) when it does.
-// AJAX pagination (?shopbyAjax=1) is Cloudflare-blocked, so we do a full page.goto
-// per ?p=N page, which keeps the cf_clearance cookie intact.
-const SALE_URL = `${BASE_URL}/mid-season-sale`;
+// Djak's discount catalogue lives under a ROTATING seasonal campaign slug
+// (/najveci-popusti -> /muskarci/ds_muskarci-ds_zene?am_on_sale=1 -> /mid-season-sale
+// -> /super-letnja-akcija-djak -> ...). When Djak rotates it, the old slug 404s and
+// the scrape collapses to zero. So SALE_URL is only the DEFAULT: if it returns no
+// products the scraper auto-discovers the current campaign from the homepage (see
+// discoverSaleUrl), self-healing across rotations. AJAX pagination (?shopbyAjax=1) is
+// Cloudflare-blocked, so we do a full page.goto per ?p=N page to keep cf_clearance.
+const SALE_URL = `${BASE_URL}/super-letnja-akcija-djak`;
+// Sale listing actually used this run — replaced by discovery if SALE_URL is dead.
+let activeSaleUrl = SALE_URL;
 const MIN_DISCOUNT = 50;
 const MAX_PAGES = 150;
 
@@ -177,7 +179,7 @@ async function launchBrowser(): Promise<Browser> {
 }
 
 async function fetchPageProducts(page: Page, pageNum: number): Promise<FetchResult> {
-  const url = `${SALE_URL}?p=${pageNum}`;
+  const url = `${activeSaleUrl}?p=${pageNum}`;
 
   // Retry transient empty renders. Djak intermittently serves the correct page
   // (right <title>) but with the product grid not yet hydrated within the wait,
@@ -297,6 +299,76 @@ async function fetchPageProducts(page: Page, pageNum: number): Promise<FetchResu
   return { products: [], hasMore: false };
 }
 
+// Find the current sale campaign when SALE_URL has gone stale. Scans the homepage
+// for discount-campaign links and returns the one whose listing has the most
+// products (the main sale), so the scraper survives Djak's slug rotations.
+async function discoverSaleUrl(page: Page): Promise<string | null> {
+  try {
+    await page.goto(BASE_URL, { waitUntil: "networkidle2", timeout: 60000 });
+    await sleep(1500);
+
+    const candidatePaths = (await page.evaluate(`
+      (function() {
+        var out = [];
+        document.querySelectorAll('a[href]').forEach(function(a) {
+          var t = (a.textContent || '').trim().toLowerCase();
+          var h = a.getAttribute('href') || '';
+          // Discount-campaign links; exclude loyalty pages and PDF/flyer links.
+          if (/popust|snizen|akcij|sale|outlet|rasprodaj|letnj|zimsk|jesenj|prolecn|season/i.test(t + ' ' + h)
+              && !/loyalty|flajer|\\.pdf/i.test(h)) {
+            out.push(h.split('?')[0]);
+          }
+        });
+        return out;
+      })()
+    `)) as string[];
+
+    const unique = [...new Set(candidatePaths)].filter(Boolean);
+    console.log(`Discovery: ${unique.length} candidate sale links found`);
+
+    let best: string | null = null;
+    let bestCount = 0;
+    for (const path of unique) {
+      const url = path.startsWith("http") ? path : `${BASE_URL}${path.startsWith("/") ? "" : "/"}${path}`;
+      try {
+        await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
+        await page.waitForSelector(".item.product.product-item", { timeout: 8000 }).catch(() => {});
+        // Rank by the toolbar total ("4254 proizvoda") — every populated listing shows
+        // the same 36 items per page, so page-1 grid size can't tell the main sale from
+        // a small category. Fall back to grid size when no toolbar total is present.
+        const count = (await page.evaluate(`
+          (function() {
+            var grid = document.querySelectorAll('.item.product.product-item').length;
+            var tb = document.querySelector('.toolbar-number, .toolbar-amount');
+            var total = 0;
+            if (tb) {
+              var nums = (tb.textContent || '').match(/\\d[\\d.,]*/g);
+              if (nums) nums.forEach(function(x) {
+                var n = parseInt(x.replace(/[.,]/g, ''), 10);
+                if (n > total) total = n;
+              });
+            }
+            return total || grid;
+          })()
+        `)) as number;
+        console.log(`  candidate ${url} -> ${count} products`);
+        if (count > bestCount) {
+          bestCount = count;
+          best = url;
+        }
+      } catch {
+        /* unreachable candidate — skip */
+      }
+    }
+
+    // Require a substantial listing so we never latch onto a tiny cross-sell page.
+    return bestCount >= 12 ? best : null;
+  } catch (err) {
+    console.error("Sale-URL discovery failed:", err instanceof Error ? err.message : err);
+    return null;
+  }
+}
+
 async function scrapeDjakSport(): Promise<void> {
   const errors: string[] = [];
   const seenUrls = new Set<string>();
@@ -323,6 +395,22 @@ async function scrapeDjakSport(): Promise<void> {
     });
 
     await sleep(2000);
+
+    // Self-heal across Djak's campaign-slug rotations: if the configured SALE_URL
+    // no longer resolves to a populated grid, discover the current sale from the
+    // homepage before paginating, instead of silently scraping zero deals.
+    const probe = await fetchPageProducts(page, 1);
+    if (probe.products.length === 0) {
+      console.log(`SALE_URL ${SALE_URL} returned no products — discovering current sale listing...`);
+      const discovered = await discoverSaleUrl(page);
+      if (discovered) {
+        activeSaleUrl = discovered;
+        console.log(`Using discovered sale listing: ${activeSaleUrl}`);
+      } else {
+        errors.push(`SALE_URL ${SALE_URL} empty and no replacement sale listing discovered`);
+        console.log("No alternative sale listing found; scrape will be empty.");
+      }
+    }
 
     // Paginate through all pages
     let currentPage = 1;
