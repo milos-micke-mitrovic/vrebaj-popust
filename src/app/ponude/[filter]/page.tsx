@@ -47,6 +47,11 @@ export async function generateStaticParams() {
     });
   });
 
+  // House/high-demand brand patike pages (driven by Search Console)
+  ["la-terra-patike", "joma-patike", "sergio-tacchini-patike", "rang-patike"].forEach(f =>
+    params.push({ filter: f })
+  );
+
   // Popular combinations: gender + category
   ["muski", "zenski"].forEach(gender => {
     ["patike", "jakne", "trenerke", "duksevi", "majice", "helanke"].forEach(cat => {

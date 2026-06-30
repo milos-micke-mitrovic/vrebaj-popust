@@ -12,6 +12,8 @@ const OTHER_BRANDS = [
   { slug: "under-armour", label: "Under Armour" },
   { slug: "the-north-face", label: "The North Face" },
   { slug: "jordan", label: "Jordan" },
+  { slug: "joma", label: "Joma" },
+  { slug: "sergio-tacchini", label: "Sergio Tacchini" },
   { slug: "reebok", label: "Reebok" },
   { slug: "converse", label: "Converse" },
   { slug: "columbia", label: "Columbia" },
@@ -28,13 +30,17 @@ const CATEGORIES = [
   { slug: "cizme", label: "Čizme", image: "/images/categories/boots.png" },
 ];
 
+// Driven by Search Console: these are the queries that actually bring impressions,
+// so linking them internally points crawl equity at the pages that already rank.
 const POPULAR_SEARCHES = [
+  { slug: "la-terra-patike", label: "La Terra patike" },
+  { slug: "joma-patike", label: "Joma patike" },
+  { slug: "sergio-tacchini-patike", label: "Sergio Tacchini patike" },
+  { slug: "rang-patike", label: "Rang patike" },
   { slug: "nike-patike", label: "Nike patike" },
   { slug: "adidas-patike", label: "Adidas patike" },
   { slug: "muski-patike", label: "Muške patike" },
   { slug: "zenski-patike", label: "Ženske patike" },
-  { slug: "nike-duksevi", label: "Nike duksevi" },
-  { slug: "adidas-jakne", label: "Adidas jakne" },
 ];
 
 export function PopularCategories() {

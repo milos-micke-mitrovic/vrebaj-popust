@@ -114,6 +114,11 @@ const FILTER_PAGES = [
   "reebok-patike",
   "converse-patike",
   "vans-patike",
+  // House/high-demand brands from Search Console
+  "la-terra-patike",
+  "joma-patike",
+  "sergio-tacchini-patike",
+  "rang-patike",
   "skechers-patike",
   "hoka-patike",
   "asics-patike",
