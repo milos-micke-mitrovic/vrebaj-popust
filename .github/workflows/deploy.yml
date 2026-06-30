@@ -1,0 +1,50 @@
+name: Deploy to VPS
+
+# Auto-deploy the Next.js app to the DigitalOcean VPS (pm2 + nginx) on every push
+# to main. Before this existed, the live site drifted ~23 commits behind because
+# deploys were manual. The scrapers run in GitHub Actions and don't need this; only
+# the web app, which runs as `pnpm start` under pm2 on the server, does.
+
+on:
+  push:
+    branches: [main]
+    # Skip deploys for changes that don't affect the running web app.
+    paths-ignore:
+      - "**.md"
+      - ".github/workflows/scrape-*.yml"
+      - ".github/workflows/nightly-scrape.yml"
+  workflow_dispatch:
+
+# Serialize deploys so two pushes can't build/restart on top of each other.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.DEPLOY_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          printf '%s\n' "${{ secrets.DEPLOY_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+
+      - name: Pull, build and restart on the server
+        run: |
+          ssh -i ~/.ssh/deploy_key -o BatchMode=yes \
+            "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" bash -s <<'REMOTE'
+          set -euo pipefail
+          cd /var/www/vrebaj-popust
+          # Force the server to exactly mirror origin/main (no manual on-server edits).
+          git fetch --quiet origin main
+          git reset --hard origin/main
+          pnpm install --frozen-lockfile
+          # Build first; pm2 is only restarted if the build succeeds (set -e), so a
+          # broken commit leaves the previous version running instead of taking the site down.
+          pnpm build
+          pm2 restart vrebaj-popust --update-env
+          pm2 save --force >/dev/null 2>&1 || true
+          echo "Deployed commit: $(git rev-parse --short HEAD)"
+          REMOTE
