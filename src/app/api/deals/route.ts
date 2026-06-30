@@ -7,6 +7,61 @@ const ITEMS_PER_PAGE = 32;
 const MAX_ITEMS_PER_PAGE = 100; // Prevent DoS via huge limit
 const MAX_PAGE = 1000; // Prevent DoS via huge page numbers
 
+// The filter sidebar aggregations (brand/store/gender counts, price range) are
+// computed over the whole >=50% catalogue and do NOT depend on the request's
+// filters — so they're identical on every call. Without caching, each request
+// (pagination, infinite scroll, every filter toggle) ran 4 extra groupBy/aggregate
+// queries over the full table for nothing. Cache them; the catalogue only changes
+// after a scrape, so a 5-minute TTL is plenty fresh.
+interface CachedFilters {
+  brands: { name: string; count: number }[];
+  stores: { name: string; count: number }[];
+  genders: { name: string; count: number }[];
+  priceRange: { min: number; max: number };
+}
+let filtersCache: CachedFilters | null = null;
+let filtersCacheTime = 0;
+const FILTERS_TTL = 5 * 60 * 1000;
+
+async function getCachedFilters(): Promise<CachedFilters> {
+  const now = Date.now();
+  if (filtersCache && now - filtersCacheTime < FILTERS_TTL) {
+    return filtersCache;
+  }
+
+  const baseWhere = { discountPercent: { gte: 50 } };
+  const [brandsAgg, storesAgg, gendersAgg, priceAgg] = await Promise.all([
+    prisma.deal.groupBy({ by: ["brand"], where: { ...baseWhere, brand: { not: null } }, _count: true }),
+    prisma.deal.groupBy({ by: ["store"], where: baseWhere, _count: true }),
+    prisma.deal.groupBy({ by: ["gender"], where: baseWhere, _count: true }),
+    prisma.deal.aggregate({ where: baseWhere, _min: { salePrice: true }, _max: { salePrice: true } }),
+  ]);
+
+  // Normalize and deduplicate brands (merge "adidas"/"Adidas"/"ADIDAS", drop
+  // gender/category words, map aliases like CALVIN -> CALVIN KLEIN).
+  const brandMap = new Map<string, { name: string; count: number }>();
+  for (const b of brandsAgg) {
+    if (!b.brand) continue;
+    const normalized = normalizeBrand(b.brand);
+    if (!normalized) continue;
+    const existing = brandMap.get(normalized);
+    if (existing) existing.count += b._count;
+    else brandMap.set(normalized, { name: normalized, count: b._count });
+  }
+
+  filtersCache = {
+    brands: Array.from(brandMap.values()).sort((a, b) => b.count - a.count),
+    stores: storesAgg.map((s) => ({ name: s.store, count: s._count })),
+    genders: gendersAgg.map((g) => ({ name: g.gender, count: g._count })),
+    priceRange: {
+      min: priceAgg._min.salePrice || 0,
+      max: priceAgg._max.salePrice || 100000,
+    },
+  };
+  filtersCacheTime = now;
+  return filtersCache;
+}
+
 export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
 
@@ -184,52 +239,8 @@ export async function GET(request: NextRequest) {
       take: limit,
     });
 
-    // Get aggregations for filters (unique values)
-    const [brandsAgg, storesAgg, gendersAgg] = await Promise.all([
-      prisma.deal.groupBy({
-        by: ["brand"],
-        where: { discountPercent: { gte: 50 }, brand: { not: null } },
-        _count: true,
-      }),
-      prisma.deal.groupBy({
-        by: ["store"],
-        where: { discountPercent: { gte: 50 } },
-        _count: true,
-      }),
-      prisma.deal.groupBy({
-        by: ["gender"],
-        where: { discountPercent: { gte: 50 } },
-        _count: true,
-      }),
-    ]);
-
-    // Get price range
-    const priceAgg = await prisma.deal.aggregate({
-      where: { discountPercent: { gte: 50 } },
-      _min: { salePrice: true },
-      _max: { salePrice: true },
-    });
-
-    // Normalize and deduplicate brands (merge "adidas", "Adidas", "ADIDAS" into one)
-    const brandMap = new Map<string, { name: string; count: number }>();
-    for (const b of brandsAgg) {
-      if (!b.brand) continue;
-      // Use normalizeBrand to:
-      // - Filter out gender words (MUSKA, ZENSKE, ZENSKI, etc.)
-      // - Filter out category words (RANAC, SANDALE, etc.)
-      // - Merge aliases (CALVIN -> CALVIN KLEIN, THE -> THE NORTH FACE, etc.)
-      // - Convert underscores to spaces (MOON_BOOT -> MOON BOOT)
-      const normalized = normalizeBrand(b.brand);
-      if (!normalized) continue; // Skip invalid brands (genders/categories)
-
-      const existing = brandMap.get(normalized);
-      if (existing) {
-        existing.count += b._count;
-      } else {
-        brandMap.set(normalized, { name: normalized, count: b._count });
-      }
-    }
-    const normalizedBrandsResult = Array.from(brandMap.values()).sort((a, b) => b.count - a.count);
+    // Filter sidebar data — cached, since it's the same for every request.
+    const filters = await getCachedFilters();
 
     return NextResponse.json({
       deals,
@@ -239,15 +250,7 @@ export async function GET(request: NextRequest) {
         total,
         totalPages: Math.ceil(total / limit),
       },
-      filters: {
-        brands: normalizedBrandsResult,
-        stores: storesAgg.map(s => ({ name: s.store, count: s._count })),
-        genders: gendersAgg.map(g => ({ name: g.gender, count: g._count })),
-        priceRange: {
-          min: priceAgg._min.salePrice || 0,
-          max: priceAgg._max.salePrice || 100000,
-        },
-      },
+      filters,
     });
   } catch (error) {
     console.error("Error fetching deals:", error);
