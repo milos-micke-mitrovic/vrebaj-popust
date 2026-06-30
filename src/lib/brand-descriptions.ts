@@ -10,6 +10,26 @@ interface BrandInfo {
 }
 
 export const BRAND_DESCRIPTIONS: Record<string, BrandInfo> = {
+  joma: {
+    description:
+      "Joma je španski sportski brend osnovan 1965. godine u mestu Portillo de Toledo. Najpoznatiji je po fudbalskoj opremi — kopačkama, dresovima i patikama — ali nudi i širok asortiman opreme za trčanje, košarku i rukomet. Joma je zvanični sponzor brojnih klubova i reprezentacija i ceni se po odnosu kvaliteta i cene.",
+    shortDescription: "Španski sportski brend poznat po fudbalskoj opremi.",
+    country: "Španija",
+    founded: 1965,
+    specialty: "Fudbalska oprema i patike",
+  },
+  "la terra": {
+    description:
+      "La Terra je brend obuće dostupan u ponudi prodavnice Planeta Sport. Poznat je po pristupačnim patikama i obući za svakodnevno nošenje, sa modelima za muškarce, žene i decu. Zahvaljujući povoljnim cenama i čestim sniženjima, La Terra je popularan izbor za kupce koji traže dobar odnos cene i kvaliteta.",
+    shortDescription: "Pristupačan brend obuće iz ponude Planeta Sporta.",
+    specialty: "Patike i obuća",
+  },
+  rang: {
+    description:
+      "Rang je brend obuće dostupan u ponudi prodavnice Planeta Sport, poznat po patikama i obući za svakodnevno nošenje po pristupačnim cenama. Asortiman obuhvata modele za muškarce, žene i decu, a redovna sniženja čine Rang povoljnim izborom za celu porodicu.",
+    shortDescription: "Pristupačan brend obuće iz ponude Planeta Sporta.",
+    specialty: "Patike i obuća",
+  },
   nike: {
     description:
       "Nike je američki multinacionalni brend sportske opreme, najveći svetski proizvođač sportske obuće i odeće. Osnovan 1964. godine pod nazivom Blue Ribbon Sports, kompanija je postala sinonim za inovativni dizajn i vrhunske performanse. Nike patike poput Air Max, Air Force 1 i Jordan serije revolucionisale su industriju sportske obuće.",

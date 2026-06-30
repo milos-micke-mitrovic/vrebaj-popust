@@ -11,9 +11,12 @@ import {
   parseFilterSlug,
   generateSeoTitle,
   generateSeoDescription,
+  generateSeoIntro,
   generateKeywords,
+  brandDisplay,
   ParsedFilter,
 } from "@/lib/filter-parser";
+import { getBrandInfo } from "@/lib/brand-descriptions";
 
 // Revalidate every 5 minutes
 export const revalidate = 300;
@@ -155,6 +158,7 @@ export default async function FilterPage({ params }: Props) {
 
   const title = generateSeoTitle(parsed);
   const description = generateSeoDescription(parsed);
+  const brandInfo = parsed.brand ? getBrandInfo(parsed.brand) : null;
 
   // Get just count and top deals for SEO schema
   const where = buildWhereClause(parsed);
@@ -271,6 +275,31 @@ export default async function FilterPage({ params }: Props) {
               filterPageSlug={filter}
             />
           </Suspense>
+
+          {/* Unique on-page content so the landing page indexes and ranks instead
+              of being treated as a thin/duplicate filtered grid. */}
+          <section className="mt-12 rounded-lg bg-white dark:bg-gray-800 p-6 shadow">
+            <h2 className="mb-3 text-lg font-semibold text-gray-900 dark:text-white">{title}</h2>
+            <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-300">
+              {generateSeoIntro(parsed, totalCount)}
+            </p>
+            {brandInfo && parsed.brand && (
+              <div className="mt-4 border-t border-gray-100 pt-4 dark:border-gray-700">
+                <h3 className="mb-2 font-semibold text-gray-900 dark:text-white">
+                  O brendu {brandDisplay(parsed.brand)}
+                </h3>
+                <p className="text-sm leading-relaxed text-gray-600 dark:text-gray-300">
+                  {brandInfo.description}
+                </p>
+                {brandInfo.founded && (
+                  <p className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                    Osnovan: {brandInfo.founded}.
+                    {brandInfo.country ? ` Zemlja porekla: ${brandInfo.country}.` : ""}
+                  </p>
+                )}
+              </div>
+            )}
+          </section>
         </main>
 
         <Footer />

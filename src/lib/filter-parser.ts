@@ -53,7 +53,7 @@ const MULTI_WORD_BRANDS: Record<string, string> = {
 
 // Brands are stored uppercase ("LA TERRA"); display them Title-Cased so search
 // snippets and headings read "La Terra na popustu", not the spammy ALL-CAPS form.
-function brandDisplay(brand: string): string {
+export function brandDisplay(brand: string): string {
   return brand
     .toLocaleLowerCase("sr-Latn")
     .replace(/(^|[\s\-/])(\p{L})/gu, (_m, sep, ch) => sep + ch.toLocaleUpperCase("sr-Latn"));
@@ -239,6 +239,31 @@ export function generateSeoDescription(parsed: ParsedFilter): string {
     : "";
 
   return `${subject} sa sniženjima preko 50%. Uporedi cene i pronađi najveće popuste u Srbiji.${storesMention}`;
+}
+
+/**
+ * Title-cased noun phrase for the filter, e.g. "Joma patike za muškarce".
+ */
+export function getFilterSubject(parsed: ParsedFilter): string {
+  const parts: string[] = [];
+  if (parsed.brand) parts.push(brandDisplay(parsed.brand));
+  if (parsed.category) parts.push(CATEGORY_DISPLAY[parsed.category]);
+  if (parsed.gender) parts.push(`za ${GENDER_DISPLAY[parsed.gender]}`);
+  if (parsed.store) parts.push(`u prodavnici ${STORE_DISPLAY[parsed.store]}`);
+  return parts.join(" ") || "Sportska oprema";
+}
+
+/**
+ * Unique intro paragraph so each landing page carries real, indexable prose
+ * instead of being treated as a thin/duplicate filtered grid by Google.
+ */
+export function generateSeoIntro(parsed: ParsedFilter, count: number): string {
+  const subject = getFilterSubject(parsed);
+  const countText =
+    count > 0
+      ? `Trenutno izdvajamo ${count} ${count === 1 ? "proizvod" : "proizvoda"} na sniženju preko 50%.`
+      : "Pratimo sniženja preko 50% i dodajemo nove ponude svakog dana.";
+  return `${subject} na popustu — sve na jednom mestu. ${countText} Cene poredimo iz vodećih sportskih prodavnica u Srbiji (Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz, Office Shoes, Intersport i Tref Sport) kako biste lako pronašli najveće popuste. Ponude se ažuriraju svakodnevno.`;
 }
 
 /**
