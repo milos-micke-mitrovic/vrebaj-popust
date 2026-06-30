@@ -164,6 +164,22 @@ export async function getAllDealsAsync(): Promise<Deal[]> {
   return fetchDeals();
 }
 
+// Lightweight: just the deal IDs. The root layout needs these on every render
+// (to validate wishlist/recently-viewed items) but does NOT need full deal
+// objects — selecting only ids avoids loading and mapping all ~6000 rows per page.
+let dealIdsCache: string[] | null = null;
+let lastIdsFetch = 0;
+export async function getAllDealIdsAsync(): Promise<string[]> {
+  const now = Date.now();
+  if (dealIdsCache && now - lastIdsFetch < CACHE_TTL) {
+    return dealIdsCache;
+  }
+  const rows = await prisma.deal.findMany({ select: { id: true } });
+  dealIdsCache = rows.map((r) => r.id);
+  lastIdsFetch = now;
+  return dealIdsCache;
+}
+
 // Initialize cache (call this in layout or page)
 export async function initDealsCache(): Promise<void> {
   await fetchDeals();

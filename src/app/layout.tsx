@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Outfit } from "next/font/google";
-import { getAllDealsAsync } from "@/lib/deals";
+import { getAllDealIdsAsync } from "@/lib/deals";
 import { AppProviders } from "@/components/app-providers";
 import { DisableScrollRestoration } from "@/components/scroll-to-top";
 import { ServiceWorkerCleanup } from "@/components/sw-cleanup";
@@ -128,8 +128,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const deals = await getAllDealsAsync();
-  const availableDealIds = deals.map((deal) => deal.id);
+  // Only the IDs are needed here (wishlist availability) — avoid loading and
+  // mapping all ~6000 full deal objects on every page render.
+  const availableDealIds = await getAllDealIdsAsync();
 
   return (
     <html lang="sr-Latn" dir="ltr" suppressHydrationWarning>
