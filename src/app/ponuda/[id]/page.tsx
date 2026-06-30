@@ -7,7 +7,7 @@ import { safeJsonLd } from "@/lib/json-ld";
 
 // Revalidate every 5 minutes
 export const revalidate = 300;
-import { formatPrice, getProxiedImageUrl, getAbsoluteImageUrl } from "@/lib/utils";
+import { formatPrice, getProxiedImageUrl, getAbsoluteImageUrl, formatProductName } from "@/lib/utils";
 import { StoreLogo } from "@/components/store-logo";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -227,14 +227,6 @@ async function getRelevantDealsFromUrl(productId: string, limit: number = 8): Pr
 // This speeds up builds significantly since we have 4000-10000 products
 // Pages are still indexed via sitemap, just rendered dynamically on first visit
 
-// Scraped product names are ALL-CAPS, which reads as spam in a search snippet and
-// hurts CTR. Title-case them (Serbian-Latin aware) for titles/descriptions.
-function toTitleCase(s: string): string {
-  return s
-    .toLocaleLowerCase("sr-Latn")
-    .replace(/(^|[\s\-/("])(\p{L})/gu, (_m, sep, ch) => sep + ch.toLocaleUpperCase("sr-Latn"));
-}
-
 // Generate metadata for SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
@@ -273,7 +265,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const categoryText = getCategoryDisplayName(deal);
 
   const savings = deal.originalPrice - deal.salePrice;
-  const niceName = toTitleCase(deal.name);
+  const niceName = formatProductName(deal.name);
   const salePriceText = formatPrice(deal.salePrice);
 
   // Price- and discount-forward title. GSC shows we already rank for these product
@@ -458,6 +450,7 @@ export default async function DealPage({ params }: Props) {
   const savings = deal.originalPrice - deal.salePrice;
   const categoryText = getCategoryDisplayName(deal);
   const genderText = GENDER_TEXT[deal.gender] || "";
+  const niceName = formatProductName(deal.name);
   const genderTag = GENDER_TAGS[deal.gender] || "";
   const relatedDeals = await getRelatedDeals(deal, 8);
 
@@ -491,7 +484,7 @@ export default async function DealPage({ params }: Props) {
   const productSchema = {
     "@context": "https://schema.org",
     "@type": "Product",
-    name: deal.name,
+    name: niceName,
     image: schemaImageUrl,
     description: `${deal.brand || ""} ${categoryText} ${genderText} sa ${deal.discountPercent}% popusta. Originalna cena ${formatPrice(deal.originalPrice)}, sada samo ${formatPrice(deal.salePrice)}. Dostupno u ${storeInfo.name}.`.trim(),
     sku: shortSku,
@@ -552,7 +545,7 @@ export default async function DealPage({ params }: Props) {
       {
         "@type": "ListItem",
         position: 3,
-        name: deal.name,
+        name: niceName,
         item: `https://www.vrebajpopust.rs/ponuda/${deal.id}`,
       },
     ],
@@ -579,7 +572,7 @@ export default async function DealPage({ params }: Props) {
           items={[
             { label: "Ponude", href: "/ponude" },
             { label: categoryText, href: getCategoryFilterUrl(deal) },
-            { label: deal.name },
+            { label: niceName },
           ]}
         />
 
@@ -632,7 +625,7 @@ export default async function DealPage({ params }: Props) {
                   className="mt-2 text-2xl font-bold text-gray-900 dark:text-white md:text-3xl"
                   itemProp="name"
                 >
-                  {deal.name}
+                  {niceName}
                 </h1>
 
                 {/* Category & Gender tags */}
@@ -811,7 +804,7 @@ export default async function DealPage({ params }: Props) {
                         </p>
                       )}
                       <p className="text-gray-600 dark:text-gray-300 mt-4 leading-relaxed">
-                        Ovaj <strong>{deal.brand}</strong> {deal.name.toLowerCase()} {genderText} je trenutno na akciji u prodavnici {storeInfo.name} sa popustom od <strong>{deal.discountPercent}%</strong>.
+                        Ovaj <strong>{deal.brand}</strong> {niceName} {genderText} je trenutno na akciji u prodavnici {storeInfo.name} sa popustom od <strong>{deal.discountPercent}%</strong>.
                         Originalna cena je {formatPrice(deal.originalPrice)}, a akcijska cena je samo <strong>{formatPrice(deal.salePrice)}</strong> - ušteda od {formatPrice(savings)}!
                       </p>
                     </>
@@ -821,7 +814,7 @@ export default async function DealPage({ params }: Props) {
                         O proizvodu
                       </h2>
                       <p className="text-gray-600 dark:text-gray-300 leading-relaxed" itemProp="description">
-                        {deal.brand && <strong>{deal.brand}</strong>} {deal.name} {genderText} je trenutno na akciji u prodavnici {storeInfo.name} sa popustom od <strong>{deal.discountPercent}%</strong>.
+                        {deal.brand && <strong>{deal.brand}</strong>} {niceName} {genderText} je trenutno na akciji u prodavnici {storeInfo.name} sa popustom od <strong>{deal.discountPercent}%</strong>.
                         Originalna cena ovog proizvoda je {formatPrice(deal.originalPrice)}, a akcijska cena je samo <strong>{formatPrice(deal.salePrice)}</strong>.
                         Kupovinom ovog proizvoda uštedećete {formatPrice(savings)}.
                       </p>

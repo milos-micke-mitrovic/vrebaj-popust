@@ -51,6 +51,29 @@ export function sleep(ms: number): Promise<void> {
 /**
  * Format price for display
  */
+// Strip trailing SKU/model-code junk from scraped names (mainly Planeta), e.g.
+// "ADIDAS Kopačke copa pure M - IE7492#41" -> "ADIDAS Kopačke copa pure M".
+// Conservative: only removes a trailing " - CODE" whose code contains a digit,
+// plus a trailing "#nn" marker — leaves clean names from other stores untouched.
+export function cleanProductName(name: string): string {
+  return name
+    .replace(/\s*[-–]\s*[A-Za-z]*\d[A-Za-z0-9]*(?:[-/][A-Za-z0-9]+)*(?:#[\d.]+)?\s*$/, "")
+    .replace(/\s*#[\d.]+\s*$/, "")
+    .trim();
+}
+
+// Title-case a (Serbian-Latin) string: "LA TERRA PATIKE" -> "La Terra Patike".
+export function toTitleCase(s: string): string {
+  return s
+    .toLocaleLowerCase("sr-Latn")
+    .replace(/(^|[\s\-/("])(\p{L})/gu, (_m, sep, ch) => sep + ch.toLocaleUpperCase("sr-Latn"));
+}
+
+// Display-ready product name: SKU junk removed and Title-Cased.
+export function formatProductName(name: string): string {
+  return toTitleCase(cleanProductName(name));
+}
+
 export function formatPrice(price: number): string {
   return new Intl.NumberFormat("sr-RS", {
     style: "currency",

@@ -6,7 +6,7 @@ import Image from "next/image";
 import { usePathname, useSearchParams } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { Deal, Store } from "@/types/deal";
-import { formatPrice, getProxiedImageUrl } from "@/lib/utils";
+import { formatPrice, getProxiedImageUrl, formatProductName } from "@/lib/utils";
 import { WishlistButton } from "@/components/wishlist-button";
 import { Tooltip } from "@/components/ui/tooltip";
 import { useQuickView } from "@/context/quick-view-context";
@@ -164,7 +164,7 @@ export function DealCard({ deal }: DealCardProps) {
               {deal.brand}
             </p>
           )}
-          <h3 className="mt-1 line-clamp-2 text-sm font-medium dark:text-white">{deal.name}</h3>
+          <h3 className="mt-1 line-clamp-2 text-sm font-medium dark:text-white">{formatProductName(deal.name)}</h3>
           <div className="mt-2 flex flex-wrap items-baseline gap-x-2">
             <span className="text-base sm:text-lg font-bold text-red-600 dark:text-red-500">
               {formatPrice(deal.salePrice)}
