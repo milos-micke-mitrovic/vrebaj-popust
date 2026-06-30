@@ -3,6 +3,7 @@ import puppeteer from "puppeteer-extra";
 import StealthPlugin from "puppeteer-extra-plugin-stealth";
 import type { Browser, Page } from "puppeteer";
 import { upsertDeal, logScrapeRun, disconnect, cleanupStaleProducts, Store, Gender } from "../db-writer";
+import { extractBrandFromName } from "../../lib/brand-utils";
 
 puppeteer.use(StealthPlugin());
 
@@ -225,13 +226,17 @@ async function scrapePlaneta(): Promise<void> {
               product.discountFromSite || calcDiscount(originalPrice, salePrice);
 
             if (discountPercent >= MIN_DISCOUNT) {
+              // Use the shared extractor (multi-word brands, aliases, gender/category
+              // filtering) instead of the crude "first word" — e.g. so "LA TERRA" is
+              // not truncated to "LA". Fall back to the page-extracted brand.
+              const brand = extractBrandFromName(product.name) || product.brand;
               // Per-deal guard: one malformed product must not abort the run.
               try {
                 await upsertDeal({
                   id: generateId(product.url),
                   store: STORE,
                   name: product.name,
-                  brand: product.brand,
+                  brand: brand,
                   originalPrice,
                   salePrice,
                   discountPercent,

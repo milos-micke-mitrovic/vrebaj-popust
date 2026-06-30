@@ -47,6 +47,7 @@ const MULTI_WORD_BRANDS: Record<string, string> = {
   "the-north-face": "THE NORTH FACE",
   "tommy-hilfiger": "TOMMY HILFIGER",
   "calvin-klein": "CALVIN KLEIN",
+  "la-terra": "LA TERRA",  // top organic query cluster ("la terra patike")
 };
 
 // Display names for genders

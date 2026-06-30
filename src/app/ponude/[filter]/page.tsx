@@ -24,7 +24,7 @@ export const dynamicParams = true;
 // Pre-generate popular combinations for faster initial load
 export async function generateStaticParams() {
   // Popular single filters
-  const brands = ["nike", "adidas", "puma", "new-balance", "under-armour", "reebok", "converse", "fila", "champion", "vans", "skechers", "asics", "jordan", "the-north-face", "columbia", "hoka", "timberland", "lacoste", "tommy-hilfiger", "calvin-klein", "hummel", "umbro", "kappa", "ellesse", "diadora", "mizuno", "salomon", "crocs"];
+  const brands = ["nike", "adidas", "puma", "new-balance", "under-armour", "reebok", "converse", "fila", "champion", "vans", "skechers", "asics", "jordan", "the-north-face", "columbia", "hoka", "timberland", "lacoste", "tommy-hilfiger", "calvin-klein", "hummel", "umbro", "kappa", "ellesse", "diadora", "mizuno", "salomon", "crocs", "la-terra"];
   const categories = ["patike", "cipele", "cizme", "jakne", "trenerke", "majice", "duksevi", "sorcevi", "helanke"];
   const genders = ["muski", "zenski", "deciji"];
   const stores = ["djak-sport", "planeta-sport", "sport-vision", "n-sport", "buzz", "office-shoes", "intersport", "tref-sport"];

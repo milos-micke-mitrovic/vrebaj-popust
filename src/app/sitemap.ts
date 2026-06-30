@@ -54,6 +54,7 @@ const FILTER_PAGES = [
   "mizuno",
   "salomon",
   "crocs",
+  "la-terra",
   // Genders
   "muski",
   "zenski",

@@ -3,6 +3,7 @@
 
 // Known multi-word brands (must match these before falling back to first word)
 export const KNOWN_BRANDS: string[] = [
+  "LA TERRA",  // Planeta house brand; without this it mis-extracts to just "LA"
   "THE NORTH FACE",
   "CALVIN KLEIN",
   "KARL LAGERFELD",
