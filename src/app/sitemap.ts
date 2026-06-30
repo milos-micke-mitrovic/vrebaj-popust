@@ -55,6 +55,9 @@ const FILTER_PAGES = [
   "salomon",
   "crocs",
   "la-terra",
+  "joma",
+  "rang",
+  "sergio-tacchini",
   // Genders
   "muski",
   "zenski",

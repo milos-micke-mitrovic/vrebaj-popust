@@ -48,7 +48,16 @@ const MULTI_WORD_BRANDS: Record<string, string> = {
   "tommy-hilfiger": "TOMMY HILFIGER",
   "calvin-klein": "CALVIN KLEIN",
   "la-terra": "LA TERRA",  // top organic query cluster ("la terra patike")
+  "sergio-tacchini": "SERGIO TACCHINI",
 };
+
+// Brands are stored uppercase ("LA TERRA"); display them Title-Cased so search
+// snippets and headings read "La Terra na popustu", not the spammy ALL-CAPS form.
+function brandDisplay(brand: string): string {
+  return brand
+    .toLocaleLowerCase("sr-Latn")
+    .replace(/(^|[\s\-/])(\p{L})/gu, (_m, sep, ch) => sep + ch.toLocaleUpperCase("sr-Latn"));
+}
 
 // Display names for genders
 const GENDER_DISPLAY: Record<Gender, string> = {
@@ -181,7 +190,7 @@ export function generateSeoTitle(parsed: ParsedFilter): string {
   const parts: string[] = [];
 
   if (parsed.brand) {
-    parts.push(parsed.brand);
+    parts.push(brandDisplay(parsed.brand));
   }
 
   if (parsed.category) {
@@ -210,7 +219,7 @@ export function generateSeoTitle(parsed: ParsedFilter): string {
  */
 export function generateSeoDescription(parsed: ParsedFilter): string {
   // Build the main subject
-  const brandText = parsed.brand || "";
+  const brandText = parsed.brand ? brandDisplay(parsed.brand) : "";
   const categoryText = parsed.category ? CATEGORY_DISPLAY[parsed.category] : "";
   const genderText = parsed.gender ? `za ${GENDER_DISPLAY[parsed.gender]}` : "";
   const storeText = parsed.store ? `u ${STORE_DISPLAY[parsed.store]}` : "";
