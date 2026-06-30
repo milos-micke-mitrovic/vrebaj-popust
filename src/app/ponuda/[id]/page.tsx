@@ -227,6 +227,14 @@ async function getRelevantDealsFromUrl(productId: string, limit: number = 8): Pr
 // This speeds up builds significantly since we have 4000-10000 products
 // Pages are still indexed via sitemap, just rendered dynamically on first visit
 
+// Scraped product names are ALL-CAPS, which reads as spam in a search snippet and
+// hurts CTR. Title-case them (Serbian-Latin aware) for titles/descriptions.
+function toTitleCase(s: string): string {
+  return s
+    .toLocaleLowerCase("sr-Latn")
+    .replace(/(^|[\s\-/("])(\p{L})/gu, (_m, sep, ch) => sep + ch.toLocaleUpperCase("sr-Latn"));
+}
+
 // Generate metadata for SEO
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
@@ -265,8 +273,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const categoryText = getCategoryDisplayName(deal);
 
   const savings = deal.originalPrice - deal.salePrice;
-  const title = `${deal.name} - ${deal.discountPercent}% popust`;
-  const description = `${deal.brand || ""} ${categoryText} ${genderText} na akciji u ${storeInfo.name}. Stara cena: ${formatPrice(deal.originalPrice)}, nova cena: ${formatPrice(deal.salePrice)}. Uštedi ${formatPrice(savings)}! Pronađi najveće sportske popuste u Srbiji.`.trim();
+  const niceName = toTitleCase(deal.name);
+  const salePriceText = formatPrice(deal.salePrice);
+
+  // Price- and discount-forward title. GSC shows we already rank for these product
+  // and SKU queries but get few clicks — leading with the actual price and % off
+  // (and a clean Title-Cased name) is the highest-leverage CTR lever we have.
+  const title = `${niceName} – ${salePriceText} (-${deal.discountPercent}%)`;
+  const description = `${niceName} na sniženju -${deal.discountPercent}%: sada ${salePriceText} umesto ${formatPrice(deal.originalPrice)} (ušteda ${formatPrice(savings)}). ${[deal.brand, categoryText, genderText].filter(Boolean).join(" ")} u prodavnici ${storeInfo.name}. Najveći sportski popusti u Srbiji.`.replace(/\s+/g, " ").trim();
 
   // Use the proxied URL for hotlink-protected stores (djaksport) so social and
   // search crawlers can actually fetch the preview image; direct URL otherwise.
@@ -290,7 +304,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       `${categoryText.toLowerCase()} na akciji`,
     ].filter(Boolean) as string[],
     openGraph: {
-      title: `${deal.name} - ${deal.discountPercent}% POPUST | VrebajPopust`,
+      title: `${niceName} – ${salePriceText} (-${deal.discountPercent}%) | VrebajPopust`,
       description,
       url: `https://www.vrebajpopust.rs/ponuda/${id}`,
       siteName: "VrebajPopust",
@@ -300,7 +314,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
               url: imageUrl,
               width: 800,
               height: 800,
-              alt: `${deal.name} - ${deal.brand || ""} ${categoryText} sa ${deal.discountPercent}% popusta`,
+              alt: `${niceName} – ${deal.brand || ""} ${categoryText} sa ${deal.discountPercent}% popusta`,
             },
           ]
         : [],
@@ -309,7 +323,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: {
       card: "summary_large_image",
-      title: `${deal.name} - ${deal.discountPercent}% POPUST`,
+      title: `${niceName} – ${salePriceText} (-${deal.discountPercent}%)`,
       description,
       images: imageUrl ? [imageUrl] : [],
     },
