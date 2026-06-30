@@ -2,8 +2,12 @@ import { Metadata } from "next";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
 import { ContactForm } from "@/components/contact-form";
-import { getAllDeals, getUniqueStores } from "@/lib/deals";
+import { getAllDealsAsync, getUniqueStores } from "@/lib/deals";
 import { safeJsonLd } from "@/lib/json-ld";
+
+// Refresh roughly hourly so the deal/store counts stay current rather than frozen
+// at build time.
+export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: "O nama | VrebajPopust",
@@ -21,8 +25,11 @@ export const metadata: Metadata = {
   },
 };
 
-export default function AboutPage() {
-  const deals = getAllDeals();
+export default async function AboutPage() {
+  // Await the async fetch first so the cache is populated — the sync getAllDeals()
+  // returns [] on a cold cache (e.g. a fresh build worker), which made this page
+  // render "0 stores / 0 deals".
+  const deals = await getAllDealsAsync();
   const stores = getUniqueStores();
 
   // AboutPage structured data
