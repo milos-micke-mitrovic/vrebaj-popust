@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
 
 // Content Security Policy
 const cspDirectives = [
@@ -11,8 +12,8 @@ const cspDirectives = [
   "img-src 'self' data: blob: https: http:",
   // Fonts: self and Google Fonts
   "font-src 'self' https://fonts.gstatic.com",
-  // Connections: self, Google Analytics
-  "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com",
+  // Connections: self, Google Analytics, Sentry error ingest (EU region)
+  "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://o4511659032707072.ingest.de.sentry.io",
   // Frames: none (prevent embedding)
   "frame-ancestors 'none'",
   // Base URI and form actions restricted to self
@@ -187,4 +188,13 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+// Wrap with Sentry. No source-map upload yet (no auth token) — errors are still
+// captured, just with minified stack traces; add SENTRY_AUTH_TOKEN later to upload
+// source maps. No tunnelRoute: events go straight to Sentry (CSP is widened above)
+// rather than routing through the small VPS.
+export default withSentryConfig(nextConfig, {
+  org: "vrebajpopust",
+  project: "vrebajpopust",
+  silent: !process.env.CI,
+  disableLogger: true,
+});
