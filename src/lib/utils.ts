@@ -83,35 +83,38 @@ export function formatPrice(price: number): string {
   }).format(price);
 }
 
+const SITE_URL = "https://www.vrebajpopust.rs";
+
 /**
- * Stores that have hotlink protection and need image proxying
+ * Stores that hotlink-protect browser requests. They still allow no-referer
+ * server-side fetches, which is how the Next image optimizer and our proxy reach
+ * them — so on-page images use direct URLs, but crawler-facing URLs (OG/sitemap)
+ * are routed through our own-domain proxy (see getAbsoluteImageUrl).
  */
 const PROXY_IMAGE_DOMAINS = ["djaksport.com"];
 
 /**
- * Get image URL, using proxy for stores with hotlink protection
+ * On-page image URL for use inside <Image>. Returns the DIRECT source URL: the
+ * optimizer fetches it server-side (with no referer, which even djaksport allows)
+ * and emits WebP. Proxying here would break optimization — Next rejects
+ * /_next/image of a local URL that carries a query string (the "?url=" proxy).
  */
 export function getProxiedImageUrl(imageUrl: string | null | undefined): string {
   if (!imageUrl) return "/images/placeholder.png";
-
-  // Check if image needs proxying based on domain
-  const needsProxy = PROXY_IMAGE_DOMAINS.some((domain) => imageUrl.includes(domain));
-
-  if (needsProxy) {
-    return `/api/image-proxy?url=${encodeURIComponent(imageUrl)}`;
-  }
-
   return imageUrl;
 }
 
 /**
- * Absolute version of the on-page image URL, for use in the image sitemap and
- * other metadata where Google requires a fully-qualified, crawlable location.
- * Mirrors exactly what the product page renders (proxied for hotlink-protected
- * stores, direct otherwise) so the sitemap declares the same image Google sees.
+ * Absolute, crawlable image URL for OG tags and the image sitemap. Hotlink-protected
+ * stores (djaksport) are routed through our own-domain proxy so Google Images and
+ * social scrapers see the image on vrebajpopust.rs (crawlable per our robots.txt)
+ * rather than the store's domain; other stores use their direct URL.
  */
 export function getAbsoluteImageUrl(imageUrl: string | null | undefined): string {
-  const proxied = getProxiedImageUrl(imageUrl);
-  if (proxied.startsWith("http")) return proxied;
-  return `https://www.vrebajpopust.rs${proxied}`;
+  if (!imageUrl) return `${SITE_URL}/images/placeholder.png`;
+  if (imageUrl.startsWith("/")) return `${SITE_URL}${imageUrl}`;
+  if (PROXY_IMAGE_DOMAINS.some((domain) => imageUrl.includes(domain))) {
+    return `${SITE_URL}/api/image-proxy?url=${encodeURIComponent(imageUrl)}`;
+  }
+  return imageUrl;
 }
