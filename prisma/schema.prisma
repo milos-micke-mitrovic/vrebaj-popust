@@ -53,6 +53,11 @@ model Deal {
   @@index([gender])
   @@index([discountPercent])
   @@index([brand])
+  // salePrice: powers price sorting and the min/max price filter in /api/deals.
+  @@index([salePrice])
+  // categories is a String[] filtered with hasSome (category landing pages + the
+  // /ponude category filter) — a GIN index turns those array scans into index lookups.
+  @@index([categories], type: Gin)
 }
 
 model ScrapeRun {
