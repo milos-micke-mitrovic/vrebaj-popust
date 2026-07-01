@@ -21,7 +21,6 @@ function DrawerImage({ src, alt }: { src: string; alt: string }) {
       sizes="80px"
       className={`object-cover transition-opacity duration-300 ${loaded ? "opacity-100" : "opacity-0"}`}
       onLoad={() => setLoaded(true)}
-      unoptimized
     />
   );
 }

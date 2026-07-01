@@ -19,7 +19,6 @@ export function ProductImage({ src, alt }: ProductImageProps) {
       sizes="(max-width: 768px) 100vw, 50vw"
       className={`object-contain p-4 transition-opacity duration-300 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
       onLoad={() => setImgLoaded(true)}
-      unoptimized
     />
   );
 }

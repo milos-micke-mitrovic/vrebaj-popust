@@ -65,7 +65,6 @@ function CarouselCard({ deal, shouldPreventClick }: { deal: Deal; shouldPreventC
             className={`object-cover transition-all duration-300 group-hover:scale-105 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
             onLoad={() => setImgLoaded(true)}
             onError={() => setImgError(true)}
-            unoptimized
             draggable={false}
           />
           {/* Discount ribbon */}

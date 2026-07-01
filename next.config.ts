@@ -94,6 +94,15 @@ const nextConfig: NextConfig = {
   // Optimize production builds
   productionBrowserSourceMaps: false,
   images: {
+    // WebP only — AVIF encoding is far more CPU-intensive and would overload the
+    // small self-hosted VPS. WebP still cuts image bytes ~25-35%.
+    formats: ["image/webp"],
+    // Cache optimized images for 31 days; source images per URL rarely change.
+    minimumCacheTTL: 2678400,
+    // Bound the number of generated variants (product thumbnails + one hero image
+    // don't need 2048/3840px renders) to keep the optimizer's work small.
+    deviceSizes: [640, 750, 828, 1080, 1200],
+    imageSizes: [96, 128, 256, 384],
     remotePatterns: [
       {
         protocol: "https",

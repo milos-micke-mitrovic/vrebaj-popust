@@ -104,7 +104,6 @@ export function DealCard({ deal }: DealCardProps) {
             className={`object-cover transition-all duration-300 group-hover:scale-105 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
             onLoad={() => setImgLoaded(true)}
             onError={() => setImgError(true)}
-            unoptimized
           />
           {/* Discount ribbon */}
           <div className="absolute -left-8 top-2 rotate-[-45deg] bg-gradient-to-r from-red-500 to-red-600 px-8 py-0.5 text-xs font-bold text-white shadow-md ribbon-shimmer">

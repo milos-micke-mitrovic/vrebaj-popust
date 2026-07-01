@@ -177,7 +177,6 @@ export function QuickViewModal({ deal, onClose }: QuickViewModalProps) {
               sizes="(max-width: 768px) 100vw, 50vw"
               className={`object-cover transition-opacity duration-300 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
               onLoad={() => setImgLoaded(true)}
-              unoptimized
             />
             {/* Discount badge */}
             <div className="absolute left-3 top-3 bg-gradient-to-r from-red-500 to-red-600 text-white text-sm font-bold px-3 py-1 rounded-full shadow">
