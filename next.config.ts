@@ -29,6 +29,10 @@ const nextConfig: NextConfig = {
   // Force webpack for PWA support
   turbopack: {},
 
+  // Cloudflare/OpenNext: keep Prisma out of the bundle so OpenNext can patch the
+  // client for the workerd runtime (otherwise it crashes scanning for engines).
+  serverExternalPackages: ["@prisma/client", ".prisma/client"],
+
   // Hide X-Powered-By header (don't reveal it's Next.js)
   poweredByHeader: false,
 
@@ -95,15 +99,10 @@ const nextConfig: NextConfig = {
   // Optimize production builds
   productionBrowserSourceMaps: false,
   images: {
-    // WebP only — AVIF encoding is far more CPU-intensive and would overload the
-    // small self-hosted VPS. WebP still cuts image bytes ~25-35%.
-    formats: ["image/webp"],
-    // Cache optimized images for 31 days; source images per URL rarely change.
-    minimumCacheTTL: 2678400,
-    // Bound the number of generated variants (product thumbnails + one hero image
-    // don't need 2048/3840px renders) to keep the optimizer's work small.
-    deviceSizes: [640, 750, 828, 1080, 1200],
-    imageSizes: [96, 128, 256, 384],
+    // Cloudflare/Workers: Next's image optimizer (sharp) can't run on the edge, so
+    // serve source images as-is. Cloudflare's CDN still caches/delivers them. (The
+    // remotePatterns below are moot with unoptimized but kept for local Node dev.)
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",

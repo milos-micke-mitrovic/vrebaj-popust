@@ -1,0 +1,24 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "vrebaj-popust",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2025-04-01",
+  "compatibility_flags": ["nodejs_compat"],
+  // Static assets emitted by OpenNext (never fetch the Worker's own URL for these).
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".open-next/assets"
+  },
+  // D1 (SQLite) — replaces the DigitalOcean Postgres. For local `cf:preview`,
+  // wrangler uses a local SQLite; database_id is only needed for the remote DB,
+  // created later via `wrangler d1 create vrebaj-popust-db` (needs Cloudflare login).
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "vrebaj-popust-db",
+      "database_id": "REPLACE_AFTER_wrangler_d1_create"
+    }
+  ]
+  // No R2: this app has no file uploads (product images are external store URLs
+  // served via /api/image-proxy, which uses fetch and works on Workers).
+}
