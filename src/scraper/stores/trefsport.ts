@@ -123,8 +123,11 @@ function extractProducts(html: string): RawProduct[] {
       if (match) discountFromSite = parseInt(match[1], 10);
     }
 
-    // Get brand from manufacturer badge
-    const brandBadge = card.querySelector(".badge-manufacturer span");
+    // Get brand from manufacturer badge. Trefsport moved the brand text directly
+    // onto the .badge-manufacturer element (was a nested <span>), so read the
+    // element itself; fall back to a nested span for older markup.
+    const brandBadge =
+      card.querySelector(".badge-manufacturer") || card.querySelector(".badge-manufacturer span");
     const brand = brandBadge?.textContent?.trim() || null;
 
     if (name && url && (originalPrice || salePrice)) {
