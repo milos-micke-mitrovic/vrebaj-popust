@@ -27,12 +27,17 @@
       "database_name": "vrebaj-popust-db",
       "database_id": "5ffae0d7-fc3d-4c66-8a12-2ebe1e735d87"
     }
-  ]
+  ],
   // No R2: this app has no file uploads (product images are external store URLs
   // served via /api/image-proxy, which uses fetch and works on Workers).
+
+  // Send email (contact-form notifications) via Cloudflare Email Routing. The
+  // destination MUST be a verified Email Routing address (m1ck33kc1m@gmail.com).
+  "send_email": [
+    { "name": "CONTACT_EMAIL", "destination_address": "m1ck33kc1m@gmail.com" }
+  ]
 
   // Secrets (NOT stored here — set once per environment):
   //   wrangler secret put INGEST_SECRET   → auth for /api/ingest (the scraper write path)
   //   wrangler secret put ADMIN_SECRET    → /admin?key=... access
-  //   wrangler secret put SENTRY_DSN      → error reporting (if used at runtime)
 }

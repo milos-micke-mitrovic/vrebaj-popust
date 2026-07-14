@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getPrisma } from "@/lib/db";
 import { blockBots } from "@/lib/bot-guard";
+import { notifyContact } from "@/lib/contact-notify";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -97,6 +98,9 @@ export async function POST(request: NextRequest) {
     await prisma.contactMessage.create({
       data: { name, email, message },
     });
+
+    // Email the owner (best-effort; never fails the request — message is already saved).
+    await notifyContact(name, email, message);
 
     return NextResponse.json({ success: true });
   } catch (error) {

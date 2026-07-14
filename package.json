@@ -37,6 +37,7 @@
     "clsx": "^2.1.1",
     "jsdom": "^27.4.0",
     "lucide-react": "^0.562.0",
+    "mimetext": "^3.0.28",
     "next": "16.2.7",
     "prisma": "^6.19.2",
     "puppeteer": "^24.35.0",

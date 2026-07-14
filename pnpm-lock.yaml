@@ -38,6 +38,9 @@ importers:
       lucide-react:
         specifier: ^0.562.0
         version: 0.562.0(react@19.2.3)
+      mimetext:
+        specifier: ^3.0.28
+        version: 3.0.28
       next:
         specifier: 16.2.7
         version: 16.2.7(@babel/core@7.28.6)(@opentelemetry/api@1.9.1)(react-dom@19.2.3(react@19.2.3))(react@19.2.3)
@@ -421,6 +424,14 @@ packages:
     resolution: {integrity: sha512-TeR9zWR18BvbfPmGbLampPMW+uW1NZnJlRuuHso8i87QZNq2JRF9i6RgxRqtEq+wQGsS19NNTWr2duhnE49mfQ==}
     engines: {node: '>=6.0.0'}
     hasBin: true
+
+  '@babel/runtime-corejs3@7.29.7':
+    resolution: {integrity: sha512-ppj9ouYku+RX0ljtgZd+KMO5mkM2bCqg8H2PYAFWnLsHEIKIdRojqbJ2i3eVHrisuxy7nOFCmngTDdWtUCdXUQ==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/runtime@7.29.7':
+    resolution: {integrity: sha512-Nq8OhGWiZIZGV6hLHoyAKLLcJihP/xFeBMGJoUrxTX2psI8dCifzLhZISFb+VWS3wFMRDmCGw5R+dOySCqPLhw==}
+    engines: {node: '>=6.9.0'}
 
   '@babel/template@7.28.6':
     resolution: {integrity: sha512-YA6Ma2KsCdGb+WC6UpBVFJGXL58MDA6oyONbjyF/+5sBgxY/dwkhLogbMT2GXXyU84/IhRw/2D1Os1B/giz+BQ==}
@@ -2675,6 +2686,9 @@ packages:
     resolution: {integrity: sha512-ei8Aos7ja0weRpFzJnEA9UHJ/7XQmqglbRwnf2ATjcB9Wq874VKH9kfjjirM6UhU2/E5fFYadylyhFldcqSidQ==}
     engines: {node: '>=18'}
 
+  core-js-pure@3.49.0:
+    resolution: {integrity: sha512-XM4RFka59xATyJv/cS3O3Kml72hQXUeGRuuTmMYFxwzc9/7C8OYTaIR/Ji+Yt8DXzsFLNhat15cE/JP15HrCgw==}
+
   cosmiconfig@9.0.0:
     resolution: {integrity: sha512-itvL5h8RETACmOTFc4UfIyB2RfEHi71Ax6E/PivVxq9NseKbOWpeyHEOIbmAw1rs8Ak0VursQNww7lf7YtUwzg==}
     engines: {node: '>=14'}
@@ -3574,6 +3588,9 @@ packages:
     resolution: {integrity: sha512-ekilCSN1jwRvIbgeg/57YFh8qQDNbwDb9xT/qu2DAHbFFZUicIl4ygVaAvzveMhMVr3LnpSKTNnwt8PoOfmKhQ==}
     hasBin: true
 
+  js-base64@3.9.0:
+    resolution: {integrity: sha512-dTIdlnQjYWoP6+8AMcQp72c0IWd5tfuQYT9WCRwmekv2C0OucjLF3lrDr09c44KA6M8Ol40DFp5hhSUbC7LkyQ==}
+
   js-tokens@4.0.0:
     resolution: {integrity: sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==}
 
@@ -3882,6 +3899,9 @@ packages:
   mime-types@3.0.2:
     resolution: {integrity: sha512-Lbgzdk0h4juoQ9fCKXW4by0UJqj+nOOrI9MJ1sSj4nI8aI2eo1qmvQEie4VD1glsS250n15LsWsYtCugiStS5A==}
     engines: {node: '>=18'}
+
+  mimetext@3.0.28:
+    resolution: {integrity: sha512-eQXpbNrtxLCjUtiVbR/qR09dbPgZ2o+KR1uA7QKqGhbn8QV7HIL16mXXsobBL4/8TqoYh1us31kfz+dNfCev9g==}
 
   mimic-fn@2.1.0:
     resolution: {integrity: sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==}
@@ -5792,6 +5812,12 @@ snapshots:
   '@babel/parser@7.28.6':
     dependencies:
       '@babel/types': 7.28.6
+
+  '@babel/runtime-corejs3@7.29.7':
+    dependencies:
+      core-js-pure: 3.49.0
+
+  '@babel/runtime@7.29.7': {}
 
   '@babel/template@7.28.6':
     dependencies:
@@ -7759,6 +7785,8 @@ snapshots:
 
   cookie@1.1.1: {}
 
+  core-js-pure@3.49.0: {}
+
   cosmiconfig@9.0.0(typescript@5.9.3):
     dependencies:
       env-paths: 2.2.1
@@ -8913,6 +8941,8 @@ snapshots:
 
   jiti@2.6.1: {}
 
+  js-base64@3.9.0: {}
+
   js-tokens@4.0.0: {}
 
   js-yaml@4.1.1:
@@ -9169,6 +9199,13 @@ snapshots:
   mime-types@3.0.2:
     dependencies:
       mime-db: 1.54.0
+
+  mimetext@3.0.28:
+    dependencies:
+      '@babel/runtime': 7.29.7
+      '@babel/runtime-corejs3': 7.29.7
+      js-base64: 3.9.0
+      mime-types: 2.1.35
 
   mimic-fn@2.1.0: {}
 
