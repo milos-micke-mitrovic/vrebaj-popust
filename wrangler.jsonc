@@ -2,7 +2,10 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "vrebaj-popust",
   "main": ".open-next/worker.js",
-  "compatibility_date": "2025-04-01",
+  // 2025-08-16+ is required for @sentry/nextjs to run on Workers: it adds
+  // https.request to the runtime, which the Sentry SDK needs to send events.
+  // nodejs_compat gives AsyncLocalStorage + the Node APIs Next/Sentry rely on.
+  "compatibility_date": "2025-08-16",
   "compatibility_flags": ["nodejs_compat"],
   // Static assets emitted by OpenNext (never fetch the Worker's own URL for these).
   "assets": {
