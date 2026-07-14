@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect } from "react";
-import * as Sentry from "@sentry/nextjs";
 
 export default function GlobalError({
   error,
@@ -11,8 +10,8 @@ export default function GlobalError({
   reset: () => void;
 }) {
   useEffect(() => {
+    // Cloudflare Workers Observability captures the exception automatically.
     console.error("Global error:", error);
-    Sentry.captureException(error);
   }, [error]);
 
   // Using inline styles because global-error.tsx runs when root layout fails,
