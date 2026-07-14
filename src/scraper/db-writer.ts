@@ -1,127 +1,78 @@
 import "dotenv/config";
-import { PrismaClient } from "@prisma/client";
 import type { Store, Gender } from "../types/deal";
-import { stringifyStringArray } from "../lib/json-array";
+import type { DealInput, DealDetailsInput, DealToDetail } from "../lib/ingest-types";
 
-const prisma = new PrismaClient();
+// The scrapers write to Cloudflare D1 through the authenticated /api/ingest endpoint
+// (GitHub Actions can't reach D1 directly). This module keeps the old db-writer API
+// so the store scrapers are unchanged — it just POSTs instead of calling Prisma.
+//
+// Deals are buffered and flushed in batches (per-deal HTTP round-trips would be far
+// too slow for ~thousands of products). The server upserts each deal in its own
+// try/catch, so one bad product still can't abort a run; per-deal failures come back
+// and are folded into the errors logged by logScrapeRun.
 
-/**
- * Expand compound sizes so exact-match filtering works.
- * "43-45" → ["43","44","45"], "38 2/3" → ["38","39"], "S/M" → ["S","M"], etc.
- */
-function normalizeSizes(sizes: string[]): string[] {
-  const result = new Set<string>();
+const INGEST_URL = process.env.INGEST_URL;
+const INGEST_SECRET = process.env.INGEST_SECRET;
 
-  for (const raw of sizes) {
-    const s = raw.trim();
-    if (!s) continue;
+const CHUNK = 50;
+let buffer: DealInput[] = [];
+let writeErrors: string[] = [];
 
-    // Range: "36-37", "43-45"
-    const rangeMatch = s.match(/^(\d+)\s*-\s*(\d+)$/);
-    if (rangeMatch) {
-      const lo = parseInt(rangeMatch[1]);
-      const hi = parseInt(rangeMatch[2]);
-      for (let i = lo; i <= hi; i++) result.add(String(i));
-      continue;
-    }
-
-    // Fractional: "38 2/3", "44 1/3"
-    const fracMatch = s.match(/^(\d+)\s+(\d+)\/(\d+)$/);
-    if (fracMatch) {
-      const whole = parseInt(fracMatch[1]);
-      result.add(String(whole));
-      result.add(String(whole + 1));
-      continue;
-    }
-
-    // Decimal: "42.5"
-    const decMatch = s.match(/^(\d+)\.(\d+)$/);
-    if (decMatch) {
-      const num = parseFloat(s);
-      result.add(String(Math.floor(num)));
-      result.add(String(Math.ceil(num)));
-      continue;
-    }
-
-    // Compound letter: "S/M", "M/L"
-    if (/^[A-Za-z0-9]+\/[A-Za-z0-9]+$/.test(s)) {
-      for (const part of s.split("/")) result.add(part.toUpperCase());
-      continue;
-    }
-
-    result.add(s);
+async function callIngest(action: string, payload: Record<string, unknown>): Promise<unknown> {
+  if (!INGEST_URL || !INGEST_SECRET) {
+    throw new Error(
+      "INGEST_URL / INGEST_SECRET are not set — scrapers write via the Cloudflare /api/ingest endpoint. Set both env vars (point at a deployed Worker or a local `cf:preview`)."
+    );
   }
-
-  return [...result];
+  const res = await fetch(INGEST_URL, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${INGEST_SECRET}`,
+    },
+    body: JSON.stringify({ action, ...payload }),
+  });
+  if (!res.ok) {
+    const detail = await res.text().catch(() => "");
+    throw new Error(`ingest "${action}" failed: HTTP ${res.status} ${detail}`.trim());
+  }
+  return res.json();
 }
 
-export interface DealInput {
-  id: string;
-  store: Store;
-  name: string;
-  brand: string | null;
-  originalPrice: number;
-  salePrice: number;
-  discountPercent: number;
-  url: string;
-  imageUrl: string | null;
-  sizes?: string[];
-  description?: string | null;
-  detailImageUrl?: string | null;
-  categories?: string[];
-  gender?: Gender;
+// Flush buffered deals to D1 in chunks. Records per-deal and per-chunk failures into
+// writeErrors (surfaced later via logScrapeRun) rather than throwing.
+async function flush(): Promise<void> {
+  if (buffer.length === 0) return;
+  const batch = buffer;
+  buffer = [];
+  for (let i = 0; i < batch.length; i += CHUNK) {
+    const chunk = batch.slice(i, i + CHUNK);
+    try {
+      const { failed } = (await callIngest("upsertDeals", { deals: chunk })) as {
+        ok: number;
+        failed: { url: string; error: string }[];
+      };
+      for (const f of failed || []) writeErrors.push(`upsert ${f.url}: ${f.error}`);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      for (const d of chunk) writeErrors.push(`upsert ${d.url}: ${message}`);
+      console.error(message);
+    }
+  }
 }
 
 export async function upsertDeal(deal: DealInput): Promise<void> {
-  const sizes = deal.sizes ? normalizeSizes(deal.sizes) : undefined;
-  await prisma.deal.upsert({
-    where: { url: deal.url },
-    update: {
-      name: deal.name,
-      brand: deal.brand,
-      originalPrice: deal.originalPrice,
-      salePrice: deal.salePrice,
-      discountPercent: deal.discountPercent,
-      imageUrl: deal.imageUrl,
-      categories: stringifyStringArray(deal.categories),
-      gender: deal.gender || "unisex",
-      scrapedAt: new Date(),
-      // Only overwrite detail-scraper fields if explicitly provided
-      ...(sizes && sizes.length > 0 && { sizes: stringifyStringArray(sizes) }),
-      ...(deal.description != null && { description: deal.description }),
-      ...(deal.detailImageUrl != null && { detailImageUrl: deal.detailImageUrl }),
-    },
-    create: {
-      id: deal.id,
-      store: deal.store,
-      name: deal.name,
-      brand: deal.brand,
-      originalPrice: deal.originalPrice,
-      salePrice: deal.salePrice,
-      discountPercent: deal.discountPercent,
-      url: deal.url,
-      imageUrl: deal.imageUrl,
-      sizes: stringifyStringArray(sizes),
-      description: deal.description || null,
-      detailImageUrl: deal.detailImageUrl || null,
-      categories: stringifyStringArray(deal.categories),
-      gender: deal.gender || "unisex",
-      scrapedAt: new Date(),
-    },
-  });
+  // Stamp scrapedAt on the scraper's clock so cleanupStaleProducts stays consistent.
+  buffer.push({ ...deal, scrapedAt: deal.scrapedAt || new Date().toISOString() });
+  if (buffer.length >= CHUNK) await flush();
 }
 
 export async function upsertDeals(deals: DealInput[]): Promise<number> {
-  let count = 0;
   for (const deal of deals) {
-    try {
-      await upsertDeal(deal);
-      count++;
-    } catch (err) {
-      console.error(`Error upserting ${deal.url}:`, err instanceof Error ? err.message : err);
-    }
+    buffer.push({ ...deal, scrapedAt: deal.scrapedAt || new Date().toISOString() });
   }
-  return count;
+  await flush();
+  return deals.length;
 }
 
 export async function logScrapeRun(
@@ -130,154 +81,52 @@ export async function logScrapeRun(
   filteredCount: number,
   errors: string[]
 ): Promise<void> {
-  await prisma.scrapeRun.create({
-    data: {
-      store,
-      totalScraped,
-      filteredCount,
-      errors: stringifyStringArray(errors),
-      completedAt: new Date(),
-    },
-  });
+  await flush();
+  const allErrors = [...errors, ...writeErrors];
+  writeErrors = [];
+  await callIngest("logScrapeRun", { store, totalScraped, filteredCount, errors: allErrors });
 }
 
-export async function updateDealDetails(
-  url: string,
-  details: {
-    sizes?: string[];
-    description?: string | null;
-    detailImageUrl?: string | null;
-    categories?: string[];
-    gender?: Gender;
-  }
-): Promise<void> {
-  await prisma.deal.update({
-    where: { url },
-    data: {
-      // Only overwrite array columns when provided (undefined = leave unchanged).
-      ...(details.sizes && { sizes: stringifyStringArray(normalizeSizes(details.sizes)) }),
-      description: details.description,
-      detailImageUrl: details.detailImageUrl,
-      ...(details.categories && { categories: stringifyStringArray(details.categories) }),
-      gender: details.gender,
-      detailsScrapedAt: new Date(),
-    },
-  });
+export async function updateDealDetails(url: string, details: DealDetailsInput): Promise<void> {
+  await callIngest("updateDealDetails", { url, details });
 }
 
-// Return only deals that still need detail scraping: never scraped, or last
-// scraped more than `staleDays` ago. Never-scraped deals come first so new
-// products are always prioritised. This keeps each run's workload bounded —
-// re-scraping the entire catalogue nightly overflowed the CI time limit once a
-// store (djaksport) grew back to ~1500 deals.
 export async function getDealsForDetailScraping(
   store: Store,
   staleDays = 7
-): Promise<{ id: string; url: string; name: string }[]> {
-  const staleBefore = new Date(Date.now() - staleDays * 24 * 60 * 60 * 1000);
-  return prisma.deal.findMany({
-    where: {
-      store,
-      OR: [{ detailsScrapedAt: null }, { detailsScrapedAt: { lt: staleBefore } }],
-    },
-    select: { id: true, url: true, name: true },
-    orderBy: { detailsScrapedAt: { sort: "asc", nulls: "first" } },
-  });
+): Promise<DealToDetail[]> {
+  const { deals } = (await callIngest("getDealsForDetailScraping", { store, staleDays })) as {
+    deals: DealToDetail[];
+  };
+  return deals;
 }
 
-export async function getAllDeals(store?: Store) {
-  return prisma.deal.findMany({
-    where: store ? { store } : undefined,
-    orderBy: { discountPercent: "desc" },
-  });
-}
-
-// Minimum products required to consider a scrape successful
-// If fewer products found, assume scraper failed and don't delete old products
-const MIN_PRODUCTS_THRESHOLD: Record<Store, number> = {
-  djaksport: 10,
-  planeta: 10,
-  nsport: 5,
-  sportvision: 10,
-  buzz: 10,
-  officeshoes: 10,
-  intersport: 10,
-  trefsport: 5,
-};
-
-/**
- * Clean up stale products for a store after a successful scrape.
- * Only deletes products if:
- * 1. The scrape found more than the minimum threshold
- * 2. The products weren't updated in the current scrape run
- */
 export async function cleanupStaleProducts(
   store: Store,
   scrapeStartTime: Date,
   productsFound: number
 ): Promise<number> {
-  const threshold = MIN_PRODUCTS_THRESHOLD[store];
-
-  // If scraper found too few products, assume it failed - don't delete anything
-  if (productsFound < threshold) {
-    console.log(`[${store}] Only found ${productsFound} products (threshold: ${threshold}). Skipping cleanup to avoid data loss.`);
-    return 0;
-  }
-
-  // Delete products that weren't updated in this scrape run
-  const result = await prisma.deal.deleteMany({
-    where: {
-      store,
-      scrapedAt: {
-        lt: scrapeStartTime,
-      },
-    },
-  });
-
-  if (result.count > 0) {
-    console.log(`[${store}] Cleaned up ${result.count} stale products`);
-  }
-
-  return result.count;
+  await flush();
+  const { deleted } = (await callIngest("cleanupStaleProducts", {
+    store,
+    scrapeStartTime: scrapeStartTime.toISOString(),
+    productsFound,
+  })) as { deleted: number };
+  return deleted;
 }
 
-/**
- * Delete a deal by URL (used when product is out of stock / no sizes)
- */
 export async function deleteDealByUrl(url: string): Promise<boolean> {
   try {
-    await prisma.deal.delete({ where: { url } });
-    return true;
+    const { deleted } = (await callIngest("deleteDealByUrl", { url })) as { deleted: boolean };
+    return Boolean(deleted);
   } catch {
     return false;
   }
 }
 
-/**
- * Get count of existing products for a store
- */
-export async function getStoreProductCount(store: Store): Promise<number> {
-  return prisma.deal.count({ where: { store } });
-}
-
-/**
- * Reset details for a store to force re-scraping
- */
-export async function resetStoreDetails(store: Store): Promise<number> {
-  const result = await prisma.deal.updateMany({
-    where: { store },
-    data: {
-      sizes: "[]",
-      detailsScrapedAt: null,
-    },
-  });
-  console.log(`[${store}] Reset details for ${result.count} products`);
-  return result.count;
-}
-
+// No persistent connection to close now — just flush any buffered deals.
 export async function disconnect(): Promise<void> {
-  await prisma.$disconnect();
+  await flush();
 }
 
-export { prisma };
 export type { Store, Gender };

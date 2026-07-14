@@ -21,4 +21,9 @@
   ]
   // No R2: this app has no file uploads (product images are external store URLs
   // served via /api/image-proxy, which uses fetch and works on Workers).
+
+  // Secrets (NOT stored here — set once per environment):
+  //   wrangler secret put INGEST_SECRET   → auth for /api/ingest (the scraper write path)
+  //   wrangler secret put ADMIN_SECRET    → /admin?key=... access
+  //   wrangler secret put SENTRY_DSN      → error reporting (if used at runtime)
 }

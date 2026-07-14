@@ -3,6 +3,11 @@ name: Scrape DjakSport
 on:
   workflow_dispatch:
 
+# Scrapers write to Cloudflare D1 via the authenticated /api/ingest endpoint.
+env:
+  INGEST_URL: ${{ secrets.INGEST_URL }}
+  INGEST_SECRET: ${{ secrets.INGEST_SECRET }}
+
 jobs:
   scrape:
     runs-on: ubuntu-latest

@@ -1,9 +1,26 @@
 import "dotenv/config";
-import { PrismaClient } from "@prisma/client";
 import type { Store } from "../types/deal";
+import type { ScrapeRunSummary } from "../lib/ingest-types";
 import { parseStringArray } from "../lib/json-array";
 
-const prisma = new PrismaClient();
+const INGEST_URL = process.env.INGEST_URL;
+const INGEST_SECRET = process.env.INGEST_SECRET;
+
+// Reads recent scrape runs via the same authenticated /api/ingest endpoint the
+// scrapers write through (D1 isn't reachable directly from GitHub Actions).
+async function fetchRecentRuns(sinceHours: number): Promise<ScrapeRunSummary[]> {
+  if (!INGEST_URL || !INGEST_SECRET) {
+    throw new Error("INGEST_URL / INGEST_SECRET are not set — health-check reads via /api/ingest.");
+  }
+  const res = await fetch(INGEST_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json", Authorization: `Bearer ${INGEST_SECRET}` },
+    body: JSON.stringify({ action: "getRecentScrapeRuns", sinceHours }),
+  });
+  if (!res.ok) throw new Error(`health-check fetch failed: HTTP ${res.status}`);
+  const { runs } = (await res.json()) as { runs: ScrapeRunSummary[] };
+  return runs;
+}
 
 const STORES: Store[] = [
   "djaksport",
@@ -27,14 +44,9 @@ interface Issue {
 }
 
 async function main(): Promise<void> {
-  const cutoff = new Date(Date.now() - 6 * 60 * 60 * 1000);
+  const runs = await fetchRecentRuns(6);
 
-  const runs = await prisma.scrapeRun.findMany({
-    where: { startedAt: { gte: cutoff } },
-    orderBy: { startedAt: "desc" },
-  });
-
-  const latestByStore = new Map<Store, (typeof runs)[number]>();
+  const latestByStore = new Map<Store, ScrapeRunSummary>();
   for (const run of runs) {
     const store = run.store as Store;
     if (!latestByStore.has(store)) latestByStore.set(store, run);
@@ -84,7 +96,6 @@ async function main(): Promise<void> {
 
   if (issues.length === 0) {
     console.log("All scrapers healthy.\n");
-    await prisma.$disconnect();
     process.exit(0);
   }
 
@@ -96,12 +107,10 @@ async function main(): Promise<void> {
   }
   console.log();
 
-  await prisma.$disconnect();
   process.exit(critical > 0 ? 1 : 0);
 }
 
-main().catch(async (err) => {
+main().catch((err) => {
   console.error(err);
-  await prisma.$disconnect();
   process.exit(1);
 });

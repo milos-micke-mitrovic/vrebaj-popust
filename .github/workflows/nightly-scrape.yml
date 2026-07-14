@@ -6,6 +6,13 @@ on:
     - cron: '0 2 * * *'
   workflow_dispatch: # Allow manual trigger
 
+# Scrapers write to Cloudflare D1 through the authenticated /api/ingest endpoint
+# (D1 isn't reachable directly from GitHub Actions). Set both as repo secrets:
+# INGEST_URL = https://www.vrebajpopust.rs/api/ingest, INGEST_SECRET = the Worker secret.
+env:
+  INGEST_URL: ${{ secrets.INGEST_URL }}
+  INGEST_SECRET: ${{ secrets.INGEST_SECRET }}
+
 jobs:
   # List scrapers run in parallel
   scrape-planeta:

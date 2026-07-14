@@ -13,6 +13,11 @@ on:
           - 'list_only'
           - 'details_only'
 
+# Scrapers write to Cloudflare D1 via the authenticated /api/ingest endpoint.
+env:
+  INGEST_URL: ${{ secrets.INGEST_URL }}
+  INGEST_SECRET: ${{ secrets.INGEST_SECRET }}
+
 jobs:
   scrape-list:
     runs-on: ubuntu-latest
