@@ -1,0 +1,66 @@
+name: Deploy to Cloudflare
+
+# Auto-deploy the Next.js app to the Cloudflare Worker (Workers + D1) on every push
+# to main — the successor to "Deploy to VPS" (deploy.yml). This file sits dormant on
+# the migration branch (it only triggers on main). At the DNS cutover, when the
+# branch merges to main, DELETE deploy.yml in the same commit so pushes deploy to
+# Cloudflare only (not the retired droplet).
+#
+# Requires repo secrets: CLOUDFLARE_API_TOKEN (Workers + D1 edit) and, for client
+# error reporting, NEXT_PUBLIC_SENTRY_DSN.
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - "**.md"
+      - ".github/workflows/scrape-*.yml"
+      - ".github/workflows/nightly-scrape.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-cloudflare
+  cancel-in-progress: false
+
+jobs:
+  # Gate: the pure business-logic unit tests must pass before we deploy.
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "pnpm"
+      - run: pnpm install --frozen-lockfile
+      # `next build` prerenders SSG/ISR pages that query the DB through the Node
+      # SQLite path, so give it an empty local SQLite to read (real data lives in D1
+      # and these pages revalidate on the Worker). Prevents "unable to open database
+      # file" during the build.
+      - name: Create empty local SQLite for the build
+        run: DATABASE_URL="file:./local.db" pnpm prisma db push --skip-generate
+      - name: Build & deploy to Cloudflare
+        run: pnpm cf:deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          # NEXT_PUBLIC_* are inlined at build time, so the client Sentry DSN must be
+          # present here (not just as a Worker runtime secret).
+          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
