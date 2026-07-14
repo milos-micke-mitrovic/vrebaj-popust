@@ -19,7 +19,7 @@
     {
       "binding": "DB",
       "database_name": "vrebaj-popust-db",
-      "database_id": "REPLACE_AFTER_wrangler_d1_create"
+      "database_id": "5ffae0d7-fc3d-4c66-8a12-2ebe1e735d87"
     }
   ]
   // No R2: this app has no file uploads (product images are external store URLs
