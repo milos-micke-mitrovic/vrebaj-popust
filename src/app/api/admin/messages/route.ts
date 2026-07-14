@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { getPrisma } from "@/lib/db";
 
 const PAGE_SIZE = 20;
 
@@ -17,6 +17,7 @@ export async function GET(request: NextRequest) {
   const page = Math.max(1, parseInt(request.nextUrl.searchParams.get("page") || "1", 10) || 1);
 
   try {
+    const prisma = await getPrisma();
     const [messages, total] = await Promise.all([
       prisma.contactMessage.findMany({
         orderBy: { createdAt: "desc" },
@@ -59,6 +60,7 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json({ error: "No IDs provided" }, { status: 400 });
     }
 
+    const prisma = await getPrisma();
     await prisma.contactMessage.updateMany({
       where: { id: { in: ids } },
       data: { read },
@@ -89,6 +91,7 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "No IDs provided" }, { status: 400 });
     }
 
+    const prisma = await getPrisma();
     if (all) {
       await prisma.contactMessage.deleteMany();
     } else {

@@ -9,6 +9,7 @@ import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
 import { mapCategory } from "../lib/category-mapper";
 import { extractGenderFromNameUrl } from "../lib/gender-mapper";
+import { parseStringArray, stringifyStringArray } from "../lib/json-array";
 
 const prisma = new PrismaClient();
 
@@ -32,7 +33,7 @@ async function cleanup() {
   const emptyDeals = await prisma.deal.findMany({
     where: {
       detailsScrapedAt: { not: null },
-      sizes: { isEmpty: true },
+      sizes: "[]",
     },
     select: { id: true, name: true, url: true, categories: true },
   });
@@ -40,8 +41,9 @@ async function cleanup() {
   let deletedCount = 0;
   for (const deal of emptyDeals) {
     const cat = mapCategory(deal.name + " " + deal.url);
+    const dealCategories = parseStringArray(deal.categories);
     const hasObucaOdeca = cat && (cat.startsWith("obuca/") || cat.startsWith("odeca/")) ||
-      deal.categories.some(c => c.startsWith("obuca/") || c.startsWith("odeca/"));
+      dealCategories.some(c => c.startsWith("obuca/") || c.startsWith("odeca/"));
 
     if (hasObucaOdeca) {
       await prisma.deal.delete({ where: { id: deal.id } });
@@ -73,7 +75,7 @@ async function cleanup() {
 
   for (let i = 0; i < deals.length; i++) {
     const deal = deals[i];
-    let newCategories = [...deal.categories];
+    let newCategories = parseStringArray(deal.categories);
     let changed = false;
 
     // Step 2: Replace stale category paths
@@ -113,7 +115,7 @@ async function cleanup() {
       await prisma.deal.update({
         where: { id: deal.id },
         data: {
-          categories: newCategories,
+          categories: stringifyStringArray(newCategories),
           ...(genderChanged && { gender: extractedGender }),
         },
       });

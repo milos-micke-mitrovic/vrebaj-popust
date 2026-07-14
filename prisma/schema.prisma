@@ -1,33 +1,26 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  // driverAdapters lets Prisma run on the Cloudflare D1 adapter at the edge.
+  previewFeatures = ["driverAdapters"]
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
-enum Store {
-  djaksport
-  planeta
-  sportvision
-  nsport
-  buzz
-  officeshoes
-  intersport
-  trefsport
-}
-
-enum Gender {
-  muski
-  zenski
-  deciji
-  unisex
-}
+// NOTE (Postgres -> SQLite/D1 migration):
+// - Enums don't exist in SQLite -> `store`/`gender` are plain String (values are
+//   still constrained in app code via the Store/Gender types).
+// - Array columns don't exist in SQLite -> `sizes`/`categories`/`errors` are stored
+//   as JSON-encoded TEXT (e.g. '["42","43"]'). They're (de)serialized centrally in
+//   src/lib/deals.ts (convertDeal) and src/scraper/db-writer.ts, so the app-level
+//   Deal type keeps `string[]`. Array filters use SQLite json_each via raw SQL.
+// - DateTimes are written as ISO-8601 TEXT by the D1 adapter.
 
 model Deal {
   id              String   @id
-  store           Store
+  store           String
   name            String
   brand           String?
   originalPrice   Int
@@ -37,36 +30,32 @@ model Deal {
   imageUrl        String?
 
   // Detail scraper fields
-  sizes           String[] @default([])
+  sizes           String   @default("[]") // JSON array of strings
   description     String?
   detailImageUrl  String?
-  categories      String[] @default([])
-  gender          Gender   @default(unisex)
+  categories      String   @default("[]") // JSON array of category paths
+  gender          String   @default("unisex")
 
   // Timestamps
-  scrapedAt       DateTime @default(now())
+  scrapedAt        DateTime  @default(now())
   detailsScrapedAt DateTime?
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
 
   @@index([store])
   @@index([gender])
   @@index([discountPercent])
   @@index([brand])
-  // salePrice: powers price sorting and the min/max price filter in /api/deals.
   @@index([salePrice])
-  // categories is a String[] filtered with hasSome (category landing pages + the
-  // /ponude category filter) — a GIN index turns those array scans into index lookups.
-  @@index([categories], type: Gin)
 }
 
 model ScrapeRun {
-  id            String   @id @default(cuid())
-  store         Store
+  id            String    @id @default(cuid())
+  store         String
   totalScraped  Int
   filteredCount Int
-  errors        String[] @default([])
-  startedAt     DateTime @default(now())
+  errors        String    @default("[]") // JSON array of strings
+  startedAt     DateTime  @default(now())
   completedAt   DateTime?
 }
 

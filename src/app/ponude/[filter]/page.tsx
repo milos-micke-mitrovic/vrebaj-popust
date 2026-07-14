@@ -2,7 +2,9 @@ import { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
-import { prisma } from "@/lib/db";
+import { getPrisma } from "@/lib/db";
+import { jsonArrayHasAny } from "@/lib/json-array";
+import { getBrandVariants } from "@/lib/brand-utils";
 import { DealsGrid } from "@/components/deals-grid";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -121,7 +123,9 @@ function buildWhereClause(parsed: ParsedFilter) {
   const where: any = { discountPercent: { gte: 50 } };
 
   if (parsed.brand) {
-    where.brand = { equals: parsed.brand, mode: "insensitive" };
+    // Match every stored casing/variant of the brand (D1 has no case-insensitive
+    // equals). getBrandVariants covers upper/lower/title/underscore + aliases.
+    where.brand = { in: getBrandVariants(parsed.brand) };
   }
   if (parsed.gender) {
     where.gender = parsed.gender;
@@ -146,7 +150,8 @@ function buildWhereClause(parsed: ParsedFilter) {
     };
     const catPath = CATEGORY_TO_PATH[parsed.category];
     if (catPath) {
-      where.categories = { hasSome: [catPath] };
+      // categories is JSON-array TEXT on D1 — membership via jsonArrayHasAny.
+      where.AND = [jsonArrayHasAny("categories", [catPath])];
     }
   }
 
@@ -167,6 +172,7 @@ export default async function FilterPage({ params }: Props) {
 
   // Get just count and top deals for SEO schema
   const where = buildWhereClause(parsed);
+  const prisma = await getPrisma();
   const [totalCount, topDeals] = await Promise.all([
     prisma.deal.count({ where }),
     prisma.deal.findMany({

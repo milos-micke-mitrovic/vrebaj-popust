@@ -1,9 +1,10 @@
-import { prisma } from "./db";
+import { getPrisma } from "./db";
 import type { Deal as PrismaDeal } from "@prisma/client";
 import { Deal, Store, Gender, Category } from "@/types/deal";
 import { mapCategory } from "./category-mapper";
 import { extractGenderFromNameUrl } from "./gender-mapper";
 import { normalizeBrand } from "./brand-utils";
+import { parseStringArray } from "./json-array";
 
 // Map CategoryPath (e.g., "obuca/patike") to legacy Category type
 function mapCategoryPathToCategory(categoryPath: string): Category {
@@ -104,6 +105,9 @@ export const STORE_INFO: Record<
 
 // Convert Prisma deal to app Deal type
 function convertDeal(prismaDeal: PrismaDeal): Deal {
+  // sizes/categories are stored as JSON-array TEXT on SQLite/D1 — parse to string[].
+  const sizes = parseStringArray(prismaDeal.sizes);
+  const categories = parseStringArray(prismaDeal.categories);
   return {
     id: prismaDeal.id,
     store: prismaDeal.store as Store,
@@ -115,14 +119,14 @@ function convertDeal(prismaDeal: PrismaDeal): Deal {
     url: prismaDeal.url,
     imageUrl: prismaDeal.imageUrl,
     gender: (prismaDeal.gender as Gender) || extractGenderFromNameUrl(prismaDeal.name, prismaDeal.url),
-    category: getCategory(prismaDeal.categories, prismaDeal.name, prismaDeal.url),
+    category: getCategory(categories, prismaDeal.name, prismaDeal.url),
     scrapedAt: prismaDeal.scrapedAt,
     createdAt: prismaDeal.createdAt,
-    sizes: prismaDeal.sizes,
+    sizes,
     description: prismaDeal.description,
     detailImageUrl: prismaDeal.detailImageUrl,
     detailsScrapedAt: prismaDeal.detailsScrapedAt || undefined,
-    categories: prismaDeal.categories as import("@/types/deal").CategoryPath[],
+    categories: categories as import("@/types/deal").CategoryPath[],
   };
 }
 
@@ -137,6 +141,7 @@ async function fetchDeals(): Promise<Deal[]> {
     return dealsCache;
   }
 
+  const prisma = await getPrisma();
   const prismaDeals = await prisma.deal.findMany({
     orderBy: { discountPercent: "desc" },
   });
@@ -174,6 +179,7 @@ export async function getAllDealIdsAsync(): Promise<string[]> {
   if (dealIdsCache && now - lastIdsFetch < CACHE_TTL) {
     return dealIdsCache;
   }
+  const prisma = await getPrisma();
   const rows = await prisma.deal.findMany({ select: { id: true } });
   dealIdsCache = rows.map((r) => r.id);
   lastIdsFetch = now;
@@ -191,6 +197,7 @@ export function getDealById(id: string): Deal | null {
 }
 
 export async function getDealByIdAsync(id: string): Promise<Deal | null> {
+  const prisma = await getPrisma();
   const prismaDeal = await prisma.deal.findUnique({
     where: { id },
   });

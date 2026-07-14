@@ -52,3 +52,13 @@ next-env.d.ts
 /public/workbox-*.js.map
 
 /src/generated/prisma
+
+# Cloudflare / OpenNext build artifacts
+.open-next/
+.wrangler/
+
+# Local SQLite (D1 dev) — never committed
+local.db
+local.db-journal
+prisma/local.db
+prisma/local.db-journal

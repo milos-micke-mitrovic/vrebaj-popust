@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { getPrisma } from "@/lib/db";
+import { blockBots } from "@/lib/bot-guard";
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -37,6 +38,8 @@ function isRateLimited(ip: string): boolean {
 }
 
 export async function POST(request: NextRequest) {
+  const blocked = blockBots(request);
+  if (blocked) return blocked;
   try {
     // Rate limiting
     const ip =
@@ -90,6 +93,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ errors }, { status: 400 });
     }
 
+    const prisma = await getPrisma();
     await prisma.contactMessage.create({
       data: { name, email, message },
     });

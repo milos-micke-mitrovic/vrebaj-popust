@@ -1,5 +1,7 @@
 import "dotenv/config";
-import { PrismaClient, Store, Gender } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import type { Store, Gender } from "../types/deal";
+import { stringifyStringArray } from "../lib/json-array";
 
 const prisma = new PrismaClient();
 
@@ -81,11 +83,11 @@ export async function upsertDeal(deal: DealInput): Promise<void> {
       salePrice: deal.salePrice,
       discountPercent: deal.discountPercent,
       imageUrl: deal.imageUrl,
-      categories: deal.categories || [],
+      categories: stringifyStringArray(deal.categories),
       gender: deal.gender || "unisex",
       scrapedAt: new Date(),
       // Only overwrite detail-scraper fields if explicitly provided
-      ...(sizes && sizes.length > 0 && { sizes }),
+      ...(sizes && sizes.length > 0 && { sizes: stringifyStringArray(sizes) }),
       ...(deal.description != null && { description: deal.description }),
       ...(deal.detailImageUrl != null && { detailImageUrl: deal.detailImageUrl }),
     },
@@ -99,10 +101,10 @@ export async function upsertDeal(deal: DealInput): Promise<void> {
       discountPercent: deal.discountPercent,
       url: deal.url,
       imageUrl: deal.imageUrl,
-      sizes: sizes || [],
+      sizes: stringifyStringArray(sizes),
       description: deal.description || null,
       detailImageUrl: deal.detailImageUrl || null,
-      categories: deal.categories || [],
+      categories: stringifyStringArray(deal.categories),
       gender: deal.gender || "unisex",
       scrapedAt: new Date(),
     },
@@ -133,7 +135,7 @@ export async function logScrapeRun(
       store,
       totalScraped,
       filteredCount,
-      errors,
+      errors: stringifyStringArray(errors),
       completedAt: new Date(),
     },
   });
@@ -152,10 +154,11 @@ export async function updateDealDetails(
   await prisma.deal.update({
     where: { url },
     data: {
-      sizes: details.sizes ? normalizeSizes(details.sizes) : details.sizes,
+      // Only overwrite array columns when provided (undefined = leave unchanged).
+      ...(details.sizes && { sizes: stringifyStringArray(normalizeSizes(details.sizes)) }),
       description: details.description,
       detailImageUrl: details.detailImageUrl,
-      categories: details.categories,
+      ...(details.categories && { categories: stringifyStringArray(details.categories) }),
       gender: details.gender,
       detailsScrapedAt: new Date(),
     },
@@ -264,7 +267,7 @@ export async function resetStoreDetails(store: Store): Promise<number> {
   const result = await prisma.deal.updateMany({
     where: { store },
     data: {
-      sizes: [],
+      sizes: "[]",
       detailsScrapedAt: null,
     },
   });
@@ -276,4 +279,5 @@ export async function disconnect(): Promise<void> {
   await prisma.$disconnect();
 }
 
-export { prisma, Store, Gender };
+export { prisma };
+export type { Store, Gender };

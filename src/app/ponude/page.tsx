@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { prisma } from "@/lib/db";
+import { getPrisma } from "@/lib/db";
 import { DealsGrid } from "@/components/deals-grid";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -71,6 +71,7 @@ const priceValidUntilDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
 
 export default async function PonudePage() {
   // Get just the count and top deals for SEO schema (much lighter than loading all deals)
+  const prisma = await getPrisma();
   const [totalCount, topDeals] = await Promise.all([
     prisma.deal.count({ where: { discountPercent: { gte: 50 } } }),
     prisma.deal.findMany({

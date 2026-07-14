@@ -1,5 +1,5 @@
 import { MetadataRoute } from "next";
-import { prisma } from "@/lib/db";
+import { getPrisma } from "@/lib/db";
 import { getAbsoluteImageUrl } from "@/lib/utils";
 
 // Always regenerate so lastmod reflects current DB state and removed deals
@@ -174,6 +174,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // These capture searches like "Nike Air Max 90 popust" etc.
   // Select only the fields the sitemap needs — this route is force-dynamic, so
   // loading and mapping all ~6000 full deal objects on every Googlebot hit is wasteful.
+  const prisma = await getPrisma();
   const deals = await prisma.deal.findMany({
     select: { id: true, scrapedAt: true, imageUrl: true },
   });

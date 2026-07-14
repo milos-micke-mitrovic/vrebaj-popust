@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
-import { Prisma, Store, Gender } from "@prisma/client";
+import { getPrisma } from "@/lib/db";
+import { Prisma } from "@prisma/client";
+import type { Store, Gender } from "@/types/deal";
 import { normalizeBrand, getBrandVariants } from "@/lib/brand-utils";
+import { jsonArrayHasAny, parseStringArray } from "@/lib/json-array";
+import { blockBots } from "@/lib/bot-guard";
 
 const ITEMS_PER_PAGE = 32;
 const MAX_ITEMS_PER_PAGE = 100; // Prevent DoS via huge limit
@@ -29,6 +32,7 @@ async function getCachedFilters(): Promise<CachedFilters> {
     return filtersCache;
   }
 
+  const prisma = await getPrisma();
   const baseWhere = { discountPercent: { gte: 50 } };
   const [brandsAgg, storesAgg, gendersAgg, priceAgg] = await Promise.all([
     prisma.deal.groupBy({ by: ["brand"], where: { ...baseWhere, brand: { not: null } }, _count: true }),
@@ -63,6 +67,9 @@ async function getCachedFilters(): Promise<CachedFilters> {
 }
 
 export async function GET(request: NextRequest) {
+  const blocked = blockBots(request);
+  if (blocked) return blocked;
+
   const searchParams = request.nextUrl.searchParams;
 
   // Parse and validate query parameters
@@ -94,11 +101,13 @@ export async function GET(request: NextRequest) {
     discountPercent: { gte: minDiscount },
   };
 
-  // Search filter (name or brand)
+  // Search filter (name or brand). SQLite's LIKE (what `contains` compiles to) is
+  // already case-insensitive for ASCII, so no `mode` is needed (and D1 doesn't
+  // support Prisma's `mode: "insensitive"`).
   if (search) {
     where.OR = [
-      { name: { contains: search, mode: "insensitive" } },
-      { brand: { contains: search, mode: "insensitive" } },
+      { name: { contains: search } },
+      { brand: { contains: search } },
     ];
   }
 
@@ -107,10 +116,12 @@ export async function GET(request: NextRequest) {
     where.store = { in: stores as Store[] };
   }
 
-  // Brand filter - expand to include all variants
+  // Brand filter - expand to include all variants. getBrandVariants already emits
+  // upper/lower/title/underscore forms, so an exact `in` covers the stored casings
+  // without needing `mode: "insensitive"` (unsupported on D1).
   if (brands.length > 0) {
     const allBrandVariants = brands.flatMap(getBrandVariants);
-    where.brand = { in: allBrandVariants, mode: "insensitive" };
+    where.brand = { in: allBrandVariants };
   }
 
   // Gender filter
@@ -162,43 +173,35 @@ export async function GET(request: NextRequest) {
     }
   });
 
-  // Category paths filter (e.g., "obuca/patike")
-  // "ostalo" = detail-scraped but uncategorized (excludes products not yet scraped)
-  const ostaloCondition = { categories: { isEmpty: true }, detailsScrapedAt: { not: null } };
+  // Category paths filter (e.g., "obuca/patike"). `categories` is JSON-array TEXT
+  // on SQLite/D1, so array membership is expressed via jsonArrayHasAny (see
+  // src/lib/json-array.ts). "ostalo" = detail-scraped but uncategorized (an empty
+  // JSON array, "[]"), excluding products not yet detail-scraped.
+  const ostaloCondition: Prisma.DealWhereInput = {
+    categories: "[]",
+    detailsScrapedAt: { not: null },
+  };
+  const categoryHasAny = jsonArrayHasAny("categories", expandedCategoryPaths) as Prisma.DealWhereInput;
   if (expandedCategoryPaths.length > 0 && filterOstalo) {
     // Both: show products matching selected categories OR uncategorized
     where.AND = [
-      ...(where.AND as Prisma.DealWhereInput[] || []),
-      { OR: [
-        { categories: { hasSome: expandedCategoryPaths } },
-        ostaloCondition,
-      ]},
+      ...((where.AND as Prisma.DealWhereInput[]) || []),
+      { OR: [categoryHasAny, ostaloCondition] },
     ];
   } else if (expandedCategoryPaths.length > 0) {
-    where.categories = { hasSome: expandedCategoryPaths };
+    where.AND = [...((where.AND as Prisma.DealWhereInput[]) || []), categoryHasAny];
   } else if (filterOstalo) {
-    where.AND = [
-      ...(where.AND as Prisma.DealWhereInput[] || []),
-      ostaloCondition,
-    ];
+    where.AND = [...((where.AND as Prisma.DealWhereInput[]) || []), ostaloCondition];
   }
 
-  // Size filter - match exact or range (e.g., "36" matches "36" and "36-37")
+  // Size filter - matches deals whose sizes array contains any selected size. The
+  // scraper already expands ranges/fractions at write time (normalizeSizes), so an
+  // exact membership test is sufficient.
   if (sizes.length > 0) {
     where.AND = [
-      ...(where.AND as Prisma.DealWhereInput[] || []),
-      {
-        OR: sizes.map(size => ({
-          OR: [
-            { sizes: { has: size } },
-            { sizes: { hasSome: [`${size}-`, `-${size}`].map(s => s) } },
-          ]
-        }))
-      }
+      ...((where.AND as Prisma.DealWhereInput[]) || []),
+      jsonArrayHasAny("sizes", sizes) as Prisma.DealWhereInput,
     ];
-    // Simplified: just check if any selected size is in the sizes array
-    // For range matching, we'd need raw SQL or post-filtering
-    where.sizes = { hasSome: sizes };
   }
 
   // Price filters
@@ -228,16 +231,24 @@ export async function GET(request: NextRequest) {
   }
 
   try {
+    const prisma = await getPrisma();
     // Get total count for pagination
     const total = await prisma.deal.count({ where });
 
     // Get paginated deals
-    const deals = await prisma.deal.findMany({
+    const rawDeals = await prisma.deal.findMany({
       where,
       orderBy,
       skip: (page - 1) * limit,
       take: limit,
     });
+    // sizes/categories are JSON-array TEXT in the DB — deserialize back to string[]
+    // so the client keeps receiving arrays (unchanged API shape).
+    const deals = rawDeals.map((d) => ({
+      ...d,
+      sizes: parseStringArray(d.sizes),
+      categories: parseStringArray(d.categories),
+    }));
 
     // Filter sidebar data — cached, since it's the same for every request.
     const filters = await getCachedFilters();

@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { prisma } from "../lib/db";
-import type { Store, Gender } from "@prisma/client";
+import type { Store, Gender } from "../types/deal";
+import { stringifyStringArray } from "../lib/json-array";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -73,10 +74,10 @@ async function importStore(storeName: string): Promise<number> {
           salePrice: deal.salePrice,
           discountPercent: deal.discountPercent,
           imageUrl: deal.imageUrl,
-          sizes: deal.sizes || [],
+          sizes: stringifyStringArray(deal.sizes),
           description: deal.description || null,
           detailImageUrl: deal.detailImageUrl || null,
-          categories: deal.categories || [],
+          categories: stringifyStringArray(deal.categories),
           gender: mapGender(deal.gender),
           scrapedAt: new Date(deal.scrapedAt),
           detailsScrapedAt: deal.detailsScrapedAt ? new Date(deal.detailsScrapedAt) : null,
@@ -91,10 +92,10 @@ async function importStore(storeName: string): Promise<number> {
           discountPercent: deal.discountPercent,
           url: deal.url,
           imageUrl: deal.imageUrl,
-          sizes: deal.sizes || [],
+          sizes: stringifyStringArray(deal.sizes),
           description: deal.description || null,
           detailImageUrl: deal.detailImageUrl || null,
-          categories: deal.categories || [],
+          categories: stringifyStringArray(deal.categories),
           gender: mapGender(deal.gender),
           scrapedAt: new Date(deal.scrapedAt),
           detailsScrapedAt: deal.detailsScrapedAt ? new Date(deal.detailsScrapedAt) : null,
@@ -112,7 +113,7 @@ async function importStore(storeName: string): Promise<number> {
       store: data.store as Store,
       totalScraped: data.totalScraped,
       filteredCount: data.filteredCount,
-      errors: data.errors,
+      errors: stringifyStringArray(data.errors),
       completedAt: new Date(),
     },
   });

@@ -29,6 +29,7 @@
   "dependencies": {
     "@next/third-parties": "^16.1.1",
     "@opennextjs/cloudflare": "^1.20.1",
+    "@prisma/adapter-d1": "^6.19.2",
     "@prisma/client": "^6.19.2",
     "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-slot": "^1.2.4",

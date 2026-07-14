@@ -1,5 +1,7 @@
 import "dotenv/config";
-import { PrismaClient, Store } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import type { Store } from "../types/deal";
+import { parseStringArray } from "../lib/json-array";
 
 const prisma = new PrismaClient();
 
@@ -34,7 +36,8 @@ async function main(): Promise<void> {
 
   const latestByStore = new Map<Store, (typeof runs)[number]>();
   for (const run of runs) {
-    if (!latestByStore.has(run.store)) latestByStore.set(run.store, run);
+    const store = run.store as Store;
+    if (!latestByStore.has(store)) latestByStore.set(store, run);
   }
 
   const issues: Issue[] = [];
@@ -56,8 +59,9 @@ async function main(): Promise<void> {
         message: `Only ${latest.filteredCount} deals (expected >= ${MIN_HEALTHY_DEALS})`,
       });
     }
-    if (latest.errors.length > 0) {
-      const preview = latest.errors.slice(0, 3).join("; ").slice(0, 300);
+    const latestErrors = parseStringArray(latest.errors);
+    if (latestErrors.length > 0) {
+      const preview = latestErrors.slice(0, 3).join("; ").slice(0, 300);
       issues.push({
         store,
         severity: "warning",
@@ -69,9 +73,10 @@ async function main(): Promise<void> {
   console.log("\n=== Scraper Health Report ===\n");
   for (const store of STORES) {
     const latest = latestByStore.get(store);
+    const errCount = latest ? parseStringArray(latest.errors).length : 0;
     const status = latest
       ? `${latest.filteredCount} deals` +
-        (latest.errors.length > 0 ? ` + ${latest.errors.length} errors` : "")
+        (errCount > 0 ? ` + ${errCount} errors` : "")
       : "NO RUN";
     console.log(`  ${store.padEnd(14)} ${status}`);
   }

@@ -4,7 +4,8 @@
  */
 
 import { prisma } from "../lib/db";
-import type { Gender } from "@prisma/client";
+import type { Gender } from "../types/deal";
+import { parseStringArray, stringifyStringArray } from "../lib/json-array";
 
 // Normalize Serbian characters to ASCII equivalents
 function normalizeSerbianChars(text: string): string {
@@ -265,26 +266,27 @@ async function migrateGenderCategory() {
     try {
       const extractedGender = extractGender(deal.name, deal.url);
       const { categoryPath } = extractCategory(deal.name, deal.url);
+      const dealCategories = parseStringArray(deal.categories);
 
       const needsUpdate =
         deal.gender !== extractedGender ||
-        (categoryPath && !deal.categories.includes(categoryPath));
+        (categoryPath && !dealCategories.includes(categoryPath));
 
       if (needsUpdate) {
         const newCategories = categoryPath
-          ? [...new Set([...deal.categories, categoryPath])]
-          : deal.categories;
+          ? [...new Set([...dealCategories, categoryPath])]
+          : dealCategories;
 
         await prisma.deal.update({
           where: { id: deal.id },
           data: {
             gender: extractedGender,
-            categories: newCategories,
+            categories: stringifyStringArray(newCategories),
           },
         });
 
         if (deal.gender !== extractedGender) updatedGender++;
-        if (categoryPath && !deal.categories.includes(categoryPath)) updatedCategory++;
+        if (categoryPath && !dealCategories.includes(categoryPath)) updatedCategory++;
       }
 
       // Progress log every 500 deals

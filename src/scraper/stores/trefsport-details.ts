@@ -1,6 +1,6 @@
 import { JSDOM } from "jsdom";
 import { getDealsForDetailScraping, updateDealDetails, deleteDealByUrl, disconnect } from "../db-writer";
-import type { Gender } from "@prisma/client";
+import type { Gender } from "../../types/deal";
 import { mapCategory } from "../../lib/category-mapper";
 import { mapGender } from "../../lib/gender-mapper";
 
