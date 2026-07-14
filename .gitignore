@@ -62,3 +62,6 @@ local.db
 local.db-journal
 prisma/local.db
 prisma/local.db-journal
+
+# Cloudflare local dev secrets (never commit)
+.dev.vars

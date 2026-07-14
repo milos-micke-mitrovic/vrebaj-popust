@@ -1,0 +1,13 @@
+# Local secrets for `pnpm cf:preview` (wrangler loads .dev.vars into the Worker env).
+# Copy to `.dev.vars` and fill in. These map to process.env.* inside the Worker.
+
+# Auth for /api/ingest (the scraper write path). Must match INGEST_SECRET used by
+# the seed script / scrapers when they POST.
+INGEST_SECRET=dev-ingest-secret
+
+# Admin page access: /admin?key=...
+ADMIN_SECRET=dev-admin-secret
+
+# Sentry (optional locally — leave blank to disable error reporting in preview).
+SENTRY_DSN=
+NEXT_PUBLIC_SENTRY_DSN=
