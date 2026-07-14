@@ -94,13 +94,19 @@ const SITE_URL = "https://www.vrebajpopust.rs";
 const PROXY_IMAGE_DOMAINS = ["djaksport.com"];
 
 /**
- * On-page image URL for use inside <Image>. Returns the DIRECT source URL: the
- * optimizer fetches it server-side (with no referer, which even djaksport allows)
- * and emits WebP. Proxying here would break optimization — Next rejects
- * /_next/image of a local URL that carries a query string (the "?url=" proxy).
+ * On-page image URL for use inside <Image>. On Cloudflare images are `unoptimized`
+ * (no server-side optimizer on Workers), so the browser loads these URLs directly
+ * and sends our referer. Hotlink-protected stores (djaksport) 403 that, so route
+ * them through our own-domain proxy (fetched server-side with no referer, then
+ * edge-cached). Other stores serve fine directly, so keep their URL to avoid an
+ * extra hop. (The old "Next rejects a local URL with a query string" caveat only
+ * applied to the optimizer, which is off now.)
  */
 export function getProxiedImageUrl(imageUrl: string | null | undefined): string {
   if (!imageUrl) return "/images/placeholder.png";
+  if (PROXY_IMAGE_DOMAINS.some((domain) => imageUrl.includes(domain))) {
+    return `/api/image-proxy?url=${encodeURIComponent(imageUrl)}`;
+  }
   return imageUrl;
 }
 

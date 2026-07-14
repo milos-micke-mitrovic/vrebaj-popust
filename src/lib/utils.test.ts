@@ -62,8 +62,9 @@ describe("formatProductName", () => {
 });
 
 describe("image url helpers", () => {
-  it("getProxiedImageUrl returns the direct url (optimizer fetches it)", () => {
-    expect(getProxiedImageUrl("https://www.djaksport.com/x.jpg")).toBe("https://www.djaksport.com/x.jpg");
+  it("getProxiedImageUrl proxies hotlink-protected djaksport, direct otherwise", () => {
+    expect(getProxiedImageUrl("https://www.djaksport.com/x.jpg")).toContain("/api/image-proxy?url=");
+    expect(getProxiedImageUrl("https://www.n-sport.net/x.jpg")).toBe("https://www.n-sport.net/x.jpg");
     expect(getProxiedImageUrl(null)).toBe("/images/placeholder.png");
   });
   it("getAbsoluteImageUrl proxies hotlink-protected djaksport for crawlers, direct otherwise", () => {
