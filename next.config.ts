@@ -4,16 +4,16 @@ import { withSentryConfig } from "@sentry/nextjs";
 // Content Security Policy
 const cspDirectives = [
   "default-src 'self'",
-  // Scripts: self, inline (Next.js needs it), Google Analytics
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com",
+  // Scripts: self, inline (Next.js needs it), Google Analytics, Cloudflare Web Analytics beacon
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com https://static.cloudflareinsights.com",
   // Styles: self, inline (Tailwind)
   "style-src 'self' 'unsafe-inline'",
   // Images: allow all https sources (stores use various CDNs that change)
   "img-src 'self' data: blob: https: http:",
   // Fonts: self and Google Fonts
   "font-src 'self' https://fonts.gstatic.com",
-  // Connections: self, Google Analytics, Sentry error ingest (EU region)
-  "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://o4511659032707072.ingest.de.sentry.io",
+  // Connections: self, Google Analytics, Sentry error ingest (EU region), Cloudflare Web Analytics
+  "connect-src 'self' https://www.google-analytics.com https://analytics.google.com https://region1.google-analytics.com https://o4511659032707072.ingest.de.sentry.io https://cloudflareinsights.com",
   // Frames: none (prevent embedding)
   "frame-ancestors 'none'",
   // Base URI and form actions restricted to self
