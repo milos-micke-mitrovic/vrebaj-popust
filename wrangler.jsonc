@@ -6,7 +6,10 @@
   // https.request to the runtime, which the Sentry SDK needs to send events.
   // nodejs_compat gives AsyncLocalStorage + the Node APIs Next/Sentry rely on.
   "compatibility_date": "2025-08-16",
-  "compatibility_flags": ["nodejs_compat"],
+  // enable_nodejs_http_modules guarantees node:http/https (https.request) — which the
+  // Sentry SDK uses to send events. Auto-enabled at this compat date, but set
+  // explicitly to match the battle-tested jamogu config.
+  "compatibility_flags": ["nodejs_compat", "enable_nodejs_http_modules"],
   // Static assets emitted by OpenNext (never fetch the Worker's own URL for these).
   "assets": {
     "binding": "ASSETS",
