@@ -83,13 +83,11 @@ const nextConfig: NextConfig = {
         destination: "/ponuda/:id",
         permanent: true, // 301 redirect - tells Google to update index
       },
-      // Ensure www and non-www consistency (redirect non-www to www)
-      {
-        source: "/:path*",
-        has: [{ type: "host", value: "vrebajpopust.rs" }],
-        destination: "https://www.vrebajpopust.rs/:path*",
-        permanent: true,
-      },
+      // NOTE: the non-www -> www redirect was removed here. On OpenNext/Workers a
+      // Next.js redirect with `:path*` does not substitute for the root path, so it
+      // emits a literal `/:path*` and every page enters a redirect loop. Apex->www
+      // canonicalization is handled at the edge (a Cloudflare Redirect Rule) instead,
+      // and the app already emits `<link rel="canonical">` to the www URL.
     ];
   },
 
