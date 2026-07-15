@@ -138,14 +138,11 @@ export default async function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
-        {/* Preload hero image for faster LCP */}
-        <link
-          rel="preload"
-          as="image"
-          href="/_next/image?url=%2Fimages%2Fhero.webp&w=1920&q=75"
-          imageSrcSet="/_next/image?url=%2Fimages%2Fhero.webp&w=640&q=75 640w, /_next/image?url=%2Fimages%2Fhero.webp&w=750&q=75 750w, /_next/image?url=%2Fimages%2Fhero.webp&w=828&q=75 828w, /_next/image?url=%2Fimages%2Fhero.webp&w=1080&q=75 1080w, /_next/image?url=%2Fimages%2Fhero.webp&w=1200&q=75 1200w, /_next/image?url=%2Fimages%2Fhero.webp&w=1920&q=75 1920w"
-          imageSizes="100vw"
-        />
+        {/* Preload the hero image (the LCP element) — images are `unoptimized` on
+            Workers, so the hero loads the direct /images/hero.webp URL, not the old
+            /_next/image optimizer URL. The preload must match the used URL or it's a
+            wasted download that doesn't help LCP. */}
+        <link rel="preload" as="image" href="/images/hero.webp" fetchPriority="high" />
         {/* Preconnect to image domains for faster loading */}
         <link rel="preconnect" href="https://www.djaksport.com" />
         <link rel="preconnect" href="https://www.sportvision.rs" />
