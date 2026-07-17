@@ -48,6 +48,10 @@ async function d1(sql) {
 
 function resolveGscKey() {
   if (process.env.GSC_KEY && fs.existsSync(process.env.GSC_KEY)) return process.env.GSC_KEY;
+  // Durable, gitignored home path — the reliable default. (macOS TCC blocks node from
+  // listing ~/Downloads, so the old auto-find there silently fails; keep it as a fallback.)
+  const durable = path.join(os.homedir(), ".config", "vrebaj-popust", "gsc-key.json");
+  if (fs.existsSync(durable)) return durable;
   const dl = path.join(os.homedir(), "Downloads");
   try {
     const f = fs.readdirSync(dl).find((n) => /jamogu-auth.*\.json$/.test(n));
