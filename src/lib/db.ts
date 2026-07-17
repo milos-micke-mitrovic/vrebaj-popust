@@ -27,7 +27,32 @@ const getWorkersPrisma = cache(async (): Promise<PrismaClient> => {
   const { env } = await getCloudflareContext({ async: true });
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const adapter = new PrismaD1((env as any).DB);
-  return new PrismaClient({ adapter });
+  const client = new PrismaClient({ adapter });
+  // D1 occasionally throws transient errors ("Network connection lost", internal
+  // resets) under load or on a cold isolate. Unretried, a single blip on a page's
+  // server render bubbles up as a 500 / error boundary (users saw this on /ponude).
+  // Retry READ operations a couple of times so a transient failure self-heals; leave
+  // writes alone (they run through /api/ingest and must not double-apply).
+  return client.$extends({
+    query: {
+      async $allOperations({ operation, args, query }) {
+        const isRead = /^(find|count|aggregate|groupBy)/.test(operation);
+        let lastErr: unknown;
+        for (let attempt = 0; attempt < 3; attempt++) {
+          try {
+            return await query(args);
+          } catch (err) {
+            lastErr = err;
+            if (!isRead || attempt === 2) throw err;
+            await new Promise((r) => setTimeout(r, 40 * (attempt + 1)));
+          }
+        }
+        throw lastErr;
+      },
+    },
+    // The extended client keeps all model delegates callers use; the cast keeps the
+    // shared getPrisma() return type stable across both runtimes.
+  }) as unknown as PrismaClient;
 });
 
 // --- Node: process-wide singleton against the SQLite file ---

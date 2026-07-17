@@ -70,23 +70,38 @@ const priceValidUntilDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
   .split("T")[0];
 
 export default async function PonudePage() {
-  // Get just the count and top deals for SEO schema (much lighter than loading all deals)
-  const prisma = await getPrisma();
-  const [totalCount, topDeals] = await Promise.all([
-    prisma.deal.count({ where: { discountPercent: { gte: 50 } } }),
-    prisma.deal.findMany({
-      where: { discountPercent: { gte: 50 } },
-      orderBy: { discountPercent: "desc" },
-      take: 10,
-      select: {
-        id: true,
-        name: true,
-        brand: true,
-        salePrice: true,
-        imageUrl: true,
-      },
-    }),
-  ]);
+  // Count + top deals feed ONLY the JSON-LD schema and the sr-only crawler nav below —
+  // they're invisible to users, whose actual list is the client-rendered <DealsGrid/>
+  // (loads from /api/deals). So a transient D1 failure here must degrade gracefully, not
+  // 500 the whole page. The D1 client already retries reads; this is the final backstop.
+  let totalCount = 0;
+  let topDeals: {
+    id: string;
+    name: string;
+    brand: string | null;
+    salePrice: number;
+    imageUrl: string | null;
+  }[] = [];
+  try {
+    const prisma = await getPrisma();
+    [totalCount, topDeals] = await Promise.all([
+      prisma.deal.count({ where: { discountPercent: { gte: 50 } } }),
+      prisma.deal.findMany({
+        where: { discountPercent: { gte: 50 } },
+        orderBy: { discountPercent: "desc" },
+        take: 10,
+        select: {
+          id: true,
+          name: true,
+          brand: true,
+          salePrice: true,
+          imageUrl: true,
+        },
+      }),
+    ]);
+  } catch (err) {
+    console.error("[ponude] SEO count/top-deals query failed; rendering page without it", err);
+  }
 
   // ItemList for product listings (top 10 for SEO)
   const itemListSchema = {
