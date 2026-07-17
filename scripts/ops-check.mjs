@@ -93,7 +93,7 @@ async function main() {
 
   if (!TOKEN) { console.log("\n(no CLOUDFLARE_API_TOKEN — skipping Worker errors + scraper runs)"); }
   else {
-    // 2. Worker errors
+    // 2. Worker errors + recent hourly shape
     try {
       const d = await cfGraphQL(`query { viewer { accounts(filter: {accountTag: "${ACCT}"}) {
         workersInvocationsAdaptive(limit: 100, filter: {scriptName: "${WORKER}", datetime_geq: "${iso(daysAgo(DAYS))}", datetime_leq: "${iso(new Date())}"}) { sum { requests errors } }
@@ -102,6 +102,28 @@ async function main() {
       const errs = rows.reduce((a, r) => a + r.sum.errors, 0);
       const reqs = rows.reduce((a, r) => a + r.sum.requests, 0);
       console.log(`${ok(errs === 0)} worker: ${reqs} requests, ${errs} errors (${DAYS}d)`);
+
+      // Hourly shape over the last 24h — localizes errors and surfaces traffic spikes
+      // that a multi-day total hides. This token only has the flat workersInvocationsAdaptive
+      // (not the ...Groups variant), so we fan out one query per hour (in parallel).
+      const hourSum = async (h) => {
+        const a = iso(new Date(Date.now() - h * 3600000));
+        const b = iso(new Date(Date.now() - (h - 1) * 3600000));
+        const r = await cfGraphQL(`query { viewer { accounts(filter: {accountTag: "${ACCT}"}) {
+          workersInvocationsAdaptive(limit: 1, filter: {scriptName: "${WORKER}", datetime_geq: "${a}", datetime_leq: "${b}"}) { sum { requests errors } }
+        } } }`);
+        const n = r.viewer.accounts[0].workersInvocationsAdaptive;
+        return { hour: a.slice(11, 13), requests: n[0]?.sum.requests || 0, errors: n[0]?.sum.errors || 0 };
+      };
+      const hours = await Promise.all(Array.from({ length: 24 }, (_, i) => hourSum(24 - i)));
+      const errHours = hours.filter((h) => h.errors > 0);
+      if (errHours.length) console.log(`     ↳ errors (24h) at ${errHours.map((h) => `${h.hour}:00 (${h.errors})`).join(", ")} UTC`);
+      const sorted = hours.map((h) => h.requests).sort((a, b) => a - b);
+      const median = sorted[Math.floor(sorted.length / 2)] || 0;
+      const peak = hours.reduce((m, h) => (h.requests > m.requests ? h : m), hours[0]);
+      if (peak.requests > 3 * Math.max(median, 1) && peak.requests > 1000) {
+        console.log(`     ↳ ⚠️ busiest hour ${peak.hour}:00 UTC = ${peak.requests} reqs (typical ~${median}/h) — check for a bot/crawler burst`);
+      }
     } catch (e) { console.log(`⚠️ worker analytics: ${e.message}`); }
 
     // 3. Scraper runs — latest per store + which stores ran in the last 26h
