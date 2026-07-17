@@ -23,11 +23,11 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ inputs.mode == 'both' || inputs.mode == 'list_only' }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '20'
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v6
         with:
           version: 9
       - run: pnpm install
@@ -44,11 +44,11 @@ jobs:
     needs: scrape-list
     if: ${{ always() && inputs.mode == 'both' && needs.scrape-list.result == 'success' }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '20'
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v6
         with:
           version: 9
       - run: pnpm install
@@ -64,11 +64,11 @@ jobs:
     runs-on: ubuntu-latest
     if: ${{ inputs.mode == 'details_only' }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version: '20'
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v6
         with:
           version: 9
       - run: pnpm install
