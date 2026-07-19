@@ -18,7 +18,20 @@ const DB_ID = "5ffae0d7-fc3d-4c66-8a12-2ebe1e735d87";
 const SITE = "https://www.vrebajpopust.rs";
 const GSC_SITE = "sc-domain:vrebajpopust.rs";
 const DAYS = Number(process.env.DAYS || 2);
-const TOKEN = process.env.CLOUDFLARE_API_TOKEN;
+
+// CF API token: env var wins; otherwise fall back to a durable, gitignored file
+// (~/.config/vrebaj-popust/cf_token) so the sweep is a true one-command with nothing
+// to paste. Mirrors the GSC key handling — the ephemeral scratchpad copy kept vanishing.
+function resolveToken() {
+  if (process.env.CLOUDFLARE_API_TOKEN) return process.env.CLOUDFLARE_API_TOKEN.trim();
+  const durable = path.join(os.homedir(), ".config", "vrebaj-popust", "cf_token");
+  try {
+    const t = fs.readFileSync(durable, "utf8").trim();
+    if (t) return t;
+  } catch { /* ignore */ }
+  return undefined;
+}
+const TOKEN = resolveToken();
 
 const iso = (d) => d.toISOString();
 const daysAgo = (n) => new Date(Date.now() - n * 86400000);
