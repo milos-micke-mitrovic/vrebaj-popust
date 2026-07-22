@@ -17,6 +17,9 @@ on:
       - ".github/workflows/nightly-scrape.yml"
       # dev/ops tooling — not part of the Worker build, so don't redeploy on changes
       - "scripts/**"
+      # scrapers run on GitHub Actions (checked out fresh), never in the Worker — a
+      # scraper-only change goes live on the next scrape run, so it shouldn't redeploy.
+      - "src/scraper/**"
   workflow_dispatch:
 
 concurrency:

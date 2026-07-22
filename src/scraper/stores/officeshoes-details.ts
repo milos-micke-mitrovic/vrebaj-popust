@@ -9,6 +9,12 @@ puppeteer.use(StealthPlugin());
 
 const STORE = "officeshoes" as const;
 
+// Stop cleanly before the workflow step times out and let the next run finish the rest.
+// getDealsForDetailScraping only returns deals still missing details, so progress
+// accumulates across runs. 40 min fits the 45-min per-store step and is well under the
+// 180-min nightly budget. (Same resumable pattern as the djaksport details scraper.)
+const MAX_RUNTIME_MS = 40 * 60 * 1000;
+
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -141,6 +147,7 @@ async function scrapeOfficeShoeDetails(): Promise<void> {
   }
 
   const browser = await launchBrowser();
+  const startTime = Date.now();
   let processed = 0;
   let errors = 0;
 
@@ -149,16 +156,28 @@ async function scrapeOfficeShoeDetails(): Promise<void> {
     await page.setViewport({ width: 1920, height: 1080 });
 
     for (const deal of deals) {
+      if (Date.now() - startTime > MAX_RUNTIME_MS) {
+        console.log(`\nTime budget reached after ${processed}/${deals.length}; remaining deals will be processed on the next run.`);
+        break;
+      }
+
       console.log(`\n[${processed + 1}/${deals.length}] ${deal.name}`);
       console.log(`  URL: ${deal.url}`);
 
       try {
+        // domcontentloaded, not networkidle2: the product type, tags, sizes and image
+        // are all in the server-rendered HTML, so waiting for the network to go idle
+        // (trackers/ads keep it busy 15-30s) was the entire bottleneck — ~36s/product.
+        // Mirrors the djaksport details scraper, which handles ~1.5k deals this way.
         await page.goto(deal.url, {
-          waitUntil: "networkidle2",
-          timeout: 60000,
+          waitUntil: "domcontentloaded",
+          timeout: 30000,
         });
+        // Brief bounded wait for the product content in case it's not instantly in the
+        // DOM; returns immediately once either selector is present (far cheaper than idle).
+        await page.waitForSelector("ul.sizes, .content-details", { timeout: 5000 }).catch(() => {});
 
-        await sleep(1000 + Math.random() * 1000);
+        await sleep(1000 + Math.random() * 800);
 
         const details = await extractProductDetails(page);
         console.log(`  Product type: ${details.productType || "not found"}`);
@@ -204,8 +223,8 @@ async function scrapeOfficeShoeDetails(): Promise<void> {
         processed++;
         console.log(`  ✓ Updated`);
 
-        // Random delay between requests
-        await sleep(1500 + Math.random() * 1500);
+        // Small politeness delay between requests
+        await sleep(800 + Math.random() * 700);
 
       } catch (err) {
         errors++;
