@@ -24,6 +24,4 @@ jobs:
       - run: npx puppeteer browsers install chrome
       - name: Run DjakSport scraper
         run: pnpm tsx src/scraper/stores/djaksport.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 60

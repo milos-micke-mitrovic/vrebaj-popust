@@ -35,8 +35,6 @@ jobs:
       - run: npx puppeteer browsers install chrome
       - name: Run Buzz scraper
         run: pnpm tsx src/scraper/stores/buzz.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 30
 
   scrape-details:
@@ -56,8 +54,6 @@ jobs:
       - run: npx puppeteer browsers install chrome
       - name: Run Buzz Details
         run: pnpm tsx src/scraper/stores/buzz-details.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 45
 
   scrape-details-only:
@@ -76,6 +72,4 @@ jobs:
       - run: npx puppeteer browsers install chrome
       - name: Run Buzz Details
         run: pnpm tsx src/scraper/stores/buzz-details.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 45

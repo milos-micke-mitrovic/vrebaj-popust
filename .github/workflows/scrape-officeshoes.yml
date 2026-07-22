@@ -35,8 +35,6 @@ jobs:
       - run: npx puppeteer browsers install chrome
       - name: Run OfficeShoes scraper
         run: pnpm tsx src/scraper/stores/officeshoes.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 30
 
   scrape-details:
@@ -56,8 +54,6 @@ jobs:
       - run: npx puppeteer browsers install chrome
       - name: Run OfficeShoes Details
         run: pnpm tsx src/scraper/stores/officeshoes-details.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 45
 
   scrape-details-only:
@@ -76,6 +72,4 @@ jobs:
       - run: npx puppeteer browsers install chrome
       - name: Run OfficeShoes Details
         run: pnpm tsx src/scraper/stores/officeshoes-details.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 45

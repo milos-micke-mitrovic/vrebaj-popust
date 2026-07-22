@@ -30,8 +30,6 @@ jobs:
       - run: npx puppeteer browsers install chrome
       - name: Run Planeta Sport scraper
         run: pnpm tsx src/scraper/stores/planeta.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 30
 
   scrape-buzz:
@@ -49,8 +47,6 @@ jobs:
       - run: npx puppeteer browsers install chrome
       - name: Run Buzz scraper
         run: pnpm tsx src/scraper/stores/buzz.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 30
 
   scrape-officeshoes:
@@ -68,8 +64,6 @@ jobs:
       - run: npx puppeteer browsers install chrome
       - name: Run Office Shoes scraper
         run: pnpm tsx src/scraper/stores/officeshoes.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 30
 
   scrape-djaksport:
@@ -87,8 +81,6 @@ jobs:
       - run: npx puppeteer browsers install chrome
       - name: Run DjakSport scraper
         run: pnpm tsx src/scraper/stores/djaksport.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         # ~129 pages of full page.goto pagination (AJAX is Cloudflare-blocked) plus
         # transient-empty retries runs longer than the old stub listing; 30 min was
         # cut off mid-run, leaving no scrape logged. 60 gives headroom to complete.
@@ -109,8 +101,6 @@ jobs:
       - run: npx puppeteer browsers install chrome
       - name: Run N-Sport scraper
         run: pnpm tsx src/scraper/stores/nsport.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 30
 
   scrape-sportvision:
@@ -128,8 +118,6 @@ jobs:
       - run: npx puppeteer browsers install chrome
       - name: Run SportVision scraper
         run: pnpm tsx src/scraper/stores/sportvision.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 30
 
   scrape-intersport:
@@ -146,8 +134,6 @@ jobs:
       - run: pnpm prisma generate
       - name: Run Intersport scraper
         run: pnpm tsx src/scraper/stores/intersport.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 30
 
   scrape-trefsport:
@@ -164,8 +150,6 @@ jobs:
       - run: pnpm prisma generate
       - name: Run Tref Sport scraper
         run: pnpm tsx src/scraper/stores/trefsport.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 30
 
   # Detail scrapers run in parallel, each waits only for its list scraper
@@ -186,8 +170,6 @@ jobs:
       - run: npx puppeteer browsers install chrome
       - name: Run Planeta Details
         run: pnpm tsx src/scraper/stores/planeta-details.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 180
 
   scrape-buzz-details:
@@ -207,8 +189,6 @@ jobs:
       - run: npx puppeteer browsers install chrome
       - name: Run Buzz Details
         run: pnpm tsx src/scraper/stores/buzz-details.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 180
 
   scrape-officeshoes-details:
@@ -228,8 +208,6 @@ jobs:
       - run: npx puppeteer browsers install chrome
       - name: Run OfficeShoes Details
         run: pnpm tsx src/scraper/stores/officeshoes-details.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 180
 
   scrape-nsport-details:
@@ -249,8 +227,6 @@ jobs:
       - run: npx puppeteer browsers install chrome
       - name: Run N-Sport Details
         run: pnpm tsx src/scraper/stores/nsport-details.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 180
 
   scrape-sportvision-details:
@@ -270,8 +246,6 @@ jobs:
       - run: npx puppeteer browsers install chrome
       - name: Run SportVision Details
         run: pnpm tsx src/scraper/stores/sportvision-details.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 180
 
   scrape-intersport-details:
@@ -290,8 +264,6 @@ jobs:
       - run: pnpm prisma generate
       - name: Run Intersport Details
         run: pnpm tsx src/scraper/stores/intersport-details.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 180
 
   scrape-trefsport-details:
@@ -310,8 +282,6 @@ jobs:
       - run: pnpm prisma generate
       - name: Run Tref Sport Details
         run: pnpm tsx src/scraper/stores/trefsport-details.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 180
 
   scrape-djaksport-details:
@@ -331,8 +301,6 @@ jobs:
       - run: npx puppeteer browsers install chrome
       - name: Run DjakSport Details
         run: pnpm tsx src/scraper/stores/djaksport-details.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         timeout-minutes: 180
 
   # Fails the workflow (and triggers the standard GHA email) when any list-scraper
@@ -362,5 +330,3 @@ jobs:
       - run: pnpm prisma generate
       - name: Check scraper health
         run: pnpm tsx src/scraper/health-check.ts
-        env:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}

@@ -8,6 +8,11 @@ puppeteer.use(StealthPlugin());
 
 const STORE = "buzz" as const;
 
+// Resumable time budget: stop before the workflow step times out; the next run picks up
+// the rest (getDealsForDetailScraping only returns deals still missing details). Mirrors
+// the djaksport/officeshoes details scrapers.
+const MAX_RUNTIME_MS = 40 * 60 * 1000;
+
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -65,6 +70,7 @@ async function scrapeBuzzDetails(): Promise<void> {
   }
 
   const browser = await launchBrowser();
+  const startTime = Date.now();
   let processed = 0;
   let errors = 0;
 
@@ -73,16 +79,24 @@ async function scrapeBuzzDetails(): Promise<void> {
     await page.setViewport({ width: 1920, height: 1080 });
 
     for (const deal of deals) {
+      if (Date.now() - startTime > MAX_RUNTIME_MS) {
+        console.log(`\nTime budget reached after ${processed}/${deals.length}; remaining deals will be processed on the next run.`);
+        break;
+      }
+
       console.log(`\n[${processed + 1}/${deals.length}] ${deal.name}`);
       console.log(`  URL: ${deal.url}`);
 
       try {
+        // domcontentloaded, not networkidle2: Buzz's sizes are in the server-rendered
+        // HTML (data-productsize-name attributes), so waiting for the network to go idle
+        // just burned 15-30s/product. Matches the djaksport/officeshoes details scrapers.
         await page.goto(deal.url, {
-          waitUntil: "networkidle2",
-          timeout: 60000,
+          waitUntil: "domcontentloaded",
+          timeout: 30000,
         });
 
-        await sleep(1000 + Math.random() * 1000);
+        await sleep(1200 + Math.random() * 800);
 
         const details = await extractProductDetails(page);
 
@@ -111,7 +125,7 @@ async function scrapeBuzzDetails(): Promise<void> {
         processed++;
         console.log(`  ✓ Updated`);
 
-        await sleep(1500 + Math.random() * 1500);
+        await sleep(800 + Math.random() * 700);
 
       } catch (err) {
         errors++;
