@@ -65,3 +65,8 @@ jobs:
         run: pnpm cf:deploy
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          # Google Analytics 4 measurement ID. NEXT_PUBLIC_* is inlined into the client
+          # bundle at build time, so it must be present here (it lived only on the old
+          # droplet's .env and was lost at the Cloudflare cutover, silently disabling GA).
+          # It's a public value — it ships in every page's client JS — so not a secret.
+          NEXT_PUBLIC_GA_ID: G-T5F4RS5LCG
