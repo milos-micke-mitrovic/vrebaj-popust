@@ -167,9 +167,14 @@ async function scrapeOfficeShoes(): Promise<void> {
 
       console.log(`\n=== Page ${pageNum}: ${pageUrl} ===`);
 
+      // domcontentloaded, not networkidle2: the 48 products are in the server-rendered
+      // HTML, but OfficeShoes' trackers keep the network busy past 60s, so networkidle2
+      // was timing out the whole run (0 deals). The waitForSelector below already gates
+      // on products being present, so this is both faster and safe. (Same fix as the
+      // officeshoes/buzz details scrapers.)
       await page.goto(pageUrl, {
-        waitUntil: "networkidle2",
-        timeout: 60000,
+        waitUntil: "domcontentloaded",
+        timeout: 30000,
       });
 
       // Wait for products to load
