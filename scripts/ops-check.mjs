@@ -169,6 +169,27 @@ async function main() {
       const row = (r.rows || [])[0];
       if (row) console.log(`\n📈 SEO (7d to -2d): ${Math.round(row.clicks)} clicks, ${Math.round(row.impressions)} impressions, ${(row.ctr * 100).toFixed(1)}% CTR, avg pos ${row.position.toFixed(1)}`);
       else console.log("\n📈 SEO: no rows");
+
+      // Week-over-week movers (page-level). Distinguishes a broad seasonal dip from
+      // specific pages losing ground — the thing you actually want when SEO moves.
+      // Pages, not queries: GSC heavily anonymizes the query dimension.
+      const gscUrl = `https://searchconsole.googleapis.com/webmasters/v3/sites/${encodeURIComponent(GSC_SITE)}/searchAnalytics/query`;
+      const pageWin = async (from, to) => ((await (await fetch(gscUrl, {
+        method: "POST", headers: { Authorization: "Bearer " + t, "Content-Type": "application/json" },
+        body: JSON.stringify({ startDate: iso(daysAgo(from)).slice(0, 10), endDate: iso(daysAgo(to)).slice(0, 10), dimensions: ["page"], rowLimit: 250 }),
+      })).json()).rows || []);
+      const [cur, prev] = await Promise.all([pageWin(8, 2), pageWin(15, 9)]);
+      const curC = Math.round(cur.reduce((s, x) => s + x.clicks, 0));
+      const prevC = Math.round(prev.reduce((s, x) => s + x.clicks, 0));
+      const pm = new Map(prev.map((x) => [x.keys[0], x.clicks]));
+      const moved = cur.map((x) => ({ p: x.keys[0], d: x.clicks - (pm.get(x.keys[0]) || 0) }))
+        .concat([...pm].filter(([p]) => !cur.some((x) => x.keys[0] === p)).map(([p, c]) => ({ p, d: -c })));
+      const short = (u) => (u.replace(/^https?:\/\/(www\.)?vrebajpopust\.rs/, "").slice(0, 40) || "/");
+      console.log(`     ↳ WoW pages: ${prevC} → ${curC} clicks ${curC >= prevC ? "▲" : "▼"}`);
+      const gains = moved.filter((m) => m.d > 0).sort((a, b) => b.d - a.d).slice(0, 3);
+      const drops = moved.filter((m) => m.d < 0).sort((a, b) => a.d - b.d).slice(0, 3);
+      if (gains.length) console.log(`        gains: ${gains.map((m) => `${short(m.p)} (+${m.d})`).join("  ")}`);
+      if (drops.length) console.log(`        drops: ${drops.map((m) => `${short(m.p)} (${m.d})`).join("  ")}`);
     } catch (e) { console.log(`\n⚠️ SEO (GSC): ${e.message}`); }
   }
   console.log("");
