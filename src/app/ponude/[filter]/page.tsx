@@ -90,6 +90,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description = generateSeoDescription(parsed);
   const keywords = generateKeywords(parsed);
 
+  // Soft-404 guard: a valid filter with 0 current deals is a thin/empty page. Google
+  // flags the indexed empty state as "Soft 404", so noindex it while empty — it becomes
+  // indexable again the moment deals return (better than a 404, which churns the URL).
+  let hasDeals = true;
+  try {
+    const prisma = await getPrisma();
+    hasDeals = (await prisma.deal.count({ where: buildWhereClause(parsed) })) > 0;
+  } catch { /* DB blip → default to indexable; never deindex a good page on a transient error */ }
+
   return {
     title,
     description,
@@ -101,10 +110,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       locale: "sr_RS",
     },
     robots: {
-      index: true,
+      index: hasDeals,
       follow: true,
       googleBot: {
-        index: true,
+        index: hasDeals,
         follow: true,
         "max-video-preview": -1,
         "max-image-preview": "large",
