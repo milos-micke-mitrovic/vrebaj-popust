@@ -6,7 +6,10 @@ on:
   # but a retry a few hours later gets through — so this self-heals it without a manual
   # re-run. When the nightly succeeded, this just harmlessly refreshes the catalog.
   schedule:
-    - cron: '0 9 * * *'
+    # Offset minute (not :00): GitHub delays/drops on-the-hour scheduled runs under load,
+    # which is why the first attempts at '0 9' never fired. ~09:19 UTC is still well inside
+    # the post-block clear window.
+    - cron: '19 9 * * *'
   workflow_dispatch:
     inputs:
       mode:
