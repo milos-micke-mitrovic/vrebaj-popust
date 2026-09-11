@@ -37,6 +37,20 @@ const STORES: Store[] = [
 // Set per-store overrides here if a store has a legitimately small catalog.
 const MIN_HEALTHY_DEALS = 5;
 
+// Self-expiring alert snooze for a KNOWN, acknowledged issue we're deliberately waiting
+// out — stops the nightly failure email from repeating while we watch, without going
+// blind. The store still appears in the report (marked SNOOZED); it just doesn't fail the
+// job. The mute AUTO-LIFTS after `until`, so a forgotten snooze can't hide a real outage.
+// planeta 2026-09: Cloudflare bot-protection is blocking the GitHub Actions IP (healthy
+// from a normal IP). Decided to wait ~1 week before spending on a proxy. Re-alerts 09-18.
+const SNOOZED: Partial<Record<Store, { until: string; reason: string }>> = {
+  planeta: { until: "2026-09-18", reason: "CF bot-block on GHA IP — waiting to see if it self-clears" },
+};
+const isSnoozed = (store: Store): boolean => {
+  const s = SNOOZED[store];
+  return !!s && new Date() < new Date(s.until);
+};
+
 interface Issue {
   store: Store;
   severity: "critical" | "warning";
@@ -90,7 +104,8 @@ async function main(): Promise<void> {
       ? `${latest.filteredCount} deals` +
         (errCount > 0 ? ` + ${errCount} errors` : "")
       : "NO RUN";
-    console.log(`  ${store.padEnd(14)} ${status}`);
+    const snooze = isSnoozed(store) ? `  (SNOOZED until ${SNOOZED[store]!.until})` : "";
+    console.log(`  ${store.padEnd(14)} ${status}${snooze}`);
   }
   console.log();
 
@@ -102,8 +117,10 @@ async function main(): Promise<void> {
   console.log("=== Issues ===\n");
   let critical = 0;
   for (const issue of issues) {
-    console.log(`  [${issue.severity.toUpperCase()}] ${issue.store}: ${issue.message}`);
-    if (issue.severity === "critical") critical++;
+    const snoozed = isSnoozed(issue.store);
+    const tag = snoozed ? " (SNOOZED — not failing)" : "";
+    console.log(`  [${issue.severity.toUpperCase()}] ${issue.store}: ${issue.message}${tag}`);
+    if (issue.severity === "critical" && !snoozed) critical++;
   }
   console.log();
 
