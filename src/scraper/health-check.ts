@@ -42,9 +42,11 @@ const MIN_HEALTHY_DEALS = 5;
 // blind. The store still appears in the report (marked SNOOZED); it just doesn't fail the
 // job. The mute AUTO-LIFTS after `until`, so a forgotten snooze can't hide a real outage.
 // planeta 2026-09: Cloudflare bot-protection is blocking the GitHub Actions IP (healthy
-// from a normal IP). Decided to wait ~1 week before spending on a proxy. Re-alerts 09-18.
+// from a normal IP). Did NOT self-clear over the first week (0 deals 09-09..09-19). User
+// opted to give it a few more days before deciding proxy-vs-drop. Re-alerts 09-26 — if
+// still blocked then, stop waiting and make the call (this is the final wait).
 const SNOOZED: Partial<Record<Store, { until: string; reason: string }>> = {
-  planeta: { until: "2026-09-18", reason: "CF bot-block on GHA IP — waiting to see if it self-clears" },
+  planeta: { until: "2026-09-26", reason: "CF bot-block on GHA IP — final wait before proxy-vs-drop decision" },
 };
 const isSnoozed = (store: Store): boolean => {
   const s = SNOOZED[store];
