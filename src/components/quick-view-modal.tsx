@@ -18,7 +18,6 @@ function isNewDeal(createdAt: Date | string): boolean {
 
 const STORE_INFO: Record<Store, { name: string; logo: string; url: string }> = {
   djaksport: { name: "Djak Sport", logo: "/logos/djaksport.png", url: "https://www.djaksport.com" },
-  planeta: { name: "Planeta Sport", logo: "/logos/planeta.png", url: "https://www.planetasport.rs" },
   sportvision: { name: "Sport Vision", logo: "/logos/sportvision.png", url: "https://www.sportvision.rs" },
   nsport: { name: "N Sport", logo: "/logos/nsport.jpg", url: "https://www.n-sport.net" },
   buzz: { name: "Buzz", logo: "/logos/buzz.png", url: "https://www.buzzsneakers.rs" },

@@ -6,8 +6,6 @@ const ALLOWED_DOMAINS = [
   "djaksport.com",
   "www.sportvision.rs",
   "sportvision.rs",
-  "planetasport.rs",
-  "www.planetasport.rs",
   "www.buzzsneakers.rs",
   "buzzsneakers.rs",
   "www.officeshoes.rs",

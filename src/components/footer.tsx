@@ -3,7 +3,6 @@ import Image from "next/image";
 
 const STORES = [
   { name: "Djak Sport", logo: "/logos/djaksport.png", slug: "djak-sport" },
-  { name: "Planeta Sport", logo: "/logos/planeta.png", slug: "planeta-sport" },
   { name: "Sport Vision", logo: "/logos/sportvision.png", slug: "sport-vision" },
   { name: "N Sport", logo: "/logos/nsport.jpg", slug: "n-sport" },
   { name: "Buzz", logo: "/logos/buzz.png", slug: "buzz" },

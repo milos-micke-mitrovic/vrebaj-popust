@@ -24,7 +24,6 @@ async function fetchRecentRuns(sinceHours: number): Promise<ScrapeRunSummary[]> 
 
 const STORES: Store[] = [
   "djaksport",
-  "planeta",
   "sportvision",
   "nsport",
   "buzz",
@@ -41,13 +40,9 @@ const MIN_HEALTHY_DEALS = 5;
 // out — stops the nightly failure email from repeating while we watch, without going
 // blind. The store still appears in the report (marked SNOOZED); it just doesn't fail the
 // job. The mute AUTO-LIFTS after `until`, so a forgotten snooze can't hide a real outage.
-// planeta 2026-09: Cloudflare bot-protection is blocking the GitHub Actions IP (healthy
-// from a normal IP). Did NOT self-clear over the first week (0 deals 09-09..09-19). User
-// opted to give it a few more days before deciding proxy-vs-drop. Re-alerts 09-26 — if
-// still blocked then, stop waiting and make the call (this is the final wait).
-const SNOOZED: Partial<Record<Store, { until: string; reason: string }>> = {
-  planeta: { until: "2026-09-26", reason: "CF bot-block on GHA IP — final wait before proxy-vs-drop decision" },
-};
+// (none currently) — e.g. planeta was snoozed here Sept 2026 during its CF block before
+// being dropped entirely 2026-10.
+const SNOOZED: Partial<Record<Store, { until: string; reason: string }>> = {};
 const isSnoozed = (store: Store): boolean => {
   const s = SNOOZED[store];
   return !!s && new Date() < new Date(s.until);

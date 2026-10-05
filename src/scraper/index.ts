@@ -1,11 +1,9 @@
 import { scrapeDjakSport } from "./stores/djaksport";
-import { scrapePlaneta } from "./stores/planeta";
 import { scrapeNSport } from "./stores/nsport";
 import { scrapeSportVision } from "./stores/sportvision";
 import { scrapeBuzz } from "./stores/buzz";
 import { scrapeOfficeShoes } from "./stores/officeshoes";
 import { scrapeIntersport } from "./stores/intersport";
-import { scrapePlanetaDetails } from "./stores/planeta-details";
 import { scrapeNSportDetails } from "./stores/nsport-details";
 import { scrapeSportVisionDetails } from "./stores/sportvision-details";
 import { scrapeBuzzDetails } from "./stores/buzz-details";
@@ -44,9 +42,8 @@ async function runAllScrapers(): Promise<void> {
   const startTime = Date.now();
 
   // === LIST SCRAPERS (find products) ===
-  // Planeta first (most reliable), DjakSport last (has timeout issues)
+  // DjakSport last (has timeout issues)
   const listScrapers: ScraperDef[] = [
-    { name: "Planeta Sport", fn: scrapePlaneta },
     { name: "N-Sport", fn: scrapeNSport },
     { name: "SportVision", fn: scrapeSportVision },
     { name: "Buzz Sneakers", fn: scrapeBuzz },
@@ -62,7 +59,6 @@ async function runAllScrapers(): Promise<void> {
   // === DETAIL SCRAPERS (enrich products with sizes, categories, gender) ===
   // Note: DjakSport doesn't need detail scraper - gets all data from list API
   const detailScrapers: ScraperDef[] = [
-    { name: "Planeta Details", fn: scrapePlanetaDetails },
     { name: "N-Sport Details", fn: scrapeNSportDetails },
     { name: "SportVision Details", fn: scrapeSportVisionDetails },
     { name: "Buzz Details", fn: scrapeBuzzDetails },

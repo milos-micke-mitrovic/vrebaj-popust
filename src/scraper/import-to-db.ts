@@ -35,7 +35,7 @@ interface JsonFile {
   errors: string[];
 }
 
-const VALID_STORES: Store[] = ["djaksport", "planeta", "sportvision", "nsport", "buzz", "officeshoes"];
+const VALID_STORES: Store[] = ["djaksport", "sportvision", "nsport", "buzz", "officeshoes"];
 const VALID_GENDERS: Gender[] = ["muski", "zenski", "deciji", "unisex"];
 
 function mapGender(gender: string | undefined): Gender {

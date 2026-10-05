@@ -6,7 +6,6 @@ import { Store } from "@/types/deal";
 
 const STORE_STYLES: Record<Store, { name: string; color: string }> = {
   djaksport: { name: "DJAK", color: "bg-red-600" },
-  planeta: { name: "PLANETA", color: "bg-blue-600" },
   sportvision: { name: "SV", color: "bg-orange-600" },
   nsport: { name: "N-SPORT", color: "bg-green-600" },
   buzz: { name: "BUZZ", color: "bg-yellow-500" },

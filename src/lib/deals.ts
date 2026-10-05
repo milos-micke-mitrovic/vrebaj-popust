@@ -66,11 +66,6 @@ export const STORE_INFO: Record<
     logo: "/logos/djaksport.png",
     url: "https://www.djaksport.com",
   },
-  planeta: {
-    name: "Planeta Sport",
-    logo: "/logos/planeta.png",
-    url: "https://www.planetasport.rs",
-  },
   sportvision: {
     name: "Sport Vision",
     logo: "/logos/sportvision.png",

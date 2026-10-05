@@ -19,7 +19,7 @@ export const revalidate = 300;
 export const metadata: Metadata = {
   title: "VrebajPopust | Najveći sportski popusti preko 50% u Srbiji",
   description:
-    "Pronađi najveće popuste i akcije preko 50% na sportsku opremu, patike i odeću. Pratimo DjakSport, Planeta Sport, Sport Vision, N Sport, Buzz, Office Shoes i Tref Sport. Ažurirano svakodnevno.",
+    "Pronađi najveće popuste i akcije preko 50% na sportsku opremu, patike i odeću. Pratimo DjakSport, Sport Vision, N Sport, Buzz, Office Shoes i Tref Sport. Ažurirano svakodnevno.",
   keywords: [
     "popusti",
     "akcije",
@@ -28,7 +28,6 @@ export const metadata: Metadata = {
     "sportska oprema",
     "patike",
     "djak sport",
-    "planeta sport",
     "sport vision",
     "online kupovina",
   ],
@@ -103,7 +102,7 @@ export default async function Home() {
         name: "Koje prodavnice pratite?",
         acceptedAnswer: {
           "@type": "Answer",
-          text: "Pratimo 8 najvećih sportskih prodavnica: Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz Sneakers, Office Shoes, Intersport i Tref Sport. Svi proizvodi se ažuriraju svakodnevno.",
+          text: "Pratimo 7 najvećih sportskih prodavnica: Djak Sport, Sport Vision, N Sport, Buzz Sneakers, Office Shoes, Intersport i Tref Sport. Svi proizvodi se ažuriraju svakodnevno.",
         },
       },
       {

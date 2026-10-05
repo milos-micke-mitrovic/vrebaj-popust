@@ -8,7 +8,6 @@ import { STORE_INFO } from "@/lib/deals";
 // Store slugs for linking
 const STORE_SLUGS: Record<Store, string> = {
   djaksport: "djak-sport",
-  planeta: "planeta-sport",
   sportvision: "sport-vision",
   nsport: "n-sport",
   buzz: "buzz",

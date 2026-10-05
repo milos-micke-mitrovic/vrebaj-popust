@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     template: "%s | VrebajPopust",
   },
   description:
-    "Pronađi najveće popuste, akcije i sniženja preko 50% na sportsku opremu, obuću i odeću u Srbiji. DjakSport, Planeta Sport i druge prodavnice. Ažurirano svakodnevno.",
+    "Pronađi najveće popuste, akcije i sniženja preko 50% na sportsku opremu, obuću i odeću u Srbiji. DjakSport i druge prodavnice. Ažurirano svakodnevno.",
   keywords: [
     "popusti",
     "sniženja",
@@ -43,7 +43,6 @@ export const metadata: Metadata = {
     "obuća",
     "odeća",
     "djak sport",
-    "planeta sport",
     "sport vision",
     "online kupovina",
     "jeftino",
@@ -146,7 +145,6 @@ export default async function RootLayout({
         {/* Preconnect to image domains for faster loading */}
         <link rel="preconnect" href="https://www.djaksport.com" />
         <link rel="preconnect" href="https://www.sportvision.rs" />
-        <link rel="preconnect" href="https://planetasport.rs" />
         <link rel="preconnect" href="https://www.buzzsneakers.rs" />
         <link rel="preconnect" href="https://www.officeshoes.rs" />
         <link rel="preconnect" href="https://www.n-sport.net" />
@@ -158,7 +156,7 @@ export default async function RootLayout({
         <meta name="revisit-after" content="1 day" />
         {/* AI Search Optimization */}
         <meta name="ai-content-declaration" content="This website aggregates sports discounts from Serbian retailers. Content is factual and updated daily." />
-        <meta name="ai-summary" content="VrebajPopust - Serbian sports discount aggregator. Find Nike, Adidas, Puma and more with 50%+ discounts from Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz, Office Shoes." />
+        <meta name="ai-summary" content="VrebajPopust - Serbian sports discount aggregator. Find Nike, Adidas, Puma and more with 50%+ discounts from Djak Sport, Sport Vision, N Sport, Buzz, Office Shoes." />
         <link rel="author" href="https://www.vrebajpopust.rs/o-nama" />
         <script
           type="application/ld+json"

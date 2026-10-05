@@ -62,7 +62,6 @@ export function normalizeSizes(sizes: string[]): string[] {
 // cleanup is skipped so a broken scraper can't wipe a store's catalogue.
 const MIN_PRODUCTS_THRESHOLD: Record<Store, number> = {
   djaksport: 10,
-  planeta: 10,
   nsport: 5,
   sportvision: 10,
   buzz: 10,

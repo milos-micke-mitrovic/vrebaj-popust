@@ -4,7 +4,6 @@ export const ITEMS_PER_PAGE = 32;
 
 export const STORE_NAMES: Record<Store, string> = {
   djaksport: "Djak Sport",
-  planeta: "Planeta Sport",
   sportvision: "Sport Vision",
   nsport: "N Sport",
   buzz: "Buzz Sneakers",

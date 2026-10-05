@@ -25,7 +25,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
     return {
       title: "Sve ponude - Popusti preko 50%",
       description:
-        "Pregledaj sve aktivne popuste i akcije preko 50% na DjakSport, Planeta Sport, Sport Vision i drugim prodavnicama u Srbiji.",
+        "Pregledaj sve aktivne popuste i akcije preko 50% na DjakSport, Sport Vision i drugim prodavnicama u Srbiji.",
       robots: {
         index: false,
         follow: true,
@@ -39,14 +39,13 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
   return {
     title: "Sve ponude - Popusti preko 50%",
     description:
-      "Pregledaj sve aktivne popuste i akcije preko 50% na DjakSport, Planeta Sport, Sport Vision i drugim prodavnicama u Srbiji. Filtriraj po brendu, kategoriji i ceni.",
+      "Pregledaj sve aktivne popuste i akcije preko 50% na DjakSport, Sport Vision i drugim prodavnicama u Srbiji. Filtriraj po brendu, kategoriji i ceni.",
     keywords: [
       "popusti",
       "akcije",
       "sniženja",
       "srbija",
       "djak sport",
-      "planeta sport",
       "sport vision",
       "patike",
       "sportska oprema",

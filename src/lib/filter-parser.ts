@@ -32,7 +32,6 @@ const CATEGORY_SLUGS: Record<string, Category> = {
 // Must match sitemap.ts exactly
 const MULTI_WORD_STORES: Record<string, Store> = {
   "djak-sport": "djaksport",
-  "planeta-sport": "planeta",
   "sport-vision": "sportvision",
   "office-shoes": "officeshoes",
   "n-sport": "nsport",
@@ -85,7 +84,6 @@ const CATEGORY_DISPLAY: Record<Category, string> = {
 // Display names for stores
 const STORE_DISPLAY: Record<Store, string> = {
   djaksport: "Djak Sport",
-  planeta: "Planeta Sport",
   sportvision: "Sport Vision",
   nsport: "N Sport",
   buzz: "Buzz",
@@ -235,7 +233,7 @@ export function generateSeoDescription(parsed: ParsedFilter): string {
 
   // For brand-only pages, mention stores to improve CTR in search results
   const storesMention = parsed.brand && !parsed.store
-    ? " Pratimo Djak Sport, Planeta Sport, Sport Vision i druge prodavnice."
+    ? " Pratimo Djak Sport, Sport Vision i druge prodavnice."
     : "";
 
   return `${subject} sa sniženjima preko 50%. Uporedi cene i pronađi najveće popuste u Srbiji.${storesMention}`;
@@ -263,7 +261,7 @@ export function generateSeoIntro(parsed: ParsedFilter, count: number): string {
     count > 0
       ? `Trenutno izdvajamo ${count} ${count === 1 ? "proizvod" : "proizvoda"} na sniženju preko 50%.`
       : "Pratimo sniženja preko 50% i dodajemo nove ponude svakog dana.";
-  return `${subject} na popustu — sve na jednom mestu. ${countText} Cene poredimo iz vodećih sportskih prodavnica u Srbiji (Djak Sport, Planeta Sport, Sport Vision, N Sport, Buzz, Office Shoes, Intersport i Tref Sport) kako biste lako pronašli najveće popuste. Ponude se ažuriraju svakodnevno.`;
+  return `${subject} na popustu — sve na jednom mestu. ${countText} Cene poredimo iz vodećih sportskih prodavnica u Srbiji (Djak Sport, Sport Vision, N Sport, Buzz, Office Shoes, Intersport i Tref Sport) kako biste lako pronašli najveće popuste. Ponude se ažuriraju svakodnevno.`;
 }
 
 /**

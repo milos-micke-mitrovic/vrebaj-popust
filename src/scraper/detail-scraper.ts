@@ -159,36 +159,6 @@ async function extractDjakSportDetails(page: Page, dealName: string = ""): Promi
   };
 }
 
-async function extractPlanetaDetails(page: Page): Promise<ProductDetails> {
-  const rawData = await page.evaluate(() => {
-    const sizes: string[] = [];
-    // Planeta uses swatch-option with data-option-label for sizes
-    const sizeElements = document.querySelectorAll(".swatch-attribute.size .swatch-option.text");
-    sizeElements.forEach((el) => {
-      const size = el.getAttribute("data-option-label") || el.textContent?.trim();
-      if (size && size.length <= 5 && /^[A-Za-z0-9.\/]+$/.test(size)) {
-        sizes.push(size);
-      }
-    });
-
-    let description: string | null = null;
-    const descEl = document.querySelector(".product.attribute.description .value");
-    if (descEl) {
-      description = descEl.textContent?.trim() || null;
-    }
-
-    let detailImageUrl: string | null = null;
-    const imgEl = document.querySelector(".gallery-placeholder img, .product.media img");
-    if (imgEl) {
-      detailImageUrl = (imgEl as HTMLImageElement).src || null;
-    }
-
-    return { sizes, description, detailImageUrl };
-  });
-
-  return { ...rawData, categories: [], gender: null };
-}
-
 async function extractSportVisionDetails(page: Page, dealName: string = ""): Promise<ProductDetails> {
   // Wait for size selector to load
   await page.waitForSelector("ul.product-attributes li", { timeout: 8000 }).catch(() => {});
@@ -548,8 +518,6 @@ async function extractDetails(page: Page, store: Store, dealName: string = ""): 
   switch (store) {
     case "djaksport":
       return extractDjakSportDetails(page, dealName);
-    case "planeta":
-      return extractPlanetaDetails(page);
     case "sportvision":
       return extractSportVisionDetails(page, dealName);
     case "nsport":
@@ -671,7 +639,7 @@ async function scrapeAllDetails(force = false): Promise<void> {
   console.log("Starting detail scraper...");
   console.log(`Data directory: ${DATA_DIR}`);
 
-  const stores: Store[] = ["djaksport", "planeta", "sportvision", "nsport", "buzz", "officeshoes"];
+  const stores: Store[] = ["djaksport", "sportvision", "nsport", "buzz", "officeshoes"];
 
   for (const store of stores) {
     try {
@@ -694,7 +662,7 @@ if (forceRescrape) {
 }
 
 async function runScraper() {
-  if (storeArg && ["djaksport", "planeta", "sportvision", "nsport", "buzz", "officeshoes"].includes(storeArg)) {
+  if (storeArg && ["djaksport", "sportvision", "nsport", "buzz", "officeshoes"].includes(storeArg)) {
     await scrapeStoreDetails(storeArg, forceRescrape);
   } else {
     await scrapeAllDetails(forceRescrape);

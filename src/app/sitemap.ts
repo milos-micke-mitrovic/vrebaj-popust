@@ -64,7 +64,6 @@ const FILTER_PAGES = [
   "deciji",
   // Stores
   "djak-sport",
-  "planeta-sport",
   "sport-vision",
   "n-sport",
   "buzz",
@@ -100,8 +99,6 @@ const FILTER_PAGES = [
   // Store + brand combos
   "djak-sport-nike",
   "djak-sport-adidas",
-  "planeta-sport-nike",
-  "planeta-sport-adidas",
   "sport-vision-nike",
   "sport-vision-adidas",
   // Additional brand + category combos (based on search trends)

@@ -32,7 +32,7 @@ export async function generateStaticParams() {
   const brands = ["nike", "adidas", "puma", "new-balance", "under-armour", "reebok", "converse", "fila", "champion", "vans", "skechers", "asics", "jordan", "the-north-face", "columbia", "hoka", "timberland", "lacoste", "tommy-hilfiger", "calvin-klein", "hummel", "umbro", "kappa", "ellesse", "diadora", "mizuno", "salomon", "crocs", "la-terra", "joma", "rang", "sergio-tacchini"];
   const categories = ["patike", "cipele", "cizme", "jakne", "trenerke", "majice", "duksevi", "sorcevi", "helanke"];
   const genders = ["muski", "zenski", "deciji"];
-  const stores = ["djak-sport", "planeta-sport", "sport-vision", "n-sport", "buzz", "office-shoes", "intersport", "tref-sport"];
+  const stores = ["djak-sport", "sport-vision", "n-sport", "buzz", "office-shoes", "intersport", "tref-sport"];
 
   const params: { filter: string }[] = [];
 

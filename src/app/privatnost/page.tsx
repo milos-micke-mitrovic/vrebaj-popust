@@ -127,8 +127,8 @@ export default function PrivacyPage() {
               Linkovi ka drugim sajtovima
             </h2>
             <p className="mb-4">
-              Naš sajt sadrži linkove ka sajtovima prodavnica (Djak Sport, Planeta
-              Sport, Sport Vision, itd.). Kada kliknete na proizvod, bićete
+              Naš sajt sadrži linkove ka sajtovima prodavnica (Djak Sport, Sport
+              Vision, itd.). Kada kliknete na proizvod, bićete
               preusmereni na sajt prodavnice koja ima sopstvenu politiku
               privatnosti. Nismo odgovorni za sadržaj ili prakse privatnosti tih
               sajtova.

@@ -17,7 +17,7 @@ const SECRET = process.env.INGEST_SECRET || "dev-ingest-secret";
 const INGEST = `${BASE}/api/ingest`;
 
 const STORES: Store[] = [
-  "djaksport", "planeta", "nsport", "buzz",
+  "djaksport", "nsport", "buzz",
   "officeshoes", "intersport", "sportvision", "trefsport",
 ];
 const GENDERS: Gender[] = ["muski", "zenski", "deciji", "unisex"];
