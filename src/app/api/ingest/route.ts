@@ -61,6 +61,14 @@ export async function POST(request: NextRequest) {
         });
       case "getRecentScrapeRuns":
         return NextResponse.json({ runs: await db.getRecentScrapeRuns(body.sinceHours as number | undefined) });
+      case "getTopDeals":
+        return NextResponse.json({
+          deals: await db.getTopDeals(
+            body.limit as number | undefined,
+            body.sinceHours as number | undefined,
+            body.minDiscount as number | undefined,
+          ),
+        });
       default:
         return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
     }

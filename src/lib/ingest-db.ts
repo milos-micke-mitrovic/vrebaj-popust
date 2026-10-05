@@ -235,3 +235,55 @@ export async function getRecentScrapeRuns(sinceHours = 6): Promise<ScrapeRunSumm
     startedAt: r.startedAt.toISOString(),
   }));
 }
+
+/**
+ * Top fresh deals for the daily Telegram post: newest high-discount deals that have an
+ * image, deduped by brand (so the channel isn't five of the same brand). Filtering to
+ * deals that first appeared in the last `sinceHours` keeps each day's post fresh and
+ * means the same deal is never posted twice.
+ */
+export interface TopDeal {
+  id: string;
+  store: string;
+  name: string;
+  brand: string | null;
+  originalPrice: number;
+  salePrice: number;
+  discountPercent: number;
+  url: string;
+  imageUrl: string | null;
+  detailImageUrl: string | null;
+}
+
+export async function getTopDeals(
+  limit = 5,
+  sinceHours = 30,
+  minDiscount = 60
+): Promise<TopDeal[]> {
+  const prisma = await getPrisma();
+  const since = new Date(Date.now() - sinceHours * 60 * 60 * 1000);
+  const rows = await prisma.deal.findMany({
+    where: {
+      discountPercent: { gte: minDiscount },
+      imageUrl: { not: null },
+      createdAt: { gte: since },
+    },
+    orderBy: { discountPercent: "desc" },
+    take: limit * 5,
+    select: {
+      id: true, store: true, name: true, brand: true,
+      originalPrice: true, salePrice: true, discountPercent: true,
+      url: true, imageUrl: true, detailImageUrl: true,
+    },
+  });
+  const seen = new Set<string>();
+  const out: TopDeal[] = [];
+  for (const d of rows) {
+    const key = (d.brand || d.name).toLowerCase();
+    if (seen.has(key)) continue;
+    seen.add(key);
+    out.push(d as TopDeal);
+    if (out.length >= limit) break;
+  }
+  return out;
+}

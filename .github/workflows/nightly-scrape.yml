@@ -293,3 +293,29 @@ jobs:
       - run: pnpm prisma generate
       - name: Check scraper health
         run: pnpm tsx src/scraper/health-check.ts
+
+  telegram:
+    runs-on: ubuntu-latest
+    needs:
+      - scrape-buzz
+      - scrape-officeshoes
+      - scrape-djaksport
+      - scrape-nsport
+      - scrape-sportvision
+      - scrape-intersport
+      - scrape-trefsport
+    if: always()
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 9
+      - run: pnpm install
+      - name: Post top deals to Telegram
+        run: pnpm tsx src/scraper/telegram-post.ts
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
