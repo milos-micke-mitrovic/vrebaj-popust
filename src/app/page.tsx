@@ -6,6 +6,7 @@ import { HeroBanner } from "@/components/hero-banner";
 import { TopDealsCarousel } from "@/components/top-deals-carousel";
 import { StoresCarousel } from "@/components/stores-carousel";
 import { PopularCategories } from "@/components/popular-categories";
+import { TelegramCTA } from "@/components/telegram-cta";
 import { FAQSection } from "@/components/faq-section";
 import { ScrollReveal } from "@/components/scroll-reveal";
 import { WaveText } from "@/components/wave-text";
@@ -227,6 +228,11 @@ export default async function Home() {
         {/* Popular Categories - Internal Links for SEO */}
         <ScrollReveal>
           <PopularCategories />
+        </ScrollReveal>
+
+        {/* Telegram channel CTA - retention / return visitors */}
+        <ScrollReveal>
+          <TelegramCTA />
         </ScrollReveal>
 
         {/* FAQ Section */}

@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getDealByIdAsync, getAllDealsAsync, STORE_INFO } from "@/lib/deals";
 import { getBrandInfo } from "@/lib/brand-descriptions";
 import { safeJsonLd } from "@/lib/json-ld";
+import { TelegramCTA } from "@/components/telegram-cta";
 
 // Revalidate every 5 minutes
 export const revalidate = 300;
@@ -871,6 +872,8 @@ export default async function DealPage({ params }: Props) {
             </div>
           </section>
         )}
+
+        <TelegramCTA />
 
         <Footer />
       </div>

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { TelegramFooterLink } from "@/components/telegram-cta";
 
 const STORES = [
   { name: "Djak Sport", logo: "/logos/djaksport.png", slug: "djak-sport" },
@@ -27,8 +28,11 @@ export function Footer() {
               </span>
             </Link>
             <p className="mt-3 text-sm text-gray-600 dark:text-gray-400">
-              Pronađi najveće sportske popuste preko 50% u Srbiji. Pratimo cene u 8 prodavnica i ažuriramo ponude svakodnevno.
+              Pronađi najveće sportske popuste preko 50% u Srbiji. Pratimo cene u 7 prodavnica i ažuriramo ponude svakodnevno.
             </p>
+            <div className="mt-4">
+              <TelegramFooterLink />
+            </div>
           </div>
 
           {/* Quick links */}
