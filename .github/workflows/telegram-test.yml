@@ -1,0 +1,28 @@
+name: Telegram Test Post
+
+# Manual-only: fire a single Telegram post on demand (e.g. to confirm setup after adding
+# the TELEGRAM_* secrets) without waiting for the nightly run. Posts the current top deals.
+on:
+  workflow_dispatch:
+
+env:
+  INGEST_URL: ${{ secrets.INGEST_URL }}
+  INGEST_SECRET: ${{ secrets.INGEST_SECRET }}
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: '20'
+      - uses: pnpm/action-setup@v6
+        with:
+          version: 9
+      - run: pnpm install
+      - name: Post top deals to Telegram
+        run: pnpm tsx src/scraper/telegram-post.ts
+        env:
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHANNEL_ID: ${{ secrets.TELEGRAM_CHANNEL_ID }}
