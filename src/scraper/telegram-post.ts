@@ -42,8 +42,23 @@ const fmt = (n: number) => Math.round(n).toLocaleString("de-DE"); // dot thousan
 const esc = (s: string) =>
   s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 
+// Retry transient network failures (ECONNRESET etc. between the GHA runner and the
+// Worker / Telegram's API happen occasionally and shouldn't abort the post).
+async function fetchRetry(url: string, opts: RequestInit, tries = 3): Promise<Response> {
+  let lastErr: unknown;
+  for (let i = 0; i < tries; i++) {
+    try {
+      return await fetch(url, opts);
+    } catch (e) {
+      lastErr = e;
+      if (i < tries - 1) await sleep(1500 * (i + 1));
+    }
+  }
+  throw lastErr;
+}
+
 async function tg(method: string, payload: unknown): Promise<{ ok: boolean; description?: string }> {
-  const r = await fetch(`https://api.telegram.org/bot${BOT}/${method}`, {
+  const r = await fetchRetry(`https://api.telegram.org/bot${BOT}/${method}`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
@@ -61,7 +76,7 @@ async function main(): Promise<void> {
     return;
   }
 
-  const res = await fetch(INGEST_URL, {
+  const res = await fetchRetry(INGEST_URL, {
     method: "POST",
     headers: { Authorization: `Bearer ${INGEST_SECRET}`, "Content-Type": "application/json" },
     body: JSON.stringify({ action: "getTopDeals", limit: COUNT, sinceHours: 30, minDiscount: 60 }),

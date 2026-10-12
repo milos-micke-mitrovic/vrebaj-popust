@@ -305,6 +305,9 @@ jobs:
       - scrape-intersport
       - scrape-trefsport
     if: always()
+    # Best-effort: posting deals is secondary to scraping, so a Telegram/network hiccup
+    # must never mark the whole Nightly Scrape run as failed (the script already retries).
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
