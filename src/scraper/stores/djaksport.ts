@@ -327,6 +327,13 @@ async function scrapeDjakSport(): Promise<void> {
       waitUntil: "networkidle2",
       timeout: 60000,
     });
+    // Cloudflare's "Just a moment..." interstitial can solve itself in a real browser;
+    // give it time to clear before paginating (a still-challenged session 403s every page).
+    const cleared = await page
+      .waitForFunction(() => !document.title.includes("Just a moment"), { timeout: 45000 })
+      .then(() => true)
+      .catch(() => false);
+    console.log(`Cloudflare challenge ${cleared ? "cleared" : "NOT cleared"} (title "${await page.title()}")`);
 
     await sleep(2000);
 
