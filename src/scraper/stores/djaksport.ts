@@ -186,7 +186,7 @@ async function fetchPageProducts(page: Page, listingUrl: string, pageNum: number
   // so a one-shot fetch yields 0 items even mid-catalogue. A single empty page
   // must NOT be mistaken for the end of pagination, so reload before giving up.
   for (let attempt = 1; attempt <= 3; attempt++) {
-    await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
+    const resp = await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
     try {
       await page.waitForSelector(".item.product.product-item", { timeout: 12000 });
     } catch {
@@ -194,6 +194,10 @@ async function fetchPageProducts(page: Page, listingUrl: string, pageNum: number
         await sleep(1500);
         continue;
       }
+      // Log what we actually got (Cloudflare challenge vs 404 vs empty grid) so an
+      // empty scrape is diagnosable from the CI log alone.
+      const title = await page.title().catch(() => "?");
+      console.log(`Empty page ${url}: HTTP ${resp?.status() ?? "?"}, title "${title}"`);
       return { products: [], hasMore: false };
     }
 
