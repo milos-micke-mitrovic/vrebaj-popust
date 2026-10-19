@@ -12,13 +12,15 @@ const STORE: Store = "djaksport";
 const BASE_URL = "https://www.djaksport.com";
 // Djak's seasonal campaign slugs ROTATE (/najveci-popusti -> /mid-season-sale ->
 // /super-letnja-akcija-djak -> ...) and 404 when a campaign ends, collapsing the scrape
-// to zero. So instead we crawl the stable top-level categories with Djak's own
-// "Na akciji" filter (am_on_sale=1) — every discounted item site-wide, independent of
-// whichever campaign is running — and keep the 50%+ ones. Djak has no percentage
-// filter or usable discount sort, so each listing is paginated fully. AJAX pagination
-// (?shopbyAjax=1) is Cloudflare-blocked, so we do a full page.goto per ?p=N page.
+// to zero. So instead we crawl the stable top-level categories sorted by "saving",
+// which lists every discounted item first (independent of whichever campaign is
+// running) and full-price items last — those yield no products (no oldPrice), so
+// pagination stops on its own once the discounted section ends. We keep the 50%+ ones.
+// Don't use the am_on_sale=1 filter: Djak's Cloudflare challenges it (403) from
+// datacenter IPs like GitHub Actions, while plain category URLs pass. AJAX pagination
+// (?shopbyAjax=1) is Cloudflare-blocked too, so we do a full page.goto per ?p=N page.
 const SALE_LISTINGS = ["muskarci", "zene", "deca", "oprema"].map(
-  (c) => `${BASE_URL}/${c}?am_on_sale=1`
+  (c) => `${BASE_URL}/${c}?product_list_order=saving`
 );
 const MIN_DISCOUNT = 50;
 const MAX_PAGES_PER_LISTING = 250;

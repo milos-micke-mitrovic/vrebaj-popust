@@ -31,7 +31,8 @@ storefront. Stack: **Next.js (App Router) + React + TypeScript + Tailwind**, **P
 - **When a store scrapes ~0 deals:** the sale URL almost certainly rotated. Find the current
   discount listing on the live site (puppeteer-stealth gets past Cloudflare) and update that
   store's `SALE_URL` / sale param. djaksport no longer uses campaign slugs — it crawls the stable
-  top-level categories with Djak's `?am_on_sale=1` filter, so it's immune to campaign rotations.
+  top-level categories sorted by `?product_list_order=saving` (discounted items first), so it's immune
+  to campaign rotations. Its `?am_on_sale=1` filter is Cloudflare-blocked from GHA — don't use it.
 - Every scraper: appends an md5 URL-hash suffix to the deal `id` (prevents unique-constraint
   collisions), and wraps each `upsertDeal` in try/catch (one bad product can't abort a run).
 
