@@ -10,18 +10,18 @@ puppeteer.use(StealthPlugin());
 
 const STORE: Store = "djaksport";
 const BASE_URL = "https://www.djaksport.com";
-// Djak's discount catalogue lives under a ROTATING seasonal campaign slug
-// (/najveci-popusti -> /muskarci/ds_muskarci-ds_zene?am_on_sale=1 -> /mid-season-sale
-// -> /super-letnja-akcija-djak -> ...). When Djak rotates it, the old slug 404s and
-// the scrape collapses to zero. So SALE_URL is only the DEFAULT: if it returns no
-// products the scraper auto-discovers the current campaign from the homepage (see
-// discoverSaleUrl), self-healing across rotations. AJAX pagination (?shopbyAjax=1) is
-// Cloudflare-blocked, so we do a full page.goto per ?p=N page to keep cf_clearance.
-const SALE_URL = `${BASE_URL}/super-letnja-akcija-djak`;
-// Sale listing actually used this run — replaced by discovery if SALE_URL is dead.
-let activeSaleUrl = SALE_URL;
+// Djak's seasonal campaign slugs ROTATE (/najveci-popusti -> /mid-season-sale ->
+// /super-letnja-akcija-djak -> ...) and 404 when a campaign ends, collapsing the scrape
+// to zero. So instead we crawl the stable top-level categories with Djak's own
+// "Na akciji" filter (am_on_sale=1) — every discounted item site-wide, independent of
+// whichever campaign is running — and keep the 50%+ ones. Djak has no percentage
+// filter or usable discount sort, so each listing is paginated fully. AJAX pagination
+// (?shopbyAjax=1) is Cloudflare-blocked, so we do a full page.goto per ?p=N page.
+const SALE_LISTINGS = ["muskarci", "zene", "deca", "oprema"].map(
+  (c) => `${BASE_URL}/${c}?am_on_sale=1`
+);
 const MIN_DISCOUNT = 50;
-const MAX_PAGES = 150;
+const MAX_PAGES_PER_LISTING = 250;
 
 interface RawProduct {
   name: string;
@@ -178,8 +178,8 @@ async function launchBrowser(): Promise<Browser> {
   }) as Promise<Browser>;
 }
 
-async function fetchPageProducts(page: Page, pageNum: number): Promise<FetchResult> {
-  const url = `${activeSaleUrl}?p=${pageNum}`;
+async function fetchPageProducts(page: Page, listingUrl: string, pageNum: number): Promise<FetchResult> {
+  const url = `${listingUrl}&p=${pageNum}`;
 
   // Retry transient empty renders. Djak intermittently serves the correct page
   // (right <title>) but with the product grid not yet hydrated within the wait,
@@ -299,76 +299,6 @@ async function fetchPageProducts(page: Page, pageNum: number): Promise<FetchResu
   return { products: [], hasMore: false };
 }
 
-// Find the current sale campaign when SALE_URL has gone stale. Scans the homepage
-// for discount-campaign links and returns the one whose listing has the most
-// products (the main sale), so the scraper survives Djak's slug rotations.
-async function discoverSaleUrl(page: Page): Promise<string | null> {
-  try {
-    await page.goto(BASE_URL, { waitUntil: "networkidle2", timeout: 60000 });
-    await sleep(1500);
-
-    const candidatePaths = (await page.evaluate(`
-      (function() {
-        var out = [];
-        document.querySelectorAll('a[href]').forEach(function(a) {
-          var t = (a.textContent || '').trim().toLowerCase();
-          var h = a.getAttribute('href') || '';
-          // Discount-campaign links; exclude loyalty pages and PDF/flyer links.
-          if (/popust|snizen|akcij|sale|outlet|rasprodaj|letnj|zimsk|jesenj|prolecn|season/i.test(t + ' ' + h)
-              && !/loyalty|flajer|\\.pdf/i.test(h)) {
-            out.push(h.split('?')[0]);
-          }
-        });
-        return out;
-      })()
-    `)) as string[];
-
-    const unique = [...new Set(candidatePaths)].filter(Boolean);
-    console.log(`Discovery: ${unique.length} candidate sale links found`);
-
-    let best: string | null = null;
-    let bestCount = 0;
-    for (const path of unique) {
-      const url = path.startsWith("http") ? path : `${BASE_URL}${path.startsWith("/") ? "" : "/"}${path}`;
-      try {
-        await page.goto(url, { waitUntil: "domcontentloaded", timeout: 60000 });
-        await page.waitForSelector(".item.product.product-item", { timeout: 8000 }).catch(() => {});
-        // Rank by the toolbar total ("4254 proizvoda") — every populated listing shows
-        // the same 36 items per page, so page-1 grid size can't tell the main sale from
-        // a small category. Fall back to grid size when no toolbar total is present.
-        const count = (await page.evaluate(`
-          (function() {
-            var grid = document.querySelectorAll('.item.product.product-item').length;
-            var tb = document.querySelector('.toolbar-number, .toolbar-amount');
-            var total = 0;
-            if (tb) {
-              var nums = (tb.textContent || '').match(/\\d[\\d.,]*/g);
-              if (nums) nums.forEach(function(x) {
-                var n = parseInt(x.replace(/[.,]/g, ''), 10);
-                if (n > total) total = n;
-              });
-            }
-            return total || grid;
-          })()
-        `)) as number;
-        console.log(`  candidate ${url} -> ${count} products`);
-        if (count > bestCount) {
-          bestCount = count;
-          best = url;
-        }
-      } catch {
-        /* unreachable candidate — skip */
-      }
-    }
-
-    // Require a substantial listing so we never latch onto a tiny cross-sell page.
-    return bestCount >= 12 ? best : null;
-  } catch (err) {
-    console.error("Sale-URL discovery failed:", err instanceof Error ? err.message : err);
-    return null;
-  }
-}
-
 async function scrapeDjakSport(): Promise<void> {
   const errors: string[] = [];
   const seenUrls = new Set<string>();
@@ -376,8 +306,8 @@ async function scrapeDjakSport(): Promise<void> {
   let totalDeals = 0;
   const scrapeStartTime = new Date();
 
-  console.log("Starting DjakSport scraper with AJAX pagination...");
-  console.log(`Target: ${SALE_URL}`);
+  console.log("Starting DjakSport scraper...");
+  console.log(`Listings: ${SALE_LISTINGS.join(", ")}`);
   console.log(`Min discount: ${MIN_DISCOUNT}%`);
 
   const browser = await launchBrowser();
@@ -389,106 +319,97 @@ async function scrapeDjakSport(): Promise<void> {
     // Warm-up navigation: gives Cloudflare's JS challenge time to mint a
     // cf_clearance cookie that subsequent fast page.goto calls can reuse.
     console.log("Warming up Cloudflare session...");
-    await page.goto(SALE_URL, {
+    await page.goto(BASE_URL, {
       waitUntil: "networkidle2",
       timeout: 60000,
     });
 
     await sleep(2000);
 
-    // Self-heal across Djak's campaign-slug rotations: if the configured SALE_URL
-    // no longer resolves to a populated grid, discover the current sale from the
-    // homepage before paginating, instead of silently scraping zero deals.
-    const probe = await fetchPageProducts(page, 1);
-    if (probe.products.length === 0) {
-      console.log(`SALE_URL ${SALE_URL} returned no products — discovering current sale listing...`);
-      const discovered = await discoverSaleUrl(page);
-      if (discovered) {
-        activeSaleUrl = discovered;
-        console.log(`Using discovered sale listing: ${activeSaleUrl}`);
-      } else {
-        errors.push(`SALE_URL ${SALE_URL} empty and no replacement sale listing discovered`);
-        console.log("No alternative sale listing found; scrape will be empty.");
-      }
-    }
+    for (const listingUrl of SALE_LISTINGS) {
+      // Paginate through all pages
+      let currentPage = 1;
+      let consecutiveEmpty = 0;
 
-    // Paginate through all pages
-    let currentPage = 1;
-    let consecutiveEmpty = 0;
+      while (currentPage <= MAX_PAGES_PER_LISTING && consecutiveEmpty < 2) {
+        console.log(`\n=== ${listingUrl} page ${currentPage} ===`);
 
-    while (currentPage <= MAX_PAGES && consecutiveEmpty < 2) {
-      console.log(`\n=== Page ${currentPage} ===`);
+        const { products } = await fetchPageProducts(page, listingUrl, currentPage);
+        console.log(`Found ${products.length} products`);
 
-      const { products } = await fetchPageProducts(page, currentPage);
-      console.log(`Found ${products.length} products`);
-
-      if (products.length === 0) {
-        consecutiveEmpty++;
-        if (consecutiveEmpty >= 2) {
-          console.log("No more products, stopping");
-          break;
-        }
-      } else {
-        consecutiveEmpty = 0;
-      }
-
-      if (currentPage === 1 && products.length > 0) {
-        console.log("Sample product:", JSON.stringify(products[0], null, 2));
-      }
-
-      for (const product of products) {
-        if (seenUrls.has(product.url)) continue;
-        seenUrls.add(product.url);
-
-        totalScraped++;
-
-        if (product.salePrice >= product.originalPrice) continue;
-
-        if (product.discountPercent >= MIN_DISCOUNT) {
-          const { gender, categories } = parseUrlInfo(product.url, product.name);
-
-          // Don't filter by sizes here — post-Feb-2026 Djak template doesn't expose
-          // sizes in the listing markup, so checking would drop real deals. The
-          // detail scraper visits each product and deletes items that are genuinely
-          // out of stock (footwear/clothing with no sizes after detail check).
-
-          // Extract brand using server-side logic (handles multi-word brands, aliases, filters genders/categories)
-          const brand = extractBrandFromName(product.name);
-
-          // Log first few products with categories for debugging
-          if (totalDeals < 5) {
-            console.log(`Saving: ${product.name.substring(0, 40)}... | brand=${brand} | gender=${gender} | categories=${JSON.stringify(categories)}`);
+        if (products.length === 0) {
+          consecutiveEmpty++;
+          if (consecutiveEmpty >= 2) {
+            console.log("No more products, stopping");
+            break;
           }
+        } else {
+          consecutiveEmpty = 0;
+        }
 
-          // Per-deal guard: one malformed product must not abort the run.
-          try {
-            await upsertDeal({
-              id: generateId(product.productId, product.url),
-              store: STORE,
-              name: product.name,
-              brand: brand,
-              originalPrice: product.originalPrice,
-              salePrice: product.salePrice,
-              discountPercent: product.discountPercent,
-              url: product.url,
-              imageUrl: product.imageUrl,
-              sizes: product.sizes,
-              categories: categories,
-              gender: gender,
-            });
-            totalDeals++;
-          } catch (err) {
-            const message = err instanceof Error ? err.message : String(err);
-            errors.push(`upsert ${product.url}: ${message}`);
-            console.error(`Upsert failed for ${product.url}:`, message);
+        if (currentPage === 1) {
+          if (products.length > 0) {
+            console.log("Sample product:", JSON.stringify(products[0], null, 2));
+          } else {
+            // A top-level category with zero on-sale items means markup/URL changed.
+            errors.push(`${listingUrl} returned no products`);
           }
         }
+
+        for (const product of products) {
+          if (seenUrls.has(product.url)) continue;
+          seenUrls.add(product.url);
+
+          totalScraped++;
+
+          if (product.salePrice >= product.originalPrice) continue;
+
+          if (product.discountPercent >= MIN_DISCOUNT) {
+            const { gender, categories } = parseUrlInfo(product.url, product.name);
+
+            // Don't filter by sizes here — post-Feb-2026 Djak template doesn't expose
+            // sizes in the listing markup, so checking would drop real deals. The
+            // detail scraper visits each product and deletes items that are genuinely
+            // out of stock (footwear/clothing with no sizes after detail check).
+
+            // Extract brand using server-side logic (handles multi-word brands, aliases, filters genders/categories)
+            const brand = extractBrandFromName(product.name);
+
+            // Log first few products with categories for debugging
+            if (totalDeals < 5) {
+              console.log(`Saving: ${product.name.substring(0, 40)}... | brand=${brand} | gender=${gender} | categories=${JSON.stringify(categories)}`);
+            }
+
+            // Per-deal guard: one malformed product must not abort the run.
+            try {
+              await upsertDeal({
+                id: generateId(product.productId, product.url),
+                store: STORE,
+                name: product.name,
+                brand: brand,
+                originalPrice: product.originalPrice,
+                salePrice: product.salePrice,
+                discountPercent: product.discountPercent,
+                url: product.url,
+                imageUrl: product.imageUrl,
+                sizes: product.sizes,
+                categories: categories,
+                gender: gender,
+              });
+              totalDeals++;
+            } catch (err) {
+              const message = err instanceof Error ? err.message : String(err);
+              errors.push(`upsert ${product.url}: ${message}`);
+              console.error(`Upsert failed for ${product.url}:`, message);
+            }
+          }
+        }
+
+        console.log(`Running total: ${totalDeals} deals (${totalScraped} scraped)`);
+
+        currentPage++;
+        await sleep(500 + Math.random() * 500);
       }
-
-      console.log(`Running total: ${totalDeals} deals (${totalScraped} scraped)`);
-
-      currentPage++;
-      await sleep(500 + Math.random() * 500);
     }
 
   } catch (err) {

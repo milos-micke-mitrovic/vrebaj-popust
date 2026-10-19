@@ -26,11 +26,12 @@ storefront. Stack: **Next.js (App Router) + React + TypeScript + Tailwind**, **P
 
 ## Scrapers — the main source of breakage
 - 8 store scrapers in `src/scraper/stores/*.ts` (+ `*-details.ts`). They break when a retailer
-  changes markup or **rotates their sale-listing URL** (djaksport & planeta do this repeatedly).
+  changes markup or **rotates their sale-listing URL** (djaksport did this repeatedly).
 - `src/scraper/health-check.ts` runs nightly and emails when a store drops below threshold.
 - **When a store scrapes ~0 deals:** the sale URL almost certainly rotated. Find the current
   discount listing on the live site (puppeteer-stealth gets past Cloudflare) and update that
-  store's `SALE_URL` / sale param. djaksport has self-healing URL discovery from its homepage.
+  store's `SALE_URL` / sale param. djaksport no longer uses campaign slugs — it crawls the stable
+  top-level categories with Djak's `?am_on_sale=1` filter, so it's immune to campaign rotations.
 - Every scraper: appends an md5 URL-hash suffix to the deal `id` (prevents unique-constraint
   collisions), and wraps each `upsertDeal` in try/catch (one bad product can't abort a run).
 
