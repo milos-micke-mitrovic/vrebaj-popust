@@ -148,7 +148,7 @@ async function main() {
       const stores = Object.values(latest).sort((a, b) => a.store.localeCompare(b.store));
       const ranRecently = stores.filter((s) => s.startedAt > cutoff).length;
       const withErrors = stores.filter((s) => (s.errlen || 0) > 2);
-      console.log(`${ok(ranRecently >= 8 && withErrors.length === 0)} scrapers: ${ranRecently}/8 stores ran in last ~26h, ${withErrors.length} with errors`);
+      console.log(`${ok(ranRecently === stores.length && withErrors.length === 0)} scrapers: ${ranRecently}/${stores.length} stores ran in last ~26h, ${withErrors.length} with errors`);
       for (const s of stores) {
         const stale = s.startedAt <= cutoff ? " (STALE)" : "";
         console.log(`     ${s.store.padEnd(12)} ${String(s.deals).padStart(5)} deals  ${s.startedAt.slice(0, 16)}${stale}${(s.errlen || 0) > 2 ? "  ⚠️ERR" : ""}`);

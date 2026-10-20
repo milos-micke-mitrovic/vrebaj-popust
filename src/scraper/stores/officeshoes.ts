@@ -161,6 +161,7 @@ async function scrapeOfficeShoes(): Promise<void> {
     let currentPage = 0;
     let consecutiveEmpty = 0;
 
+    let noNewPages = 0;
     while (currentPage < MAX_PAGES && consecutiveEmpty < 2) {
       const pageNum = currentPage + 1;
       const pageUrl = `${BASE_URL}${SALE_PATH}?page=${pageNum}`;
@@ -205,6 +206,7 @@ async function scrapeOfficeShoes(): Promise<void> {
         console.log("Sample product:", JSON.stringify(products[0], null, 2));
       }
 
+      const scrapedBefore = totalScraped;
       for (const product of products) {
         // Skip duplicates
         if (seenUrls.has(product.url)) continue;
@@ -248,6 +250,20 @@ async function scrapeOfficeShoes(): Promise<void> {
       }
 
       console.log(`Running total: ${totalDeals} deals (${totalScraped} scraped)`);
+
+      // Office Shoes sometimes serves the whole sale listing on every ?page=N, so a
+      // page with only already-seen products means we've reached the end — stop
+      // instead of reloading the same listing up to MAX_PAGES times (each extra load
+      // also raises the risk of tripping their datacenter-IP block).
+      if (totalScraped === scrapedBefore) {
+        noNewPages++;
+        if (noNewPages >= 2) {
+          console.log("Two pages with no new products in a row, stopping");
+          break;
+        }
+      } else {
+        noNewPages = 0;
+      }
 
       currentPage++;
 

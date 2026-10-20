@@ -1,6 +1,7 @@
 import { createHash } from "crypto";
 import { JSDOM } from "jsdom";
 import { upsertDeal, logScrapeRun, disconnect, cleanupStaleProducts, Store } from "../db-writer";
+import { fetchHtml } from "../fetch-html";
 
 const STORE: Store = "trefsport";
 const BASE_URL = "https://trefsport.com";
@@ -51,21 +52,7 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-async function fetchPage(url: string): Promise<string> {
-  const response = await fetch(url, {
-    headers: {
-      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-      "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8",
-      "Accept-Language": "sr-RS,sr;q=0.9,en;q=0.8",
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-  }
-
-  return response.text();
-}
+const fetchPage = fetchHtml;
 
 function extractProducts(html: string): RawProduct[] {
   const dom = new JSDOM(html);
