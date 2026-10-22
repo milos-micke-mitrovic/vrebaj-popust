@@ -45,6 +45,10 @@ jobs:
       - name: Run OfficeShoes scraper
         run: pnpm tsx src/scraper/stores/officeshoes.ts
         timeout-minutes: 30
+      # The nightly health-check defers officeshoes to this retry, so this is where a
+      # persistent failure alerts (fails the workflow → standard GHA email).
+      - name: Check OfficeShoes health
+        run: pnpm tsx src/scraper/health-check.ts --only officeshoes
 
   scrape-details:
     runs-on: ubuntu-latest

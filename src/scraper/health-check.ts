@@ -22,7 +22,7 @@ async function fetchRecentRuns(sinceHours: number): Promise<ScrapeRunSummary[]> 
   return runs;
 }
 
-const STORES: Store[] = [
+const ALL_STORES: Store[] = [
   "djaksport",
   "sportvision",
   "nsport",
@@ -31,6 +31,20 @@ const STORES: Store[] = [
   "intersport",
   "trefsport",
 ];
+
+// `--only <store>` checks a single store (used by a store's own retry workflow).
+const onlyIdx = process.argv.indexOf("--only");
+const ONLY = onlyIdx > -1 ? (process.argv[onlyIdx + 1] as Store) : null;
+const STORES: Store[] = ONLY ? [ONLY] : ALL_STORES;
+
+// Stores with their own scheduled retry workflow that runs `health-check --only <store>`
+// afterwards. Their nightly failures don't fail the nightly job — officeshoes regularly
+// blocks the GHA IP at nightly time and the retry hours later usually gets through, so
+// failing here only sent false alarms. The retry's own check alerts if it fails too.
+const RETRIED_LATER: Partial<Record<Store, string>> = {
+  officeshoes: "scrape-officeshoes.yml",
+};
+const isDeferred = (store: Store): boolean => !ONLY && !!RETRIED_LATER[store];
 
 // Any scraper producing fewer than this is considered broken.
 // Set per-store overrides here if a store has a legitimately small catalog.
@@ -115,9 +129,14 @@ async function main(): Promise<void> {
   let critical = 0;
   for (const issue of issues) {
     const snoozed = isSnoozed(issue.store);
-    const tag = snoozed ? " (SNOOZED — not failing)" : "";
+    const deferred = isDeferred(issue.store);
+    const tag = snoozed
+      ? " (SNOOZED — not failing)"
+      : deferred
+        ? ` (not failing — ${RETRIED_LATER[issue.store]} retries later and alerts if still broken)`
+        : "";
     console.log(`  [${issue.severity.toUpperCase()}] ${issue.store}: ${issue.message}${tag}`);
-    if (issue.severity === "critical" && !snoozed) critical++;
+    if (issue.severity === "critical" && !snoozed && !deferred) critical++;
   }
   console.log();
 
