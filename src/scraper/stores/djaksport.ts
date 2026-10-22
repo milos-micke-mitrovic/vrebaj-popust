@@ -434,7 +434,7 @@ async function scrapeDjakSport(): Promise<void> {
   }
 
   await logScrapeRun(STORE, totalScraped, totalDeals, errors);
-  await cleanupStaleProducts(STORE, scrapeStartTime, totalDeals);
+  await cleanupStaleProducts(STORE, scrapeStartTime, totalDeals, errors.length === 0 ? totalScraped : 0);
 
   console.log("\n=== Scraping Complete ===");
   console.log(`Total scraped: ${totalScraped}`);

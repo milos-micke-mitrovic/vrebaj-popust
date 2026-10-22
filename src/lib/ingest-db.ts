@@ -171,13 +171,20 @@ export async function logScrapeRun(
  * threshold, so a broken scraper can't wipe the catalogue. scrapeStartTime is the
  * scraper's clock (same as the scrapedAt it wrote), avoiding cross-clock skew.
  */
+const MIN_LISTING_FOR_CLEANUP = 50;
+
 export async function cleanupStaleProducts(
   store: Store,
   scrapeStartTime: string,
-  productsFound: number
+  productsFound: number,
+  listingScraped = 0
 ): Promise<number> {
   const threshold = MIN_PRODUCTS_THRESHOLD[store] ?? 10;
-  if (productsFound < threshold) return 0;
+  // Skip cleanup on a suspiciously small run (likely a broken/blocked scrape) — unless
+  // the scraper read a full listing without errors (listingScraped) and few products
+  // simply qualify anymore, e.g. a store repriced its sale below 50%. Then the old
+  // deals really are stale and must go, or we'd keep advertising discounts that ended.
+  if (productsFound < threshold && listingScraped < MIN_LISTING_FOR_CLEANUP) return 0;
 
   const prisma = await getPrisma();
   const result = await prisma.deal.deleteMany({

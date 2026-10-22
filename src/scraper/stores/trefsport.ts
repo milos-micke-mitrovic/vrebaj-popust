@@ -236,7 +236,7 @@ async function scrapeTrefSport(): Promise<void> {
   await logScrapeRun(STORE, totalScraped, totalDeals, errors);
 
   // Clean up stale products
-  await cleanupStaleProducts(STORE, scrapeStartTime, totalDeals);
+  await cleanupStaleProducts(STORE, scrapeStartTime, totalDeals, errors.length === 0 ? totalScraped : 0);
 
   console.log("\n=== Scraping Complete ===");
   console.log(`Total scraped: ${totalScraped}`);

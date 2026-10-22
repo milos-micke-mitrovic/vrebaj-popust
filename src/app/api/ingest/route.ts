@@ -47,7 +47,8 @@ export async function POST(request: NextRequest) {
           deleted: await db.cleanupStaleProducts(
             body.store as Parameters<typeof db.cleanupStaleProducts>[0],
             body.scrapeStartTime as string,
-            body.productsFound as number
+            body.productsFound as number,
+            (body.listingScraped as number | undefined) ?? 0
           ),
         });
       case "deleteDealByUrl":

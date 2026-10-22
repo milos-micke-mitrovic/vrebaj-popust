@@ -427,7 +427,7 @@ async function scrapeNSport(): Promise<void> {
     // Always log the run — even a totally failed run is signal for the health-check.
     try {
       await logScrapeRun(STORE, totalScraped, totalDeals, errors);
-      await cleanupStaleProducts(STORE, scrapeStartTime, totalDeals);
+      await cleanupStaleProducts(STORE, scrapeStartTime, totalDeals, errors.length === 0 ? totalScraped : 0);
     } catch (logErr) {
       console.error("Failed to log scrape run:", logErr instanceof Error ? logErr.message : logErr);
     }

@@ -104,13 +104,16 @@ export async function getDealsForDetailScraping(
 export async function cleanupStaleProducts(
   store: Store,
   scrapeStartTime: Date,
-  productsFound: number
+  productsFound: number,
+  // Products read from the listing; pass it only for an error-free run (see ingest-db).
+  listingScraped = 0
 ): Promise<number> {
   await flush();
   const { deleted } = (await callIngest("cleanupStaleProducts", {
     store,
     scrapeStartTime: scrapeStartTime.toISOString(),
     productsFound,
+    listingScraped,
   })) as { deleted: number };
   return deleted;
 }
