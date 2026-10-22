@@ -49,6 +49,8 @@ const isDeferred = (store: Store): boolean => !ONLY && !!RETRIED_LATER[store];
 // Any scraper producing fewer than this is considered broken.
 // Set per-store overrides here if a store has a legitimately small catalog.
 const MIN_HEALTHY_DEALS = 5;
+// A run that read at least this many products is a working scraper even if few qualify.
+const MIN_SCRAPED_FOR_QUIET = 50;
 
 // Self-expiring alert snooze for a KNOWN, acknowledged issue we're deliberately waiting
 // out — stops the nightly failure email from repeating while we watch, without going
@@ -89,14 +91,20 @@ async function main(): Promise<void> {
       });
       continue;
     }
+    const latestErrors = parseStringArray(latest.errors);
     if (latest.filteredCount < MIN_HEALTHY_DEALS) {
+      // Scraped a healthy listing without errors but few qualify → the store simply has
+      // no 50%+ discounts right now (e.g. officeshoes repricing its sale to -20%). The
+      // scraper works, so warn instead of failing; nothing to fix on our side.
+      const storeQuiet = (latest.totalScraped ?? 0) >= MIN_SCRAPED_FOR_QUIET && latestErrors.length === 0;
       issues.push({
         store,
-        severity: "critical",
-        message: `Only ${latest.filteredCount} deals (expected >= ${MIN_HEALTHY_DEALS})`,
+        severity: storeQuiet ? "warning" : "critical",
+        message: storeQuiet
+          ? `Only ${latest.filteredCount} deals of ${latest.totalScraped} products scraped — store has few 50%+ discounts right now (scraper OK)`
+          : `Only ${latest.filteredCount} deals (expected >= ${MIN_HEALTHY_DEALS})`,
       });
     }
-    const latestErrors = parseStringArray(latest.errors);
     if (latestErrors.length > 0) {
       const preview = latestErrors.slice(0, 3).join("; ").slice(0, 300);
       issues.push({

@@ -226,10 +226,11 @@ export async function getRecentScrapeRuns(sinceHours = 6): Promise<ScrapeRunSumm
   const runs = await prisma.scrapeRun.findMany({
     where: { startedAt: { gte: cutoff } },
     orderBy: { startedAt: "desc" },
-    select: { store: true, filteredCount: true, errors: true, startedAt: true },
+    select: { store: true, totalScraped: true, filteredCount: true, errors: true, startedAt: true },
   });
   return runs.map((r) => ({
     store: r.store,
+    totalScraped: r.totalScraped,
     filteredCount: r.filteredCount,
     errors: r.errors,
     startedAt: r.startedAt.toISOString(),

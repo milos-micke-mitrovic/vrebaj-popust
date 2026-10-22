@@ -42,6 +42,7 @@ export interface DealToDetail {
 /** One scrape run row, as returned to the health-check (errors is JSON-array TEXT). */
 export interface ScrapeRunSummary {
   store: string;
+  totalScraped: number;
   filteredCount: number;
   errors: string;
   startedAt: string;
