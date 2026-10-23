@@ -181,6 +181,12 @@ async function scrapeOfficeShoes(): Promise<void> {
         timeout: 30000,
       });
 
+      // Cloudflare's "Just a moment..." challenge often clears itself under stealth if
+      // given time (same as the djaksport warm-up); a still-blocked page falls through.
+      await page
+        .waitForFunction(() => !document.title.includes("Just a moment"), { timeout: 45000 })
+        .catch(() => {});
+
       // Wait for products to load
       try {
         await page.waitForSelector('.product-article_wrapper, article[data-product_id]', { timeout: 15000 });
