@@ -13,6 +13,7 @@ import path from "node:path";
 import crypto from "node:crypto";
 
 const ACCT = "2fb3d178d5f36a51bbee103ec69d3ef7";
+const ZONE = "131d89c92777bf441087756faa314235";
 const WORKER = "vrebaj-popust";
 const DB_ID = "5ffae0d7-fc3d-4c66-8a12-2ebe1e735d87";
 const SITE = "https://www.vrebajpopust.rs";
@@ -126,16 +127,30 @@ async function main() {
           workersInvocationsAdaptive(limit: 1, filter: {scriptName: "${WORKER}", datetime_geq: "${a}", datetime_leq: "${b}"}) { sum { requests errors } }
         } } }`);
         const n = r.viewer.accounts[0].workersInvocationsAdaptive;
-        return { hour: a.slice(11, 13), requests: n[0]?.sum.requests || 0, errors: n[0]?.sum.errors || 0 };
+        return { hour: a.slice(11, 16), from: a, to: b, requests: n[0]?.sum.requests || 0, errors: n[0]?.sum.errors || 0 };
       };
       const hours = await Promise.all(Array.from({ length: 24 }, (_, i) => hourSum(24 - i)));
       const errHours = hours.filter((h) => h.errors > 0);
-      if (errHours.length) console.log(`     ↳ errors (24h) at ${errHours.map((h) => `${h.hour}:00 (${h.errors})`).join(", ")} UTC`);
+      if (errHours.length) console.log(`     ↳ errors (24h) at ${errHours.map((h) => `${h.hour} (${h.errors})`).join(", ")} UTC`);
       const sorted = hours.map((h) => h.requests).sort((a, b) => a - b);
       const median = sorted[Math.floor(sorted.length / 2)] || 0;
       const peak = hours.reduce((m, h) => (h.requests > m.requests ? h : m), hours[0]);
       if (peak.requests > 3 * Math.max(median, 1) && peak.requests > 1000) {
-        console.log(`     ↳ ⚠️ busiest hour ${peak.hour}:00 UTC = ${peak.requests} reqs (typical ~${median}/h) — check for a bot/crawler burst`);
+        // The nightly scrapers write through /api/ingest, so the scrape hour always spikes
+        // in Worker invocations — but that traffic doesn't show up as zone (visitor)
+        // requests. Only flag the burst when real visitor traffic accounts for it.
+        let visitors = Infinity;
+        try {
+          const z = await cfGraphQL(`query { viewer { zones(filter: {zoneTag: "${ZONE}"}) {
+            httpRequestsAdaptiveGroups(limit: 1, filter: {datetime_geq: "${peak.from}", datetime_lt: "${peak.to}"}) { count }
+          } } }`);
+          visitors = z.viewer.zones[0].httpRequestsAdaptiveGroups[0]?.count || 0;
+        } catch (e) { console.log(`     ↳ (visitor-traffic lookup failed: ${e.message})`); }
+        if (visitors < peak.requests / 2) {
+          console.log(`     ↳ busiest hour from ${peak.hour} UTC = ${peak.requests} reqs, only ${visitors} from visitors — nightly scrape ingest, expected`);
+        } else {
+          console.log(`     ↳ ⚠️ busiest hour from ${peak.hour} UTC = ${peak.requests} reqs (typical ~${median}/h) — check for a bot/crawler burst`);
+        }
       }
     } catch (e) { console.log(`⚠️ worker analytics: ${e.message}`); }
 
