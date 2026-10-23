@@ -51,6 +51,8 @@ const isDeferred = (store: Store): boolean => !ONLY && !!RETRIED_LATER[store];
 const MIN_HEALTHY_DEALS = 5;
 // A run that read at least this many products is a working scraper even if few qualify.
 const MIN_SCRAPED_FOR_QUIET = 50;
+// A store that reads 0 products (IP block) only fails once it has had no full read for this long.
+const BLOCK_GRACE_HOURS = 72;
 
 // Self-expiring alert snooze for a KNOWN, acknowledged issue we're deliberately waiting
 // out — stops the nightly failure email from repeating while we watch, without going
@@ -71,12 +73,19 @@ interface Issue {
 }
 
 async function main(): Promise<void> {
-  const runs = await fetchRecentRuns(6);
+  const runs = await fetchRecentRuns(BLOCK_GRACE_HOURS);
+  const latestCutoff = Date.now() - 6 * 60 * 60 * 1000;
 
   const latestByStore = new Map<Store, ScrapeRunSummary>();
+  const lastFullReadByStore = new Map<Store, ScrapeRunSummary>();
   for (const run of runs) {
     const store = run.store as Store;
-    if (!latestByStore.has(store)) latestByStore.set(store, run);
+    if (!latestByStore.has(store) && new Date(run.startedAt).getTime() >= latestCutoff) {
+      latestByStore.set(store, run);
+    }
+    if (!lastFullReadByStore.has(store) && (run.totalScraped ?? 0) >= MIN_SCRAPED_FOR_QUIET) {
+      lastFullReadByStore.set(store, run);
+    }
   }
 
   const issues: Issue[] = [];
@@ -97,12 +106,19 @@ async function main(): Promise<void> {
       // no 50%+ discounts right now (e.g. officeshoes repricing its sale to -20%). The
       // scraper works, so warn instead of failing; nothing to fix on our side.
       const storeQuiet = (latest.totalScraped ?? 0) >= MIN_SCRAPED_FOR_QUIET && latestErrors.length === 0;
+      // Read nothing (site blocked our IP) but a full read succeeded within the grace
+      // window → a passing block; cleanup was skipped so existing deals stay up. Only
+      // fail once the store has been unreadable for the whole window.
+      const lastFull = lastFullReadByStore.get(store);
+      const blockedBriefly = (latest.totalScraped ?? 0) === 0 && !!lastFull;
       issues.push({
         store,
-        severity: storeQuiet ? "warning" : "critical",
+        severity: storeQuiet || blockedBriefly ? "warning" : "critical",
         message: storeQuiet
           ? `Only ${latest.filteredCount} deals of ${latest.totalScraped} products scraped — store has few 50%+ discounts right now (scraper OK)`
-          : `Only ${latest.filteredCount} deals (expected >= ${MIN_HEALTHY_DEALS})`,
+          : blockedBriefly
+            ? `Read 0 products (likely blocked); last full read ${lastFull!.startedAt} — deals kept, fails if unreadable for ${BLOCK_GRACE_HOURS}h`
+            : `Only ${latest.filteredCount} deals (expected >= ${MIN_HEALTHY_DEALS})`,
       });
     }
     if (latestErrors.length > 0) {

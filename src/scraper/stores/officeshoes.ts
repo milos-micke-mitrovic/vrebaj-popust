@@ -15,6 +15,8 @@ const BASE_URL = "https://www.officeshoes.rs";
 const SALE_PATH = "/sale/0/48/discount_desc/";
 const MIN_DISCOUNT = 50;
 const MAX_PAGES = 80;
+// Waits before re-trying a blocked (empty) page 1; ~7 min total, well within the job timeout.
+const PAGE1_RETRY_WAITS_MS = [120_000, 300_000];
 
 interface RawProduct {
   name: string;
@@ -162,6 +164,7 @@ async function scrapeOfficeShoes(): Promise<void> {
     let consecutiveEmpty = 0;
 
     let noNewPages = 0;
+    let page1Retries = 0;
     while (currentPage < MAX_PAGES && consecutiveEmpty < 2) {
       const pageNum = currentPage + 1;
       const pageUrl = `${BASE_URL}${SALE_PATH}?page=${pageNum}`;
@@ -182,6 +185,17 @@ async function scrapeOfficeShoes(): Promise<void> {
       try {
         await page.waitForSelector('.product-article_wrapper, article[data-product_id]', { timeout: 15000 });
       } catch {
+        // An empty page 1 is Office Shoes blocking the GHA IP (the sale is never empty).
+        // Blocks often lift within minutes, so wait and retry page 1 before giving up.
+        if (pageNum === 1 && page1Retries < PAGE1_RETRY_WAITS_MS.length) {
+          const wait = PAGE1_RETRY_WAITS_MS[page1Retries++];
+          console.log(`Page 1 empty (title "${await page.title()}") — likely blocked, retrying in ${wait / 1000}s`);
+          await sleep(wait);
+          continue;
+        }
+        if (pageNum === 1) {
+          errors.push(`Blocked: sale listing page 1 had no products (title "${await page.title()}")`);
+        }
         console.log("No products found on this page, stopping");
         break;
       }
