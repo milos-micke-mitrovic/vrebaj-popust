@@ -58,9 +58,18 @@ const BLOCK_GRACE_HOURS = 72;
 // out — stops the nightly failure email from repeating while we watch, without going
 // blind. The store still appears in the report (marked SNOOZED); it just doesn't fail the
 // job. The mute AUTO-LIFTS after `until`, so a forgotten snooze can't hide a real outage.
-// (none currently) — e.g. planeta was snoozed here Sept 2026 during its CF block before
-// being dropped entirely 2026-10.
-const SNOOZED: Partial<Record<Store, { until: string; reason: string }>> = {};
+// e.g. planeta was snoozed here Sept 2026 during its CF block before being dropped
+// entirely 2026-10.
+const SNOOZED: Partial<Record<Store, { until: string; reason: string }>> = {
+  officeshoes: {
+    until: "2026-11-25",
+    reason:
+      "Cloudflare 403s every officeshoes.rs page from GHA IPs since 2026-10-23 (fetch and " +
+      "stealth puppeteer alike); its sale is only -10..20% so nothing qualifies anyway. " +
+      "Daily runs continue and resume on their own if the block lifts; if still blocked " +
+      "when this expires, drop the store like planeta.",
+  },
+};
 const isSnoozed = (store: Store): boolean => {
   const s = SNOOZED[store];
   return !!s && new Date() < new Date(s.until);
